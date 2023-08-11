@@ -1,0 +1,455 @@
+2023-08-02T10:30:12.512  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T10:30:12.521  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T10:30:12.524  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:30:12.525  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T10:30:12.645  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00000a88
+2023-08-02T10:30:12.760  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:30:13.657  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:31:30.568  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:31:30.816  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:31:31.035  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T10:31:31.040  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x790
+2023-08-02T10:31:31.052  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T10:31:31.052  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:32:32.390  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T10:32:32.396  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T10:32:32.400  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:32:32.401  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T10:32:32.520  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00004008
+2023-08-02T10:32:32.632  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:32:33.552  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:33:57.960  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:33:58.176  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:33:58.398  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T10:33:58.405  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x790
+2023-08-02T10:33:58.414  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T10:33:58.416  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:53:53.480  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T10:53:53.487  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T10:53:53.491  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:53:53.493  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T10:53:53.604  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00003af4
+2023-08-02T10:53:53.717  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:53:54.931  <Warn> phidget22[waitForPendingPacket()] : Packet tracker waitForPendingPacket timeout (1000ms), Port 0
+2023-08-02T10:53:54.934 <ERROR> phidget22vint[PhidgetVINTDevice_bridgeInput()] : Failed to send VINT_PACKET_TYPE_PHIDGET_RESET message: 0x03 - Timed Out
+2023-08-02T10:53:54.935 <ERROR> phidget22[dispatchEntry()] : Failed to send BP_OPENRESET to device for Bipolar Stepper Controller Ch:0 -> STC1005 -> HUB0001 Port:0 S/N:683442: 0x03 - Timed Out
+2023-08-02T10:53:55.038  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T10:53:55.046  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7a4
+2023-08-02T10:53:55.400  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00004020
+2023-08-02T10:53:55.503  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:53:56.736  <Warn> phidget22[waitForPendingPacket()] : Packet tracker waitForPendingPacket timeout (1000ms), Port 0
+2023-08-02T10:53:56.736 <ERROR> phidget22vint[PhidgetVINTDevice_bridgeInput()] : Failed to send VINT_PACKET_TYPE_PHIDGET_RESET message: 0x03 - Timed Out
+2023-08-02T10:53:56.736 <ERROR> phidget22[dispatchEntry()] : Failed to send BP_OPENRESET to device for Bipolar Stepper Controller Ch:0 -> STC1005 -> HUB0001 Port:0 S/N:683442: 0x03 - Timed Out
+2023-08-02T10:53:56.838  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T10:53:56.845  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0xadc
+2023-08-02T10:53:57.173  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x000041cc
+2023-08-02T10:53:57.275  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:53:58.489  <Warn> phidget22[waitForPendingPacket()] : Packet tracker waitForPendingPacket timeout (1000ms), Port 0
+2023-08-02T10:53:58.489 <ERROR> phidget22vint[PhidgetVINTDevice_bridgeInput()] : Failed to send VINT_PACKET_TYPE_PHIDGET_RESET message: 0x03 - Timed Out
+2023-08-02T10:53:58.489 <ERROR> phidget22[dispatchEntry()] : Failed to send BP_OPENRESET to device for Bipolar Stepper Controller Ch:0 -> STC1005 -> HUB0001 Port:0 S/N:683442: 0x03 - Timed Out
+2023-08-02T10:53:58.708  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T10:53:58.715  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0xb14
+2023-08-02T10:53:58.715 <ERROR> phidget22vint[PhidgetVINTDevice_bridgeInput()] : Failed to send VINT_PACKET_TYPE_PHIDGET_RESET message: 0x34 - Device not Attached
+2023-08-02T10:53:58.716 <ERROR> phidget22[Phidget_close()] : Failed to send BP_CLOSERESET to device: 0x34 - Device not Attached
+2023-08-02T10:54:21.537  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T10:54:21.543  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T10:54:21.546  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:54:21.547  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T10:54:21.658  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00002ca8
+2023-08-02T10:54:21.767  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:54:21.769  <Info> phidget22vint[processPacketReturnCodes()] : An unexpected PacketID was returned: 0x02 (0xe0 - Success). Probably this packet is from a previous session or detached device.
+2023-08-02T10:54:21.983  <Info> phidget22vint[processPacketReturnCodes()] : An unexpected PacketID was returned: 0x03 (0xe0 - Success). Probably this packet is from a previous session or detached device.
+2023-08-02T10:54:22.086  <Info> phidget22vint[processPacketReturnCodes()] : An unexpected PacketID was returned: 0x04 (0xe0 - Success). Probably this packet is from a previous session or detached device.
+2023-08-02T10:54:23.356  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:54:31.786  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:54:32.036  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T10:54:32.268  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T10:54:32.276  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7a0
+2023-08-02T11:01:56.593  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:01:56.613  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:01:56.619  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:01:56.621  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:01:56.742  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00000cd4
+2023-08-02T11:01:56.847  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:01:57.749  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:02:23.510  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:02:23.743  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:02:23.946  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:02:23.954  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x788
+2023-08-02T11:02:23.963  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:02:23.964  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:05:06.196  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:05:06.209  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:05:06.214  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:05:06.216  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:05:06.352  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00002048
+2023-08-02T11:05:06.455  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:05:07.352  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:05:53.665  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:05:53.899  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:05:54.115  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:05:54.123  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x784
+2023-08-02T11:30:05.929  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:30:05.947  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:30:05.953  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:05.954  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:30:06.074  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00003fcc
+2023-08-02T11:30:06.180  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:07.129  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:18.669  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:18.887  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:19.104  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:30:19.112  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x780
+2023-08-02T11:30:19.124  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:30:19.125  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:44.066  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:30:44.079  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:30:44.085  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:44.086  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:30:44.201  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00003260
+2023-08-02T11:30:44.309  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:30:45.227  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:31:55.904  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:31:56.132  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:31:56.365  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:31:56.371  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7d4
+2023-08-02T11:53:22.689  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:53:22.698  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:53:22.701  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:53:22.704  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:53:22.824  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x0000155c
+2023-08-02T11:53:22.935  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:53:23.854  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:53:53.567  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:53:53.800  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:53:54.017  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:53:54.023  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7c8
+2023-08-02T11:54:24.953  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:54:24.972  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:54:24.977  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:54:24.978  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:54:25.102  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00004704
+2023-08-02T11:54:25.215  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:54:26.121  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:58:45.764  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:58:45.984  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:58:46.192  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:58:46.198  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7c4
+2023-08-02T11:58:51.900  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T11:58:51.913  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T11:58:51.918  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:58:51.919  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T11:58:52.028  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00001204
+2023-08-02T11:58:52.131  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:58:53.047  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:59:08.449  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:59:08.703  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T11:59:08.915  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T11:59:08.922  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7ec
+2023-08-02T12:00:03.127  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:00:03.138  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:00:03.143  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:00:03.145  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:00:03.270  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x000042e0
+2023-08-02T12:00:03.378  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:00:04.282  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:02:53.458  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:02:53.687  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:02:53.919  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:02:53.927  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7a8
+2023-08-02T12:11:57.412  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:11:57.426  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:11:57.431  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:11:57.433  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:11:57.550  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00000768
+2023-08-02T12:11:57.664  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:11:58.549  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:12:21.810  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:12:22.028  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:12:22.244  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:12:22.250  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x784
+2023-08-02T12:17:05.041  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:17:05.058  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:17:05.062  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:05.064  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:17:05.188  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x0000080c
+2023-08-02T12:17:05.292  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:06.166  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:40.828  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:41.079  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:41.285  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:17:41.293  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x78c
+2023-08-02T12:17:47.779  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:17:47.788  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:17:47.792  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:47.793  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:17:47.922  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x000043d8
+2023-08-02T12:17:48.030  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:17:48.920  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:17.844  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:18.093  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:18.324  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:19:18.328  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x78c
+2023-08-02T12:19:18.342  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:19:18.343  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:48.528  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:19:48.533  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:19:48.535  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:48.535  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:19:48.652  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00003650
+2023-08-02T12:19:48.757  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:49.660  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:54.540  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:54.874  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:19:55.077  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:19:55.084  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x78c
+2023-08-02T12:20:18.998  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:20:19.017  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:20:19.022  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:19.023  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:20:19.145  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x000001ec
+2023-08-02T12:20:19.257  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:20.176  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:36.306  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:36.639  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:36.856  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:20:36.865  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7a8
+2023-08-02T12:20:36.876  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:20:36.877  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:59.606  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:20:59.614  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:20:59.617  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:20:59.618  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:20:59.731  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00000a34
+2023-08-02T12:20:59.846  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:21:00.752  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:21:45.602  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:21:45.935  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:21:46.157  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:21:46.165  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x79c
+2023-08-02T12:21:46.173  <Info> phidget22[deviceDetach()] : (Detach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:21:46.174  <Info> phidget22[deviceDetach()] : (Detach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:23:43.153  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T12:23:43.170  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T12:23:43.175  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:23:43.177  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T12:23:43.301  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00001c68
+2023-08-02T12:23:43.405  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:23:44.317  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:24:26.448  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:24:26.695  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T12:24:26.911  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T12:24:26.917  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x790
+2023-08-02T15:49:46.084  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T15:49:46.087  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T15:49:46.089  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T15:49:46.091  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T15:49:46.094  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:49:46.095  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T15:49:46.218  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00000bc0
+2023-08-02T15:49:46.321  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:49:46.989  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0x3fc
+2023-08-02T15:49:46.990  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x00002908
+2023-08-02T15:49:47.327  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:49:47.556  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T15:49:47.563  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7b8
+2023-08-02T15:49:47.773  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x3fc
+2023-08-02T15:49:47.773  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T15:56:03.225  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T15:56:03.231  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T15:56:03.236  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T15:56:03.252  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T15:56:03.252  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:56:03.252  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T15:56:03.377  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00003b34
+2023-08-02T15:56:03.486  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:56:04.147  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0x804
+2023-08-02T15:56:04.147  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x00004b34
+2023-08-02T15:56:04.486  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:56:04.719  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T15:56:04.726  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7f4
+2023-08-02T15:56:04.833  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x804
+2023-08-02T15:56:04.833  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T15:56:37.024  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T15:56:37.029  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T15:56:37.034  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T15:56:37.038  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T15:56:37.042  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:56:37.044  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T15:56:37.158  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00004a00
+2023-08-02T15:56:37.263  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:56:37.961  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0x488
+2023-08-02T15:56:37.962  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x000033d4
+2023-08-02T15:56:38.284  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:56:38.500  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T15:56:38.503  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7e0
+2023-08-02T15:56:38.634  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x488
+2023-08-02T15:56:38.634  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T15:57:05.475  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T15:57:05.483  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T15:57:05.487  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T15:57:05.493  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T15:57:05.497  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T15:57:05.499  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T15:57:05.502  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0x79c
+2023-08-02T15:57:05.503  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x00003a98
+2023-08-02T15:57:06.282  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x79c
+2023-08-02T15:58:15.371  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T16:27:30.350  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T16:32:03.404  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T16:32:03.408  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T16:32:03.410  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T16:32:03.413  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T16:32:03.417  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:32:03.417  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T16:32:03.544  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00004850
+2023-08-02T16:32:03.653  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:32:04.331  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0xae8
+2023-08-02T16:32:04.332  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x0000351c
+2023-08-02T16:32:04.672  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:32:04.904  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T16:32:04.911  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7a0
+2023-08-02T16:32:05.021  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0xae8
+2023-08-02T16:32:05.021  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T16:34:11.694  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T16:34:11.705  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T16:34:11.707  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T16:34:11.714  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T16:34:11.718  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:34:11.720  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T16:34:11.843  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x00002a9c
+2023-08-02T16:34:11.945  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:34:12.637  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0xad4
+2023-08-02T16:34:12.638  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x000044d4
+2023-08-02T16:34:12.980  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:34:13.214  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T16:34:13.218  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x798
+2023-08-02T16:34:13.329  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0xad4
+2023-08-02T16:34:13.329  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T16:40:40.645  <Info> phidget22 : 
+	******************************  Logging Enabled  ******************************
+	* Phidget22 - Version 1.16 - Built Jul  7 2023 09:13:43                       *
+	* Release 1.16.20230707 - Windows (64-bit)                                    *
+	*******************************************************************************
+2023-08-02T16:40:40.649  <Info> phidget22usb[AttachUSBDevice()] : Attaching HID Phidget | Path: \\?\hid#vid_06c2&pid_0045#8&25afaaf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030} | PDO Name: \Device\000000de
+2023-08-02T16:40:40.652  <Info> phidget22[deviceAttach()] : (Attach) 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846
+2023-08-02T16:40:40.654  <Info> phidget22usb[AttachUSBDevice()] : Attaching Phidget | Path: \\?\usb#vid_06c2&pid_0043#683442#{ddc0b225-2263-4835-aa6e-55f8b77788fe} | PDO Name: \Device\USBPDO-7 | Hub Port: 1
+2023-08-02T16:40:40.656  <Info> phidget22[deviceAttach()] : (Attach) HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:40:40.657  <Info> phidget22[deviceAttach()] : (Attach) STC1005 (4A Stepper Phidget) v100 -> HUB0001 Port:0 S/N:683442
+2023-08-02T16:40:40.776  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: USB read thread started: 0x000041a8
+2023-08-02T16:40:40.876  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:40:41.573  <Info> phidget22usb[PhidgetUSBOpenHandle()] : Opened USB Device: 0xafc
+2023-08-02T16:40:41.574  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: USB read thread started: 0x000038f0
+2023-08-02T16:40:41.913  <Info> phidget22vint[PhidgetHubDevice_setPortMode()] : Setting Port: 0 mode to VINT on HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442
+2023-08-02T16:40:42.127  <Info> phidget22[PhidgetUSBReadThreadFunction()] : HUB0001 (6-Port USB VINT Hub Phidget) v111 S/N:683442: ReadThread exiting normally (signaled by Phidget_close)
+2023-08-02T16:40:42.132  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0x7bc
+2023-08-02T16:40:42.243  <Info> phidget22usb[PhidgetUSBCloseHandle()] : Closing USB Device: 0xafc
+2023-08-02T16:40:42.243  <Info> phidget22[PhidgetUSBReadThreadFunction()] : 1010/1018/1019 (PhidgetInterfaceKit 8/8/8) v904 S/N:432846: ReadThread exiting normally (signaled by Phidget_close)
