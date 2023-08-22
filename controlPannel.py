@@ -20,11 +20,15 @@ class ControlPannel(object):
     def __init__(self, phm: PHMeter, spectro: str): 
         self.phmeter=phm
         self.spectrometer=spectro
+        self.calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"\ncoefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
         print("init de control pannel")
+        self.wrong=0
 
     def setOnDirectPH(self, ch, voltage):
         #print(self, ch, voltage)
-        pH = volt2pH(2,4,voltage)
+        a=self.phmeter.current_a
+        b=self.phmeter.current_b
+        pH = volt2pH(a,b,voltage)
         self.direct_pH.display(pH)
 
     def openConfigWindow(self):
@@ -35,13 +39,23 @@ class ControlPannel(object):
 
     def openCalibWindow(self):
         self.window = QtWidgets.QDialog()
-        self.ui = CalBox(self.phmeter)
+        self.ui = CalBox(self.phmeter, self)
         self.ui.setupUi(self.window)
         self.window.show()
 
+    def onCalibrationChange(self):
+        #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
+        self.calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"\ncoefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
+        self.calText.clear()
+        self.calText.appendPlainText(self.calib_text)
+        if self.phmeter.current_a==0:
+            self.wrong=1
+            print("Calibration erronée")
+        #print("calibration change")
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 700)
+        MainWindow.resize(900, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
@@ -84,10 +98,12 @@ class ControlPannel(object):
         self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_2.setGeometry(QtCore.QRect(190, 440, 281, 41))
         self.checkBox_2.setObjectName("checkBox_2")
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(530, 160, 211, 221))
-        self.tableView.setSizeIncrement(QtCore.QSize(0, 0))
-        self.tableView.setObjectName("tableView")
+        self.calText = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.calText.setGeometry(QtCore.QRect(530, 160, 350, 220))
+        self.calText.setSizeIncrement(QtCore.QSize(0, 0))
+        self.calText.setObjectName("calText")
+        #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
+        self.calText.appendPlainText(self.calib_text)
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(530, 115, 211, 41))
         self.label_6.setObjectName("label_6")
@@ -112,7 +128,12 @@ class ControlPannel(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
+        #activation de l'actualisation de la tension
+        self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectPH)
+        if self.phmeter.getIsOpen():
+            U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
+            pH=volt2pH(self.phmeter.current_a,self.phmeter.current_b,U)
+            self.direct_pH.display(pH)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

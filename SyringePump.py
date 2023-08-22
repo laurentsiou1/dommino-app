@@ -12,6 +12,18 @@ class SyringePump:
         self.relay = rly
         self.switch = swc
     
+    #cette fonction ne garantit pas que tous les appareils passifs sont branchés
+    #Il s'agit seulement des Phidgets
+    #Cela permet de ne pas avoir d'erreurs lors de l'exécution mais ne garantit pas 
+    #qu'un interrupteur de sécurité ne soit mal branché. 
+    def getIsOpen(self):
+        if self.stepper.getIsOpen() and self.relay.getIsOpen():
+            #la carte est branchée ainsi que le stepper
+            state=True
+        else:
+            state=False
+        return state
+    
     def SecurityStop(self, switch, state): #self est un syringe pump
         #print(self, switch, state) #x2 est interrupteur0 et x3=state
         if state == 1:

@@ -10,10 +10,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from pHmeter import *
+from datetime import datetime
 
 class CalBox(object):
-    def __init__(self, phm):
+    def __init__(self, phm, control_pannel):
         self.phmeter=phm
+        self.motherWindow=control_pannel
+        self.U4=0
+        self.U7=0
+        self.U10=0
+        self.cal_method=3 #3 points pH=4,7,10 #ou pH=4,7 
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -23,6 +29,9 @@ class CalBox(object):
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Apply|QtWidgets.QDialogButtonBox.Cancel)
         self.buttonBox.setObjectName("buttonBox")
+        self.buttonBox.clicked.connect(self.validateCal) #lorsqu'on clique sur valider, la calibration est enregsitrée
+        self.buttonBox.clicked.connect(self.phmeter.onCalibrationChange)        
+        self.buttonBox.clicked.connect(self.motherWindow.onCalibrationChange)
         self.direct_pH = QtWidgets.QLCDNumber(Dialog)
         self.direct_pH.setGeometry(QtCore.QRect(210, 80, 211, 131))
         self.direct_pH.setObjectName("direct_pH")
@@ -42,13 +51,13 @@ class CalBox(object):
         self.lcdNumber_pH10.setGeometry(QtCore.QRect(30, 210, 71, 51))
         self.lcdNumber_pH10.setObjectName("lcdNumber_pH10")
         self.lcdNumber_pH10.setNumDigits(6)
-        self.pushButton_pH4 = QtWidgets.QPushButton(Dialog, clicked = lambda: self.dispSavedVoltage(self.lcdNumber_pH4))
+        self.pushButton_pH4 = QtWidgets.QPushButton(Dialog, clicked = lambda: self.saveAndShowVoltage(self.lcdNumber_pH4))
         self.pushButton_pH4.setGeometry(QtCore.QRect(130, 50, 51, 51))
         self.pushButton_pH4.setObjectName("pushButton_pH4")
-        self.pushButton_pH7 = QtWidgets.QPushButton(Dialog, clicked = lambda: self.dispSavedVoltage(self.lcdNumber_pH7))
+        self.pushButton_pH7 = QtWidgets.QPushButton(Dialog, clicked = lambda: self.saveAndShowVoltage(self.lcdNumber_pH7))
         self.pushButton_pH7.setGeometry(QtCore.QRect(130, 130, 51, 51))
         self.pushButton_pH7.setObjectName("pushButton_pH7")
-        self.pushButton_pH10 = QtWidgets.QPushButton(Dialog, clicked = lambda: self.dispSavedVoltage(self.lcdNumber_pH10))
+        self.pushButton_pH10 = QtWidgets.QPushButton(Dialog, clicked = lambda: self.saveAndShowVoltage(self.lcdNumber_pH10))
         self.pushButton_pH10.setGeometry(QtCore.QRect(130, 210, 51, 51))
         self.pushButton_pH10.setObjectName("pushButton_pH10")
         self.label_2 = QtWidgets.QLabel(Dialog)
@@ -60,11 +69,12 @@ class CalBox(object):
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         
-        #Configuration de la fenêtre
-        U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
-        self.direct_pH.display(U)
         #activation de l'actualisation de la tension
-        self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectPH)
+        self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectVoltage)
+        #affichage de la tension déjà affichée sur le panneau de contrôle
+        if self.phmeter.getIsOpen():
+            U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
+            self.direct_pH.display(U)
     
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -75,16 +85,34 @@ class CalBox(object):
         self.pushButton_pH4.setText(_translate("Dialog", "pH4"))
         self.label_2.setText(_translate("Dialog", "Tensions enregistrées"))
 
-    def setOnDirectPH(self, ch, voltage):
+    def setOnDirectVoltage(self, ch, voltage):
         #print(self, ch, voltage)
-        pH = volt2pH(2,4,voltage)
-        self.direct_pH.display(pH)
+        #pH = volt2pH(2,4,voltage)
+        self.direct_pH.display(voltage)
 
-    def dispSavedVoltage(self, screen): #sreen est un objet QLCDNumber
+    def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
         U=self.phmeter.voltagechannel.getVoltage()
+        if screen==self.lcdNumber_pH4:
+            self.U4=U
+        if screen==self.lcdNumber_pH7:
+            self.U7=U
+        if screen==self.lcdNumber_pH10:
+            self.U10=U
         #pH=volt2pH(2,4,U)
         screen.display(U)
 
+    def validateCal(self): #method est un entier 2 ou 3 selon le type de calibration voulu
+        method = self.cal_method
+        print(method)
+        dt = datetime.now()
+        T = 22 #22°C pour l'instant non modifiable
+        #plus tard, implémenter un bouton sur l'interface pour sélectionner le type de calibration
+        if method == 2:
+            u_cal = [self.U4, self.U7]
+        if method == 3:
+            u_cal = [self.U4, self.U7, self.U10]
+        (a,b)=PHMeter.computeCalCoefs(self.phmeter,u_cal,method) #calcul des coefficients de calib
+        PHMeter.saveCalData(self.phmeter, dt, 22, method, u_cal, (a,b)) #enregistrer dans le fichier
 
 """
 if __name__ == "__main__":
@@ -98,6 +126,7 @@ if __name__ == "__main__":
 """
 # boucle pour tester ce programme uniquement
 if __name__ == "__main__":
+    from controlPannel import ControlPannel
     try: #si le pH mètre est connecté
         ch = VoltageInput()
         ch.setDeviceSerialNumber(432846)
@@ -115,7 +144,8 @@ if __name__ == "__main__":
         import sys
         app = QtWidgets.QApplication(sys.argv)
         Dialog = QtWidgets.QDialog()
-        ui = CalBox(phm)
+        mwindow = ControlPannel()
+        ui = CalBox(phm, mwindow)
         ui.setupUi(Dialog)
     try:
         #connection de la fenêtre avec le pH-mètre
