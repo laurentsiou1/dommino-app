@@ -12,7 +12,7 @@ import time
 #import syringe_pump as sp
 #import pHmeter as phm
 
-from SyringePump import SyringePump
+from syringePump import SyringePump
 
 #event handlers
 def onVoltageChange(self, voltage):
@@ -24,10 +24,15 @@ def onAttach(self, channel):
     ### Initialisation_composants ###
 
     ## Voltgage Inputs ##
-U_pH = VoltageInput() #pH-mètre
-U_pH.setDeviceSerialNumber(432846)
-U_pH.setChannel(0)
-U_pH.openWaitForAttachment(5000)
+try:
+    U_pH = VoltageInput() #pH-mètre
+    U_pH.setDeviceSerialNumber(432846)
+    U_pH.setChannel(0)
+    U_pH.openWaitForAttachment(5000)
+    deviceName1 = U_pH.getDeviceName()
+    print("device pH meter: " + str(deviceName1))
+except:
+	pass
 
 U_stepper = VoltageInput() #tension d'alim du stepper
 U_stepper.setDeviceSerialNumber(683442)
@@ -54,16 +59,16 @@ stepper.setHubPort(0) #seulement pour les device avec VINT
 stepper.setChannel(0)
 stepper.openWaitForAttachment(5000)    
 
-deviceName1 = U_pH.getDeviceName()
+
 deviceName2 = U_stepper.getDeviceName()
-deviceName3 = interrupteur0.getDeviceName()
-deviceName4 = relay0_state.getDeviceName()
+# deviceName3 = interrupteur0.getDeviceName()
+# deviceName4 = relay0_state.getDeviceName()
 deviceName5 = stepper.getDeviceName()
 
-print("device pH meter: " + str(deviceName1))
+
 print("Device stepper: " + str(deviceName2))
-print("device interrupteur: " + str(deviceName3))
-print("Device relai: " + str(deviceName4))    
+# print("device interrupteur: " + str(deviceName3))
+# print("Device relai: " + str(deviceName4))    
 print("device stepper: " + str(deviceName5))
 
 
@@ -73,7 +78,7 @@ print("Voltage: " + str(Uin))
 controlMode=stepper.getControlMode() #0 est le mode position set
 print("ControlMode: " + str(controlMode))
         
-stepper.setCurrentLimit(0.1)
+stepper.setCurrentLimit(0.2)
 stepper.setVelocityLimit(1000)
 
 sp = SyringePump(stepper, relay0_state, interrupteur0)
@@ -83,9 +88,9 @@ sp.switch.setOnStateChangeHandler(sp.SecurityStop) #securitystop prend trois arg
 
 
 sp.setZeroPosition()
-sp.fill_syringe(150)
-sp.dispense(20)
-sp.empty_syringe()
+#sp.fill_syringe(150)
+#sp.dispense(20)
+#sp.empty_syringe()
 
 
 

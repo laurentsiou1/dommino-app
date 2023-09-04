@@ -9,20 +9,31 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pyqtgraph import PlotWidget, plot
+import pyqtgraph as pg
 from expConfig import ExpConfig
 from calBox import CalBox
+from spectrumConfig import SpectrumConfigWindow
 
 from Phidget22.Devices.VoltageInput import VoltageInput
 from pHmeter import *
+from oceandirect.OceanDirectAPI import Spectrometer, OceanDirectAPI
+from spectro.absorbanceMeasure import AbsorbanceMeasure
 
 class ControlPannel(object):
     #Pour instancier la classe ControlPannel on doit renseigner un attribut PHMeter et un Spectrometer
-    def __init__(self, phm: PHMeter, spectro: str): 
+    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure):
+        print("initialisation du panneau de contrôle") 
+        
+        #Mesure du pH
         self.phmeter=phm
-        self.spectrometer=spectro
         self.calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"\ncoefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
-        print("init de control pannel")
-        self.wrong=0
+        self.wrong=0 #mauvaise calibration
+        
+        #spectrometry
+        self.spectro_unit=spectro_unit
+        if spectro_unit.state=='open':
+            self.shutter_state=not(self.spectro_unit.adv.get_enable_lamp())
 
     def setOnDirectPH(self, ch, voltage):
         #print(self, ch, voltage)
@@ -42,6 +53,12 @@ class ControlPannel(object):
         self.ui = CalBox(self.phmeter, self)
         self.ui.setupUi(self.window)
         self.window.show()
+    
+    def openSpectroWindow(self):
+        self.window = QtWidgets.QDialog()
+        self.ui = SpectrumConfigWindow(self.spectro_unit)
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def onCalibrationChange(self):
         #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
@@ -52,7 +69,17 @@ class ControlPannel(object):
             self.wrong=1
             print("Calibration erronée")
         #print("calibration change")
+    
+    def changeShutterState(self):
+        if self.spectro_unit.state=='open':
+            self.spectro_unit.changeShutterState()
+            self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
 
+    def updateSpectrum(self):
+        self.current_spectrum=AbsorbanceMeasure.get_averaged_corrected_spectrum(self.spectro_unit)
+        #print(self.lambdas)
+        self.directSpectrum.setData(self.lambdas,self.current_spectrum)
+        
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(900, 700)
@@ -68,9 +95,16 @@ class ControlPannel(object):
         self.electrode_is_stable.setProperty("value", 2)
         self.electrode_is_stable.setTextVisible(False)
         self.electrode_is_stable.setObjectName("electrode_is_stable")
-        self.Abs_direct = QtWidgets.QGraphicsView(self.centralwidget)
-        self.Abs_direct.setGeometry(QtCore.QRect(10, 50, 501, 331))
-        self.Abs_direct.setObjectName("Abs_direct")
+
+        self.direct_Abs_widget = pg.PlotWidget(self.centralwidget)        
+        """ #remplacé
+        self.direct_Abs_widget = QtWidgets.QGraphicsView(self.centralwidget)
+        """
+        self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 501, 331))
+        self.direct_Abs_widget.setObjectName("direct_Abs_widget")
+
+
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(530, 30, 71, 31))
         self.label.setObjectName("label")
@@ -80,24 +114,27 @@ class ControlPannel(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(650, 50, 71, 41))
         self.label_3.setObjectName("label_3")
-        self.plainTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.plainTextEdit.setGeometry(QtCore.QRect(30, 430, 121, 51))
-        self.plainTextEdit.setObjectName("plainTextEdit")
+
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(30, 390, 191, 41))
+        self.label_4.setGeometry(QtCore.QRect(330, 450, 151, 31))
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(30, 500, 81, 31))
+        self.label_5.setGeometry(QtCore.QRect(330, 550, 101, 31))
         self.label_5.setObjectName("label_5")
-        self.plainTextEdit_2 = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.plainTextEdit_2.setGeometry(QtCore.QRect(30, 540, 121, 51))
-        self.plainTextEdit_2.setObjectName("plainTextEdit_2")
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(190, 550, 271, 41))
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_2.setGeometry(QtCore.QRect(190, 440, 281, 41))
-        self.checkBox_2.setObjectName("checkBox_2")
+        
+        self.shutter = QtWidgets.QCheckBox(self.centralwidget, clicked = lambda: self.changeShutterState())
+        self.shutter.setGeometry(QtCore.QRect(90, 460, 101, 41))
+        self.shutter.setObjectName("shutter")
+
+        self.avg = QtWidgets.QSpinBox(self.centralwidget)
+        self.avg.setGeometry(QtCore.QRect(330, 580, 81, 31))
+        self.avg.setProperty("value", 1)
+        self.avg.setObjectName("avg")
+        self.Tint = QtWidgets.QSpinBox(self.centralwidget)
+        self.Tint.setGeometry(QtCore.QRect(330, 480, 81, 31))
+        self.Tint.setProperty("value", 10)
+        self.Tint.setObjectName("Tint")
+
         self.calText = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.calText.setGeometry(QtCore.QRect(530, 160, 350, 220))
         self.calText.setSizeIncrement(QtCore.QSize(0, 0))
@@ -107,12 +144,17 @@ class ControlPannel(object):
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(530, 115, 211, 41))
         self.label_6.setObjectName("label_6")
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openConfigWindow())
-        self.pushButton.setGeometry(QtCore.QRect(530, 530, 211, 51))
+        self.pushButton.setGeometry(QtCore.QRect(550, 570, 171, 51))
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openCalibWindow())
-        self.pushButton_2.setGeometry(QtCore.QRect(530, 430, 211, 51))
+        self.pushButton_2.setGeometry(QtCore.QRect(550, 470, 171, 51))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.reglage_spectro = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSpectroWindow())
+        self.reglage_spectro.setGeometry(QtCore.QRect(60, 550, 151, 51))
+        self.reglage_spectro.setObjectName("reglage_spectro")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 18))
@@ -134,6 +176,26 @@ class ControlPannel(object):
             U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
             pH=volt2pH(self.phmeter.current_a,self.phmeter.current_b,U)
             self.direct_pH.display(pH)
+        
+        #création d'un timer pour le renouvellement du spectre affiché
+        #il pourrait servir dans es autres fenêtres!
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(3000)
+        self.timer.start()
+        
+        #spectro connecté
+        if self.spectro_unit.state=='open':
+            #mise sur timer
+            self.timer.timeout.connect(self.updateSpectrum)            
+            
+            #état réel du shutter
+            self.shutter.setChecked(self.shutter_state)
+            
+            #affichage du spectre courant
+            self.lambdas=self.spectro_unit.wavelengths
+            self.current_spectrum=AbsorbanceMeasure.get_averaged_corrected_spectrum(self.spectro_unit)            
+            self.directSpectrum=self.direct_Abs_widget.plot(self.lambdas,self.current_spectrum)
+            
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -144,8 +206,10 @@ class ControlPannel(object):
         self.label_3.setText(_translate("MainWindow", "électrode stable"))
         self.label_4.setText(_translate("MainWindow", "integration time (ms)"))
         self.label_5.setText(_translate("MainWindow", "average"))
-        self.checkBox.setText(_translate("MainWindow", "non linearity correction"))
-        self.checkBox_2.setText(_translate("MainWindow", "electric dark correction"))
+        self.shutter.setText(_translate("MainWindow", "shutter"))
+        self.reglage_spectro.setText(_translate("MainWindow", "réglages spectro"))
+
+
         self.label_6.setText(_translate("MainWindow", "dernière calibration"))
         self.pushButton.setText(_translate("MainWindow", "lancement du titrage"))
         self.pushButton_2.setText(_translate("MainWindow", "calibration"))
@@ -153,32 +217,26 @@ class ControlPannel(object):
 
 
 if __name__ == "__main__":
-    spec = 'spectromètre'
-    import sys
+
+    #spectro
+    od = OceanDirectAPI()
+    device_count = od.find_usb_devices() # 1 si appareils détectés
+    device_ids = od.get_device_ids()
+    #device_count = len(device_ids)
+    id=device_ids[0]
+    spectro = od.open_device(id) #crée une instance de la classe Spectrometer
+    adv = Spectrometer.Advanced(spectro)
+    spectro_unit=AbsorbanceMeasure(od,spectro)
+
+    #pHmètre
+    U_pH = VoltageInput()
+    ph_meter = PHMeter(U_pH)
+
+    #Interface
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    #if getIs
-    try: #si le pH mètre est connecté
-        ch = VoltageInput()
-        ch.setDeviceSerialNumber(432846)
-        ch.setChannel(0)
-        ch.openWaitForAttachment(1000)
-        ch.setOnVoltageChangeHandler(PHMeter.doOnVoltageChange)
-
-        phm = PHMeter(ch)
-        phm.configure_pHmeter()
-        print("pH mètre connecté")
-        ui = ControlPannel(phm,spec)
-        ui.setupUi(MainWindow)
-        ui.phmeter.voltagechannel.setOnVoltageChangeHandler(ui.setOnDirectPH)
-    except: #pH mètre non connecté
-        #phm = 'pH mètre'
-        print("blabla")
-        print("pH mètre non connecté")
-        ui = ControlPannel(spec)
-        print("blabla")
-        ui.setupUi(MainWindow)
-        print("ui setup")
-    finally:
-        MainWindow.show()        
-        sys.exit(app.exec_())
+    ui = ControlPannel(ph_meter,spectro_unit)
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+        

@@ -29,9 +29,9 @@ class CalBox(object):
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Apply|QtWidgets.QDialogButtonBox.Cancel)
         self.buttonBox.setObjectName("buttonBox")
-        self.buttonBox.clicked.connect(self.validateCal) #lorsqu'on clique sur valider, la calibration est enregsitrée
-        self.buttonBox.clicked.connect(self.phmeter.onCalibrationChange)        
-        self.buttonBox.clicked.connect(self.motherWindow.onCalibrationChange)
+        self.buttonBox.accepted.connect(self.validateCal) #lorsqu'on clique sur valider, la calibration est enregsitrée
+        self.buttonBox.accepted.connect(self.phmeter.onCalibrationChange)        
+        self.buttonBox.accepted.connect(self.motherWindow.onCalibrationChange)
         self.direct_pH = QtWidgets.QLCDNumber(Dialog)
         self.direct_pH.setGeometry(QtCore.QRect(210, 80, 211, 131))
         self.direct_pH.setObjectName("direct_pH")
@@ -124,6 +124,8 @@ if __name__ == "__main__":
     Dialog.show()
     sys.exit(app.exec_())
 """
+
+"""
 # boucle pour tester ce programme uniquement
 if __name__ == "__main__":
     from controlPannel import ControlPannel
@@ -156,3 +158,29 @@ if __name__ == "__main__":
         Dialog.show()        
         #print("show")
         sys.exit(app.exec_())
+"""
+
+if __name__ == "__main__":
+    
+    #spectro
+    od = OceanDirectAPI()
+    device_count = od.find_usb_devices() # 1 si appareils détectés
+    device_ids = od.get_device_ids()
+    #device_count = len(device_ids)
+    id=device_ids[0]
+    spectro = od.open_device(id) #crée une instance de la classe Spectrometer
+    adv = Spectrometer.Advanced(spectro)
+    spectro_unit=AbsorbanceMeasure(od,spectro)
+
+    #pHmètre
+    U_pH = VoltageInput()
+    ph_meter = PHMeter(U_pH)
+
+    #Interface
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    cp = ControlPannel(ph_meter,spectro_unit)
+    ui = CalBox(ph_meter, cp)
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())

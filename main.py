@@ -1,5 +1,6 @@
 "Programme principal de l'application"
 
+#imports Phidget
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageInput import *
 from Phidget22.Devices.DigitalInput import *
@@ -7,14 +8,22 @@ from Phidget22.Devices.DigitalOutput import *
 from Phidget22.Devices.Stepper import *
 from Phidget22.Devices.Log import *
 from Phidget22.Devices.Manager import *
-import time
 
+#imports OceanDirect
+from oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectrometer as Sp
+from oceandirect.od_logger import od_logger
+
+#Classes crées pour les sous-systèmes
 from syringePump import SyringePump
 from pHmeter import PHMeter
+from spectro.absorbanceMeasure import AbsorbanceMeasure
 
+#modules et classes pour l'interface
 from PyQt5 import QtCore, QtGui, QtWidgets
 import IHM
 from controlPannel import ControlPannel
+
+import time
 
 # class Sous_Systeme:
 #     isConnected
@@ -78,40 +87,81 @@ stepper.setDeviceSerialNumber(683442)
 stepper.setHubPort(0)
 stepper.setChannel(0)
 try:
-    U_stepper.openWaitForAttachment(1000)
-    stepper.openWaitForAttachment(1000)
+    U_stepper.openWaitForAttachment(2000) #au moins 2000
+    stepper.openWaitForAttachment(2000)
     stepperIsconnected=True
     print("stepper connecté")
-    U_stepper.setOnAttachHandler(onAttach) #gestionnaire de connexion activé
-    U_stepper.setOnDetachHandler(onDetach)    
+    #U_stepper.setOnAttachHandler(onAttach) #gestionnaire de connexion activé
+    #U_stepper.setOnDetachHandler(onDetach)    
 except:
     print("Stepper non connecté")
     stepperIsConnected=False
     pass
 
+                        ## Spectromètre et lampe ##
+# logger = od_logger()
+od = OceanDirectAPI()
+device_count = od.find_usb_devices() #nb d'appareils détectés
+device_ids = od.get_device_ids()
+if device_ids!=[]:
+    id=device_ids[0]
+    try:
+        spectro = od.open_device(id) #crée une instance de la classe Spectrometer
+        adv = Sp.Advanced(spectro)
+        spectroIsConnected=True
+        print("Spectro connecté")
+    except:
+        spectro=None #on crée dans tous les cas un objet Spectrometer
+        adv = None
+        spectroIsConnected=False
+        print("Ne peut pas se connecter au spectro numéro ", id)
+        pass
+else:
+    spectro=None #on crée dans tous les cas un objet Spectrometer
+    adv = None #Sp.Advanced(spectro)
+    spectroIsConnected=False
+    print("Spectro non connecté")
+print("Nombre d'appareils OceanDirect détectés : ", device_count)
+print("ID spectros: ", device_ids)
 
+#Les instances pour chaque appareil/voie de mesure sont crées peu importe leur état de connexion
+# activé/désactivé
+#Les instances des sous-systèmes de même. 
 ph_meter = PHMeter(U_pH)
 syringe_pump=SyringePump(stepper, relay0, switch0)
-spectrometer='classe à créer'
+spectrometry_set=AbsorbanceMeasure(od, spectro)
 peristaltic_pump='classe de pompe péristaltique à créer'
 
-### Lancement IHM
-ph_meter.getIsOpen()
-syringe_pump.getIsOpen()
+
+### Lancement IHM ###
+statut_phm=ph_meter.getIsOpen()
+statut_ps=syringe_pump.getIsOpen()
+statut_spectro=spectrometry_set.getIsOpen()
+
+print(statut_ps,statut_phm,statut_spectro)
 
 
 import sys
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
-ui = ControlPannel(ph_meter,spectrometer)
+ui = ControlPannel(ph_meter,spectrometry_set)
 ui.setupUi(MainWindow)
 #ui.phmeter.voltagechannel.setOnVoltageChangeHandler(ui.setOnDirectPH)
 MainWindow.show()        
 sys.exit(app.exec_())
 
+### fermeture des voies  ###
 U_pH.close()
 U_stepper.close()
 switch0.close()
 switch1.close()
 relay0.close()
 stepper.close()
+
+adv.set_enable_lamp(False) #Protection des fibres
+print("shutter fermé\n")
+od.close_device(id)
+print("Spectromètre déconnecté \n")
+
+
+

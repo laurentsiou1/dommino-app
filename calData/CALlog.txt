@@ -278,3 +278,43 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(6.666666666652522e-05, 2.728866666666668)
 
+2023-08-29 11:58:10.975320
+22°C 
+Type de calibration: 3
+Voltages calib:
+[2.8694, 2.8256, 0]
+Coefficients U=a*pH+b
+(a,b)=(-0.4782333333333336, 5.2459666666666696)
+
+2023-08-29 12:32:11.882217
+22°C 
+Type de calibration: 3
+Voltages calib:
+[0, 0, 0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+
+2023-08-29 13:39:26.354757
+22°C 
+Type de calibration: 3
+Voltages calib:
+[0, 0, 0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+
+2023-08-31 15:30:06.626232
+22°C 
+Type de calibration: 3
+Voltages calib:
+[0, 0, 0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+
+2023-08-31 17:02:55.144351
+22°C 
+Type de calibration: 3
+Voltages calib:
+[0, 0, 0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+
