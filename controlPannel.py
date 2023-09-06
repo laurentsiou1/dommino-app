@@ -15,10 +15,13 @@ from expConfig import ExpConfig
 from calBox import CalBox
 from spectrumConfig import SpectrumConfigWindow
 
-from Phidget22.Devices.VoltageInput import VoltageInput
 from pHmeter import *
-from oceandirect.OceanDirectAPI import Spectrometer, OceanDirectAPI
 from spectro.absorbanceMeasure import AbsorbanceMeasure
+
+from Phidget22.Devices.VoltageInput import VoltageInput
+from oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
+from oceandirect.od_logger import od_logger
+
 
 class ControlPannel(object):
     #Pour instancier la classe ControlPannel on doit renseigner un attribut PHMeter et un Spectrometer
@@ -76,9 +79,8 @@ class ControlPannel(object):
             self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
 
     def updateSpectrum(self):
-        self.current_spectrum=AbsorbanceMeasure.get_averaged_corrected_spectrum(self.spectro_unit)
-        #print(self.lambdas)
-        self.directSpectrum.setData(self.lambdas,self.current_spectrum)
+        if self.spectro_unit.current_Abs_spectrum!=None:
+            self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_Abs_spectrum)
         
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -191,10 +193,10 @@ class ControlPannel(object):
             #état réel du shutter
             self.shutter.setChecked(self.shutter_state)
             
-            #affichage du spectre courant
-            self.lambdas=self.spectro_unit.wavelengths
-            self.current_spectrum=AbsorbanceMeasure.get_averaged_corrected_spectrum(self.spectro_unit)            
-            self.directSpectrum=self.direct_Abs_widget.plot(self.lambdas,self.current_spectrum)
+            #config de l'affichage du spectre courant
+            self.lambdas=self.spectro_unit.wavelengths    
+            #self.current_Abs_spectrum=self.spectro_unit.current_Abs_spectrum    
+            self.directSpectrum=self.direct_Abs_widget.plot([0],[0])
             
 
     def retranslateUi(self, MainWindow):
@@ -216,17 +218,36 @@ class ControlPannel(object):
         self.menuPanneau_de_controle.setTitle(_translate("MainWindow", "Panneau de contrôle"))
 
 
+#suppose qu'un spectro et un pH mètre sont connectés
 if __name__ == "__main__":
 
     #spectro
+    logger = od_logger()
     od = OceanDirectAPI()
-    device_count = od.find_usb_devices() # 1 si appareils détectés
+    device_count = od.find_usb_devices() #nb d'appareils détectés
     device_ids = od.get_device_ids()
-    #device_count = len(device_ids)
-    id=device_ids[0]
-    spectro = od.open_device(id) #crée une instance de la classe Spectrometer
-    adv = Spectrometer.Advanced(spectro)
-    spectro_unit=AbsorbanceMeasure(od,spectro)
+    if device_ids!=[]:
+        id=device_ids[0]
+        try:
+            spectro = od.open_device(id) #crée une instance de la classe Spectrometer
+            adv = Sp.Advanced(spectro)
+            spectroIsConnected=True
+            print("Spectro connecté")
+        except:
+            spectro=None #on crée dans tous les cas un objet Spectrometer
+            adv = None
+            spectroIsConnected=False
+            print("Ne peut pas se connecter au spectro numéro ", id)
+            pass
+    else:
+        spectro=None #on crée dans tous les cas un objet Spectrometer
+        adv = None #Sp.Advanced(spectro)
+        spectroIsConnected=False
+        print("Spectro non connecté")
+    print("Nombre d'appareils OceanDirect détectés : ", device_count)
+    print("ID spectros: ", device_ids)
+
+    spectrometry_unit=AbsorbanceMeasure(od, spectro)
 
     #pHmètre
     U_pH = VoltageInput()
@@ -235,7 +256,7 @@ if __name__ == "__main__":
     #Interface
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = ControlPannel(ph_meter,spectro_unit)
+    ui = ControlPannel(ph_meter,spectrometry_unit)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

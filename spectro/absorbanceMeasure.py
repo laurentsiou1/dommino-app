@@ -61,6 +61,7 @@ class AbsorbanceMeasure(Spectrometer):
             self.active_dark_spectrum=None
             self.active_ref_spectrum=None    
             self.current_spectrum=None
+            self.current_Abs_spectrum=None
 
         else:
             self.state='closed'
@@ -111,7 +112,7 @@ class AbsorbanceMeasure(Spectrometer):
         elif self.active_dark_spectrum!=None: #attribut existant
             dsp=self.active_dark_spectrum
         else:   #aucun argument ni attribut de fourni
-            print("Spectrum has no dark correction")
+            #print("Spectrum has no dark correction")
             dsp=[0 for i in self.wavelengths] #correction nulle
             #print("dsp=",dsp)
         current_sp=self.get_averaged_spectrum()
@@ -134,6 +135,22 @@ class AbsorbanceMeasure(Spectrometer):
         else:
             print("numéro du spectro: ",self.serial_number)
         return optimal_int_time_us
+
+    def acquire_dark_spectrum(self):
+        self.adv.set_enable_lamp(False)
+        time.sleep(2)
+        #Prise du spectre d'obscurité
+        dark_spectrum=self.get_averaged_spectrum()
+        self.active_dark_spectrum=dark_spectrum
+
+    def acquire_ref_spectrum(self):
+        self.adv.set_enable_lamp(True)
+        print("shutter ouvert ? ",self.adv.get_enable_lamp())
+        time.sleep(2)
+        ref_spectrum_non_corrected=self.get_averaged_spectrum()
+        #correction du dark spectrum et nonlinearité
+        ref_spectrum=self.device.nonlinearity_correct_spectrum2(self.active_dark_spectrum,ref_spectrum_non_corrected)
+        self.active_ref_spectrum=ref_spectrum
 
     def acquire_ref_and_dark_spectra(self):
         self.adv.set_enable_lamp(False)

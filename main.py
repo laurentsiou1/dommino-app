@@ -1,4 +1,11 @@
 "Programme principal de l'application"
+"""
+https://www.hostinger.fr/tutoriels/commandes-git
+Petit tuto des commandes git
+
+Pour afficher l'arbre dans le terminal:
+https://stackoverflow.com/questions/1064361/unable-to-show-a-git-tree-in-terminal
+"""
 
 #imports Phidget
 from Phidget22.Phidget import *
@@ -99,7 +106,7 @@ except:
     pass
 
                         ## Spectromètre et lampe ##
-# logger = od_logger()
+logger = od_logger()
 od = OceanDirectAPI()
 device_count = od.find_usb_devices() #nb d'appareils détectés
 device_ids = od.get_device_ids()
@@ -146,7 +153,7 @@ app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 ui = ControlPannel(ph_meter,spectrometry_set)
 ui.setupUi(MainWindow)
-#ui.phmeter.voltagechannel.setOnVoltageChangeHandler(ui.setOnDirectPH)
+
 MainWindow.show()        
 sys.exit(app.exec_())
 

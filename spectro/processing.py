@@ -31,10 +31,13 @@ def get_optimal_integration_time(spectra,int_time_us):
 
 #Les spectres entrés sont supposés corrigés du bruit d'obscurité et de la non linéarité du capteur
 def intensity2absorbance(spectrum, blanc_ref):
-    for i in spectrum:
-        if i==0:
-            i=1 #pour éviter une division par zéro
-    abs_spectrum = [math.log10(blanc_ref[k]/spectrum[k]) for k in range(len(spectrum))]
+    if spectrum!=None and blanc_ref!=None:
+        for intensity in blanc_ref:
+            if intensity==0:
+                intensity=1 #pour éviter une division par zéro
+        abs_spectrum = [1-spectrum[k]/blanc_ref[k] for k in range(len(spectrum))]
+    else:
+        abs_spectrum=None
     return abs_spectrum
 
 def plot_spectrum(wl, spectrum):
