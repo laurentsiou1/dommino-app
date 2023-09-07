@@ -35,7 +35,7 @@ def intensity2absorbance(spectrum, blanc_ref):
         for intensity in blanc_ref:
             if intensity==0:
                 intensity=1 #pour éviter une division par zéro
-        abs_spectrum = [1-spectrum[k]/blanc_ref[k] for k in range(len(spectrum))]
+        abs_spectrum = [math.log10(spectrum[k]/blanc_ref[k]) for k in range(len(spectrum))]
     else:
         abs_spectrum=None
     return abs_spectrum

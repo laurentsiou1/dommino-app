@@ -41,21 +41,33 @@ class AbsorbanceMeasure(Spectrometer):
     def __init__(self, od, spectro): 
         if spectro!=None:
             self.state='open'
+            self.model=spectro.get_model()
+            print(self.model)
+            if self.model=='OceanSR2':
+                spectro.set_boxcar_width(3) #2k pix pour 700nm
+                spectro.set_integration_time(30000)      
+                print("spectro sr2 reconnu")      
+            
+            elif self.model=='OceanSTUV':
+                spectro.set_boxcar_width(5) #2k pix pour 400nm
+                spectro.set_integration_time(10000)
+                print("spectro st-uv reconnu")
+
+            else:
+                print("type de spectro non reconnu")
 
             self.ocean_manager=od #instance de la classe OceanDirectAPI
             self.device=spectro
             self.adv=Spectrometer.Advanced(spectro) 
 
-            spectro.set_integration_time(30000)
-            spectro.set_boxcar_width(3)
             spectro.set_scans_to_average(10)
             spectro.use_nonlinearity(True)
             spectro.set_electric_dark_correction_usage(True)
             
-            self.wavelengths = spectro.get_wavelengths()
-            self.t_int=spectro.get_integration_time()
-            self.averaging=spectro.get_scans_to_average()
-            self.boxcar=spectro.get_boxcar_width()
+            self.wavelengths = spectro.wavelengths
+            self.t_int=spectro.integration_time
+            self.averaging=spectro.scans_to_avg
+            self.boxcar=spectro.boxcar_hw
 
             self.isShutterOpen=self.adv.get_enable_lamp()
             self.active_dark_spectrum=None
@@ -145,7 +157,7 @@ class AbsorbanceMeasure(Spectrometer):
 
     def acquire_ref_spectrum(self):
         self.adv.set_enable_lamp(True)
-        print("shutter ouvert ? ",self.adv.get_enable_lamp())
+        #print("shutter ouvert ? ",self.adv.get_enable_lamp())
         time.sleep(2)
         ref_spectrum_non_corrected=self.get_averaged_spectrum()
         #correction du dark spectrum et nonlinearité
@@ -205,7 +217,7 @@ if __name__ == "__main__":
         device = od.open_device(id) #crée une instance de la classe Spectrometer
         absorbance_unit=AbsorbanceMeasure(od,device)
         adv = Spectrometer.Advanced(device)
-
+        """
         #ref et dark
         absorbance_unit.acquire_ref_and_dark_spectra()
 
@@ -217,6 +229,16 @@ if __name__ == "__main__":
         AbsorbanceMeasure.add_spectrum_to_plot(absorbance_unit,spec)
         plt.legend() #tracé
         plt.show()
+        """
+        device.details()
+        print(device.get_device_type())
+        print(device.get_model())
+        print(device.model_name,device.model)
+        print(device.get_serial_number())
+        print(device.serial_number)
+
+
+
 
         #fermeture
         absorbance_unit.close_shutter()

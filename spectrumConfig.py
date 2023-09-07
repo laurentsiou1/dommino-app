@@ -15,6 +15,8 @@ from oceandirect.od_logger import od_logger
 from spectro.absorbanceMeasure import AbsorbanceMeasure
 import spectro.processing as proc
 
+_translate = QtCore.QCoreApplication.translate
+
 class SpectrumConfigWindow(object):
     def __init__(self, spectro_unit):
         self.spectro_unit=spectro_unit
@@ -72,38 +74,59 @@ class SpectrumConfigWindow(object):
         self.abs_plot=self.abs_widget.plot([0],[0],pen="y",clear = True)
         self.abs_plot.setData(self.lambdas,self.spectro_unit.current_Abs_spectrum)  
 
+    def update_integration_time(self):
+        t=1000*self.Tint.value()
+        self.spectro_unit.device.set_integration_time(t)
+        self.spectro_unit.t_int=t #modifie dans la classe AbsorbanceMeasure
+
+    def update_averaging(self):
+        a=self.avg.value()
+        self.spectro_unit.device.set_scans_to_average(a)
+        self.spectro_unit.averaging=a #modifie l'attribut de la classe absorbance
+
+    def update_acquisition_delay(self):
+        dl=self.spectro_unit.t_int*self.spectro_unit.averaging
+        self.acquisition_delay=dl//1000 #millisecondes
+        seconds=dl/1000000
+        self.acquisition_delay_display.setText(_translate("Dialog", "durée d\'acquisition : %0.1fs"% seconds ))
+    
+    def update_refreshing_rate(self):
+        r=self.acquisition_delay+2000
+        self.refresh_rate=r
+        self.timer.setInterval(r)    
+        self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : %0.1fs"% float(r/1000) ))    
+
     def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(1263, 755)
+        Dialog.setObjectName("Configuration du spectromètre")
+        Dialog.resize(1799, 954)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(1010, 720, 241, 21))
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setGeometry(QtCore.QRect(1690, 850, 81, 71))
+        self.buttonBox.setOrientation(QtCore.Qt.Vertical)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         
         self.dark_widget = pg.PlotWidget(Dialog)
-        self.dark_widget.setGeometry(QtCore.QRect(1000, 60, 251, 171))
+        self.dark_widget.setGeometry(QtCore.QRect(960, 20, 521, 291))
         self.dark_widget.setObjectName("dark_widget")
         self.ref_widget = pg.PlotWidget(Dialog)
-        self.ref_widget.setGeometry(QtCore.QRect(1000, 290, 251, 171))
+        self.ref_widget.setGeometry(QtCore.QRect(960, 320, 521, 311))
         self.ref_widget.setObjectName("ref_widget")
         
         self.abs_widget = pg.PlotWidget(Dialog) 
-        #self.absorbance_widget = QtWidgets.QGraphicsView(Dialog)
-        self.abs_widget.setGeometry(QtCore.QRect(10, 40, 971, 621))
+        self.abs_widget.setGeometry(QtCore.QRect(10, 50, 941, 621))
         self.abs_widget.setObjectName("abs_widget")
         self.intensity_widget = pg.PlotWidget(Dialog)
-        self.intensity_widget.setGeometry(QtCore.QRect(1000, 520, 251, 171))
+        self.intensity_widget.setGeometry(QtCore.QRect(960, 640, 521, 291))
         self.intensity_widget.setObjectName("intensity_widget")
         
         self.label_dark = QtWidgets.QLabel(Dialog)
-        self.label_dark.setGeometry(QtCore.QRect(1020, 20, 91, 31))
+        self.label_dark.setGeometry(QtCore.QRect(1560, 130, 191, 31))
         self.label_dark.setObjectName("label_dark")
         self.label_ref = QtWidgets.QLabel(Dialog)
-        self.label_ref.setGeometry(QtCore.QRect(1020, 250, 91, 31))
+        self.label_ref.setGeometry(QtCore.QRect(1560, 440, 91, 31))
         self.label_ref.setObjectName("label_ref")
         self.label_intensity = QtWidgets.QLabel(Dialog)
-        self.label_intensity.setGeometry(QtCore.QRect(1020, 480, 91, 31))
+        self.label_intensity.setGeometry(QtCore.QRect(1560, 760, 101, 31))
         self.label_intensity.setObjectName("label_intensity")
         self.label_abs = QtWidgets.QLabel(Dialog)
         self.label_abs.setGeometry(QtCore.QRect(20, 10, 91, 31))
@@ -111,63 +134,87 @@ class SpectrumConfigWindow(object):
         
         #boutons de mise à jour réf et dark
         self.refresh_dark_button = QtWidgets.QPushButton(Dialog)
-        self.refresh_dark_button.setGeometry(QtCore.QRect(1140, 20, 81, 31))
+        self.refresh_dark_button.setGeometry(QtCore.QRect(1560, 180, 81, 31))
         self.refresh_dark_button.setObjectName("refresh_dark_button")
         self.refresh_ref_button = QtWidgets.QPushButton(Dialog)
-        self.refresh_ref_button.setGeometry(QtCore.QRect(1140, 250, 81, 31))
+        self.refresh_ref_button.setGeometry(QtCore.QRect(1560, 490, 81, 31))
         self.refresh_ref_button.setObjectName("refresh_ref_button")
     
 
-        self.Tint = QtWidgets.QSpinBox(Dialog)
+        self.Tint = QtWidgets.QSpinBox(Dialog) 
         self.Tint.setGeometry(QtCore.QRect(30, 700, 71, 31))
         self.Tint.setMinimum(1)
         self.Tint.setMaximum(1000)
-        self.Tint.setProperty("value", 10)
         self.Tint.setObjectName("Tint")
+        self.avg = QtWidgets.QSpinBox(Dialog)
+        self.avg.setGeometry(QtCore.QRect(180, 700, 71, 31))
+        self.avg.setMinimum(1)
+        self.avg.setMaximum(500)
+        self.avg.setObjectName("avg")
+
         self.label_tint = QtWidgets.QLabel(Dialog)
         self.label_tint.setGeometry(QtCore.QRect(50, 680, 51, 21))
         self.label_tint.setObjectName("label_tint")
         self.label_avg = QtWidgets.QLabel(Dialog)
         self.label_avg.setGeometry(QtCore.QRect(200, 680, 61, 21))
         self.label_avg.setObjectName("label_avg")
-        self.avg = QtWidgets.QSpinBox(Dialog)
-        self.avg.setGeometry(QtCore.QRect(180, 700, 71, 31))
-        self.avg.setMinimum(1)
-        self.avg.setMaximum(500)
-        self.avg.setProperty("value", 1)
-        self.avg.setObjectName("avg")
         self.shutter = QtWidgets.QCheckBox(Dialog, clicked = lambda: self.changeShutterState())
-        self.shutter.setGeometry(QtCore.QRect(330, 700, 71, 31))
+        self.shutter.setGeometry(QtCore.QRect(340, 710, 131, 31))
         self.shutter.setObjectName("shutter")
+
+        self.acquisition_delay_display = QtWidgets.QLabel(Dialog)
+        self.acquisition_delay_display.setGeometry(QtCore.QRect(30, 770, 251, 31))
+        self.acquisition_delay_display.setObjectName("acquisition_delay_display")
+        self.processing_delay_display = QtWidgets.QLabel(Dialog)
+        self.processing_delay_display.setGeometry(QtCore.QRect(30, 820, 251, 31))
+        self.processing_delay_display.setObjectName("processing_delay_display")
+        self.refresh_rate_display = QtWidgets.QLabel(Dialog)
+        self.refresh_rate_display.setGeometry(QtCore.QRect(30, 870, 400, 31))
+        self.refresh_rate_display.setObjectName("refresh_rate_display")
+
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
-
+        
         #création d'un timer pour le renouvellement du spectre affiché
         #il pourrait servir dans les autres fenêtres!
         self.timer = QtCore.QTimer()
-        self.timer.setInterval(5000)
+        self.timer.setInterval(3000)
         self.timer.start()
-
+        
         #spectro connecté
         if self.spectro_unit.state=='open':
             self.shutter.setChecked(self.shutter_state)   
             
+            #config des paramètres selon valeurs actuelles du spectro
+            t_int=self.spectro_unit.t_int//1000 #temps en millisecondes
+            self.Tint.setProperty("value", t_int)  
+            self.avg.setProperty("value", self.spectro_unit.averaging)
+            self.acquisition_delay=t_int*self.spectro_unit.averaging
+
+            self.Tint.valueChanged.connect(self.update_integration_time)
+            self.Tint.valueChanged.connect(self.update_acquisition_delay)
+            self.avg.valueChanged.connect(self.update_averaging)
+
+
             self.lambdas=self.spectro_unit.wavelengths
             #connexion boutons à l'initialisation
             self.refresh_dark_button.clicked.connect(self.update_dark_spectrum) #dark spectrum
-
-            #connexion des boutons
             self.timer.timeout.connect(self.update_intensity_spectrum) #intensity_widget spectrum (corrected)  
             self.refresh_ref_button.clicked.connect(self.update_ref_spectrum) #ref spectrum
             #actualisation des spectres périodiquement
             self.timer.timeout.connect(self.refresh_all_spectra_on_timer)
 
+            #affichage_graphique
+            self.refresh_rate=self.acquisition_delay//1000+2000 #en millisecondes
+            self.timer.timeout.connect(self.update_refreshing_rate)
+
+
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        #_translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Configuration du spectromètre"))
         self.label_dark.setText(_translate("Dialog", "Dark Spectrum"))
         self.label_ref.setText(_translate("Dialog", "Référence"))
         self.label_intensity.setText(_translate("Dialog", "Intensité"))
@@ -177,6 +224,9 @@ class SpectrumConfigWindow(object):
         self.label_tint.setText(_translate("Dialog", "T int"))
         self.label_avg.setText(_translate("Dialog", "averaging"))
         self.shutter.setText(_translate("Dialog", "Shutter"))
+        self.acquisition_delay_display.setText(_translate("Dialog", "durée d\'acquisition : "))
+        self.processing_delay_display.setText(_translate("Dialog", "durée de calcul : "))
+        self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : "))
 
 
 if __name__ == "__main__":
