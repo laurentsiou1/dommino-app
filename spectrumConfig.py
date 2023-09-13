@@ -53,7 +53,7 @@ class SpectrumConfigWindow(object):
         self.spectro_unit.acquire_ref_spectrum()    
 
     def update_absorbance_spectrum(self):
-        #cette fonction est appelée alors même qu'il n'y a pas de spectre de réf actif
+        #lorsque le shutter est fermé, ça n'a pas de sens d'afficher l'absorbance
         self.spectro_unit.current_Abs_spectrum=proc.intensity2absorbance(self.spectro_unit.current_spectrum,self.spectro_unit.active_ref_spectrum)
 
     def refresh_displayed_dark_spectrum(self):

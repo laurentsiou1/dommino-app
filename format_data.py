@@ -5,23 +5,25 @@ A SIMPLIFIER
 """
 
 import glob, os
-import processing
+import spectro.processing
 from datetime import datetime
+
+def directMeasureFile(set,folder):
+    for 
+
+
+
 
 #lambda
 wl=[250,300,350,400,450,500,550,600,650]
 
 #simulation d'un spectre en intensité
 dark_ref = [25, 510, 232, 429, 823, 351, 453, 559, 620]
-
 blanc_ref = [3122, 15066, 12372, 11399, 7383, 8327, 9898, 10432, 10100]
-
 I1 = [2382, 12870, 7831, 8731, 5311, 7319, 8311, 8310, 8100]
 I2 = [2280, 12190, 7280, 8011, 5209, 7279, 8290, 8280, 8049]
 I3 = [2260, 12090, 7220, 7970, 5021, 6980, 7892, 8009, 7900]
-
 pH=[4.8,6.5,8.2]
-
 abs1 = processing.intensity2absorbance(I1,blanc_ref)
 #print(abs1)
 abs2 = processing.intensity2absorbance(I2,blanc_ref)

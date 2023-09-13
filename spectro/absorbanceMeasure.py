@@ -65,10 +65,13 @@ class AbsorbanceMeasure(Spectrometer):
             spectro.set_electric_dark_correction_usage(True)
             
             self.wavelengths = spectro.wavelengths
-            self.t_int=spectro.integration_time
+            self.N_lambda = len(self.wavelengths)
+            self.t_int=spectro.integration_time #us
             self.averaging=spectro.scans_to_avg
             self.boxcar=spectro.boxcar_hw
 
+            self.nonlinearity_correction_usage=spectro.get_nonlinearity_correction_usage()
+            self.electric_dark_correction_usage=spectro.get_electric_dark_correction_usage()
             self.isShutterOpen=self.adv.get_enable_lamp()
             self.active_dark_spectrum=None
             self.active_ref_spectrum=None    

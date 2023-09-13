@@ -11,26 +11,33 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
+from IHM import IHM
 from expConfig import ExpConfig
 from calBox import CalBox
 from spectrumConfig import SpectrumConfigWindow
+from savingConfig import SavingConfig
 
 from pHmeter import *
 from spectro.absorbanceMeasure import AbsorbanceMeasure
+from syringePump import SyringePump
 
 from Phidget22.Devices.VoltageInput import VoltageInput
+from Phidget22.Devices.DigitalInput import DigitalInput
+from Phidget22.Devices.DigitalOutput import DigitalOutput
+from Phidget22.Devices.Stepper import Stepper
 from oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from oceandirect.od_logger import od_logger
 
 
 class ControlPannel(object):
     #Pour instancier la classe ControlPannel on doit renseigner un attribut PHMeter et un Spectrometer
-    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure):
+    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure, ihm: IHM):
         print("initialisation du panneau de contrôle") 
+        self.ihm=ihm #ihm passé de attribut 
         
         #Mesure du pH
         self.phmeter=phm
-        self.calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"\ncoefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
+        self.calib_text = "Current calibration data:\n"+"date: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
         self.wrong=0 #mauvaise calibration
         
         #spectrometry
@@ -38,40 +45,43 @@ class ControlPannel(object):
         if spectro_unit.state=='open':
             self.shutter_state=not(self.spectro_unit.adv.get_enable_lamp())
 
-    def setOnDirectPH(self, ch, voltage):
-        #print(self, ch, voltage)
-        a=self.phmeter.current_a
-        b=self.phmeter.current_b
-        pH = volt2pH(a,b,voltage)
+    def setOnDirectPH(self):
+        if self.phmeter.getIsOpen():
+            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)
+        print("passage dans set on ")
+
+    def displayDirectPH(self,ch,voltage): #arguments immuables
+        self.phmeter.currentVoltage=voltage        
+        pH = volt2pH(self.phmeter.a,self.phmeter.b,voltage)
+        self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
         self.direct_pH.display(pH)
 
     def openConfigWindow(self):
-        self.window = QtWidgets.QDialog()
-        self.ui = ExpConfig()
-        self.ui.setupUi(self.window)
-        self.window.show()
+        self.window3 = QtWidgets.QDialog()
+        self.ui3 = ExpConfig()
+        self.ui3.setupUi(self.window3)
+        self.window3.show()
 
     def openCalibWindow(self):
-        self.window = QtWidgets.QDialog()
-        self.ui = CalBox(self.phmeter, self)
-        self.ui.setupUi(self.window)
-        self.window.show()
+        self.window1 = QtWidgets.QDialog()
+        self.ui1 = CalBox(self.phmeter, self)
+        self.ui1.setupUi(self.window1)
+        self.window1.show()
     
     def openSpectroWindow(self):
-        self.window = QtWidgets.QDialog()
-        self.ui = SpectrumConfigWindow(self.spectro_unit)
-        self.ui.setupUi(self.window)
-        self.window.show()
+        self.window2 = QtWidgets.QDialog()
+        self.ui2 = SpectrumConfigWindow(self.spectro_unit)
+        self.ui2.setupUi(self.window2)
+        self.window2.show()
 
     def onCalibrationChange(self):
-        #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
-        self.calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"\ncoefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
+        self.calib_text = "Current calibration data:\n"+"date: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
+        #print(self.phmeter.CALtype)
         self.calText.clear()
         self.calText.appendPlainText(self.calib_text)
-        if self.phmeter.current_a==0:
+        if self.phmeter.a==0:
             self.wrong=1
             print("Calibration erronée")
-        #print("calibration change")
     
     def changeShutterState(self):
         if self.spectro_unit.state=='open':
@@ -81,85 +91,146 @@ class ControlPannel(object):
     def updateSpectrum(self):
         if self.spectro_unit.current_Abs_spectrum!=None:
             self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_Abs_spectrum)
-        
+    
+    def openSavingConfigWindow(self):
+        self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
+        self.win4.show()
+
     def setupUi(self, MainWindow):
+        #global
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 700)
+        MainWindow.resize(1054, 825)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        #labels   
+        self.pH_label = QtWidgets.QLabel(self.centralwidget)
+        self.pH_label.setGeometry(QtCore.QRect(680, 80, 51, 51))
+        self.pH_label.setObjectName("pH_label")
+        self.abs_label = QtWidgets.QLabel(self.centralwidget)
+        self.abs_label.setGeometry(QtCore.QRect(10, 10, 421, 41))
+        self.abs_label.setObjectName("abs_label")
+        self.stability_label = QtWidgets.QLabel(self.centralwidget)
+        self.stability_label.setGeometry(QtCore.QRect(640, 30, 81, 31))
+        self.stability_label.setObjectName("stability_label")
+        self.Tint_label = QtWidgets.QLabel(self.centralwidget)
+        self.Tint_label.setGeometry(QtCore.QRect(20, 430, 151, 41))
+        self.Tint_label.setObjectName("Tint_label")
+        self.avg_label = QtWidgets.QLabel(self.centralwidget)
+        self.avg_label.setGeometry(QtCore.QRect(40, 490, 81, 41))
+        self.avg_label.setObjectName("avg_label")
+        self.last_cal_label = QtWidgets.QLabel(self.centralwidget)
+        self.last_cal_label.setGeometry(QtCore.QRect(530, 130, 191, 41))
+        self.last_cal_label.setObjectName("last_cal_label")
+        self.label_base_syringe = QtWidgets.QLabel(self.centralwidget)
+        self.label_base_syringe.setGeometry(QtCore.QRect(560, 460, 250, 41))
+        self.label_base_syringe.setAutoFillBackground(False)
+        self.label_base_syringe.setObjectName("label_base_syringe")
+        self.added_base_label = QtWidgets.QLabel(self.centralwidget)
+        self.added_base_label.setGeometry(QtCore.QRect(810, 550, 150, 41))
+        self.added_base_label.setAutoFillBackground(False)
+        self.added_base_label.setObjectName("added_base_label")
+        self.added_acid_label = QtWidgets.QLabel(self.centralwidget)
+        self.added_acid_label.setGeometry(QtCore.QRect(810, 680, 150, 41))
+        self.added_acid_label.setAutoFillBackground(False)
+        self.added_acid_label.setObjectName("added_acid_label")
+
+        #Ph-mètre    
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
-        self.direct_pH.setGeometry(QtCore.QRect(530, 60, 91, 51))
+        self.direct_pH.setGeometry(QtCore.QRect(730, 80, 101, 51))
         self.direct_pH.setObjectName("direct_pH")
         self.direct_pH.setNumDigits(6)
-        self.electrode_is_stable = QtWidgets.QProgressBar(self.centralwidget)
-        self.electrode_is_stable.setGeometry(QtCore.QRect(650, 90, 81, 21))
-        self.electrode_is_stable.setMaximum(4)
-        self.electrode_is_stable.setProperty("value", 2)
-        self.electrode_is_stable.setTextVisible(False)
-        self.electrode_is_stable.setObjectName("electrode_is_stable")
-
-        self.direct_Abs_widget = pg.PlotWidget(self.centralwidget)        
-        """ #remplacé
-        self.direct_Abs_widget = QtWidgets.QGraphicsView(self.centralwidget)
-        """
-        self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 501, 331))
-        self.direct_Abs_widget.setObjectName("direct_Abs_widget")
-
-
-
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(530, 30, 71, 31))
-        self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(10, 10, 421, 41))
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(650, 50, 71, 41))
-        self.label_3.setObjectName("label_3")
-
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(330, 450, 151, 31))
-        self.label_4.setObjectName("label_4")
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(330, 550, 101, 31))
-        self.label_5.setObjectName("label_5")
-        
-        self.shutter = QtWidgets.QCheckBox(self.centralwidget, clicked = lambda: self.changeShutterState())
-        self.shutter.setGeometry(QtCore.QRect(90, 460, 101, 41))
-        self.shutter.setObjectName("shutter")
-
-        self.avg = QtWidgets.QSpinBox(self.centralwidget)
-        self.avg.setGeometry(QtCore.QRect(330, 580, 81, 31))
-        self.avg.setProperty("value", 1)
-        self.avg.setObjectName("avg")
-        self.Tint = QtWidgets.QSpinBox(self.centralwidget)
-        self.Tint.setGeometry(QtCore.QRect(330, 480, 81, 31))
-        self.Tint.setProperty("value", 10)
-        self.Tint.setObjectName("Tint")
-
+        self.stabilisation_level = QtWidgets.QProgressBar(self.centralwidget)
+        self.stabilisation_level.setGeometry(QtCore.QRect(730, 30, 101, 31))
+        self.stabilisation_level.setMaximum(100)
+        self.stabilisation_level.setProperty("value", 15)
+        self.stabilisation_level.setTextVisible(True)
+        self.stabilisation_level.setOrientation(QtCore.Qt.Horizontal)
+        self.stabilisation_level.setObjectName("stabilisation_level")
         self.calText = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.calText.setGeometry(QtCore.QRect(530, 160, 350, 220))
+        self.calText.setGeometry(QtCore.QRect(700, 170, 300, 241))
         self.calText.setSizeIncrement(QtCore.QSize(0, 0))
         self.calText.setObjectName("calText")
         #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
         self.calText.appendPlainText(self.calib_text)
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(530, 115, 211, 41))
-        self.label_6.setObjectName("label_6")
+        self.cal_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openCalibWindow())
+        self.cal_button.setGeometry(QtCore.QRect(890, 50, 121, 61))
+        self.cal_button.setObjectName("cal_button")
 
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openConfigWindow())
-        self.pushButton.setGeometry(QtCore.QRect(550, 570, 171, 51))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openCalibWindow())
-        self.pushButton_2.setGeometry(QtCore.QRect(550, 470, 171, 51))
-        self.pushButton_2.setObjectName("pushButton_2")
+        #Spectrométrie
+        self.direct_Abs_widget = pg.PlotWidget(self.centralwidget)        
+        self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 501, 361))
+        self.direct_Abs_widget.setObjectName("direct_Abs_widget")        
+        self.shutter = QtWidgets.QCheckBox(self.centralwidget, clicked = lambda: self.changeShutterState())
+        self.shutter.setGeometry(QtCore.QRect(240, 490, 111, 41))
+        self.shutter.setObjectName("shutter")
+        self.avg = QtWidgets.QSpinBox(self.centralwidget)
+        self.avg.setGeometry(QtCore.QRect(130, 490, 81, 41))
+        self.avg.setProperty("value", 1)
+        self.avg.setObjectName("avg")
+        self.Tint = QtWidgets.QSpinBox(self.centralwidget)
+        self.Tint.setGeometry(QtCore.QRect(180, 430, 81, 41))
+        self.Tint.setProperty("value", 10)
+        self.Tint.setObjectName("Tint")
         self.reglage_spectro = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSpectroWindow())
-        self.reglage_spectro.setGeometry(QtCore.QRect(60, 550, 151, 51))
+        self.reglage_spectro.setGeometry(QtCore.QRect(360, 450, 140, 61))
         self.reglage_spectro.setObjectName("reglage_spectro")
+
+        #Syringe Pump
+        self.base_syringe = QtWidgets.QSlider(self.centralwidget)
+        self.base_syringe.setGeometry(QtCore.QRect(560, 500, 381, 41))
+        self.base_syringe.setMouseTracking(True)
+        self.base_syringe.setMaximum(500)
+        self.base_syringe.setProperty("value", 100)
+        self.base_syringe.setOrientation(QtCore.Qt.Horizontal)
+        self.base_syringe.setObjectName("base_syringe")
+        self.added_base = QtWidgets.QLabel(self.centralwidget)
+        self.added_base.setGeometry(QtCore.QRect(810, 590, 100, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.added_base.setFont(font)
+        self.added_base.setObjectName("added_base")
+        self.base_level = QtWidgets.QLabel(self.centralwidget)
+        self.base_level.setGeometry(QtCore.QRect(960, 500, 71, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.base_level.setFont(font)
+        self.base_level.setObjectName("base_level")
+        self.add_base_button = QtWidgets.QPushButton(self.centralwidget)
+        self.add_base_button.setGeometry(QtCore.QRect(650, 590, 120, 41))
+        self.add_base_button.setObjectName("add_base_button")
+        self.reset_base_count = QtWidgets.QPushButton(self.centralwidget)
+        self.reset_base_count.setGeometry(QtCore.QRect(890, 590, 81, 41))
+        self.reset_base_count.setObjectName("reset_base_count")
+        self.add_base_box = QtWidgets.QSpinBox(self.centralwidget)
+        self.add_base_box.setGeometry(QtCore.QRect(560, 590, 81, 41))
+        self.add_base_box.setObjectName("add_base_box")
+        self.added_acid = QtWidgets.QLabel(self.centralwidget)
+        self.added_acid.setGeometry(QtCore.QRect(810, 720, 71, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.added_acid.setFont(font)
+        self.added_acid.setObjectName("added_acid")
+        self.reset_acid_count = QtWidgets.QPushButton(self.centralwidget)
+        self.reset_acid_count.setGeometry(QtCore.QRect(890, 720, 81, 41))
+        self.reset_acid_count.setObjectName("reset_acid_count")
+
+        #application
+        self.titration_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openConfigWindow())
+        self.titration_button.setGeometry(QtCore.QRect(270, 660, 171, 51))
+        self.titration_button.setObjectName("titration_button")
+        self.saving_config = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSavingConfigWindow())
+        self.saving_config.setGeometry(QtCore.QRect(20, 590, 171, 51))
+        self.saving_config.setObjectName("saving_config")
+        #self.saving_config.clicked.connect()
+        self.save_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.ihm.createDirectMeasureFile())
+        self.save_button.setGeometry(QtCore.QRect(20, 680, 200, 51))
+        self.save_button.setObjectName("save_button")
+
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 18))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1054, 18))
         self.menubar.setObjectName("menubar")
         self.menuPanneau_de_controle = QtWidgets.QMenu(self.menubar)
         self.menuPanneau_de_controle.setObjectName("menuPanneau_de_controle")
@@ -173,11 +244,12 @@ class ControlPannel(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         #activation de l'actualisation de la tension
-        self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectPH)
+        #self.phmeter.activatePHmeter()
+        #Le setOnVoltageChangeHandler ne s'applique que sur la dernière fonction renseignée
+        
         if self.phmeter.getIsOpen():
-            U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
-            pH=volt2pH(self.phmeter.current_a,self.phmeter.current_b,U)
-            self.direct_pH.display(pH)
+            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)
+            #self.direct_pH.display(self.phmeter.currentPH)
         
         #création d'un timer pour le renouvellement du spectre affiché
         #il pourrait servir dans es autres fenêtres!
@@ -202,19 +274,31 @@ class ControlPannel(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.electrode_is_stable.setFormat(_translate("MainWindow", "%p%"))
-        self.label.setText(_translate("MainWindow", "pH"))
-        self.label_2.setText(_translate("MainWindow", "Absorbance direct et référence"))
-        self.label_3.setText(_translate("MainWindow", "électrode stable"))
-        self.label_4.setText(_translate("MainWindow", "integration time (ms)"))
-        self.label_5.setText(_translate("MainWindow", "average"))
+
+        self.pH_label.setText(_translate("MainWindow", "pH"))
+        self.abs_label.setText(_translate("MainWindow", "Absorbance direct et référence"))
+        self.stability_label.setText(_translate("MainWindow", "stability"))
+        self.Tint_label.setText(_translate("MainWindow", "integration time (ms)"))
+        self.avg_label.setText(_translate("MainWindow", "averaging"))
+
+        self.stabilisation_level.setFormat(_translate("MainWindow", "%p%"))
         self.shutter.setText(_translate("MainWindow", "shutter"))
         self.reglage_spectro.setText(_translate("MainWindow", "réglages spectro"))
+        self.titration_button.setText(_translate("MainWindow", "lancement du titrage"))
+        self.cal_button.setText(_translate("MainWindow", "calibration"))
 
-
-        self.label_6.setText(_translate("MainWindow", "dernière calibration"))
-        self.pushButton.setText(_translate("MainWindow", "lancement du titrage"))
-        self.pushButton_2.setText(_translate("MainWindow", "calibration"))
+        self.saving_config.setText(_translate("MainWindow", "Configure data saving"))
+        self.save_button.setText(_translate("MainWindow", "Save current measure"))
+        self.label_base_syringe.setText(_translate("MainWindow", "basic syringe level (0 - 500uL)"))
+        self.base_level.setText(_translate("MainWindow", "100 uL"))
+        self.added_base.setText(_translate("MainWindow", "55 uL"))
+        self.added_base_label.setText(_translate("MainWindow", "added base (uL)"))
+        self.add_base_button.setText(_translate("MainWindow", "Add volume"))
+        self.reset_base_count.setText(_translate("MainWindow", "Reset"))
+        self.added_acid_label.setText(_translate("MainWindow", "added acid (uL)"))
+        self.added_acid.setText(_translate("MainWindow", "55 uL"))
+        self.reset_acid_count.setText(_translate("MainWindow", "Reset"))
+    
         self.menuPanneau_de_controle.setTitle(_translate("MainWindow", "Panneau de contrôle"))
 
 
@@ -246,17 +330,31 @@ if __name__ == "__main__":
         print("Spectro non connecté")
     print("Nombre d'appareils OceanDirect détectés : ", device_count)
     print("ID spectros: ", device_ids)
-
     spectrometry_unit=AbsorbanceMeasure(od, spectro)
 
     #pHmètre
-    U_pH = VoltageInput()
+    U_pH = VoltageInput() #pH-mètre
+    U_pH.setDeviceSerialNumber(432846)
+    U_pH.setChannel(0)
+    try:
+        U_pH.openWaitForAttachment(1000)
+        print("pH mètre connecté")
+    except:
+        print("pH-mètre non connecté")
+    pass
     ph_meter = PHMeter(U_pH)
+
+    #Syringe Pump
+    stepper=Stepper()
+    relay=DigitalOutput()
+    switch=DigitalInput()
+    syringe_pump = SyringePump(stepper,relay,switch)
 
     #Interface
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = ControlPannel(ph_meter,spectrometry_unit)
+    ihm = IHM(ph_meter,spectrometry_unit,syringe_pump)
+    ui = ControlPannel(ph_meter, spectrometry_unit, ihm)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

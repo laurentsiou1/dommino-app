@@ -19,7 +19,7 @@ class CalBox(object):
         self.U4=0
         self.U7=0
         self.U10=0
-        self.cal_method=3 #3 points pH=4,7,10 #ou pH=4,7 
+        self.used_pH_buffers=set()
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -27,15 +27,14 @@ class CalBox(object):
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setGeometry(QtCore.QRect(190, 220, 231, 51))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Apply|QtWidgets.QDialogButtonBox.Cancel)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Ok|QtWidgets.QDialogButtonBox.Cancel)
         self.buttonBox.setObjectName("buttonBox")
-        self.buttonBox.accepted.connect(self.validateCal) #lorsqu'on clique sur valider, la calibration est enregsitrée
-        self.buttonBox.accepted.connect(self.phmeter.onCalibrationChange)        
-        self.buttonBox.accepted.connect(self.motherWindow.onCalibrationChange)
-        self.direct_pH = QtWidgets.QLCDNumber(Dialog)
-        self.direct_pH.setGeometry(QtCore.QRect(210, 80, 211, 131))
-        self.direct_pH.setObjectName("direct_pH")
-        self.direct_pH.setNumDigits(6)
+        #print("passage!")
+
+        self.direct_voltage = QtWidgets.QLCDNumber(Dialog)
+        self.direct_voltage.setGeometry(QtCore.QRect(210, 80, 211, 131))
+        self.direct_voltage.setObjectName("direct_voltage")
+        self.direct_voltage.setNumDigits(6)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(260, 40, 131, 41))
         self.label.setObjectName("label")
@@ -65,16 +64,22 @@ class CalBox(object):
         self.label_2.setObjectName("label_2")
 
         self.retranslateUi(Dialog)
+
+        self.buttonBox.accepted.connect(self.validateCal) #lorsqu'on clique sur valider, la calibration est enregsitrée
+        self.buttonBox.accepted.connect(self.phmeter.onCalibrationChange)        
+        self.buttonBox.accepted.connect(self.motherWindow.onCalibrationChange)        
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.buttonBox.clicked.connect(self.motherWindow.setOnDirectPH) # type: ignore
+        #QtCore.QMetaObject.connectSlotsByName(Dialog)
+
         
         #activation de l'actualisation de la tension
         self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectVoltage)
         #affichage de la tension déjà affichée sur le panneau de contrôle
-        if self.phmeter.getIsOpen():
-            U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
-            self.direct_pH.display(U)
+        #if self.phmeter.getIsOpen():
+            #U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
+            #self.direct_voltage.display(U)
     
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -86,33 +91,44 @@ class CalBox(object):
         self.label_2.setText(_translate("Dialog", "Tensions enregistrées"))
 
     def setOnDirectVoltage(self, ch, voltage):
-        #print(self, ch, voltage)
-        #pH = volt2pH(2,4,voltage)
-        self.direct_pH.display(voltage)
+        self.phmeter.currentVoltage=voltage    
+        self.direct_voltage.display(voltage)
 
     def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
-        U=self.phmeter.voltagechannel.getVoltage()
+        U=self.phmeter.currentVoltage
+        print("save voltage")
         if screen==self.lcdNumber_pH4:
             self.U4=U
+            self.used_pH_buffers.add(4)
         if screen==self.lcdNumber_pH7:
             self.U7=U
+            self.used_pH_buffers.add(7)
         if screen==self.lcdNumber_pH10:
             self.U10=U
-        #pH=volt2pH(2,4,U)
+            self.used_pH_buffers.add(10)
+        print("voltage=",U)
         screen.display(U)
 
-    def validateCal(self): #method est un entier 2 ou 3 selon le type de calibration voulu
-        method = self.cal_method
-        print(method)
+    def validateCal(self): #pH_buffers est un tuple contenant les valeurs de pH des tampons
+        pH_buffers=sorted(list(self.used_pH_buffers))
+        self.used_pH_buffers = pH_buffers
+        #print("pH buffers : ",type(pH_buffers),pH_buffers)
         dt = datetime.now()
         T = 22 #22°C pour l'instant non modifiable
-        #plus tard, implémenter un bouton sur l'interface pour sélectionner le type de calibration
-        if method == 2:
+        if pH_buffers == [4]:
+            u_cal = [self.U4]
+        elif pH_buffers == [7]:
+            u_cal = [self.U7]
+        elif pH_buffers == [4,7]:
             u_cal = [self.U4, self.U7]
-        if method == 3:
+            print("calib 2 pts")
+        elif pH_buffers == [4,7,10]:
             u_cal = [self.U4, self.U7, self.U10]
-        (a,b)=PHMeter.computeCalCoefs(self.phmeter,u_cal,method) #calcul des coefficients de calib
-        PHMeter.saveCalData(self.phmeter, dt, 22, method, u_cal, (a,b)) #enregistrer dans le fichier
+            print("calib 3 pts")
+        else:
+            print("This type of calibration is not suppported")
+        (a,b)=PHMeter.computeCalCoefs(self.phmeter,u_cal,pH_buffers) #calcul des coefficients de calib
+        PHMeter.saveCalData(self.phmeter, dt, 22, pH_buffers, u_cal, (a,b)) #enregistrer dans le fichier
 
 """
 if __name__ == "__main__":

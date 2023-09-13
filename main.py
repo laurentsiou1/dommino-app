@@ -27,7 +27,7 @@ from spectro.absorbanceMeasure import AbsorbanceMeasure
 
 #modules et classes pour l'interface
 from PyQt5 import QtCore, QtGui, QtWidgets
-import IHM
+from IHM import IHM
 from controlPannel import ControlPannel
 
 import time
@@ -76,11 +76,13 @@ try:
     relay0.openWaitForAttachment(1000)
     pHmeterIsconnected=True
     print("carte d'interfaçage connectée")
+    print("pH-mètre connecté")
     U_pH.setOnAttachHandler(onAttach)   #état de connexion de la carte
     U_pH.setOnDetachHandler(onDetach)
 except:
     pHmeterIsconnected=False
     print("carte d'interfaçage non connectée")
+    print("pH-mètre non connecté")
     pass
 
                             ## hub Phidget ##
@@ -141,17 +143,12 @@ peristaltic_pump='classe de pompe péristaltique à créer'
 
 
 ### Lancement IHM ###
-statut_phm=ph_meter.getIsOpen()
-statut_ps=syringe_pump.getIsOpen()
-statut_spectro=spectrometry_set.getIsOpen()
-
-print(statut_ps,statut_phm,statut_spectro)
-
 
 import sys
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
-ui = ControlPannel(ph_meter,spectrometry_set)
+ihm=IHM(ph_meter,spectrometry_set,syringe_pump)
+ui = ControlPannel(ph_meter,spectrometry_set,ihm)
 ui.setupUi(MainWindow)
 
 MainWindow.show()        

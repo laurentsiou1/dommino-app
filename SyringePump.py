@@ -11,6 +11,17 @@ class SyringePump:
         self.stepper = stp
         self.relay = rly
         self.switch = swc
+
+        mode = 'manual' #peut être 'titration'
+        isEmpty = None
+
+        #niveau courant des seringues
+        self.acid_level_uL=None
+        self.base_level_uL=None
+
+        #monitoring de la dispense sur le titrage
+        self.added_acid_uL = 0
+        self.added_base_uL = 0
     
     #cette fonction ne garantit pas que tous les appareils passifs sont branchés
     #Il s'agit seulement des Phidgets
