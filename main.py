@@ -65,15 +65,21 @@ switch0.setChannel(0)
 switch1 = DigitalInput() #interrupteur bout de course seringue pleine
 switch1.setDeviceSerialNumber(432846)
 switch1.setChannel(1)
+legato_run_indicator = DigitalInput() #pin 15 DIGITAL IO à 1 si en mouvement
+legato_run_indicator.setDeviceSerialNumber(432846)
+legato_run_indicator.setChannel(5)
+legato_direction = DigitalInput() #pin7 DIGITAL IO à 1 si infusion 0 si recharge
+legato_direction.setDeviceSerialNumber(432846)
+legato_direction.setChannel(7)
 #Digital outputs
-relay0 = DigitalOutput() #contrôle électrovanne
-relay0.setDeviceSerialNumber(432846)
-relay0.setChannel(0)
+electro_valve = DigitalOutput() #contrôle électrovanne
+electro_valve.setDeviceSerialNumber(432846)
+electro_valve.setChannel(0)
 try:
     U_pH.openWaitForAttachment(1000)
     switch0.openWaitForAttachment(1000)
     switch1.openWaitForAttachment(1000)
-    relay0.openWaitForAttachment(1000)
+    electro_valve.openWaitForAttachment(1000)
     pHmeterIsconnected=True
     print("carte d'interfaçage connectée")
     print("pH-mètre connecté")
@@ -133,11 +139,18 @@ else:
 print("Nombre d'appareils OceanDirect détectés : ", device_count)
 print("ID spectros: ", device_ids)
 
+                        ###     Pousse seringue du commerce     ###
+try:
+    ser=serial.Serial('COM3', timeout = 2, stopbits=2)  #COM3 peut changer, à vérifier
+    print("Liaison série établie avec le KDS Legato100\n", ser)
+except:
+    pass
+
 #Les instances pour chaque appareil/voie de mesure sont crées peu importe leur état de connexion
 # activé/désactivé
 #Les instances des sous-systèmes de même. 
 ph_meter = PHMeter(U_pH)
-syringe_pump=SyringePump(stepper, relay0, switch0)
+syringe_pump=SyringePump('Legato') #ou 'Phidget'
 spectrometry_set=AbsorbanceMeasure(od, spectro)
 peristaltic_pump='classe de pompe péristaltique à créer'
 
@@ -159,7 +172,7 @@ U_pH.close()
 U_stepper.close()
 switch0.close()
 switch1.close()
-relay0.close()
+electro_valve.close()
 stepper.close()
 
 adv.set_enable_lamp(False) #Protection des fibres

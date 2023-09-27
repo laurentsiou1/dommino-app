@@ -1,100 +1,396 @@
 "Classe SyringePump"
 
-import Phidget22.Devices.Stepper 
-import Phidget22.Devices.DigitalOutput
-import Phidget22.Devices.DigitalInput 
+from Phidget22.Phidget import *
+from Phidget22.Devices.VoltageInput import *
+from Phidget22.Devices.DigitalInput import *
+from Phidget22.Devices.DigitalOutput import *
+from Phidget22.Devices.Stepper import *
 import time
 
-class SyringePump:
+class SyringePump: #Nouvelle classe SyringePump globale : classe mère
+        
+    mode = 'manual' #peut être 'titration'
 
-    def __init__(self, stp, rly, swc):
-        self.stepper = stp
-        self.relay = rly
-        self.switch = swc
+    #niveau courant des seringues
+    acid_level_uL=None
+    base_level_uL=None
 
-        mode = 'manual' #peut être 'titration'
-        isEmpty = None
-
-        #niveau courant des seringues
-        self.acid_level_uL=None
-        self.base_level_uL=None
-
-        #monitoring de la dispense sur le titrage
-        self.added_acid_uL = 0
-        self.added_base_uL = 0
+    #monitoring de la dispense sur le titrage
+    added_acid_uL = 0
+    added_base_uL = 0
     
+    def __init__(self, model):
+        if model=='Phidget':
+            self.model='Stepper Phidget'
+            PhidgetStepperPump.__init__(self)
+        elif model=='Legato':
+            self.model='KDSLegato100'
+            KDS_Legato100.__init__(self)
+        else:
+            self.model='unknown'
+    
+    def reset_acid_count(self):
+        self.added_acid_uL=0
+    
+    def reset_base_count(self):
+        self.added_base_uL=0
+
+
+class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
+    
+    stepper = Stepper() #contrôle du stepper
+    switch = DigitalInput() #interrupteur bout de course seringue    
+    electrovanne = DigitalOutput() #contrôle électrovanne    
+    
+    def __init__(self,syringe_type='SGE500'):
+        
+        #Stepper
+        self.stepper.setDeviceSerialNumber(683442)
+        self.stepper.setHubPort(0)
+        self.stepper.setChannel(0)
+        try:
+            self.stepper.openWaitForAttachment(2000)
+            print("stepper connecté")
+        except:
+            print("stepper non connecté")
+            pass
+        
+        if self.stepper.getIsOpen():
+            print("limite de courant actuelle : ", self.stepper.getCurrentLimit())
+            self.stepper.setCurrentLimit(0.2) #0.1A
+            print("limite de courant après réglage : ", self.stepper.getCurrentLimit())
+            self.stepper.setVelocityLimit(20)
+            print("limite de vittesse stepper : ", self.stepper.getVelocityLimit())
+            self.stepper.setAcceleration(5)
+            print("acceleration stepper : ", self.stepper.getAcceleration())
+            if syringe_type=='SGE500': #Trajan SGE 500uL
+                self.stepper.setRescaleFactor(-0.013115) 
+                #450uL dispensés sur une échelle de 30500 positions avec scale factor=1
+                #soit 76,25 microsteps pour 1 uL.     
+                self.size = 450 #en uL : c'est le volume utilse de la seringue. 
+                #Sur une seringue de 500uL j'utilise un volume utile de 400uL
+                #Pour ne pas toucher le bout de la seringue
+            else:
+                #par défaut c'est une 500uL SGE...
+                print("dans le else")
+                self.stepper.setRescaleFactor(-0.01303) #avant 0.013115
+            print("rescale factor = ", self.stepper.getRescaleFactor())
+
+        #Interrupteurs, electrovanne
+        self.switch.setDeviceSerialNumber(432846)
+        self.switch.setChannel(0)
+        self.electrovanne.setDeviceSerialNumber(432846)
+        self.electrovanne.setChannel(0)
+        try:
+            self.switch.openWaitForAttachment(1000)
+            self.electrovanne.openWaitForAttachment(1000)
+        except:
+            pass
+    
+    def getIsOpen(self):
     #cette fonction ne garantit pas que tous les appareils passifs sont branchés
     #Il s'agit seulement des Phidgets
     #Cela permet de ne pas avoir d'erreurs lors de l'exécution mais ne garantit pas 
     #qu'un interrupteur de sécurité ne soit mal branché. 
-    def getIsOpen(self):
-        if self.stepper.getIsOpen() and self.relay.getIsOpen():
+        if self.stepper.getIsOpen() and self.electrovanne.getIsOpen():
             #la carte est branchée ainsi que le stepper
             state=True
         else:
             state=False
         return state
     
-    def SecurityStop(self, switch, state): #self est un syringe pump
-        #print(self, switch, state) #x2 est interrupteur0 et x3=state
-        if state == 1:
+    def SecurityStop(self, switch, state): #à modifier
+        print("self:",self,"switch:",switch,"state",state)
+        if state == 0:
             self.stepper.setEngaged(False)
-            print("Piston en bout de course, moteur coupé")
+            print("interrupteur ouvert : arrêt du moteur")
+        else:
+            print("interrupteur fermé")
 
-    def ReachedPosition(self): #agit sur un objet Stepper
-        time.sleep(1) #attendre la stabilisation du moteur
-        position = self.getPosition()
-        print("Position atteinte : " + str(position))
-        return position
+    def motorStopped(self): #agit sur un objet Stepper
+        self.setEngaged(False)
+        time.sleep(2) #marge pour stabilisation du moteur
     
+    def waitForStop(self):
+        #cette fonction tourne jusqu'à ce que le moteur s'arrête
+        mv=self.stepper.getEngaged()
+        #print("mv=",mv)
+        if mv==True:
+            print("start of movement")
+            while(self.stepper.getEngaged()==True):
+                pass
+            print("end of movement")
+        else:
+            print("no movement")
+    
+    def engageMovement(self):
+        self.switch.setOnStateChangeHandler(self.SecurityStop)
+        self.stepper.setOnStoppedHandler(PhidgetStepperPump.motorStopped)
+        print("Motor rotating, press ctrl+Z to Stop\n")
+        try:
+            self.stepper.setEngaged(True)
+            self.waitForStop()
+        except(KeyboardInterrupt):
+            self.stepper.setEngaged(False)         
+    
+    def configForDispense(self,ev=1): #ev=1 electrovanne en position de dispense
+        #paramètres stepper
+        self.stepper.setCurrentLimit(0.4)
+        self.stepper.setAcceleration(1)
+        self.stepper.setVelocityLimit(10)
+        print("config pour dispense : \n\
+            vitesse limite = ",self.stepper.getVelocityLimit(),"\n\
+            limite en courant (A) : ", self.stepper.getCurrentLimit )
+        if ev==1:#electrovanne sur le mode dispense
+            time.sleep(1)
+            self.electrovanne.setState(True)
+            time.sleep(1)
+
+    def configForRefill(self,ev=0): #ev=0 electrovanne en position de recharge
+        #paramètres stepper
+        self.stepper.setCurrentLimit(0.2)
+        self.stepper.setAcceleration(5)
+        self.stepper.setVelocityLimit(20)
+        print("config pour recharge : \n\
+            vitesse limite = ",self.stepper.getVelocityLimit(),"\n\
+            limite en courant (A) : ", self.stepper.getCurrentLimit )
+        if ev==0:   #electrovanne sur le mode recharge
+            time.sleep(1)
+            self.electrovanne.setState(False)
+            time.sleep(1)
+
+    def simple_dispense(self,vol,ev=1):
+        pos0 = self.stepper.getPosition()
+        print("position avant dispense : ",pos0)
+        if vol <= self.size-pos0:
+            self.configForDispense(ev)
+            self.stepper.setTargetPosition(pos0+vol)
+            #lancement
+            self.engageMovement()
+            #On repasse en mode recharge (electrovanne hors tension)
+            time.sleep(1)
+            self.electrovanne.setState(False)
+            time.sleep(1)
+            #affichage de la position atteinte
+            position = self.stepper.getPosition()
+            print("Position atteinte après dispense: ", position)
+            self.added_base_uL+=(position-pos0)
+            print("volume cumulé de base ajouté = ", self.added_base_uL)
+        else:
+            print("Volume diponible dans la seringue insuffisant, \
+                  la dispense doit se faire en plusieurs étapes")
+    
+    def simple_refill(self,vol,ev=1):   
+        pos0=self.stepper.getPosition()
+        self.configForRefill(ev)
+        self.stepper.setTargetPosition(pos0-vol) #recharge donc target supérieur à position courante
+        #lancement
+        self.engageMovement()
+        #affichage de la position atteinte
+        position = self.stepper.getPosition()
+        
+        print("Position atteinte après recharge: ", position)
+    
+    def full_refill(self,ev=1):
+        pos0=self.stepper.getPosition()
+        self.configForRefill(ev)
+        self.stepper.setTargetPosition(0) #recharge donc target supérieur à position courante
+        #lancement
+        self.engageMovement()
+        #affichage de la position atteinte
+        position = self.stepper.getPosition()
+        print("Position atteinte après recharge: ", position)
+
     def setZeroPosition(self):
         dx = int(input("entrer le déplacement voulu : "))
-        pos = self.stepper.getPosition()
-        self.stepper.setTargetPosition(pos+dx)
-        self.stepper.setEngaged(True)
-        try:
-            input("taper entrée pour arrêter\n")
-        except (Exception, KeyboardInterrupt):
-            pass
-        pos=self.stepper.getPosition()
-        print("position actuelle avant offset", pos)
-        self.stepper.addPositionOffset(-pos)
-        pos=self.stepper.getPosition()
-        print("position après offset", pos)
-    
-    def fill_syringe(self, vol):
-        position = self.stepper.getPosition()
-        print("Position piston avant recharge: " + str(position))
-        self.stepper.setTargetPosition(100*vol)
-        self.stepper.setEngaged(True)
-        self.stepper.setOnStoppedHandler(SyringePump.ReachedPosition)
-        try:
-            input("Press Enter to Stop\n")
-        except (Exception, KeyboardInterrupt):
-            pass
-
-    def dispense(self, vol):
-        pos0 = self.stepper.getPosition()
-        if vol*100 <= pos0:
-            self.relay.setState(True)
-            self.stepper.setTargetPosition(pos0-100*vol)
-            self.stepper.setOnStoppedHandler(SyringePump.ReachedPosition)
-            self.stepper.setEngaged(True)
+        if dx<0:
+            self.simple_refill(-dx,0) #
         else:
-            print("Volume diponible dans la seringue insuffisant")
-        try:
-            input("Press Enter to Stop\n")
-            
-        except (Exception, KeyboardInterrupt):
-            pass
-            #print("Position piston avant dispense: " + str(pos0))
-        self.relay.setState(False)
+            self.simple_dispense(dx,0)
+        pos=self.stepper.getPosition()
+        self.stepper.addPositionOffset(-pos)
+        pos1=self.stepper.getPosition()
+        print("position du moteur après mise à zéro : ", pos1)
     
-    def empty_syringe(self):
-        self.stepper.setTargetPosition(0)
-        self.stepper.setEngaged(True)
-        print("vidage de la seringue")
+    #def refill(self, vol):
+
+    #def dispense(self, vol):
+    
+    def empty_syringe(self, vol):
+        pos0=self.stepper.getPosition()
+        self.configForDispense(0) #electrovanne connectée sur recharge
+        self.stepper.setTargetPosition(self.size) #recharge donc target supérieur à position courante
+        #lancement
+        self.engageMovement()
+        #affichage de la position atteinte
+        position = self.stepper.getPosition()
+        print("Position atteinte après vidage: ", position)
+
+
+if __name__=="__main__":
+    sp=PhidgetStepperPump()
+    sp.setZeroPosition()
+    #sp.simple_dispense(100)
+
+
+class KDS_Legato100(SyringePump):
+    #Le pousse seringue doit être configuré en amont avec la bonne seringue
+
+    def __init__(self):
+        self.ser=serial.Serial('COM3', timeout = 2, stopbits=2)  #COM3 peut changer, à vérifier
+        print(self.ser)
+        self.dir = DigitalInput() #direction courante
+        self.dir.setDeviceSerialNumber(432846)
+        self.dir.setChannel(7)
+        self.movement = DigitalInput() #mouvement en cours ou pas
+        self.movement.setDeviceSerialNumber(432846)
+        self.movement.setChannel(5)
+        self.electrovanne=DigitalOutput() #contrôle electrovanne
+        self.electrovanne.setDeviceSerialNumber(432846)
+        self.electrovanne.setChannel(0)
         try:
-            input("Taper entrée pour interrompre\n")
-        except (Exception, KeyboardInterrupt):
+            self.dir.openWaitForAttachment(1000)
+            self.movement.openWaitForAttachment(1000)    
+            self.electrovanne.openWaitForAttachment(1000) 
+        except:
             pass
+        
+        self.size=300    #définition de la courser complète (en mL)
+    
+    def setValveOnRefill(self):
+        time.sleep(1)
+        self.electrovanne.setState(False)
+        time.sleep(1)
+    
+    def setValveOnDispense(self):
+        time.sleep(1)
+        self.electrovanne.setState(True)
+        time.sleep(1)
+
+    def send(self,cmd): #envoyer une commande en RS232
+        command=cmd+"\r"
+        command_ascii=[]
+        for ch in command:
+            ch3=ord(ch) #code ascii
+            #print(ch, ch3)
+            command_ascii.append(ch3)
+        #print(command_ascii)
+        bytes_command=bytearray(command_ascii) #conversion en bytes
+        #print(bytes_command)
+        self.ser.write(bytes_command) #renvoie le byte string given 
+        y=0
+        x=self.ser.in_waiting
+        while(y==0 or x!=0):
+            if x > 0:
+                #print("ser.in_waiting=",x)
+                out = self.ser.read(100)
+                answer=out.decode()
+                y=1
+            else:
+                y=0
+                pass
+            x=self.ser.in_waiting
+        print(answer)
+        #print(out)
+    
+    def waitForStop(self):
+        #attendre le signal de la seringue annonçant le moteur s'arrete
+        mv=self.movement.getState()
+        #print("mv=",mv)
+        if mv==True:
+            print("start of movement")
+            while(self.movement.getState()==True):
+                pass
+            print("end of movement")
+        else:
+            print("no movement")
+
+    def simple_dispense(self,vol,pos):
+        self.setValveOnDispense()
+        stroke=self.size-pos
+        if vol>stroke:
+            print("erreur : ne peut pas faire une simple dispense")
+        else: #vol<=stroke
+            if vol!=0:
+                self.send("cvolume") #impératif pour pas avoir le message erreur
+                print("simple dispense of %d uL"%vol)
+                self.send("tvolume %d u" %vol)
+                self.send("irun")
+                self.waitForStop()
+            else: #volume nul 
+                pass   
+            ending_position=pos+vol    
+            return ending_position
+            
+    def dispense(self,vol,pos): 
+        # vol: volume (uL) 
+        # pos: position avant dispense (uL)  /!\ impératif /!\
+        stroke=self.size-pos #le type de dispense en dépend
+        
+        #dispense simple
+        if vol<=stroke: 
+            ending_position=self.simple_dispense(vol,pos)
+        
+        #dispense en plusieures parties
+        else: 
+            #Calcul des quatités
+            vol2=vol-stroke #reste à dispenser après un aller en bout de course
+            q=vol2//self.size;r=vol2%self.size
+            print("Déroulé de la dispense :\nvolume=%duL (bout de course) \n+%d*%duL (nombre de courses)\
+                   \n+%duL (dernière dispense)" % (stroke, q, self.size ,r))
+            
+            #Première dispense jusqu'en bout de course
+            self.simple_dispense(stroke, pos)
+            print("première dispense de %d uL effectuée"%stroke)
+            #input("Tapez entrée pour recharger")
+            self.refill(self.size)
+            #input("Taper entrée pour dispenser")
+            
+            #dispenses course complète
+            for n in range(q):
+                self.simple_dispense(self.size,0)
+                print(" %d dispense(s) sur course complète effectuée(s) sur %d"%(n+1,q))
+                #input("taper entrée pour recharger") #les input seront 
+                #à remplacer par des commandes sur l'électrovanne pour switcher (dispense/recharge)
+                self.refill(self.size)
+                #input("taper entrée pour dispenser")
+
+            #dernière dispense avec le reste
+            self.simple_dispense(r,0)   
+            print("dernière dispense de %d uL effectuée"%r)
+            ending_position=r #remainder of euclidian division 
+        
+        print("ending position : %d"%ending_position)
+        return ending_position
+
+    def refill(self,pos):
+        self.setValveOnRefill()
+        if (self.electrovanne.getState()==False): #Attention à ne pas recharger la seringue avec
+            #l'électrovanne en position dispense. La valve anti-retour va bloquer et la seringue 
+            #soit va caler, soit va prendre de l'air où elle peut (donc bulles) soit va endommanger la
+            #valve anti retour. 
+            self.send("cvolume")
+            self.send("tvolume %d u" %pos)
+            self.send("wrun")
+            self.waitForStop()
+
+    def run_sequence(self,seq):
+    # seq est une liste de volumes en microlitres [50, 30, 20, 10, 15, 30, 80, 200] par exemple
+        a=input("Voulez-vous recharger la seringue ? 'y' for YES, any key otherwise : ")
+        #Recharge optionnelle au début
+        if a=='y':
+            self.refill(self.size)
+        else:
+            pass
+        pos=0 #position courante de la seringue
+        #séquence de dispenses
+        for vol in seq:
+            #("taper entrée pour dispenser la séquence suivante")
+            #if volume_count<=self.size:
+            end_pos=self.dispense(vol,pos) 
+            pos=end_pos
+            print("position courante: ", pos)
+        #input("Taper entrée pour remettre la seringue en position initiale")
+        self.refill(pos) #remet en position initiale
+
+
