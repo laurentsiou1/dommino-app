@@ -19,7 +19,8 @@ from savingConfig import SavingConfig
 
 from pHmeter import *
 from spectro.absorbanceMeasure import AbsorbanceMeasure
-from syringePump import SyringePump
+from syringePump import *
+from peristalticPump import *
 
 from Phidget22.Devices.VoltageInput import VoltageInput
 from Phidget22.Devices.DigitalInput import DigitalInput
@@ -31,7 +32,8 @@ from oceandirect.od_logger import od_logger
 
 class ControlPannel(object):
     #Pour instancier la classe ControlPannel on doit renseigner un attribut PHMeter et un Spectrometer
-    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure, ihm: IHM):
+    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure, \
+               syringe_pump: SyringePump, peristaltic_pump: PeristalticPump, ihm: IHM):
         print("initialisation du panneau de contrôle") 
         self.ihm=ihm #ihm passé de attribut 
         
@@ -44,6 +46,14 @@ class ControlPannel(object):
         self.spectro_unit=spectro_unit
         if spectro_unit.state=='open':
             self.shutter_state=not(self.spectro_unit.adv.get_enable_lamp())
+
+        #Pousse-seringue
+        self.syringe_pump=syringe_pump
+        if self.syringe_pump.getIsOpen():
+            self.base_level=500-self.syringe_pump.stepper.getPosition()
+        
+        #Peristaltic Pump
+        self.peristaltic_pump=peristaltic_pump
 
     def setOnDirectPH(self):
         if self.phmeter.getIsOpen():
@@ -96,6 +106,77 @@ class ControlPannel(object):
         self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
         self.win4.show()
 
+
+    ### Méthodes pour le pousse-seringue
+    def set_reference_position(self):
+        self.syringe_pump.setReference()
+
+        #maj levelbar
+        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.base_level)
+        self.base_level_number.setText("%d uL" % self.base_level)
+
+    def unload_base(self): #appelée lors de l'appui sur le bouton unload base
+        vol=self.unload_base_box.value()
+        self.syringe_pump.simple_dispense(vol,ev=0)
+
+        #maj levelbar
+        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.base_level)
+        self.base_level_number.setText("%d uL" % self.base_level)
+
+    def reload_base(self): #lors de l'appui sur load_base_button
+        vol=self.load_base_box.value()
+        self.syringe_pump.simple_refill(vol)
+
+        #maj levelbar
+        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.base_level)
+        self.base_level_number.setText("%d uL" % self.base_level)
+    
+    def full_reload(self):
+        self.syringe_pump.full_refill()
+
+        #maj levelbar
+        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.base_level)
+        self.base_level_number.setText("%d uL" % self.base_level)
+
+    
+    def dispense_base(self):
+        vol=self.dispense_base_box.value()
+        self.syringe_pump.simple_dispense(vol) #ev=1 default
+
+        #maj levelbar
+        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.base_level)
+        self.base_level_number.setText("%d uL" % self.base_level)
+
+        #maj volume count
+        self.added_base.setText("%d" %self.syringe_pump.added_base_uL)
+        self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
+    
+    def reset_volume_count(self):
+        self.syringe_pump.added_acid_uL=0
+        self.syringe_pump.added_base_uL=0
+        self.syringe_pump.added_total_uL=0
+        self.syringe_pump.dispense_log=[]
+        
+        self.added_acid.setValue(0)
+        self.added_base.setText("0")
+        self.added_total.setText("0" )
+
+    def actualize_counts_on_acid_value_change(self):
+        #modification de acid et total dans la classe syringe_pump
+        self.syringe_pump.added_acid_uL=self.added_acid.value()
+        self.syringe_pump.added_total_uL=self.syringe_pump.added_acid_uL+self.syringe_pump.added_base_uL
+        #modif de l'affichage total count
+        self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
+    
+    ###Pompe péristaltique
+    def update_pump_speed(self):
+        self.peristaltic_pump.setVelocity_rpm(self.pump_speed_rpm.value())
+
     def setupUi(self, MainWindow):
         #global
         MainWindow.setObjectName("MainWindow")
@@ -113,33 +194,15 @@ class ControlPannel(object):
         self.stability_label = QtWidgets.QLabel(self.centralwidget)
         self.stability_label.setGeometry(QtCore.QRect(640, 30, 81, 31))
         self.stability_label.setObjectName("stability_label")
-        self.Tint_label = QtWidgets.QLabel(self.centralwidget)
-        self.Tint_label.setGeometry(QtCore.QRect(20, 430, 151, 41))
-        self.Tint_label.setObjectName("Tint_label")
-        self.avg_label = QtWidgets.QLabel(self.centralwidget)
-        self.avg_label.setGeometry(QtCore.QRect(40, 490, 81, 41))
-        self.avg_label.setObjectName("avg_label")
         self.last_cal_label = QtWidgets.QLabel(self.centralwidget)
         self.last_cal_label.setGeometry(QtCore.QRect(530, 130, 191, 41))
         self.last_cal_label.setObjectName("last_cal_label")
-        self.label_base_syringe = QtWidgets.QLabel(self.centralwidget)
-        self.label_base_syringe.setGeometry(QtCore.QRect(560, 460, 250, 41))
-        self.label_base_syringe.setAutoFillBackground(False)
-        self.label_base_syringe.setObjectName("label_base_syringe")
-        self.added_base_label = QtWidgets.QLabel(self.centralwidget)
-        self.added_base_label.setGeometry(QtCore.QRect(810, 550, 150, 41))
-        self.added_base_label.setAutoFillBackground(False)
-        self.added_base_label.setObjectName("added_base_label")
-        self.added_acid_label = QtWidgets.QLabel(self.centralwidget)
-        self.added_acid_label.setGeometry(QtCore.QRect(810, 680, 150, 41))
-        self.added_acid_label.setAutoFillBackground(False)
-        self.added_acid_label.setObjectName("added_acid_label")
 
         #Ph-mètre    
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
         self.direct_pH.setGeometry(QtCore.QRect(730, 80, 101, 51))
         self.direct_pH.setObjectName("direct_pH")
-        self.direct_pH.setNumDigits(6)
+        self.direct_pH.setNumDigits(4)
         self.stabilisation_level = QtWidgets.QProgressBar(self.centralwidget)
         self.stabilisation_level.setGeometry(QtCore.QRect(730, 30, 101, 31))
         self.stabilisation_level.setMaximum(100)
@@ -159,72 +222,140 @@ class ControlPannel(object):
 
         #Spectrométrie
         self.direct_Abs_widget = pg.PlotWidget(self.centralwidget)        
-        self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 501, 361))
+        self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 520, 430))
         self.direct_Abs_widget.setObjectName("direct_Abs_widget")        
         self.shutter = QtWidgets.QCheckBox(self.centralwidget, clicked = lambda: self.changeShutterState())
-        self.shutter.setGeometry(QtCore.QRect(240, 490, 111, 41))
+        self.shutter.setGeometry(QtCore.QRect(250, 500, 111, 41))
         self.shutter.setObjectName("shutter")
-        self.avg = QtWidgets.QSpinBox(self.centralwidget)
-        self.avg.setGeometry(QtCore.QRect(130, 490, 81, 41))
-        self.avg.setProperty("value", 1)
-        self.avg.setObjectName("avg")
-        self.Tint = QtWidgets.QSpinBox(self.centralwidget)
-        self.Tint.setGeometry(QtCore.QRect(180, 430, 81, 41))
-        self.Tint.setProperty("value", 10)
-        self.Tint.setObjectName("Tint")
         self.reglage_spectro = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSpectroWindow())
-        self.reglage_spectro.setGeometry(QtCore.QRect(360, 450, 140, 61))
+        self.reglage_spectro.setGeometry(QtCore.QRect(380, 500, 140, 61))
         self.reglage_spectro.setObjectName("reglage_spectro")
 
         #Syringe Pump
-        self.base_syringe = QtWidgets.QSlider(self.centralwidget)
-        self.base_syringe.setGeometry(QtCore.QRect(560, 500, 381, 41))
-        self.base_syringe.setMouseTracking(True)
-        self.base_syringe.setMaximum(500)
-        self.base_syringe.setProperty("value", 100)
-        self.base_syringe.setOrientation(QtCore.Qt.Horizontal)
-        self.base_syringe.setObjectName("base_syringe")
-        self.added_base = QtWidgets.QLabel(self.centralwidget)
-        self.added_base.setGeometry(QtCore.QRect(810, 590, 100, 41))
+        self.label_base_level = QtWidgets.QLabel(self.centralwidget)
+        self.label_base_level.setGeometry(QtCore.QRect(560, 420, 301, 41))
+        self.label_base_level.setAutoFillBackground(False)
+        self.label_base_level.setObjectName("label_base_level")
+        self.base_level_number = QtWidgets.QLabel(self.centralwidget)
+        self.base_level_number.setGeometry(QtCore.QRect(550, 580, 71, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.base_level_number.setFont(font)
+        self.base_level_number.setObjectName("base_level_number")
+        self.unload_base_button = QtWidgets.QPushButton(self.centralwidget)
+        self.unload_base_button.setGeometry(QtCore.QRect(600, 530, 71, 41))
+        self.unload_base_button.setObjectName("unload_base_button")
+        self.unload_base_box = QtWidgets.QSpinBox(self.centralwidget)
+        self.unload_base_box.setGeometry(QtCore.QRect(680, 530, 61, 41))
+        self.unload_base_box.setObjectName("unload_base_box")
+        self.unload_base_box.setRange(0,450)
+        self.reload_base_button = QtWidgets.QPushButton(self.centralwidget)
+        self.reload_base_button.setGeometry(QtCore.QRect(600, 470, 71, 41))
+        self.reload_base_button.setObjectName("reload_base_button")
+        self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(710, 600, 311, 161))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setContentsMargins(2, 2, 2, 2)
+        self.gridLayout.setObjectName("gridLayout")
+        self.added_acid = QtWidgets.QSpinBox(self.gridLayoutWidget)
+        self.added_acid.setObjectName("added_acid")
+        self.gridLayout.addWidget(self.added_acid, 1, 2, 1, 1)
+        self.added_total_label = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.added_total_label.setAutoFillBackground(False)
+        self.added_total_label.setObjectName("added_total_label")
+        self.gridLayout.addWidget(self.added_total_label, 3, 1, 1, 1)
+        self.added_volume_label = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.added_volume_label.setAutoFillBackground(False)
+        self.added_volume_label.setObjectName("added_volume_label")
+        self.gridLayout.addWidget(self.added_volume_label, 0, 2, 1, 1)
+        self.reset_added_count = QtWidgets.QPushButton(self.gridLayoutWidget)
+        self.reset_added_count.setObjectName("reset_added_count")
+        self.gridLayout.addWidget(self.reset_added_count, 4, 2, 1, 1)
+        self.added_base_label = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.added_base_label.setAutoFillBackground(False)
+        self.added_base_label.setObjectName("added_base_label")
+        self.gridLayout.addWidget(self.added_base_label, 2, 1, 1, 1)
+        self.added_acid_label = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.added_acid_label.setAutoFillBackground(False)
+        self.added_acid_label.setObjectName("added_acid_label")
+        self.gridLayout.addWidget(self.added_acid_label, 1, 1, 1, 1)
+        self.added_base = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.added_base.setFont(font)
         self.added_base.setObjectName("added_base")
-        self.base_level = QtWidgets.QLabel(self.centralwidget)
-        self.base_level.setGeometry(QtCore.QRect(960, 500, 71, 41))
+        self.gridLayout.addWidget(self.added_base, 2, 2, 1, 1)
+        self.added_total = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setPointSize(12)
-        self.base_level.setFont(font)
-        self.base_level.setObjectName("base_level")
-        self.add_base_button = QtWidgets.QPushButton(self.centralwidget)
-        self.add_base_button.setGeometry(QtCore.QRect(650, 590, 120, 41))
-        self.add_base_button.setObjectName("add_base_button")
-        self.reset_base_count = QtWidgets.QPushButton(self.centralwidget)
-        self.reset_base_count.setGeometry(QtCore.QRect(890, 590, 81, 41))
-        self.reset_base_count.setObjectName("reset_base_count")
-        self.add_base_box = QtWidgets.QSpinBox(self.centralwidget)
-        self.add_base_box.setGeometry(QtCore.QRect(560, 590, 81, 41))
-        self.add_base_box.setObjectName("add_base_box")
-        self.added_acid = QtWidgets.QLabel(self.centralwidget)
-        self.added_acid.setGeometry(QtCore.QRect(810, 720, 71, 41))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.added_acid.setFont(font)
-        self.added_acid.setObjectName("added_acid")
-        self.reset_acid_count = QtWidgets.QPushButton(self.centralwidget)
-        self.reset_acid_count.setGeometry(QtCore.QRect(890, 720, 81, 41))
-        self.reset_acid_count.setObjectName("reset_acid_count")
+        self.added_total.setFont(font)
+        self.added_total.setObjectName("added_total")
+        self.gridLayout.addWidget(self.added_total, 3, 2, 1, 1)
+        self.base_level_bar = QtWidgets.QProgressBar(self.centralwidget)
+        self.base_level_bar.setGeometry(QtCore.QRect(550, 470, 31, 101))
+        self.base_level_bar.setMinimum(50)
+        self.base_level_bar.setMaximum(500)
+        self.base_level_bar.setTextVisible(True)
+        self.base_level_bar.setOrientation(QtCore.Qt.Vertical)
+        self.base_level_bar.setObjectName("base_level_bar")
+        self.make_ref_button = QtWidgets.QPushButton(self.centralwidget)
+        self.make_ref_button.setGeometry(QtCore.QRect(550, 620, 121, 61))
+        self.make_ref_button.setObjectName("make_ref_button")
+        self.load_base_box = QtWidgets.QSpinBox(self.centralwidget)
+        self.load_base_box.setGeometry(QtCore.QRect(680, 470, 61, 41))
+        self.load_base_box.setObjectName("load_base_box")
+        self.load_base_box.setRange(0,450)
+        self.full_reload_button = QtWidgets.QPushButton(self.centralwidget)
+        self.full_reload_button.setGeometry(QtCore.QRect(750, 470, 91, 41))
+        self.full_reload_button.setObjectName("full_reload_button")
+        self.dispense_base_button = QtWidgets.QPushButton(self.centralwidget)
+        self.dispense_base_button.setGeometry(QtCore.QRect(880, 530, 141, 41))
+        self.dispense_base_button.setObjectName("dispense_base_button")
+        self.dispense_base_box = QtWidgets.QSpinBox(self.centralwidget)
+        self.dispense_base_box.setGeometry(QtCore.QRect(810, 530, 61, 41))
+        self.dispense_base_box.setObjectName("dispense_base_box")
+        self.dispense_base_box.setRange(0,450)
+
+        #Peristaltic Pump
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(260, 560, 221, 180))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.group_peristaltic_pump = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.group_peristaltic_pump.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
+        self.group_peristaltic_pump.setContentsMargins(0, 0, 0, 0)
+        self.group_peristaltic_pump.setSpacing(0)
+        self.group_peristaltic_pump.setObjectName("group_peristaltic_pump")
+        self.label = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label.setObjectName("label")
+        self.group_peristaltic_pump.addWidget(self.label)
+        self.start_pump = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.start_pump.setObjectName("start_pump")
+        self.group_peristaltic_pump.addWidget(self.start_pump)
+        self.stop_pump = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.stop_pump.setObjectName("stop_pump")
+        self.group_peristaltic_pump.addWidget(self.stop_pump)
+        self.change_dir = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.change_dir.setObjectName("change_dir")
+        self.group_peristaltic_pump.addWidget(self.change_dir)
+        self.pump_speed_rpm = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.pump_speed_rpm.setAccessibleName("")
+        self.pump_speed_rpm.setMaximum(240)
+        self.pump_speed_rpm.setSingleStep(10)
+        self.pump_speed_rpm.setProperty("value", 60)
+        self.pump_speed_rpm.setObjectName("pump_speed_rpm")
+        self.group_peristaltic_pump.addWidget(self.pump_speed_rpm)
 
         #application
         self.titration_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openConfigWindow())
-        self.titration_button.setGeometry(QtCore.QRect(270, 660, 171, 51))
+        self.titration_button.setGeometry(QtCore.QRect(20, 700, 171, 51))
         self.titration_button.setObjectName("titration_button")
         self.saving_config = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSavingConfigWindow())
-        self.saving_config.setGeometry(QtCore.QRect(20, 590, 171, 51))
+        self.saving_config.setGeometry(QtCore.QRect(20, 520, 171, 51))
         self.saving_config.setObjectName("saving_config")
         #self.saving_config.clicked.connect()
         self.save_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.ihm.createDirectMeasureFile())
-        self.save_button.setGeometry(QtCore.QRect(20, 680, 200, 51))
+        self.save_button.setGeometry(QtCore.QRect(20, 610, 171, 51))
         self.save_button.setObjectName("save_button")
 
 
@@ -239,7 +370,6 @@ class ControlPannel(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuPanneau_de_controle.menuAction())
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -252,7 +382,7 @@ class ControlPannel(object):
             #self.direct_pH.display(self.phmeter.currentPH)
         
         #création d'un timer pour le renouvellement du spectre affiché
-        #il pourrait servir dans es autres fenêtres!
+        #il pourrait servir dans les autres fenêtres!
         self.timer = QtCore.QTimer()
         self.timer.setInterval(3000)
         self.timer.start()
@@ -269,36 +399,75 @@ class ControlPannel(object):
             self.lambdas=self.spectro_unit.wavelengths    
             #self.current_Abs_spectrum=self.spectro_unit.current_Abs_spectrum    
             self.directSpectrum=self.direct_Abs_widget.plot([0],[0])
+        
+        if self.syringe_pump.getIsOpen():
+            #reference
+            self.make_ref_button.clicked.connect(self.set_reference_position)
             
+            #action buttons
+            self.unload_base_button.clicked.connect(self.unload_base)
+            self.reload_base_button.clicked.connect(self.reload_base)
+            self.full_reload_button.clicked.connect(self.full_reload)
+            self.dispense_base_button.clicked.connect(self.dispense_base)
+            self.added_acid.valueChanged.connect(self.actualize_counts_on_acid_value_change)
+            self.reset_added_count.clicked.connect(self.reset_volume_count)
+            
+            #Display
+            self.base_level_bar.setProperty("value", self.base_level)
+            self.base_level_number.setText("%d uL" % self.base_level)
+            self.added_base.setText("0")
+        
+        if self.peristaltic_pump.getIsOpen():
+            self.start_pump.clicked.connect(self.peristaltic_pump.start)
+            self.stop_pump.clicked.connect(self.peristaltic_pump.stop)
+            self.change_dir.clicked.connect(self.peristaltic_pump.change_direction)
+            self.pump_speed_rpm.valueChanged.connect(self.update_pump_speed)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
+        #pH meter
         self.pH_label.setText(_translate("MainWindow", "pH"))
-        self.abs_label.setText(_translate("MainWindow", "Absorbance direct et référence"))
         self.stability_label.setText(_translate("MainWindow", "stability"))
-        self.Tint_label.setText(_translate("MainWindow", "integration time (ms)"))
-        self.avg_label.setText(_translate("MainWindow", "averaging"))
-
         self.stabilisation_level.setFormat(_translate("MainWindow", "%p%"))
-        self.shutter.setText(_translate("MainWindow", "shutter"))
-        self.reglage_spectro.setText(_translate("MainWindow", "réglages spectro"))
-        self.titration_button.setText(_translate("MainWindow", "lancement du titrage"))
         self.cal_button.setText(_translate("MainWindow", "calibration"))
 
+        #spectro
+        self.abs_label.setText(_translate("MainWindow", "Absorbance direct et référence"))
+        self.shutter.setText(_translate("MainWindow", "shutter"))
+        self.reglage_spectro.setText(_translate("MainWindow", "réglages spectro"))
+        
+        #pousse seringue
+        self.label_base_level.setText(_translate("MainWindow", "basic syringe level (50 - 500uL)"))
+        self.base_level_number.setText(_translate("MainWindow", "100 uL"))
+        self.unload_base_button.setText(_translate("MainWindow", "unload"))
+        self.reload_base_button.setText(_translate("MainWindow", "load"))
+        self.added_total_label.setText(_translate("MainWindow", "total"))
+        self.added_volume_label.setText(_translate("MainWindow", "added volume (uL)"))
+        self.reset_added_count.setText(_translate("MainWindow", "Reset"))
+        self.added_base_label.setText(_translate("MainWindow", "NaOH 0.1M (base)"))
+        self.added_acid_label.setText(_translate("MainWindow", "HCl 0.1M (acid)"))
+        self.added_base.setText(_translate("MainWindow", "55 uL"))
+        self.added_total.setText(_translate("MainWindow", "0 uL"))
+        self.base_level_bar.setFormat(_translate("MainWindow", "%p%"))
+        self.make_ref_button.setText(_translate("MainWindow", "make reference \n"
+" on full syringe"))
+        self.full_reload_button.setText(_translate("MainWindow", "Full reload"))
+        self.dispense_base_button.setText(_translate("MainWindow", "Dispense base (uL)"))
+
+        #Peristaltic Pump
+        self.label.setText(_translate("MainWindow", "Peristaltic Pump"))
+        self.start_pump.setText(_translate("MainWindow", "Start"))
+        self.stop_pump.setText(_translate("MainWindow", "Stop"))
+        self.change_dir.setText(_translate("MainWindow", "change Direction"))
+
+        #application
+        self.titration_button.setText(_translate("MainWindow", "lancement du titrage"))
         self.saving_config.setText(_translate("MainWindow", "Configure data saving"))
         self.save_button.setText(_translate("MainWindow", "Save current measure"))
-        self.label_base_syringe.setText(_translate("MainWindow", "basic syringe level (0 - 500uL)"))
-        self.base_level.setText(_translate("MainWindow", "100 uL"))
-        self.added_base.setText(_translate("MainWindow", "55 uL"))
-        self.added_base_label.setText(_translate("MainWindow", "added base (uL)"))
-        self.add_base_button.setText(_translate("MainWindow", "Add volume"))
-        self.reset_base_count.setText(_translate("MainWindow", "Reset"))
-        self.added_acid_label.setText(_translate("MainWindow", "added acid (uL)"))
-        self.added_acid.setText(_translate("MainWindow", "55 uL"))
-        self.reset_acid_count.setText(_translate("MainWindow", "Reset"))
-    
+        
         self.menuPanneau_de_controle.setTitle(_translate("MainWindow", "Panneau de contrôle"))
 
 
@@ -345,16 +514,16 @@ if __name__ == "__main__":
     ph_meter = PHMeter(U_pH)
 
     #Syringe Pump
-    stepper=Stepper()
-    relay=DigitalOutput()
-    switch=DigitalInput()
-    syringe_pump = SyringePump(stepper,relay,switch)
+    syringe_pump = PhidgetStepperPump('SGE500')
+
+    #Peristaltic Pump
+    peristaltic_pump=PeristalticPump()
 
     #Interface
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ihm = IHM(ph_meter,spectrometry_unit,syringe_pump)
-    ui = ControlPannel(ph_meter, spectrometry_unit, ihm)
+    ui = ControlPannel(ph_meter, spectrometry_unit, syringe_pump, peristaltic_pump, ihm)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

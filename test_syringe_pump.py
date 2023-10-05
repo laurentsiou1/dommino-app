@@ -25,7 +25,11 @@ class pompe:
 
         
 class pompeA(pompe): #pompe stepper phidget
+
+    attributA=2
+
     def __init__(self):
+        print("self=",self)
         U_stepper = VoltageInput() #tension d'alim
         U_stepper.setDeviceSerialNumber(683442)
         U_stepper.setHubPort(0) #seulement pour les device avec VINT
@@ -41,6 +45,8 @@ class pompeA(pompe): #pompe stepper phidget
             pass
         self.stp=stepper
 
+        print(self.attributA)
+
 class pompeB(pompe): #pompe Legato
     def __init__(self):
         legato_run_indicator = DigitalInput() #pin 15 DIGITAL IO à 1 si en mouvement
@@ -53,13 +59,12 @@ class pompeB(pompe): #pompe Legato
         self.run_indicator=legato_run_indicator
 
 if __name__=="__main__":
-    a=pompeA()
-    print(a.stp)
-    print(a)
-    print(a.get_volume())
-    print(a.attribut)
-    b=pompeB()
-    print(b)
+    #a=pompeA()
+    #print(a.stp)
+    #print(a)
+    #print(a.get_volume())
+    #print(a.attribut)
+
     c=pompe('A')
     print("pompe('A')=",c)
     print(c.stp)

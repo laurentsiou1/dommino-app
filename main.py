@@ -21,7 +21,7 @@ from oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectro
 from oceandirect.od_logger import od_logger
 
 #Classes crées pour les sous-systèmes
-from syringePump import SyringePump
+from syringePump import *
 from pHmeter import PHMeter
 from spectro.absorbanceMeasure import AbsorbanceMeasure
 
@@ -150,7 +150,8 @@ except:
 # activé/désactivé
 #Les instances des sous-systèmes de même. 
 ph_meter = PHMeter(U_pH)
-syringe_pump=SyringePump('Legato') #ou 'Phidget'
+syringe_pump=PhidgetStepperPump('SGE500') #ou SyringePump('Phidget') ou 'Legato'
+#cette ligne est à revoir avec la définition des sous classes de SyringePump
 spectrometry_set=AbsorbanceMeasure(od, spectro)
 peristaltic_pump='classe de pompe péristaltique à créer'
 
@@ -161,7 +162,7 @@ import sys
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 ihm=IHM(ph_meter,spectrometry_set,syringe_pump)
-ui = ControlPannel(ph_meter,spectrometry_set,ihm)
+ui = ControlPannel(ph_meter,spectrometry_set,syringe_pump,ihm)
 ui.setupUi(MainWindow)
 
 MainWindow.show()        

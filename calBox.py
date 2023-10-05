@@ -34,7 +34,7 @@ class CalBox(object):
         self.direct_voltage = QtWidgets.QLCDNumber(Dialog)
         self.direct_voltage.setGeometry(QtCore.QRect(210, 80, 211, 131))
         self.direct_voltage.setObjectName("direct_voltage")
-        self.direct_voltage.setNumDigits(6)
+        self.direct_voltage.setNumDigits(5)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(260, 40, 131, 41))
         self.label.setObjectName("label")

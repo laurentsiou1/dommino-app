@@ -18,10 +18,10 @@ app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
 
 
 class IHM:
-    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure, syrp: SyringePump):
+    def __init__(self, phm: PHMeter, spectro_unit: AbsorbanceMeasure, syringe_pump: SyringePump):
         self.phmeter=phm
         self.spectro_unit=spectro_unit
-        self.syringe_pump=syrp
+        self.syringe_pump=syringe_pump
         
         parser = ConfigParser()
         parser.read(app_config_path)
@@ -74,11 +74,14 @@ class IHM:
 
         if self.save_titration_data: #saving dispensed volumes
             if self.syringe_pump.getIsOpen():
+                self.syringe_pump.dispense_log.insert(0,self.syringe_pump.added_acid_uL)
                 name+="titr-"
-                header+="Syringe Pump : 500uL Trajan gas tight syringe\n\n"
-                added_acid_uL = self.syringe_pump.added_acid_uL
-                added_base_uL = self.syringe_pump.added_acid_uL
-                data+="Added acid : "+str(added_acid_uL)+"uL\n"+"added base : "+str(added_base_uL)+"uL\n\n"
+                header+=("Syringe Pump : "+str(self.syringe_pump.model)+"\n"
+                +"Syringe : "+str("500uL Trajan gas tight syringe\n"))
+                data+=("Fluid dispense log (first acid then base) : "+str(self.syringe_pump.dispense_log)+"uL\n"
+                +"Added acid : "+str(self.syringe_pump.added_acid_uL)+"uL\n"
+                +"added base : "+str(self.syringe_pump.added_base_uL)+"uL\n"
+                +"total added : "+str(self.syringe_pump.added_total_uL)+"uL\n")
             else:
                 header+="Syringe pump not connected\n\n"
 
