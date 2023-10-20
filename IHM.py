@@ -74,11 +74,12 @@ class IHM:
 
         if self.save_titration_data: #saving dispensed volumes
             if self.syringe_pump.getIsOpen():
-                self.syringe_pump.dispense_log.insert(0,self.syringe_pump.added_acid_uL)
                 name+="titr-"
                 header+=("Syringe Pump : "+str(self.syringe_pump.model)+"\n"
                 +"Syringe : "+str("500uL Trajan gas tight syringe\n"))
-                data+=("Fluid dispense log (first acid then base) : "+str(self.syringe_pump.dispense_log)+"uL\n"
+                data+=("Fluid dispense log \n"
+                       +"acid : "+str(self.syringe_pump.acid_dispense_log)+"uL\n"
+                       +"base : "+str(self.syringe_pump.base_dispense_log)+"uL\n"
                 +"Added acid : "+str(self.syringe_pump.added_acid_uL)+"uL\n"
                 +"added base : "+str(self.syringe_pump.added_base_uL)+"uL\n"
                 +"total added : "+str(self.syringe_pump.added_total_uL)+"uL\n")

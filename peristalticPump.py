@@ -14,7 +14,7 @@ class PeristalticPump(DCMotor): #Elle est crée comme une sous classe de DCMotor
         self.setHubPort(2)
 
         try:
-            self.openWaitForAttachment(3000)
+            self.openWaitForAttachment(4000)
             print("moteur de pompe alimenté")
         except:
             print("moteur de pompe non alimenté")

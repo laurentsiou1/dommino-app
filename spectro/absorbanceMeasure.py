@@ -44,12 +44,15 @@ class AbsorbanceMeasure(Spectrometer):
             self.model=spectro.get_model()
             print(self.model)
             if self.model=='OceanSR2':
-                spectro.set_boxcar_width(3) #2k pix pour 700nm
+                spectro.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
+                #2k pix pour 700nm
                 spectro.set_integration_time(30000)      
-                print("spectro sr2 reconnu")      
+                print("spectro sr2 reconnu")
+
             
-            elif self.model=='OceanSTUV':
-                spectro.set_boxcar_width(5) #2k pix pour 400nm
+            elif self.model=='OceanST':
+                spectro.set_boxcar_width(2) #moyennage sur 5 points (2n+1) 
+                #2k pix pour 400nm
                 spectro.set_integration_time(10000)
                 print("spectro st-uv reconnu")
 
@@ -62,7 +65,12 @@ class AbsorbanceMeasure(Spectrometer):
 
             spectro.set_scans_to_average(10)
             spectro.use_nonlinearity(True)
-            spectro.set_electric_dark_correction_usage(True)
+            if self.model!='OceanST':
+                spectro.set_electric_dark_correction_usage(True) #non pris en charge par le ST
+                self.electric_dark_correction_usage=spectro.get_electric_dark_correction_usage()
+            else:
+                self.electric_dark_correction_usage=False
+                print("Electric dark not included with OceanST")
             
             self.wavelengths = spectro.wavelengths
             self.N_lambda = len(self.wavelengths)
@@ -70,8 +78,9 @@ class AbsorbanceMeasure(Spectrometer):
             self.averaging=spectro.scans_to_avg
             self.boxcar=spectro.boxcar_hw
 
+            spectro.set_nonlinearity_correction_usage(True)
             self.nonlinearity_correction_usage=spectro.get_nonlinearity_correction_usage()
-            self.electric_dark_correction_usage=spectro.get_electric_dark_correction_usage()
+
             self.isShutterOpen=self.adv.get_enable_lamp()
             self.active_dark_spectrum=None
             self.active_ref_spectrum=None    

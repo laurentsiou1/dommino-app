@@ -7,6 +7,7 @@ from Phidget22.Devices.DigitalOutput import *
 from Phidget22.Devices.Stepper import *
 import time
 
+
 class SyringePump: #Nouvelle classe SyringePump globale : classe mère
         
     mode = 'manual' #peut être 'titration'
@@ -20,7 +21,8 @@ class SyringePump: #Nouvelle classe SyringePump globale : classe mère
     added_base_uL = 0
     added_total_uL = 0
 
-    dispense_log = []
+    acid_dispense_log = []
+    base_dispense_log = []
     
     def __init__(self, model):
         if model=='Phidget':
@@ -49,7 +51,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.stepper.setHubPort(0)
         self.stepper.setChannel(0)
         try:
-            self.stepper.openWaitForAttachment(2000)
+            self.stepper.openWaitForAttachment(4000)
             print("stepper connecté")
         except:
             print("stepper non connecté")
@@ -217,7 +219,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 delta=round((position-pos0),0)
                 self.added_base_uL+=delta
                 self.added_total_uL+=delta
-                self.dispense_log.append(delta)
+                self.base_dispense_log.append(delta)
                 print("volume cumulé de base ajouté = ", self.added_base_uL)
                 print("volume cumulé de fluide ajouté = ", self.added_total_uL)
         else:
@@ -278,7 +280,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
 
 if __name__=="__main__":
     sp=PhidgetStepperPump()
-    sp.setZeroPosition()
+    #sp.setZeroPosition()
     #sp.simple_dispense(100)
 
 

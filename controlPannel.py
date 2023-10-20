@@ -160,7 +160,8 @@ class ControlPannel(object):
         self.syringe_pump.added_acid_uL=0
         self.syringe_pump.added_base_uL=0
         self.syringe_pump.added_total_uL=0
-        self.syringe_pump.dispense_log=[]
+        self.syringe_pump.acid_dispense_log=[]
+        self.syringe_pump.base_dispense_log=[]
         
         self.added_acid.setValue(0)
         self.added_base.setText("0")
@@ -170,8 +171,11 @@ class ControlPannel(object):
         #modification de acid et total dans la classe syringe_pump
         self.syringe_pump.added_acid_uL=self.added_acid.value()
         self.syringe_pump.added_total_uL=self.syringe_pump.added_acid_uL+self.syringe_pump.added_base_uL
+        
         #modif de l'affichage total count
         self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
+    
+        self.syringe_pump.acid_dispense_log = self.syringe_pump.added_acid_uL
     
     ###Pompe péristaltique
     def update_pump_speed(self):
