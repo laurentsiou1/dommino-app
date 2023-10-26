@@ -44,8 +44,8 @@ class ControlPannel(object):
         
         #spectrometry
         self.spectro_unit=spectro_unit
-        if spectro_unit.state=='open':
-            self.shutter_state=not(self.spectro_unit.adv.get_enable_lamp())
+        #if spectro_unit.state=='open':
+        #    self.shutter_state=not(self.spectro_unit.adv.get_enable_lamp())
 
         #Pousse-seringue
         self.syringe_pump=syringe_pump
@@ -94,18 +94,17 @@ class ControlPannel(object):
             print("Calibration erronée")
     
     def changeShutterState(self):
-        if self.spectro_unit.state=='open':
-            self.spectro_unit.changeShutterState()
-            self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
+        #if self.spectro_unit.state=='open':
+        self.spectro_unit.changeShutterState()
+        self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
 
     def updateSpectrum(self):
-        if self.spectro_unit.current_Abs_spectrum!=None:
-            self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_Abs_spectrum)
+        if self.spectro_unit.current_absorbance_spectrum!=None:
+            self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
     
     def openSavingConfigWindow(self):
         self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
         self.win4.show()
-
 
     ### Méthodes pour le pousse-seringue
     def set_reference_position(self):
@@ -228,7 +227,7 @@ class ControlPannel(object):
         self.direct_Abs_widget = pg.PlotWidget(self.centralwidget)        
         self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 520, 430))
         self.direct_Abs_widget.setObjectName("direct_Abs_widget")        
-        self.shutter = QtWidgets.QCheckBox(self.centralwidget, clicked = lambda: self.changeShutterState())
+        self.shutter = QtWidgets.QCheckBox(self.centralwidget) #clicked = lambda: self.changeShutterState())
         self.shutter.setGeometry(QtCore.QRect(250, 500, 111, 41))
         self.shutter.setObjectName("shutter")
         self.reglage_spectro = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSpectroWindow())
@@ -397,11 +396,12 @@ class ControlPannel(object):
             self.timer.timeout.connect(self.updateSpectrum)            
             
             #état réel du shutter
-            self.shutter.setChecked(self.shutter_state)
+            self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
+            self.shutter.clicked.connect(self.changeShutterState)
             
             #config de l'affichage du spectre courant
             self.lambdas=self.spectro_unit.wavelengths    
-            #self.current_Abs_spectrum=self.spectro_unit.current_Abs_spectrum    
+            #self.current_absorbance_spectrum=self.spectro_unit.current_absorbance_spectrum    
             self.directSpectrum=self.direct_Abs_widget.plot([0],[0])
         
         if self.syringe_pump.getIsOpen():

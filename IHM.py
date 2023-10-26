@@ -93,20 +93,26 @@ class IHM:
                 +"Integration time (ms) : "+str(self.spectro_unit.t_int/1000)+"\n"
                 +"Averaging : "+str(self.spectro_unit.averaging)+"\n"
                 +"Boxcar : "+str(self.spectro_unit.boxcar)+"\n"
-                +"Nonlinearity correction usage : "+str(self.spectro_unit.nonlinearity_correction_usage)+"\n"
-                +"Electric dark correction usage : "+str(self.spectro_unit.electric_dark_correction_usage)+"\n")
-                dark_ref = self.spectro_unit.active_dark_spectrum
-                blanc_ref = self.spectro_unit.active_ref_spectrum
-                absorbance = self.spectro_unit.current_Abs_spectrum
-                intensity = self.spectro_unit.current_spectrum
+                +"Nonlinearity correction usage : "+str(self.spectro_unit.device.get_nonlinearity_correction_usage())+"\n")
+                if self.spectro_unit.model!='OceanST':
+                    header+=("Electric dark correction usage : "+str(self.spectro_unit.device.get_electric_dark_correction_usage())+"\n")
+                else:
+                    header+=("Electric dark correction usage : not supported by device\n")
+                header+="Absorbance formula : A = log10[(reference-background)/(sample-background)]\n"    
+
+                background = self.spectro_unit.active_background_spectrum
+                ref = self.spectro_unit.active_ref_spectrum
+                sample = self.spectro_unit.current_intensity_spectrum
+                absorbance = self.spectro_unit.current_absorbance_spectrum
                 wl = self.spectro_unit.wavelengths
-                spectra=[wl,dark_ref,blanc_ref,intensity,absorbance]
-            
-                data+="lambda(nm)\tdark spectrum (pixel count)\treference (pixel count)\tintensity (pixel count)\tabsorbance (abs unit)\n"
+                spectra=[wl,background,ref,sample,absorbance]
+                
+                Nc=len(spectra)-1
+                data+="lambda(nm)\tbackground (unit count)\treference ('')\tsample ('')\tabsorbance (abs unit)\n"
                 for l in range(self.spectro_unit.N_lambda):
-                    for c in range(4):
+                    for c in range(Nc):
                         data+=str(spectra[c][l])+'\t'
-                    data+=str(spectra[4][l])+'\n'
+                    data+=str(spectra[Nc][l])+'\n'
             else:
                 header+="Spectrometer closed\n"
 
@@ -116,9 +122,7 @@ class IHM:
         f_out = open(self.saving_folder+'/'+name+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output)
         f_out.close()
-        
 
- 
 
     def createFullSequenceFile(self):
         #création du fichier au format compatible avec le traitement de données
