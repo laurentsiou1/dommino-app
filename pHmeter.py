@@ -30,18 +30,15 @@ class PHMeter:
 		self.getCalData()
 		if ch.getIsOpen():
 			self.state='open'
-			self.configure_pHmeter()
-			self.currentPH=None
-			self.currentVoltage=None
+			self.voltagechannel.setDataRate(3)
+			self.voltagechannel.setVoltageChangeTrigger(0.00001) #seuill de déclenchement (Volt)
+			self.currentVoltage=self.voltagechannel.getVoltage()
+			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
 		else:
 			self.state='closed'
 
-	def getIsOpen(self):
-		return(self.voltagechannel.getIsOpen())
-
-	def configure_pHmeter(self):
-		self.voltagechannel.setDataRate(3)
-		self.voltagechannel.setVoltageChangeTrigger(0.00001) #seuill de déclenchement (Volt)
+	"""def getIsOpen(self):
+		return(self.voltagechannel.getIsOpen())"""
 	
 	def getCalData(self):
 		parser = ConfigParser()
@@ -49,9 +46,6 @@ class PHMeter:
 		self.CALdate=parser.get('data', 'date')
 		self.CALtemperature=float(parser.get('data', 'temperature'))
 		self.CALtype=parser.get('data', 'calib_type')
-		# s=sorted(t)
-		# self.CALtype=set(sorted(t))
-		# print("pHmeter.getCalData ", t, s, self.CALtype)
 		self.U1=float(parser.get('data', 'U1'))
 		self.U2=float(parser.get('data', 'U2'))
 		self.U3=float(parser.get('data', 'U3'))
@@ -160,53 +154,3 @@ if __name__ == "__main__":
 	# print("SensorValue: pH = " + str(sensorValue))
 
 	ch.close()
-
-#def main():
-    
-    # #stabTime=
-    # bufferSize=1
-    # buffer=[]
-
-    # #création d'un canal pour la tension d'entrée
-    # self = VoltageInput()
-    # self.setOnVoltageChangeHandler(DoOnVoltageChange)
-    # #self.setOnVoltageChangeHandler(vc2)
-    # self.openWaitForAttachment(5000)
-    # self.setDataRate(1)
-    # self.setVoltageChangeTrigger(0.0001) #précision de 10mV
-
-
-    # pH_set = (4,7)
-    # Two_point_calibration(self, pH_set)
-
-
-    # #lv = []
-    # #voltage = self.getVoltage()
-    # #print("Voltage: " + str(voltage) + "V")
-    
-    # try:
-    #     input("Press Enter to Stop\n")
-    # except (Exception, KeyboardInterrupt):
-    #     pass    
-
-    # self.setSensorType(VoltageSensorType.SENSOR_TYPE_1130_PH)
-    # sensorValue = self.getSensorValue() #pour comparer aux valeurs calculées avec calibration
-    # print("SensorValue: pH = " + str(sensorValue))
-
-    # self.close()
-
-#main()
-# class data_buffer:
-    
-#     def __init__(self):
-#         self.values = []
-#         self.size = 0
-    
-#     def set_buffer_size(self,Nmes):
-#         self.size = Nmes
-# 
-# # def vc2(self, buffer):
-#     v=self.getVoltage()
-#     buffer.append(v)
-#     del(buffer[0])
-#     return buffer

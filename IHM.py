@@ -1,5 +1,7 @@
 """Classe IHM qui contient des attributs communs à toutes les fenêtres PyQt"""
 
+from PyQt5 import QtCore
+
 from configparser import ConfigParser
 import os
 from pathlib import Path
@@ -32,7 +34,13 @@ class IHM:
         self.save_titration_data=parser.get('saving_parameters', 'save_titration_data')
         self.create_detailed_param_file=parser.get('saving_parameters', 'create_detailed_param_file')
         self.compatible_format=parser.get('saving_parameters', 'compatible_format')         
-        print(self.save_absorbance)          
+        #print(self.save_absorbance)     
+
+        #création d'un timer pour le renouvellement du pH sur calBox 
+        #il pourrait servir dans les autres fenêtres!
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(1000)
+        self.timer.start()     
               
     def updateConfigFile(self):
         parser = ConfigParser()

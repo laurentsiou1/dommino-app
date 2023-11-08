@@ -11,9 +11,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from pHmeter import *
 from datetime import datetime
+from IHM import IHM
 
 class CalBox(object):
-    def __init__(self, phm, control_pannel):
+    def __init__(self, phm, control_pannel, ihm : IHM):
+        self.ihm=ihm
         self.phmeter=phm
         self.motherWindow=control_pannel
         self.U4=0
@@ -70,12 +72,18 @@ class CalBox(object):
         self.buttonBox.accepted.connect(self.motherWindow.onCalibrationChange)        
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
-        self.buttonBox.clicked.connect(self.motherWindow.setOnDirectPH) # type: ignore
-        #QtCore.QMetaObject.connectSlotsByName(Dialog)
-
         
-        #activation de l'actualisation de la tension
-        self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectVoltage)
+        #self.buttonBox.clicked.connect(self.motherWindow.setOnDirectPH) 
+        #pour retrouver le pH en direct quand on revient sur le control pannel 
+        
+        if self.phmeter.state=='open':
+            #activation de l'actualisation de la tension
+            #self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectVoltage)
+            #mise sur timer
+            self.ihm.timer.timeout.connect(self.setOnDirectVoltage)  
+        
+        #rajouter une fonction à la fermeture de la fenetre pour desactiver les actions sur le timer
+
         #affichage de la tension déjà affichée sur le panneau de contrôle
         #if self.phmeter.getIsOpen():
             #U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
@@ -90,9 +98,9 @@ class CalBox(object):
         self.pushButton_pH4.setText(_translate("Dialog", "pH4"))
         self.label_2.setText(_translate("Dialog", "Tensions enregistrées"))
 
-    def setOnDirectVoltage(self, ch, voltage):
-        self.phmeter.currentVoltage=voltage    
-        self.direct_voltage.display(voltage)
+    def setOnDirectVoltage(self): #, ch, voltage):
+        #self.direct_voltage self.=voltage
+        self.direct_voltage.display(self.phmeter.currentVoltage)
 
     def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
         U=self.phmeter.currentVoltage

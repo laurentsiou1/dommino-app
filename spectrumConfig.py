@@ -151,8 +151,7 @@ class SpectrumConfigWindow(object):
 
         self.Tint = QtWidgets.QSpinBox(Dialog) 
         self.Tint.setGeometry(QtCore.QRect(30, 700, 71, 31))
-        self.Tint.setMinimum(self.spectro_unit.t_int_min) #milliseconds
-        self.Tint.setMaximum(self.spectro_unit.t_int_max)
+
         self.Tint.setObjectName("Tint")
         self.avg = QtWidgets.QSpinBox(Dialog)
         self.avg.setGeometry(QtCore.QRect(180, 700, 71, 31))
@@ -210,6 +209,8 @@ class SpectrumConfigWindow(object):
             
             #config des paramètres selon valeurs actuelles du spectro
             t_int=self.spectro_unit.t_int #time in millisecondes
+            self.Tint.setMinimum(self.spectro_unit.t_int_min) #milliseconds
+            self.Tint.setMaximum(self.spectro_unit.t_int_max)
             self.Tint.setProperty("value", t_int)  
             self.avg.setProperty("value", self.spectro_unit.averaging)
             self.acquisition_delay=t_int*self.spectro_unit.averaging

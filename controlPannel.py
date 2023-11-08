@@ -44,8 +44,6 @@ class ControlPannel(object):
         
         #spectrometry
         self.spectro_unit=spectro_unit
-        #if spectro_unit.state=='open':
-        #    self.shutter_state=not(self.spectro_unit.adv.get_enable_lamp())
 
         #Pousse-seringue
         self.syringe_pump=syringe_pump
@@ -55,35 +53,20 @@ class ControlPannel(object):
         #Peristaltic Pump
         self.peristaltic_pump=peristaltic_pump
 
-    def setOnDirectPH(self):
-        if self.phmeter.getIsOpen():
-            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)
-        print("passage dans set on ")
-
+    ### Méthodes pour le pH mètre
     def displayDirectPH(self,ch,voltage): #arguments immuables
         self.phmeter.currentVoltage=voltage        
         pH = volt2pH(self.phmeter.a,self.phmeter.b,voltage)
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
         self.direct_pH.display(pH)
-
-    def openConfigWindow(self):
-        self.window3 = QtWidgets.QDialog()
-        self.ui3 = ExpConfig()
-        self.ui3.setupUi(self.window3)
-        self.window3.show()
+        #print("voltage change")
 
     def openCalibWindow(self):
         self.window1 = QtWidgets.QDialog()
-        self.ui1 = CalBox(self.phmeter, self)
+        self.ui1 = CalBox(self.phmeter, self, self.ihm)
         self.ui1.setupUi(self.window1)
         self.window1.show()
     
-    def openSpectroWindow(self):
-        self.window2 = QtWidgets.QDialog()
-        self.ui2 = SpectrumConfigWindow(self.spectro_unit)
-        self.ui2.setupUi(self.window2)
-        self.window2.show()
-
     def onCalibrationChange(self):
         self.calib_text = "Current calibration data:\n"+"date: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
         #print(self.phmeter.CALtype)
@@ -92,6 +75,13 @@ class ControlPannel(object):
         if self.phmeter.a==0:
             self.wrong=1
             print("Calibration erronée")
+
+### Méthodes pour le spectromètre
+    def openSpectroWindow(self):
+        self.window2 = QtWidgets.QDialog()
+        self.ui2 = SpectrumConfigWindow(self.spectro_unit)
+        self.ui2.setupUi(self.window2)
+        self.window2.show()
     
     def changeShutterState(self):
         #if self.spectro_unit.state=='open':
@@ -101,15 +91,21 @@ class ControlPannel(object):
     def updateSpectrum(self):
         if self.spectro_unit.current_absorbance_spectrum!=None:
             self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+
+#Méthodes pour l'enregistrement des données et configuration des séquences
+    def openConfigWindow(self):
+        self.window3 = QtWidgets.QDialog()
+        self.ui3 = ExpConfig()
+        self.ui3.setupUi(self.window3)
+        self.window3.show()
     
     def openSavingConfigWindow(self):
         self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
         self.win4.show()
 
-    ### Méthodes pour le pousse-seringue
+### Méthodes pour le pousse-seringue
     def set_reference_position(self):
         self.syringe_pump.setReference()
-
         #maj levelbar
         self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.base_level)
@@ -118,7 +114,6 @@ class ControlPannel(object):
     def unload_base(self): #appelée lors de l'appui sur le bouton unload base
         vol=self.unload_base_box.value()
         self.syringe_pump.simple_dispense(vol,ev=0)
-
         #maj levelbar
         self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.base_level)
@@ -127,7 +122,6 @@ class ControlPannel(object):
     def reload_base(self): #lors de l'appui sur load_base_button
         vol=self.load_base_box.value()
         self.syringe_pump.simple_refill(vol)
-
         #maj levelbar
         self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.base_level)
@@ -135,22 +129,18 @@ class ControlPannel(object):
     
     def full_reload(self):
         self.syringe_pump.full_refill()
-
         #maj levelbar
         self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.base_level)
         self.base_level_number.setText("%d uL" % self.base_level)
 
-    
     def dispense_base(self):
         vol=self.dispense_base_box.value()
         self.syringe_pump.simple_dispense(vol) #ev=1 default
-
         #maj levelbar
         self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.base_level)
         self.base_level_number.setText("%d uL" % self.base_level)
-
         #maj volume count
         self.added_base.setText("%d" %self.syringe_pump.added_base_uL)
         self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
@@ -161,7 +151,6 @@ class ControlPannel(object):
         self.syringe_pump.added_total_uL=0
         self.syringe_pump.acid_dispense_log=[]
         self.syringe_pump.base_dispense_log=[]
-        
         self.added_acid.setValue(0)
         self.added_base.setText("0")
         self.added_total.setText("0" )
@@ -170,16 +159,15 @@ class ControlPannel(object):
         #modification de acid et total dans la classe syringe_pump
         self.syringe_pump.added_acid_uL=self.added_acid.value()
         self.syringe_pump.added_total_uL=self.syringe_pump.added_acid_uL+self.syringe_pump.added_base_uL
-        
         #modif de l'affichage total count
         self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
-    
         self.syringe_pump.acid_dispense_log = self.syringe_pump.added_acid_uL
     
-    ###Pompe péristaltique
+### Méthodes pour la pompe péristaltique
     def update_pump_speed(self):
         self.peristaltic_pump.setVelocity_rpm(self.pump_speed_rpm.value())
 
+### Définition et config des widgets
     def setupUi(self, MainWindow):
         #global
         MainWindow.setObjectName("MainWindow")
@@ -205,7 +193,7 @@ class ControlPannel(object):
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
         self.direct_pH.setGeometry(QtCore.QRect(730, 80, 101, 51))
         self.direct_pH.setObjectName("direct_pH")
-        self.direct_pH.setNumDigits(4)
+        self.direct_pH.setNumDigits(6)
         self.stabilisation_level = QtWidgets.QProgressBar(self.centralwidget)
         self.stabilisation_level.setGeometry(QtCore.QRect(730, 30, 101, 31))
         self.stabilisation_level.setMaximum(100)
@@ -230,9 +218,10 @@ class ControlPannel(object):
         self.shutter = QtWidgets.QCheckBox(self.centralwidget) #clicked = lambda: self.changeShutterState())
         self.shutter.setGeometry(QtCore.QRect(250, 500, 111, 41))
         self.shutter.setObjectName("shutter")
-        self.reglage_spectro = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSpectroWindow())
+        self.reglage_spectro = QtWidgets.QPushButton(self.centralwidget) #, )
         self.reglage_spectro.setGeometry(QtCore.QRect(380, 500, 140, 61))
         self.reglage_spectro.setObjectName("reglage_spectro")
+        self.reglage_spectro.clicked.connect(self.openSpectroWindow)
 
         #Syringe Pump
         self.label_base_level = QtWidgets.QLabel(self.centralwidget)
@@ -361,7 +350,6 @@ class ControlPannel(object):
         self.save_button.setGeometry(QtCore.QRect(20, 610, 171, 51))
         self.save_button.setObjectName("save_button")
 
-
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1054, 18))
@@ -380,9 +368,9 @@ class ControlPannel(object):
         #self.phmeter.activatePHmeter()
         #Le setOnVoltageChangeHandler ne s'applique que sur la dernière fonction renseignée
         
-        if self.phmeter.getIsOpen():
+        if self.phmeter.state=='open':
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)
-            #self.direct_pH.display(self.phmeter.currentPH)
+            self.direct_pH.display(self.phmeter.currentPH)
         
         #création d'un timer pour le renouvellement du spectre affiché
         #il pourrait servir dans les autres fenêtres!
@@ -394,20 +382,16 @@ class ControlPannel(object):
         if self.spectro_unit.state=='open':
             #mise sur timer
             self.timer.timeout.connect(self.updateSpectrum)            
-            
             #état réel du shutter
             self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
             self.shutter.clicked.connect(self.changeShutterState)
-            
             #config de l'affichage du spectre courant
-            self.lambdas=self.spectro_unit.wavelengths    
-            #self.current_absorbance_spectrum=self.spectro_unit.current_absorbance_spectrum    
+            self.lambdas=self.spectro_unit.wavelengths      
             self.directSpectrum=self.direct_Abs_widget.plot([0],[0])
         
         if self.syringe_pump.getIsOpen():
             #reference
             self.make_ref_button.clicked.connect(self.set_reference_position)
-            
             #action buttons
             self.unload_base_button.clicked.connect(self.unload_base)
             self.reload_base_button.clicked.connect(self.reload_base)
@@ -415,7 +399,6 @@ class ControlPannel(object):
             self.dispense_base_button.clicked.connect(self.dispense_base)
             self.added_acid.valueChanged.connect(self.actualize_counts_on_acid_value_change)
             self.reset_added_count.clicked.connect(self.reset_volume_count)
-            
             #Display
             self.base_level_bar.setProperty("value", self.base_level)
             self.base_level_number.setText("%d uL" % self.base_level)
@@ -471,13 +454,10 @@ class ControlPannel(object):
         self.titration_button.setText(_translate("MainWindow", "lancement du titrage"))
         self.saving_config.setText(_translate("MainWindow", "Configure data saving"))
         self.save_button.setText(_translate("MainWindow", "Save current measure"))
-        
         self.menuPanneau_de_controle.setTitle(_translate("MainWindow", "Panneau de contrôle"))
 
 
-#suppose qu'un spectro et un pH mètre sont connectés
 if __name__ == "__main__":
-
     #spectro
     logger = od_logger()
     od = OceanDirectAPI()
@@ -505,6 +485,7 @@ if __name__ == "__main__":
     print("ID spectros: ", device_ids)
     spectrometry_unit=AbsorbanceMeasure(od, spectro)
 
+
     #pHmètre
     U_pH = VoltageInput() #pH-mètre
     U_pH.setDeviceSerialNumber(432846)
@@ -522,6 +503,7 @@ if __name__ == "__main__":
 
     #Peristaltic Pump
     peristaltic_pump=PeristalticPump()
+
 
     #Interface
     app = QtWidgets.QApplication(sys.argv)
