@@ -104,6 +104,12 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             state=False
         return state
     
+    def close(self):
+        self.stepper.close()
+        self.security_switch.close()
+        self.reference_switch.close()
+        self.electrovanne.close()
+
     def SecurityStop(self, security_switch, state): #à modifier
         if state == 0:
             print("security stop \nself:",self,"security_switch:",security_switch,"state",state)
@@ -166,11 +172,11 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         Au moins 1 ne fonctionne pas correctement ")   
         print("Motor rotating, press ctrl+Z to Stop\n")
         try:
-            print("aa")
+            #print("aa")
             self.stepper.setEngaged(True)
-            print("aa")
+            #print("aa")
             self.waitForStop()
-            print("aa")
+            #print("aa")
         except(KeyboardInterrupt):
             self.stepper.setEngaged(False)         
     
@@ -185,6 +191,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         if ev==1:#electrovanne sur le mode dispense
             time.sleep(1)
             self.electrovanne.setState(True)
+            print("etat de l'electrovanne : ",self.electrovanne.getState())
             time.sleep(1)
 
     def configForRefill(self): #ev=0 electrovanne en position de recharge

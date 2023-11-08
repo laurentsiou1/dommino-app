@@ -42,7 +42,7 @@ class AbsorbanceMeasure(Spectrometer):
         if spectro!=None:
             self.state='open'
             self.model=spectro.get_model()
-            print(self.model)
+            #print(self.model)
             self.ocean_manager=od #instance de la classe OceanDirectAPI
             self.device=spectro
             self.adv=Spectrometer.Advanced(spectro) 
@@ -72,7 +72,7 @@ class AbsorbanceMeasure(Spectrometer):
                 self.device.set_electric_dark_correction_usage(True) #non pris en charge par le ST
             else:
                 self.device.set_electric_dark_correction_usage(False)
-                print("Electric dark not included with OceanST")
+                #print("Electric dark not included with OceanST")
             
             self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
             self.N_lambda = len(self.wavelengths)
@@ -80,7 +80,7 @@ class AbsorbanceMeasure(Spectrometer):
             self.t_int=self.device.get_integration_time()//1000 
             self.t_int_max=self.device.get_maximum_integration_time()//1000 
             self.t_int_min=self.device.get_minimum_integration_time()//1000 
-            print("min tint=",self.t_int_min,"\tmax tint=",self.t_int_max)
+            #print("min tint=",self.t_int_min,"\tmax tint=",self.t_int_max)
             self.averaging=self.device.get_scans_to_average()
             self.boxcar=self.device.get_boxcar_width()
             
@@ -103,7 +103,15 @@ class AbsorbanceMeasure(Spectrometer):
         elif self.state=='closed':
             a=False
         return a
-    
+
+    def close(self,id): #fermeture de l'objet absorbanceMeasure
+        self.adv.set_enable_lamp(False) #Protection des fibres
+        print("shutter fermé\n")
+        self.device.close_device()
+        self.ocean_manager.close_device(id) #close_device(id)
+        print("Spectromètre déconnecté \n")
+        self.state='closed'
+
     def open_shutter(self):
         self.adv.set_enable_lamp(True)
 
@@ -227,8 +235,8 @@ if __name__ == "__main__":
     device_count = od.find_usb_devices() # 1 si appareils détectés
     device_ids = od.get_device_ids()
     device_count = len(device_ids)
-    print("\nNombre d'appareils OceanDirect détectés : ", device_count)
-    print("ID spectros: ", device_ids)
+    #print("\nNombre d'appareils OceanDirect détectés : ", device_count)
+    #print("ID spectros: ", device_ids)
     if device_ids!=[]:
         id=device_ids[0]
         print("Spectro connecté")

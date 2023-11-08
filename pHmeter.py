@@ -129,6 +129,10 @@ class PHMeter:
 		self.a=a
 		self.b=b
 		return a, b
+		
+	def close(self):
+		self.voltagechannel.close()
+		self.state='closed'
 
 if __name__ == "__main__":
     #création d'un canal pour la tension d'entrée

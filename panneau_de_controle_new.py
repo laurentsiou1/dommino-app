@@ -149,7 +149,6 @@ class Ui_MainWindow(object):
         self.dispense_base_box = QtWidgets.QSpinBox(self.centralwidget)
         self.dispense_base_box.setGeometry(QtCore.QRect(810, 530, 61, 41))
         self.dispense_base_box.setObjectName("dispense_base_box")
-        
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(260, 610, 221, 101))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -178,8 +177,15 @@ class Ui_MainWindow(object):
         self.pump_speed_rpm.setProperty("value", 60.0)
         self.pump_speed_rpm.setObjectName("pump_speed_rpm")
         self.group_peristaltic_pump.addWidget(self.pump_speed_rpm)
-        
-        
+        self.connect_phmeter = QtWidgets.QPushButton(self.centralwidget)
+        self.connect_phmeter.setGeometry(QtCore.QRect(590, 320, 101, 51))
+        self.connect_phmeter.setObjectName("connect_phmeter")
+        self.connect_pump = QtWidgets.QPushButton(self.centralwidget)
+        self.connect_pump.setGeometry(QtCore.QRect(320, 570, 111, 31))
+        self.connect_pump.setObjectName("connect_pump")
+        self.close_all = QtWidgets.QPushButton(self.centralwidget)
+        self.close_all.setGeometry(QtCore.QRect(560, 720, 101, 51))
+        self.close_all.setObjectName("close_all")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1054, 18))
@@ -225,12 +231,13 @@ class Ui_MainWindow(object):
 " on full syringe"))
         self.full_reload.setText(_translate("MainWindow", "Full reload"))
         self.dispense_base_button.setText(_translate("MainWindow", "Dispense base (uL)"))
-        
         self.label.setText(_translate("MainWindow", "Peristaltic Pump"))
         self.start_pump.setText(_translate("MainWindow", "Start"))
         self.stop_pump.setText(_translate("MainWindow", "Stop"))
         self.change_dir.setText(_translate("MainWindow", "change Direction"))
-        
+        self.connect_phmeter.setText(_translate("MainWindow", "connect pH meter"))
+        self.connect_pump.setText(_translate("MainWindow", "connect pump"))
+        self.close_all.setText(_translate("MainWindow", "close all devices"))
         self.menuPanneau_de_controle.setTitle(_translate("MainWindow", "Panneau de contrôle"))
 
 

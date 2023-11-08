@@ -7,7 +7,6 @@ import time
 class PeristalticPump(DCMotor): #Elle est crée comme une sous classe de DCMotor
 
     def __init__(self):
-
         DCMotor.__init__(self)
         self.setDeviceSerialNumber(683442)
         self.setChannel(0)

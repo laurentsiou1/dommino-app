@@ -12,14 +12,16 @@ import pyqtgraph as pg
 from oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectrometer as Sp
 from oceandirect.od_logger import od_logger
 
+from IHM import IHM
 from spectro.absorbanceMeasure import AbsorbanceMeasure
 import spectro.processing as proc
 
 _translate = QtCore.QCoreApplication.translate
 
 class SpectrumConfigWindow(object):
-    def __init__(self,  spectro_unit : AbsorbanceMeasure):
+    def __init__(self,  spectro_unit : AbsorbanceMeasure, ihm : IHM):
         self.spectro_unit=spectro_unit
+        self.ihm=ihm
 
     def changeShutterState(self):
         #if self.spectro_unit.state=='open':
@@ -101,7 +103,7 @@ class SpectrumConfigWindow(object):
     def update_refreshing_rate(self):
         r=self.acquisition_delay+2000
         self.refresh_rate=r
-        self.timer.setInterval(r)    
+        self.ihm.timer_spectra.setInterval(r)    
         self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : %0.1fs"% float(r/1000) ))    
 
     def setupUi(self, Dialog):
@@ -191,11 +193,11 @@ class SpectrumConfigWindow(object):
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         
-        #création d'un timer pour le renouvellement du spectre affiché
+        """#création d'un timer pour le renouvellement du spectre affiché
         #il pourrait servir dans les autres fenêtres!
-        self.timer = QtCore.QTimer()
-        self.timer.setInterval(3000)
-        self.timer.start()
+        self.ihm.timer_spectra = QtCore.QTimer()
+        self.ihm.timer_spectra.setInterval(3000)
+        self.ihm.timer_spectra.start()"""
         
         #spectro connecté
         if self.spectro_unit.state=='open':
@@ -223,16 +225,16 @@ class SpectrumConfigWindow(object):
             self.lambdas=self.spectro_unit.wavelengths
             #connexion boutons à l'initialisation
             self.refresh_background_button.clicked.connect(self.update_background_spectrum) #background spectrum
-            self.timer.timeout.connect(self.update_intensity_spectrum) #intensity_widget spectrum (corrected)  
+            self.ihm.timer_spectra.timeout.connect(self.update_intensity_spectrum) #intensity_widget spectrum (corrected)  
             self.refresh_ref_button.clicked.connect(self.update_ref_spectrum) #ref spectrum
             
             #actualisation des spectres périodiquement
-            self.timer.timeout.connect(self.refresh_all_spectra_on_timer)
-            self.timer.timeout.connect(self.refresh_displayed_intensity_spectrum) #mise sur timer
+            self.ihm.timer_spectra.timeout.connect(self.refresh_all_spectra_on_timer)
+            self.ihm.timer_spectra.timeout.connect(self.refresh_displayed_intensity_spectrum) #mise sur timer
             
             #affichage_graphique
             self.refresh_rate=self.acquisition_delay//1000+2000 #en millisecondes
-            self.timer.timeout.connect(self.update_refreshing_rate)
+            self.ihm.timer_spectra.timeout.connect(self.update_refreshing_rate)
 
 
     def retranslateUi(self, Dialog):
@@ -277,8 +279,8 @@ if __name__ == "__main__":
         adv = None #Sp.Advanced(spectro)
         spectroIsConnected=False
         print("Spectro non connecté")
-    print("Nombre d'appareils OceanDirect détectés : ", device_count)
-    print("ID spectros: ", device_ids)
+    #print("Nombre d'appareils OceanDirect détectés : ", device_count)
+    #print("ID spectros: ", device_ids)
 
     spectrometry_unit=AbsorbanceMeasure(od, spectro)
 

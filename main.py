@@ -33,7 +33,7 @@ from controlPannel import ControlPannel
 
 import time
 
-# class Sous_Systeme:
+"""# class Sous_Systeme:
 #     isConnected
 #     def isConnected(self):
 #         return self.isConnected
@@ -154,7 +154,7 @@ ph_meter = PHMeter(U_pH)
 syringe_pump=PhidgetStepperPump('SGE500') #ou SyringePump('Phidget') ou 'Legato'
 #cette ligne est à revoir avec la définition des sous classes de SyringePump
 spectrometry_set=AbsorbanceMeasure(od, spectro)
-peristaltic_pump=PeristalticPump()
+peristaltic_pump=PeristalticPump()"""
 
 
 ### Lancement IHM ###
@@ -162,8 +162,8 @@ peristaltic_pump=PeristalticPump()
 import sys
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
-ihm=IHM(ph_meter,spectrometry_set,syringe_pump)
-ui = ControlPannel(ph_meter,spectrometry_set,syringe_pump,peristaltic_pump,ihm)
+itf=IHM()
+ui = ControlPannel(ihm=itf)
 ui.setupUi(MainWindow)
 
 MainWindow.show()        

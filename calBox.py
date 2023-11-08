@@ -80,7 +80,7 @@ class CalBox(object):
             #activation de l'actualisation de la tension
             #self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectVoltage)
             #mise sur timer
-            self.ihm.timer.timeout.connect(self.setOnDirectVoltage)  
+            self.ihm.timer1s.timeout.connect(self.setOnDirectVoltage)  
         
         #rajouter une fonction à la fermeture de la fenetre pour desactiver les actions sur le timer
 
