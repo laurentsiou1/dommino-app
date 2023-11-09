@@ -20,7 +20,7 @@ _translate = QtCore.QCoreApplication.translate
 
 class SpectrumConfigWindow(object):
     def __init__(self,  spectro_unit : AbsorbanceMeasure, ihm : IHM):
-        self.spectro_unit=spectro_unit
+        self.spectro_unit=ihm.spectro_unit
         self.ihm=ihm
 
     def changeShutterState(self):

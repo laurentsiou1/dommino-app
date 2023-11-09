@@ -92,8 +92,9 @@ class ControlPannel(object):
     def OnClick_reglage_spectro(self):
         if self.spectro_unit==None:
             self.ihm.connectSpectrometer()
-            self.spectro_unit=self.ihm.spectro_unit
-            self.activate_spectro()
+            if self.ihm.spectro_unit.state=='open':
+                self.spectro_unit=self.ihm.spectro_unit
+                self.activate_spectro()
         self.openSpectroWindow()
 
     def openSpectroWindow(self):
@@ -211,7 +212,7 @@ class ControlPannel(object):
     
 ### Méthodes pour la pompe péristaltique
     def link_pump2IHM(self):
-        print("c'est bien connecté")
+        #print("pompe péristaltique reliée au panneau de controle")
         self.start_pump.clicked.connect(self.peristaltic_pump.start)
         self.stop_pump.clicked.connect(self.peristaltic_pump.stop)
         self.change_dir.clicked.connect(self.peristaltic_pump.change_direction)
@@ -383,7 +384,7 @@ class ControlPannel(object):
         self.connect_pump = QtWidgets.QPushButton(self.centralwidget)
         self.connect_pump.setGeometry(QtCore.QRect(400, 570, 120, 30))
         self.connect_pump.setObjectName("connect_pump")
-        self.connect_pump.clicked.connect(self.ihm.connectPeristalticPump)
+        #self.connect_pump.clicked.connect(self.ihm.connectPeristalticPump)
         self.connect_pump.clicked.connect(self.connectPeristalticPump)   
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(260, 560, 221, 180))
@@ -551,14 +552,17 @@ class ControlPannel(object):
         self.phmeter = self.ihm.phmeter
 
     def connectSyringePump(self):
-        if self.syringe_pump==None:
-            self.ihm.connectSyringePump()   #création de l'object SyringePump comme attribut de IHM
-            self.syringe_pump = self.ihm.syringe_pump #mise en attribut de controlPannel aussi. 
+        #if self.syringe_pump==None:
+        self.ihm.connectSyringePump()   #création de l'object SyringePump comme attribut de IHM
+        self.syringe_pump = self.ihm.syringe_pump #mise en attribut de controlPannel aussi.
+        if self.syringe_pump.getIsOpen(): 
             self.link_SyringePump2IHM()
 
     def connectPeristalticPump(self):
+        self.ihm.connectPeristalticPump()
         self.peristaltic_pump=self.ihm.peristaltic_pump
-        self.link_pump2IHM()
+        if self.peristaltic_pump.getIsOpen():
+            self.link_pump2IHM()
 
 
 #Idée : lancer l'interface. Gérer l'allumage et connexion de chaque appareil sur l'interface via des boutons

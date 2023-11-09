@@ -119,7 +119,8 @@ class IHM:
         self.timer3s.stop()
         self.timer_spectra.stop()
         if self.spectro_unit!=None:
-            self.spectro_unit.close(self.id)
+            if self.spectro_unit.state=='open':
+                self.spectro_unit.close(self.id)
         if self.phmeter!=None:
             self.phmeter.close()
         if self.syringe_pump!=None:
