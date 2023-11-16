@@ -16,6 +16,7 @@ from expConfig import ExpConfig
 from calBox import CalBox
 from spectrumConfig import SpectrumConfigWindow
 from savingConfig import SavingConfig
+from windowHandler import WindowHandler
 
 from pHmeter import *
 from spectro.absorbanceMeasure import AbsorbanceMeasure
@@ -32,40 +33,38 @@ from oceandirect.od_logger import od_logger
 
 class ControlPannel(object):
     #Pour instancier la classe ControlPannel on doit renseigner un attribut PHMeter et un Spectrometer
-    def __init__(self, phm: PHMeter = None, spectro_unit: AbsorbanceMeasure = None, \
-               syringe_pump: SyringePump = None, peristaltic_pump: PeristalticPump = None, ihm: IHM = None):
+    def __init__(self, ihm:IHM=None, win:WindowHandler=None):
         print("initialisation du panneau de contrôle") 
         self.ihm=ihm #ihm passé de attribut 
-        
-        #Mesure du pH
-        if phm != None:
-            self.phmeter=phm
-            self.calib_text = "Current calibration data:\n"+"date: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
-            self.wrong=0 #mauvaise calibration
-        else:
-            self.phmeter=None
-
-        #spectrometry
-        if spectro_unit!=None:
-            self.spectro_unit=spectro_unit
-        else:
-            self.spectro_unit=None
+        self.win=win
+        self.phmeter=ihm.phmeter
+        self.spectro_unit=ihm.spectro_unit
+        self.syringe_pump=ihm.syringe_pump
+        self.peristaltic_pump=ihm.peristaltic_pump
 
         #Pousse-seringue
-        if syringe_pump!=None:
+        #Que faire de ce bloc ? 
+        """if syringe_pump!=None:
             self.syringe_pump=syringe_pump
-            if self.syringe_pump.getIsOpen():
+            if self.syringe_pump.state=='open':
                 self.base_level=500-self.syringe_pump.stepper.getPosition()
         else:
-            self.syringe_pump=None
-        
-        #Peristaltic Pump
-        if peristaltic_pump!=None:
-            self.peristaltic_pump=peristaltic_pump
-        else:
-            self.peristaltic_pump=None
+            self.syringe_pump=None"""
+
 
     ### Méthodes pour le pH mètre
+    def link_pHmeter2IHM(self):
+        self.phmeter.connect()
+        if self.phmeter.state=='open':
+            #affichage des données de calibration
+            self.onCalibrationChange()
+            #pH en direct
+            self.direct_pH.display(self.phmeter.currentPH) #pH instantané
+            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
+
+    def clear_IHM(self):
+        self.direct_pH.display(None) #   setDisabled()
+
     def displayDirectPH(self,ch,voltage): #arguments immuables
         self.phmeter.currentVoltage=voltage        
         pH = volt2pH(self.phmeter.a,self.phmeter.b,voltage)
@@ -81,20 +80,16 @@ class ControlPannel(object):
     
     def onCalibrationChange(self):
         self.calib_text = "Current calibration data:\n"+"date: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
-        #print(self.phmeter.CALtype)
         self.calText.clear()
         self.calText.appendPlainText(self.calib_text)
-        if self.phmeter.a==0:
-            self.wrong=1
-            print("Calibration erronée")
 
 ### Méthodes pour le spectromètre
     def OnClick_reglage_spectro(self):
-        if self.spectro_unit==None:
-            self.ihm.connectSpectrometer()
-            if self.ihm.spectro_unit.state=='open':
-                self.spectro_unit=self.ihm.spectro_unit
-                self.activate_spectro()
+        self.spectro_unit=self.ihm.spectro_unit
+        if self.spectro_unit.state=='closed':
+            self.spectro_unit.connect()
+        if self.spectro_unit.state=='open':
+            self.link_spectro2IHM()
         self.openSpectroWindow()
 
     def openSpectroWindow(self):
@@ -112,7 +107,7 @@ class ControlPannel(object):
         if self.spectro_unit.current_absorbance_spectrum!=None:
             self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
     
-    def activate_spectro(self):
+    def link_spectro2IHM(self):
         #mise sur timer
         self.ihm.timer3s.timeout.connect(self.updateSpectrum)            
         #état réel du shutter
@@ -125,7 +120,7 @@ class ControlPannel(object):
 #Méthodes pour l'enregistrement des données et configuration des séquences
     def openConfigWindow(self):
         self.window3 = QtWidgets.QDialog()
-        self.ui3 = ExpConfig()
+        self.ui3 = ExpConfig(self.ihm, self.win)
         self.ui3.setupUi(self.window3)
         self.window3.show()
     
@@ -247,13 +242,7 @@ class ControlPannel(object):
         self.connect_phmeter = QtWidgets.QPushButton(self.centralwidget)
         self.connect_phmeter.setGeometry(QtCore.QRect(540, 320, 150, 51))
         self.connect_phmeter.setObjectName("connect_phmeter")
-        self.connect_phmeter.clicked.connect(self.ihm.connectPHMeter)
-        self.connect_phmeter.clicked.connect(self.connectPHMeter)
-        self.connect_phmeter.clicked.connect(self.onCalibrationChange)
-        if self.phmeter!=None:
-            if self.phmeter.state=='open':
-                self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)
-                self.direct_pH.display(self.phmeter.currentPH)
+        self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM) #param de l'ihm
         
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
         self.direct_pH.setGeometry(QtCore.QRect(730, 80, 101, 51))
@@ -271,10 +260,10 @@ class ControlPannel(object):
         self.calText.setSizeIncrement(QtCore.QSize(0, 0))
         self.calText.setObjectName("calText")
         #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
-        try: 
+        """try: 
             self.calText.appendPlainText(self.calib_text)
         except:
-            pass
+            pass"""
         self.cal_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openCalibWindow())
         self.cal_button.setGeometry(QtCore.QRect(890, 50, 121, 61))
         self.cal_button.setObjectName("cal_button")
@@ -419,6 +408,7 @@ class ControlPannel(object):
         self.close_all.setGeometry(QtCore.QRect(560, 700, 101, 51))
         self.close_all.setObjectName("close_all") 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
+        self.close_all.clicked.connect(self.clear_IHM)
 
         #application
         self.titration_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openConfigWindow())
@@ -445,56 +435,20 @@ class ControlPannel(object):
         self.menubar.addAction(self.menuPanneau_de_controle.menuAction())
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-        #activation de l'actualisation de la tension
-        #self.phmeter.activatePHmeter()
-        #Le setOnVoltageChangeHandler ne s'applique que sur la dernière fonction renseignée
         
-        if self.phmeter!=None:
-            if self.phmeter.state=='open':
-                self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)
-                self.direct_pH.display(self.phmeter.currentPH)
+        #Sur les appareils connectés
+        """if self.phmeter.state=='open':
+            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)                
+            self.direct_pH.display(self.phmeter.currentPH)
         
-        """#création d'un timer pour le renouvellement du spectre affiché
-        #il pourrait servir dans les autres fenêtres!
-        self.timer3s = QtCore.QTimer()
-        self.timer3s.setInterval(3000)
-        self.timer3s.start()"""
+        if self.spectro_unit.state=='open':
+            self.link_spectro2IHM()
         
-        #spectro connecté
-        if self.spectro_unit!=None:
-            if self.spectro_unit.state=='open':
-                self.activate_spectro()
-
-                """#mise sur timer
-                self.ihm.timer3s.timeout.connect(self.updateSpectrum)            
-                #état réel du shutter
-                self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
-                self.shutter.clicked.connect(self.changeShutterState)
-                #config de l'affichage du spectre courant
-                self.lambdas=self.spectro_unit.wavelengths      
-                self.directSpectrum=self.direct_Abs_widget.plot([0],[0])"""
+        if self.syringe_pump.state=='open':
+            self.link_SyringePump2IHM()
         
-        if self.syringe_pump!=None:
-            if self.syringe_pump.getIsOpen():
-                self.link_SyringePump2IHM()
-                """#reference
-                self.make_ref_button.clicked.connect(self.set_reference_position)
-                #action buttons
-                self.unload_base_button.clicked.connect(self.unload_base)
-                self.reload_base_button.clicked.connect(self.reload_base)
-                self.full_reload_button.clicked.connect(self.full_reload)
-                self.dispense_base_button.clicked.connect(self.dispense_base)
-                self.added_acid.valueChanged.connect(self.actualize_counts_on_acid_value_change)
-                self.reset_added_count.clicked.connect(self.reset_volume_count)
-                #Display
-                self.base_level_bar.setProperty("value", self.base_level)
-                self.base_level_number.setText("%d uL" % self.base_level)
-                self.added_base.setText("0")"""
-        
-        if self.peristaltic_pump!=None:
-            if self.peristaltic_pump.getIsOpen():
-                self.connect_pump.clicked.connect(self.link_pump2IHM)
+        if self.peristaltic_pump.state=='open':
+            self.connect_pump.clicked.connect(self.link_pump2IHM)"""
 
 
     def retranslateUi(self, MainWindow):
@@ -545,44 +499,25 @@ class ControlPannel(object):
         self.close_all.setText(_translate("MainWindow","close devices"))
         self.menuPanneau_de_controle.setTitle(_translate("MainWindow", "Panneau de contrôle"))
 
-    def connectSpectrometer(self):
-        self.spectro_unit=self.ihm.spectro_unit
-
-    def connectPHMeter(self):
-        self.phmeter = self.ihm.phmeter
-
     def connectSyringePump(self):
-        #if self.syringe_pump==None:
-        self.ihm.connectSyringePump()   #création de l'object SyringePump comme attribut de IHM
-        self.syringe_pump = self.ihm.syringe_pump #mise en attribut de controlPannel aussi.
-        if self.syringe_pump.getIsOpen(): 
+        self.syringe_pump.connect()
+        if self.syringe_pump.state=='open':
             self.link_SyringePump2IHM()
 
     def connectPeristalticPump(self):
-        self.ihm.connectPeristalticPump()
-        self.peristaltic_pump=self.ihm.peristaltic_pump
-        if self.peristaltic_pump.getIsOpen():
+        self.peristaltic_pump.connect()
+        if self.peristaltic_pump.state=='open':
             self.link_pump2IHM()
-
 
 #Idée : lancer l'interface. Gérer l'allumage et connexion de chaque appareil sur l'interface via des boutons
 if __name__ == "__main__":
-    """#Interface
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    itf = IHM()
-    ui = ControlPannel(ihm=itf)
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())"""
-
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     itf=IHM()
-    ui = ControlPannel(ihm=itf)
+    win=WindowHandler()
+    ui = ControlPannel(ihm=itf,win=win)
     ui.setupUi(MainWindow)
-
     MainWindow.show()        
     sys.exit(app.exec_())
         

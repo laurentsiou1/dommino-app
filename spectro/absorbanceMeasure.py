@@ -38,17 +38,36 @@ except:
 """
 class AbsorbanceMeasure(Spectrometer):
 
-    def __init__(self, od, spectro : Spectrometer): 
-        if spectro!=None:
-            self.state='open'
+    def __init__(self): #, od, spectro : Spectrometer): 
+        self.state='closed'
+    
+    def connect(self):
+        od = OceanDirectAPI()
+        device_count = od.find_usb_devices() #ne pas enlever cette ligne pour détecter le spectro
+        device_ids = od.get_device_ids()
+        if device_ids!=[]:
+            self.id=device_ids[0]
+            try:
+                spectro = od.open_device(self.id) #crée une instance de la classe Spectrometer
+                adv = Spectrometer.Advanced(spectro)
+                self.state='open'
+                print("Spectro connecté")
+            except:
+                print("Ne peut pas se connecter au spectro numéro ", self.id)
+                self.state='closed'
+        else:
+            self.state='closed'
+            print("Spectro non connecté")
+        #print("ID spectro: ", device_ids)
+        
+        if self.state=='open':
             self.model=spectro.get_model()
             #print(self.model)
             self.ocean_manager=od #instance de la classe OceanDirectAPI
             self.device=spectro
             self.adv=Spectrometer.Advanced(spectro) 
             
-            #Processing corrections
-            #Specific to models
+            #Processing corrections specific to models
             if self.model=='OceanSR2':
                 self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
                 #2k pix pour 700nm
@@ -72,7 +91,6 @@ class AbsorbanceMeasure(Spectrometer):
                 self.device.set_electric_dark_correction_usage(True) #non pris en charge par le ST
             else:
                 self.device.set_electric_dark_correction_usage(False)
-                #print("Electric dark not included with OceanST")
             
             self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
             self.N_lambda = len(self.wavelengths)
@@ -94,15 +112,12 @@ class AbsorbanceMeasure(Spectrometer):
             self.current_intensity_spectrum=None    #Sample or whatever is in the cell
             self.current_absorbance_spectrum=None   #Absorbance
 
-        else:
-            self.state='closed'
-
-    def getIsOpen(self):
+    """def getIsOpen(self):
         if self.state=='open':
             a=True
         elif self.state=='closed':
             a=False
-        return a
+        return a"""
 
     def close(self,id): #fermeture de l'objet absorbanceMeasure
         self.adv.set_enable_lamp(False) #Protection des fibres

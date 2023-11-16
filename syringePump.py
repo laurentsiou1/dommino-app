@@ -42,9 +42,11 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     reference_switch = DigitalInput() #interrupteur pour positionnement de référence
     electrovanne = DigitalOutput() #contrôle électrovannes
     
-    def __init__(self,syringe_type='SGE500'):
-        
-        #print("self=",self)
+    def __init__(self,syringe_type='SGE500'): #par défaut une SGE500uL
+        self.syringe_type=syringe_type
+        self.state='closed'
+
+    def connect(self):
         self.model='Phidget Stepper STC 10005_0 Syringe Pump'
         #Stepper
         self.stepper.setDeviceSerialNumber(683442)
@@ -53,11 +55,6 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         try:
             self.stepper.openWaitForAttachment(4000)
             print("stepper connecté")
-        except:
-            print("stepper non connecté")
-            pass
-        
-        if self.stepper.getIsOpen():
             print("limite de courant actuelle : ", self.stepper.getCurrentLimit())
             self.stepper.setCurrentLimit(0.2) #0.1A
             print("limite de courant après réglage : ", self.stepper.getCurrentLimit())
@@ -65,7 +62,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             print("limite de vittesse stepper : ", self.stepper.getVelocityLimit())
             self.stepper.setAcceleration(5)
             print("acceleration stepper : ", self.stepper.getAcceleration())
-            if syringe_type=='SGE500': #Trajan SGE 500uL
+            if self.syringe_type=='SGE500': #Trajan SGE 500uL
                 self.stepper.setRescaleFactor(-0.013115) 
                 #450uL dispensés sur une échelle de 30500 positions avec scale factor=1
                 #soit 76,25 microsteps pour 1 uL.     
@@ -77,7 +74,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 print("dans le else")
                 self.stepper.setRescaleFactor(-0.01303) #avant 0.013115
             print("rescale factor = ", self.stepper.getRescaleFactor())
-
+        except:
+            print("stepper non connecté")
+        
         #Interrupteurs, electrovanne
         self.security_switch.setDeviceSerialNumber(432846)
         self.security_switch.setChannel(0)
@@ -89,20 +88,19 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.security_switch.openWaitForAttachment(1000)
             self.reference_switch.openWaitForAttachment(1000)
             self.electrovanne.openWaitForAttachment(1000)
+            print("electrovanne et interrupteurs connectés")
         except:
-            pass
-    
-    def getIsOpen(self):
-    #cette fonction ne garantit pas que tous les appareils passifs sont branchés
-    #Il s'agit seulement des Phidgets
-    #Cela permet de ne pas avoir d'erreurs lors de l'exécution mais ne garantit pas 
-    #qu'un interrupteur de sécurité ne soit mal branché. 
-        if self.stepper.getIsOpen() and self.electrovanne.getIsOpen():
-            #la carte est branchée ainsi que le stepper
-            state=True
+            print("problème pour la connexion de l'électrovanne ou des interrupteurs")
+        
+        if (self.stepper.getIsOpen() and self.security_switch.getIsOpen() and \
+        self.reference_switch.getIsOpen() and self.electrovanne.getIsOpen()):
+            self.state='open'
         else:
-            state=False
-        return state
+            self.state='closed'
+        #L'attribut state ne garantit pas que tous les appareils passifs sont branchés
+        #Il s'agit seulement des Phidgets
+        #Cela permet de ne pas avoir d'erreurs lors de l'exécution mais ne garantit pas 
+        #qu'un interrupteur de sécurité ne soit mal branché. 
     
     def close(self):
         self.stepper.close()

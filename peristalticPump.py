@@ -4,21 +4,19 @@ from Phidget22.Phidget import *
 from Phidget22.Devices.DCMotor import *
 import time
 
-class PeristalticPump(DCMotor): #Elle est crée comme une sous classe de DCMotor
+class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMotor
 
     def __init__(self):
         DCMotor.__init__(self)
         self.setDeviceSerialNumber(683442)
         self.setChannel(0)
         self.setHubPort(2)
+        self.state='closed'
 
+    def connect(self):
         try:
             self.openWaitForAttachment(4000)
             print("moteur de pompe alimenté")
-        except:
-            print("moteur de pompe non alimenté")
-
-        if self.getIsOpen():
             self.direction=1 # +1 or -1 according to the direction
             self.setCurrentLimit(1) #1A
             self.setAcceleration(0.5)
@@ -30,6 +28,10 @@ class PeristalticPump(DCMotor): #Elle est crée comme une sous classe de DCMotor
             "\nDuty cycle: ", self.duty_cycle,\
             "\nAverage Voltage (V) : ", self.duty_cycle*12,\
             "\nDirection : ", self.direction, "\n")
+            self.state='open'
+        except:
+            print("moteur de pompe non alimenté")
+            self.state='closed'
 
     def setVelocity_rpm(self,omega):
         self.velocity_rpm=omega

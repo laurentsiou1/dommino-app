@@ -14,7 +14,7 @@ from oceandirect.od_logger import od_logger
 
 from pHmeter import PHMeter
 from spectro.absorbanceMeasure import AbsorbanceMeasure
-from syringePump import SyringePump, PhidgetStepperPump
+from syringePump import PhidgetStepperPump
 from peristalticPump import PeristalticPump
 
 path = Path(__file__)
@@ -24,22 +24,15 @@ app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
 
 
 class IHM:
-    def __init__(self, phm : PHMeter = None, spectro_unit: AbsorbanceMeasure = None, syringe_pump: SyringePump = None, peristaltic_pump : PeristalticPump = None):
-        #mettre les entrées en optionnel 
-        #plutot dans chaque classe. Initialiser avec un state 'open' ou 'close'. 
-        #Puis les fonctions de l'init, les mettre dans une methode configure avec tout. 
-        """print("control pannel :\n \
-            self:",self,\
-            "\nphmeter=",phm,\
-            "\nspectro=",spectro_unit,\
-            "\nsyringe_pump=",syringe_pump,\
-            "\nperistaltic_pump=",peristaltic_pump)"""
+    #Sous sytèmes 
+    #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
+    spectro_unit=AbsorbanceMeasure()
+    phmeter=PHMeter()
+    syringe_pump=PhidgetStepperPump()
+    peristaltic_pump=PeristalticPump()
 
-        self.phmeter=phm
-        self.spectro_unit=spectro_unit
-        self.syringe_pump=syringe_pump
-        self.peristaltic_pump=peristaltic_pump
-        
+    def __init__(self):
+        #Config for savings
         parser = ConfigParser()
         parser.read(app_config_path)
         
@@ -49,83 +42,44 @@ class IHM:
         self.save_titration_data=parser.get('saving_parameters', 'save_titration_data')
         self.create_detailed_param_file=parser.get('saving_parameters', 'create_detailed_param_file')
         self.compatible_format=parser.get('saving_parameters', 'compatible_format')         
-        #print(self.save_absorbance)     
+  
+        #Configs for Automatic titration sequence
+        self.experience_name=None
+        self.description=None
+        self.OM_type=None #type of organic matter
+        self.concentration=None
+        self.fibers=None
+        self.flowcell=None
+        self.initial_pH=None
+        self.final_pH=None
+        self.N_mes=None #number of pH/spectra measures
 
         #création d'un timer pour le renouvellement du pH sur calBox 
         self.timer1s = QtCore.QTimer()
         self.timer1s.setInterval(1000)
         self.timer1s.start()     
-
         #création d'un timer pour le renouvellement du spectre affiché
         self.timer3s = QtCore.QTimer()
         self.timer3s.setInterval(3000)
         self.timer3s.start()
-
         #timer pour le rafraichissement des spectres dans spectrum Config. 
         #La période sera modifiée selon les param du spectro avg Tint
         self.timer_spectra = QtCore.QTimer()
         self.timer_spectra.setInterval(3000)
         self.timer_spectra.start()        
-
-    def connectSpectrometer(self):
-        #spectro
-        logger = od_logger()
-        od = OceanDirectAPI()
-        device_count = od.find_usb_devices() #nb d'appareils détectés
-        device_ids = od.get_device_ids()
-        if device_ids!=[]:
-            self.id=device_ids[0]
-            try:
-                spectro = od.open_device(self.id) #crée une instance de la classe Spectrometer
-                adv = Sp.Advanced(spectro)
-                print("Spectro connecté")
-            except:
-                spectro=None #on crée dans tous les cas un objet Spectrometer
-                adv = None
-                print("Ne peut pas se connecter au spectro numéro ", self.id)
-                pass
-        else:
-            spectro=None #on crée dans tous les cas un objet Spectrometer
-            adv = None #Sp.Advanced(spectro)
-            print("Spectro non connecté")
-        #print("Nombre d'appareils OceanDirect détectés : ", device_count)
-        #print("ID spectros: ", device_ids)
-        self.spectro_unit=AbsorbanceMeasure(od, spectro)
-
-    def connectPHMeter(self):
-        #pHmètre
-        U_pH = VoltageInput() #pH-mètre
-        U_pH.setDeviceSerialNumber(432846)
-        U_pH.setChannel(0)
-        try:
-            U_pH.openWaitForAttachment(1000)
-            print("pH mètre connecté")
-        except:
-            print("pH-mètre non connecté")
-        pass
-
-        phm = PHMeter(U_pH)
-        self.phmeter = phm
-
-    def connectSyringePump(self):
-        self.syringe_pump = PhidgetStepperPump('SGE500')
-    
-    def connectPeristalticPump(self):
-        self.peristaltic_pump=PeristalticPump()
     
     def close_all_devices(self):
         print("Closing all device")
         self.timer1s.stop()
         self.timer3s.stop()
         self.timer_spectra.stop()
-        if self.spectro_unit!=None:
-            if self.spectro_unit.state=='open':
-                self.spectro_unit.close(self.id)
-        if self.phmeter!=None:
+        if self.spectro_unit.state=='open':
+            self.spectro_unit.close(self.spectro_unit.id)
+        if self.phmeter.state=='open':
             self.phmeter.close()
-        if self.syringe_pump!=None:
+        if self.syringe_pump.state=='open':
             self.syringe_pump.close()
-        if self.peristaltic_pump!=None:
+        if self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
               
     def updateConfigFile(self):
@@ -210,7 +164,6 @@ class IHM:
             else:
                 header+="Spectrometer closed\n"
 
-        
         name+=str(date_time)
         output=header+"\n\n"+data
         f_out = open(self.saving_folder+'/'+name+'.txt','w') #création d'un fichier dans le répertoire
@@ -237,7 +190,6 @@ class IHM:
         f_out = open(self.saving_folder+'/'+output_name_csv+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output_string)
         f_out.close()
-
 
 if __name__=="main":
     interface = IHM()

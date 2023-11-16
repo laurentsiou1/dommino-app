@@ -25,22 +25,34 @@ def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
 
 class PHMeter:
 
-	def __init__(self, ch): #ch est un VoltageInput
-		self.voltagechannel = ch
-		self.getCalData()
-		if ch.getIsOpen():
-			self.state='open'
-			self.voltagechannel.setDataRate(3)
-			self.voltagechannel.setVoltageChangeTrigger(0.00001) #seuill de déclenchement (Volt)
-			self.currentVoltage=self.voltagechannel.getVoltage()
-			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
-		else:
-			self.state='closed'
+	def __init__(self):
+		self.state='closed'
 
-	"""def getIsOpen(self):
-		return(self.voltagechannel.getIsOpen())"""
+	def connect(self):
+		#pHmètre
+		U_pH = VoltageInput() #pH-mètre
+		U_pH.setDeviceSerialNumber(432846)
+		U_pH.setChannel(0)
+		try:
+			U_pH.openWaitForAttachment(1000)
+			if U_pH.getIsOpen():
+				U_pH.setDataRate(3)
+				U_pH.setVoltageChangeTrigger(0.00001) #seuill de déclenchement (Volt)
+				self.getCalData()
+				self.currentVoltage=U_pH.getVoltage()
+				self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
+				self.state='open'
+				print("pH mètre connecté")
+			else:
+				self.state='closed'
+				print("pH-mètre non connecté")
+		except:
+			self.state='closed'
+			print("pH-mètre non connecté")
+		self.voltagechannel=U_pH
 	
 	def getCalData(self):
+		#print("passage dans get cal data")
 		parser = ConfigParser()
 		parser.read(cal_data_path)
 		self.CALdate=parser.get('data', 'date')
@@ -56,7 +68,7 @@ class PHMeter:
 		#les arguments de cette fonctions ne peuvent pas être changés
 		#self:PHMeter,ch:VoltageInput,voltage:float 
 		self.currentVoltage=voltage #self.voltagechannel.getVoltage()
-		print("current voltage=",self.currentVoltage)
+		#print("current voltage=",self.currentVoltage)
 		self.current_PH=volt2pH(self.a,self.b,self.currentVoltage)  
 		#return(self.currentVoltage,self.current_PH)
 	
