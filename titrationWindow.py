@@ -14,21 +14,22 @@ class TitrationWindow(object):
         self.peristaltic_pump=ihm.peristaltic_pump
         self.syringe_pump=ihm.syringe_pump
 
-        self.lambdas=self.spectro_unit.wavelengths    
+        self.lambdas=self.spectro_unit.wavelengths 
+        self.N_lambda=len(self.lambdas)   
         self.N_mes=self.titration_sequence.N_mes
     
-    """#DIRECT
-    #Actualisation du spectre en direct
-    def updateSpectrum(self):
-        if self.spectro_unit.current_absorbance_spectrum!=None:
-            self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
-    
-    def setOnDirectSpectrum(self):
-        #mise sur timer
-        self.ihm.timer3s.timeout.connect(self.updateSpectrum)        
-        #config de l'affichage du spectre courant
-        self.lambdas=self.spectro_unit.wavelengths      
-        self.directSpectrum=self.direct_abs.plot([0],[0])"""
+    #DIRECT
+    def refresh_stability_level(self):
+        self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
+        self.label_stability.setText(str(self.phmeter.stab_purcent)+"%")
+
+    #spectre courant sur le graphe en delta 
+    def updateCurrentSpectrum_delta(self): #il y a déjà un spectre enregistré
+        self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.titration_sequence.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+        
+        #cette ligne permet de tracer plusieurs courbes superposées sur un graphe. 
+        #voir spectrum config pour les couleurs
+        #self.delta_all_abs.plot(self.lambdas,self.current_absorbance_spectrum_delta)
 
     #ENREGISTREMENT
 
@@ -37,19 +38,20 @@ class TitrationWindow(object):
         self.spectra_j=self.delta_all_abs.plot(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
 
     #pH et volume
-    def append_pH_in_table(self,nb): #nb=numero de la mesure
+    def append_pH_in_table(self,nb,pH): #nb=numero de la mesure
         pH_j="pH"+str(nb)
         self.pH_j = QtWidgets.QLabel(self.grid0)
         self.pH_j.setObjectName(pH_j)
         self.grid_all_pH_vol.addWidget(self.pH_j, 2, nb, 1, 1)
-        self.pH_j.setText(self.ihm.pH)
+        self.pH_j.setText(str(pH))
         
-    def append_vol_in_table(self,nb): #nb numero de mesure
+    def append_vol_in_table(self,nb,vol): #nb numero de mesure
         vol_j="vol"+str(nb)
         self.vol_j = QtWidgets.QLabel(self.grid0)
         self.vol_j.setObjectName(vol_j)
         self.grid_all_pH_vol.addWidget(self.vol_j, 1, nb, 1, 1)
-        self.vol_j.setText(self.ihm.vol)
+        self.vol_j.clear()
+        self.vol_j.setText(str(vol))
     
     def last_vol_in_table(self):
         self.total_volume.setText(str())

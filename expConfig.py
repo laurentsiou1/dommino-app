@@ -35,7 +35,7 @@ class ExpConfig(object):
         self.ihm.timer3s.stop()
         #self.ihm.timer_spectra.stop() celui ci continue
 
-        nc=0
+        """nc=0
         if self.ihm.spectro_unit.state=='closed':
             self.ihm.spectro_unit.connect()
             nc+=1
@@ -51,7 +51,8 @@ class ExpConfig(object):
         if nc==0:
             print("\ntous les instruments sont configurés\n\n    ### Lancement de la séquence de titrage automatique ###\n\n")
                 #experiment parameters
-        
+        """
+                
         self.ihm.titration_sequence=TitrationSequence(self.ihm,self.window_handler) #création de l'objet dans l'IHM        
 
         self.ihm.titration_sequence.experience_name=self.experience_name.toPlainText()

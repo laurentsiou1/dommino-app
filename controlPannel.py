@@ -54,13 +54,16 @@ class ControlPannel(object):
 
     ### Méthodes pour le pH mètre
     def link_pHmeter2IHM(self):
-        self.phmeter.connect()
+        if self.phmeter.state=='closed':
+            self.phmeter.connect()
         if self.phmeter.state=='open':
             #affichage des données de calibration
             self.onCalibrationChange()
             #pH en direct
             self.direct_pH.display(self.phmeter.currentPH) #pH instantané
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
+            self.phmeter.activateStabilityLevel()
+            self.phmeter.stab_timer.timeout.connect(self.refresh_stability_level)
 
     def clear_IHM(self):
         self.direct_pH.display(None) #   setDisabled()
@@ -71,6 +74,10 @@ class ControlPannel(object):
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
         self.direct_pH.display(pH)
         #print("voltage change")
+    
+    def refresh_stability_level(self):
+        self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
+        self.stability_label.setText(str(self.phmeter.stab_purcent)+"%")
 
     def openCalibWindow(self):
         self.window1 = QtWidgets.QDialog()
@@ -85,7 +92,7 @@ class ControlPannel(object):
 
 ### Méthodes pour le spectromètre
     def OnClick_reglage_spectro(self):
-        self.spectro_unit=self.ihm.spectro_unit
+        #self.spectro_unit=self.ihm.spectro_unit
         if self.spectro_unit.state=='closed':
             self.spectro_unit.connect()
         if self.spectro_unit.state=='open':
@@ -231,9 +238,7 @@ class ControlPannel(object):
         self.abs_label = QtWidgets.QLabel(self.centralwidget)
         self.abs_label.setGeometry(QtCore.QRect(10, 10, 421, 41))
         self.abs_label.setObjectName("abs_label")
-        self.stability_label = QtWidgets.QLabel(self.centralwidget)
-        self.stability_label.setGeometry(QtCore.QRect(640, 30, 81, 31))
-        self.stability_label.setObjectName("stability_label")
+
         self.last_cal_label = QtWidgets.QLabel(self.centralwidget)
         self.last_cal_label.setGeometry(QtCore.QRect(530, 130, 191, 41))
         self.last_cal_label.setObjectName("last_cal_label")
@@ -252,9 +257,12 @@ class ControlPannel(object):
         self.stabilisation_level.setGeometry(QtCore.QRect(730, 30, 101, 31))
         self.stabilisation_level.setMaximum(100)
         self.stabilisation_level.setProperty("value", 15)
-        self.stabilisation_level.setTextVisible(True)
+        self.stabilisation_level.setTextVisible(False)
         self.stabilisation_level.setOrientation(QtCore.Qt.Horizontal)
         self.stabilisation_level.setObjectName("stabilisation_level")
+        self.stability_label = QtWidgets.QLabel(self.centralwidget)
+        self.stability_label.setGeometry(QtCore.QRect(640, 30, 81, 31))
+        self.stability_label.setObjectName("stability_label")
         self.calText = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.calText.setGeometry(QtCore.QRect(700, 170, 300, 241))
         self.calText.setSizeIncrement(QtCore.QSize(0, 0))

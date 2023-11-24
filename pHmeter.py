@@ -1,5 +1,7 @@
 "Acquisition du pH"
 
+from PyQt5 import QtCore
+
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageInput import *
 from Phidget22.Devices.PHSensor import *
@@ -27,6 +29,12 @@ class PHMeter:
 
 	def __init__(self):
 		self.state='closed'
+		
+		self.stab_timer = QtCore.QTimer()
+		self.stab_timer.setInterval(1000)
+		self.stab_level=0 #pourcentage de stabilité
+		self.stab_step=0.01 #pas pour lequel si on dépasse on est plus stable
+		self.stab_time=30 #seconds. If pH change < stab_step no change in 30secs 
 
 	def connect(self):
 		#pHmètre
@@ -69,8 +77,7 @@ class PHMeter:
 		#self:PHMeter,ch:VoltageInput,voltage:float 
 		self.currentVoltage=voltage #self.voltagechannel.getVoltage()
 		#print("current voltage=",self.currentVoltage)
-		self.current_PH=volt2pH(self.a,self.b,self.currentVoltage)  
-		#return(self.currentVoltage,self.current_PH)
+		self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)  
 	
 	def activatePHmeter(self):
 		#si le voltagechangetrigger est à zéro, l'évènement se produit périodiquement
@@ -141,7 +148,26 @@ class PHMeter:
 		self.a=a
 		self.b=b
 		return a, b
-		
+	
+	def activateStabilityLevel(self):
+		self.ph0=self.currentPH
+		self.stab_timer.start()
+		self.stab_timer.timeout.connect(self.refreshStabilityLevel)
+		self.time_counter=0
+	
+	def refreshStabilityLevel(self):
+		self.time_counter+=1
+		if (abs(self.currentPH-self.ph0)>self.stab_step): #si ça bouge, on reset tout
+			self.ph0=self.currentPH
+			self.time_counter=0
+			self.stab_level=0
+		elif self.stab_level<self.stab_time: #ça bouge pas donc le stab progresse
+			self.stab_level+=1 
+		elif self.time_counter==self.stab_time: #ça bouge pas, le temps de stab est écoulé et le compteur arrive au bout
+			self.ph0=self.currentPH #on reprend une valeur de référence pour le pH
+			self.time_counter=0 #on reset le compteur
+		self.stab_purcent = round((self.stab_level/self.stab_time)*100,2)
+
 	def close(self):
 		self.voltagechannel.close()
 		self.state='closed'

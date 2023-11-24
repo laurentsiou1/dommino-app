@@ -79,11 +79,14 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         
         #Interrupteurs, electrovanne
         self.security_switch.setDeviceSerialNumber(432846)
-        self.security_switch.setChannel(0)
+        self.security_switch.setChannel(1)
         self.reference_switch.setDeviceSerialNumber(432846)
-        self.reference_switch.setChannel(1)
+        self.reference_switch.setChannel(0)
+        
         self.electrovanne.setDeviceSerialNumber(432846)
-        self.electrovanne.setChannel(0)
+        self.electrovanne.setChannel(1)
+        print(self.reference_switch)
+        print(self.electrovanne)
         try:
             self.security_switch.openWaitForAttachment(1000)
             self.reference_switch.openWaitForAttachment(1000)
@@ -102,11 +105,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         #Cela permet de ne pas avoir d'erreurs lors de l'exécution mais ne garantit pas 
         #qu'un interrupteur de sécurité ne soit mal branché. 
     
-    def close(self):
-        self.stepper.close()
-        self.security_switch.close()
-        self.reference_switch.close()
-        self.electrovanne.close()
+
 
     def SecurityStop(self, security_switch, state): #à modifier
         if state == 0:
@@ -250,17 +249,6 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         #affichage de la position atteinte
         position = self.stepper.getPosition()
         print("Position atteinte après recharge: ", position)
-
-    def setZeroPosition(self):
-        dx = int(input("entrer le déplacement voulu : "))
-        if dx<0:
-            self.simple_refill(-dx) #
-        else:
-            self.simple_dispense(dx)
-        pos=self.stepper.getPosition()
-        self.stepper.addPositionOffset(-pos)
-        pos1=self.stepper.getPosition()
-        print("position du moteur après mise à zéro : ", pos1)
     
     def setReference(self):
         pos=self.stepper.getPosition()
@@ -272,6 +260,24 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
 
     #def dispense(self, vol):
     
+    def close(self):
+        self.stepper.close()
+        self.security_switch.close()
+        self.reference_switch.close()
+        self.electrovanne.close()
+    
+    """def setZeroPosition(self):
+        dx = int(input("entrer le déplacement voulu : "))
+        if dx<0:
+            self.simple_refill(-dx) #
+        else:
+            self.simple_dispense(dx)
+        pos=self.stepper.getPosition()
+        self.stepper.addPositionOffset(-pos)
+        pos1=self.stepper.getPosition()
+        print("position du moteur après mise à zéro : ", pos1)"""
+
+    """
     def empty_syringe(self, vol):
         pos0=self.stepper.getPosition()
         self.configForDispense(0) #electrovanne connectée sur recharge
@@ -280,7 +286,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.engageMovement()
         #affichage de la position atteinte
         position = self.stepper.getPosition()
-        print("Position atteinte après vidage: ", position)
+        print("Position atteinte après vidage: ", position)"""
 
 
 if __name__=="__main__":

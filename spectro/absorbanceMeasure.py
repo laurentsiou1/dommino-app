@@ -60,6 +60,9 @@ class AbsorbanceMeasure(Spectrometer):
             print("Spectro non connecté")
         #print("ID spectro: ", device_ids)
         
+        self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
+        self.N_lambda = len(self.wavelengths)
+        
         if self.state=='open':
             self.model=spectro.get_model()
             #print(self.model)
@@ -92,8 +95,7 @@ class AbsorbanceMeasure(Spectrometer):
             else:
                 self.device.set_electric_dark_correction_usage(False)
             
-            self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
-            self.N_lambda = len(self.wavelengths)
+            
             #time attributes in milliseconds. SDK methods outputs are in microseconds (us)
             self.t_int=self.device.get_integration_time()//1000 
             self.t_int_max=self.device.get_maximum_integration_time()//1000 
