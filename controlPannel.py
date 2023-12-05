@@ -144,40 +144,60 @@ class ControlPannel(object):
         self.base_level_number.setText("%d uL" % self.base_level)
 
     def unload_base(self): #appelée lors de l'appui sur le bouton unload base
+        print(self)
         vol=self.unload_base_box.value()
         self.syringe_pump.simple_dispense(vol,ev=0)
         #maj levelbar
-        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
-        self.base_level_bar.setProperty("value", self.base_level)
-        self.base_level_number.setText("%d uL" % self.base_level)
+        #self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.syringe_pump.base_level_uL)
+        self.base_level_number.setText("%d uL" % self.syringe_pump.base_level_uL)
 
     def reload_base(self): #lors de l'appui sur load_base_button
         vol=self.load_base_box.value()
         self.syringe_pump.simple_refill(vol)
         #maj levelbar
-        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
-        self.base_level_bar.setProperty("value", self.base_level)
-        self.base_level_number.setText("%d uL" % self.base_level)
+        #self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level_bar.setProperty("value", self.syringe_pump.base_level_uL)
+        self.base_level_number.setText("%d uL" % self.syringe_pump.base_level_uL)
     
     def full_reload(self):
         self.syringe_pump.full_refill()
         #maj levelbar
-        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
-        self.base_level_bar.setProperty("value", self.base_level)
-        self.base_level_number.setText("%d uL" % self.base_level)
+        self.base_level_bar.setProperty("value", 500)
+        self.base_level_number.setText("500 uL")
     
     #Suppose que le pousse seringue soit ouvert
     def link_SyringePump2IHM(self):
+#attention. les connexions clicked.connect de signaux avec des slots sont recréées à chaque appel.
+#Il faut donc supprimer les connexions pour pas que les slots soient effectués plusieurs fois de suite
+
         self.base_level=500-self.syringe_pump.stepper.getPosition()
+        
         #reference
+        self.make_ref_button.disconnect()
         self.make_ref_button.clicked.connect(self.set_reference_position)
         #action buttons
+        self.stop_syringe.disconnect()
+        self.stop_syringe.clicked.connect(self.syringe_pump.ForceStop)
+
+        self.unload_base_button.disconnect()
         self.unload_base_button.clicked.connect(self.unload_base)
+
+        self.reload_base_button.disconnect()
         self.reload_base_button.clicked.connect(self.reload_base)
+
+        self.full_reload_button.disconnect()
         self.full_reload_button.clicked.connect(self.full_reload)
+
+        self.dispense_base_button.disconnect()
         self.dispense_base_button.clicked.connect(self.dispense_base)
+
+        self.added_acid.disconnect()
         self.added_acid.valueChanged.connect(self.actualize_counts_on_acid_value_change)
+
+        self.reset_added_count.disconnect()
         self.reset_added_count.clicked.connect(self.reset_volume_count)
+
         #Display
         self.base_level_bar.setProperty("value", self.base_level)
         self.base_level_number.setText("%d uL" % self.base_level)
@@ -187,9 +207,8 @@ class ControlPannel(object):
         vol=self.dispense_base_box.value()
         self.syringe_pump.simple_dispense(vol) #ev=1 default
         #maj levelbar
-        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
-        self.base_level_bar.setProperty("value", self.base_level)
-        self.base_level_number.setText("%d uL" % self.base_level)
+        self.base_level_bar.setProperty("value", self.syringe_pump.base_level_uL)
+        self.base_level_number.setText("%d uL" % self.syringe_pump.base_level_uL)
         #maj volume count
         self.added_base.setText("%d" %self.syringe_pump.added_base_uL)
         self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
@@ -211,7 +230,8 @@ class ControlPannel(object):
         #modif de l'affichage total count
         self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
         self.syringe_pump.acid_dispense_log = self.syringe_pump.added_acid_uL
-    
+
+
 ### Méthodes pour la pompe péristaltique
     def link_pump2IHM(self):
         #print("pompe péristaltique reliée au panneau de controle")
@@ -357,7 +377,7 @@ class ControlPannel(object):
         self.base_level_bar.setOrientation(QtCore.Qt.Vertical)
         self.base_level_bar.setObjectName("base_level_bar")
         self.make_ref_button = QtWidgets.QPushButton(self.centralwidget)
-        self.make_ref_button.setGeometry(QtCore.QRect(550, 620, 121, 61))
+        self.make_ref_button.setGeometry(QtCore.QRect(550, 610, 151, 41))
         self.make_ref_button.setObjectName("make_ref_button")
         self.load_base_box = QtWidgets.QSpinBox(self.centralwidget)
         self.load_base_box.setGeometry(QtCore.QRect(680, 470, 61, 41))
@@ -373,9 +393,13 @@ class ControlPannel(object):
         self.dispense_base_box.setGeometry(QtCore.QRect(810, 530, 61, 41))
         self.dispense_base_box.setObjectName("dispense_base_box")
         self.dispense_base_box.setRange(0,450)
-        #connexion du pousse seringue   #2 boutons possibles
-        self.full_reload_button.clicked.connect(self.connectSyringePump)        
-        self.reload_base_button.clicked.connect(self.connectSyringePump)
+        self.stop_syringe = QtWidgets.QPushButton(self.centralwidget)
+        self.stop_syringe.setGeometry(QtCore.QRect(910, 470, 91, 41))
+        self.stop_syringe.setObjectName("stop_syringe")       
+        self.connect_syringe_pump = QtWidgets.QPushButton(self.centralwidget)
+        self.connect_syringe_pump.setGeometry(QtCore.QRect(550, 660, 150, 41))
+        self.connect_syringe_pump.setObjectName("connect_syringe_pump") 
+        self.connect_syringe_pump.clicked.connect(self.connectSyringePump)#bouton de connexion
 
         #Peristaltic Pump
         self.connect_pump = QtWidgets.QPushButton(self.centralwidget)
@@ -413,7 +437,7 @@ class ControlPannel(object):
 
         #Tous les appareils
         self.close_all = QtWidgets.QPushButton(self.centralwidget)
-        self.close_all.setGeometry(QtCore.QRect(560, 700, 101, 51))
+        self.close_all.setGeometry(QtCore.QRect(560, 720, 101, 51))
         self.close_all.setObjectName("close_all") 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.clear_IHM)
@@ -492,6 +516,8 @@ class ControlPannel(object):
 " on full syringe"))
         self.full_reload_button.setText(_translate("MainWindow", "Full reload"))
         self.dispense_base_button.setText(_translate("MainWindow", "Dispense base (uL)"))
+        self.stop_syringe.setText(_translate("MainWindow", "Stop"))
+        self.connect_syringe_pump.setText(_translate("MainWindow", "connect Syringe Pump"))
 
         #Peristaltic Pump
         self.connect_pump.setText(_translate("MainWindow", "connect pump"))

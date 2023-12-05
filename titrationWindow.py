@@ -25,7 +25,8 @@ class TitrationWindow(object):
 
     #spectre courant sur le graphe en delta 
     def updateCurrentSpectrum_delta(self): #il y a déjà un spectre enregistré
-        self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.titration_sequence.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+        if self.spectro_unit.current_absorbance_spectrum!=None:
+            self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.titration_sequence.absorbance_spectrum1[k] for k in range(self.N_lambda)]
         
         #cette ligne permet de tracer plusieurs courbes superposées sur un graphe. 
         #voir spectrum config pour les couleurs
@@ -36,23 +37,20 @@ class TitrationWindow(object):
     #Spectres en delta
     def append_spectra_in_delta(self):
         self.spectra_j=self.delta_all_abs.plot(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
-
+    
+    def append_vol_in_table(self,nb,vol): #nb numero de mesure
+        self.table_vol_pH[nb-1][0].setObjectName("vol"+str(nb))
+        self.grid_all_pH_vol.addWidget(self.table_vol_pH[nb-1][0], 1, nb, 1, 1)
+        self.table_vol_pH[nb-1][0].clear()
+        self.table_vol_pH[nb-1][0].setText(str(vol))
+    
     #pH et volume
     def append_pH_in_table(self,nb,pH): #nb=numero de la mesure
-        pH_j="pH"+str(nb)
-        self.pH_j = QtWidgets.QLabel(self.grid0)
-        self.pH_j.setObjectName(pH_j)
-        self.grid_all_pH_vol.addWidget(self.pH_j, 2, nb, 1, 1)
-        self.pH_j.setText(str(pH))
-        
-    def append_vol_in_table(self,nb,vol): #nb numero de mesure
-        vol_j="vol"+str(nb)
-        self.vol_j = QtWidgets.QLabel(self.grid0)
-        self.vol_j.setObjectName(vol_j)
-        self.grid_all_pH_vol.addWidget(self.vol_j, 1, nb, 1, 1)
-        self.vol_j.clear()
-        self.vol_j.setText(str(vol))
-    
+        self.table_vol_pH[nb-1][1].setObjectName("pH"+str(nb))
+        self.grid_all_pH_vol.addWidget(self.table_vol_pH[nb-1][1], 2, nb, 1, 1)
+        self.table_vol_pH[nb-1][1].clear()
+        self.table_vol_pH[nb-1][1].setText(str(pH))
+
     def last_vol_in_table(self):
         self.total_volume.setText(str())
     
@@ -66,9 +64,9 @@ class TitrationWindow(object):
         +"\nConcentration : "+str(self.titration_sequence.concentration)\
         +"\nFibres : "+str(self.titration_sequence.fibers)\
         +"\nFlowcell : "+str(self.titration_sequence.flowcell)\
-        +"\npH initial : "+str(self.titration_sequence.initial_pH)\
-        +"\npH final : "+str(self.titration_sequence.final_pH)\
-        +"\nNombre de mesures : "+str(self.titration_sequence.N_mes))
+        +"\nNombre de mesures : "+str(self.titration_sequence.N_mes)\
+        +"\npH initial : "+str(self.titration_sequence.pH_start)\
+        +"\npH final : "+str(self.titration_sequence.pH_end))
 
         #Spectro
         #spectre en direct
@@ -79,11 +77,13 @@ class TitrationWindow(object):
         self.grid_all_pH_vol.addWidget(self.label_total_volume, 0, self.N_mes+1, 1, 1)
         self.grid_all_pH_vol.addWidget(self.total_volume, 1, self.N_mes+1, 1, 1)  
         
-        #1ère ligne : numeros de mesures
-        for j in range(1,self.N_mes+1):
-            mes_j="mes"+str(j)
+        #tableau de données QLabels à compléter au fil de l'expérience
+        self.table_vol_pH=[[QtWidgets.QLabel(self.grid0) for k in range(self.N_mes)], \
+                         [QtWidgets.QLabel(self.grid0) for k in range(self.N_mes)]]
+        for j in range(1,self.N_mes+1): #1ère ligne : numeros de mesures
+            #mes_j="mes"+str(j)
             self.mes_j = QtWidgets.QLabel(self.grid0)
-            self.mes_j.setObjectName(mes_j)
+            #self.mes_j.setObjectName(mes_j)
             self.grid_all_pH_vol.addWidget(self.mes_j, 0, j, 1, 1)
             self.mes_j.setText(str(j))
 

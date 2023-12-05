@@ -21,7 +21,8 @@ import time
 try: #dépend depuis où est lancé le programme
     import spectro.processing as sp 
 except:
-    import processing as sp
+    pass
+    #import processing as sp
 
 """
 #La fonction récupère un spectre issu du moyennage sur le Spectro
@@ -40,6 +41,16 @@ class AbsorbanceMeasure(Spectrometer):
 
     def __init__(self): #, od, spectro : Spectrometer): 
         self.state='closed'
+        #Data
+        #All spectra are saved with active corrections. It can be nonlinearity and/or electric dark 
+        # when activated via methods "set_nonlinearity_correction_usage" and 
+        # "set_electric_dark_correction_usage". None of these are corrected from 
+        # the background spectrum. 
+        self.active_background_spectrum=None  #Background Spectrum
+        self.active_ref_spectrum=None   #Reference
+        self.current_intensity_spectrum=None    #Sample or whatever is in the cell
+        self.current_absorbance_spectrum=None   #Absorbance
+        self.wavelengths=[0]
     
     def connect(self):
         od = OceanDirectAPI()
@@ -104,22 +115,6 @@ class AbsorbanceMeasure(Spectrometer):
             self.averaging=self.device.get_scans_to_average()
             self.boxcar=self.device.get_boxcar_width()
             
-            #Data
-            #All spectra are saved with active corrections. It can be nonlinearity and/or electric dark 
-            # when activated via methods "set_nonlinearity_correction_usage" and 
-            # "set_electric_dark_correction_usage". None of these are corrected from 
-            # the background spectrum. 
-            self.active_background_spectrum=None  #Background Spectrum
-            self.active_ref_spectrum=None   #Reference
-            self.current_intensity_spectrum=None    #Sample or whatever is in the cell
-            self.current_absorbance_spectrum=None   #Absorbance
-
-    """def getIsOpen(self):
-        if self.state=='open':
-            a=True
-        elif self.state=='closed':
-            a=False
-        return a"""
 
     def close(self,id): #fermeture de l'objet absorbanceMeasure
         self.adv.set_enable_lamp(False) #Protection des fibres

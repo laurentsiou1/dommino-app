@@ -24,46 +24,33 @@ class ExpConfig(object):
         self.window_handler=win
 
     def launchTitration(self):
-        #Normalement On doit régler le spectro avant la séquence auto. 
-        #Le pH mètre est calibré manuellement aussi 
-        #Le pousse seringue doit être mis sur la position zéro ? 
-        #On a donc déjà des attributs qui sont open pour les sous systèmes. 
-        #Devoir connecter les sous-sytèmes est un signe de non ou mauvais réglage. 
-
-        #arrêt des timers pour consacrer toute la mémoire sur la séquence
-        self.ihm.timer1s.stop()
-        self.ihm.timer3s.stop()
-        #self.ihm.timer_spectra.stop() celui ci continue
-
-        """nc=0
-        if self.ihm.spectro_unit.state=='closed':
-            self.ihm.spectro_unit.connect()
-            nc+=1
-        if self.ihm.phmeter.state=='closed':
-            self.ihm.phmeter.connect()
-            nc+=1
-        if self.ihm.syringe_pump.state=='closed':
-            self.ihm.syringe_pump.connect()
-        if self.ihm.peristaltic_pump.state=='closed':
-            self.ihm.peristaltic_pump.connect()
-
-        #vérification que tout est connecté
-        if nc==0:
-            print("\ntous les instruments sont configurés\n\n    ### Lancement de la séquence de titrage automatique ###\n\n")
-                #experiment parameters
-        """
-                
-        self.ihm.titration_sequence=TitrationSequence(self.ihm,self.window_handler) #création de l'objet dans l'IHM        
-
-        self.ihm.titration_sequence.experience_name=self.experience_name.toPlainText()
-        self.ihm.titration_sequence.description=self.description.toPlainText()
-        self.ihm.titration_sequence.OM_type=self.OM_type.currentText() #type of organic matter
-        self.ihm.titration_sequence.concentration=self.concentration.value()
-        self.ihm.titration_sequence.fibers=self.fibers.currentText()
-        self.ihm.titration_sequence.flowcell=self.flowcell.currentText()
-        self.ihm.titration_sequence.initial_pH=self.pH_init.value()
-        self.ihm.titration_sequence.final_pH=self.pH_fin.value()
-        self.ihm.titration_sequence.N_mes=self.N_mes.value() #number of pH/spectra measures
+        
+        config=[name,des,OM,C,fb,cell,mode,N,start,end]=[self.experience_name.toPlainText(),\
+            self.description.toPlainText(),\
+            self.OM_type.currentText(),\
+            self.concentration.value(),\
+            self.fibers.currentText(),\
+            self.flowcell.currentText(),\
+            self.dispense_mode.currentText(),\
+            self.Nmes.value(),\
+            self.pH_init.value(),\
+            self.pH_fin.value()]
+        
+        """if mode=='fit on 5/05/2023':
+            self.ihm.titration_sequence.N_mes=N
+            self.ihm.titration_sequence.target_pH_list=[4+5*k/(N-1) for k in range(N)]
+        elif mode=='fixed volumes':
+            self.ihm.titration_sequence.N_mes=11 #10 dispenses de base : 11 mesures
+            self.ihm.titration_sequence.target_volumes_list=[200,100,100,50,50,10,200,200,500,1500]
+        else:
+            self.ihm.titration_sequence.N_mes=N
+            self.ihm.titration_sequence.initial_pH=start
+            self.ihm.titration_sequence.final_pH=end
+            self.ihm.titration_sequence.target_pH_list=[self.start+(start-end)*k/(N-1) for k in range(N)]
+            self.ihm.target_acid='calcul...'"""
+        
+        self.ihm.titration_sequence=TitrationSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
+        self.ihm.titration_sequence.configure()
         
         #affichage des données pour la séquence auto
         print("\nNom de l'expérience : ",self.ihm.titration_sequence.experience_name,\
@@ -72,18 +59,11 @@ class ExpConfig(object):
         "\nConcentration : ",self.ihm.titration_sequence.concentration,\
         "\nFibres : ",self.ihm.titration_sequence.fibers,\
         "\nFlowcell : ",self.ihm.titration_sequence.flowcell,\
-        "\npH initial : ",self.ihm.titration_sequence.initial_pH,\
-        "\npH final : ",self.ihm.titration_sequence.final_pH,\
+        "\nMode de dispense : ",self.ihm.titration_sequence.dispense_mode,\
+        "\npH initial : ",self.ihm.titration_sequence.pH_start,\
+        "\npH final : ",self.ihm.titration_sequence.pH_end,\
         "\nNombre de mesures : ",self.ihm.titration_sequence.N_mes)
 
-        #création de la fenêtre
-        self.window_handler.titration_window0=QtWidgets.QMainWindow()
-        self.window_handler.titration_window0.show()
-        self.window_handler.titration_window1 = TitrationWindow(self.ihm)
-        self.window_handler.titration_window1.graphical_setup(self.window_handler.titration_window0)
-        self.window_handler.titration_window1.param_init() 
-
-        self.ihm.titration_sequence.configure()
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -146,23 +126,24 @@ class ExpConfig(object):
         self.label_flowcell = QtWidgets.QLabel(Dialog)
         self.label_flowcell.setGeometry(QtCore.QRect(10, 560, 351, 41))
         self.label_flowcell.setObjectName("label_flowcell")
-        self.N_mes = QtWidgets.QSpinBox(Dialog)
-        self.N_mes.setGeometry(QtCore.QRect(570, 590, 131, 61))
-        self.N_mes.setMinimum(3)
-        self.N_mes.setMaximum(20)
-        self.N_mes.setProperty("value", 10)
-        self.N_mes.setObjectName("N_mes")
-        self.label_pHinit = QtWidgets.QLabel(Dialog)
-        self.label_pHinit.setGeometry(QtCore.QRect(430, 390, 111, 41))
-        self.label_pHinit.setObjectName("label_pHinit")
-        self.label_pHfin = QtWidgets.QLabel(Dialog)
-        self.label_pHfin.setGeometry(QtCore.QRect(590, 390, 121, 41))
-        self.label_pHfin.setObjectName("label_pHfin")
-        self.label_Nmes = QtWidgets.QLabel(Dialog)
-        self.label_Nmes.setGeometry(QtCore.QRect(430, 590, 131, 61))
-        self.label_Nmes.setObjectName("label_Nmes")
+        
+        self.Nmes = QtWidgets.QSpinBox(Dialog)
+        self.Nmes.setGeometry(QtCore.QRect(580, 610, 121, 51))
+        self.Nmes.setMinimum(3)
+        self.Nmes.setMaximum(20)
+        self.Nmes.setProperty("value", 10)
+        self.Nmes.setObjectName("Nmes")
+        self.pH_init_label = QtWidgets.QLabel(Dialog)
+        self.pH_init_label.setGeometry(QtCore.QRect(420, 480, 111, 41))
+        self.pH_init_label.setObjectName("pH_init_label")
+        self.pH_fin_label = QtWidgets.QLabel(Dialog)
+        self.pH_fin_label.setGeometry(QtCore.QRect(580, 480, 121, 41))
+        self.pH_fin_label.setObjectName("pH_fin_label")
+        self.Nmes_label = QtWidgets.QLabel(Dialog)
+        self.Nmes_label.setGeometry(QtCore.QRect(440, 610, 131, 51))
+        self.Nmes_label.setObjectName("Nmes_label")
         self.pH_init = QtWidgets.QDoubleSpinBox(Dialog)
-        self.pH_init.setGeometry(QtCore.QRect(420, 450, 121, 61))
+        self.pH_init.setGeometry(QtCore.QRect(420, 520, 121, 51))
         self.pH_init.setDecimals(1)
         self.pH_init.setMinimum(3.0)
         self.pH_init.setMaximum(5.0)
@@ -170,13 +151,24 @@ class ExpConfig(object):
         self.pH_init.setProperty("value", 4.0)
         self.pH_init.setObjectName("pH_init")
         self.pH_fin = QtWidgets.QDoubleSpinBox(Dialog)
-        self.pH_fin.setGeometry(QtCore.QRect(590, 450, 111, 61))
+        self.pH_fin.setGeometry(QtCore.QRect(580, 520, 121, 51))
         self.pH_fin.setDecimals(1)
         self.pH_fin.setMinimum(8.0)
         self.pH_fin.setMaximum(10.0)
         self.pH_fin.setSingleStep(0.1)
         self.pH_fin.setProperty("value", 9.0)
         self.pH_fin.setObjectName("pH_fin")
+        self.dispense_mode = QtWidgets.QComboBox(Dialog)
+        self.dispense_mode.setGeometry(QtCore.QRect(420, 410, 281, 51))
+        self.dispense_mode.setEditable(True)
+        self.dispense_mode.setMaxVisibleItems(10)
+        self.dispense_mode.setObjectName("dispense_mode")
+        self.dispense_mode.addItem("fit on 5/05/2023")
+        self.dispense_mode.addItem("fixed volumes")
+        self.dispense_mode.addItem("complete processing")
+        self.dispense_mode_label = QtWidgets.QLabel(Dialog)
+        self.dispense_mode_label.setGeometry(QtCore.QRect(420, 370, 261, 41))
+        self.dispense_mode_label.setObjectName("dispense_mode_label")
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
@@ -201,9 +193,9 @@ class ExpConfig(object):
         self.OM_type.setItemText(1, _translate("Dialog", "SRNOM"))
         self.label_fiber.setText(_translate("Dialog", "fibres"))
         self.label_flowcell.setText(_translate("Dialog", "cellule"))
-        self.label_pHinit.setText(_translate("Dialog", "pH initial"))
-        self.label_pHfin.setText(_translate("Dialog", "pH final"))
-        self.label_Nmes.setText(_translate("Dialog", "N mesures"))
+        self.pH_init_label.setText(_translate("Dialog", "pH initial"))
+        self.pH_fin_label.setText(_translate("Dialog", "pH final"))
+        self.Nmes_label.setText(_translate("Dialog", "N mesures"))
 
 #Lancement direct du programme avec run
 if __name__ == "__main__":

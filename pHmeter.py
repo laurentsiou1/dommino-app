@@ -1,6 +1,9 @@
 "Acquisition du pH"
 
+"""https://pythonpyqt.com/pyqt-events/ créer des signaux"""
+
 from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal, QObject
 
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageInput import *
@@ -23,7 +26,10 @@ def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
 		pH=(U-b)/a
 	else:
 		pH=1000
-	return pH
+	return round(pH,3)
+
+class CustomSignals(QObject):
+	stability_reached=pyqtSignal()
 
 class PHMeter:
 
@@ -32,6 +38,7 @@ class PHMeter:
 		
 		self.stab_timer = QtCore.QTimer()
 		self.stab_timer.setInterval(1000)
+		self.stable=False
 		self.stab_level=0 #pourcentage de stabilité
 		self.stab_step=0.01 #pas pour lequel si on dépasse on est plus stable
 		self.stab_time=30 #seconds. If pH change < stab_step no change in 30secs 
@@ -51,6 +58,9 @@ class PHMeter:
 				self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
 				self.state='open'
 				print("pH mètre connecté")
+
+				#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
+				self.signals=CustomSignals()
 			else:
 				self.state='closed'
 				print("pH-mètre non connecté")
@@ -157,19 +167,36 @@ class PHMeter:
 	
 	def refreshStabilityLevel(self):
 		self.time_counter+=1
-		if (abs(self.currentPH-self.ph0)>self.stab_step): #si ça bouge, on reset tout
+		if (abs(self.currentPH-self.ph0)<self.stab_step):	#le pH bouge pas, le stab_level progresse
+			if self.stab_level<self.stab_time: 					#en attente
+				self.stable=False
+				self.stab_level+=1 
+				print("2")
+			elif self.stab_level==self.stab_time: 				#stable
+				if self.stable==True: 								#déjà stable à l'itération précédente
+					print("3")
+					if self.time_counter==self.stab_time: 				#stable pendant toute une période
+						print("time counter= stab time")
+						self.ph0=self.currentPH 						#on reprend une valeur de référence pour le pH
+						self.time_counter=0 							#reset du compteur
+						print("nouveau pH mesuré au bout du temps de stab")
+				else: 												#devient stable
+					self.stable=True
+					self.signals.stability_reached.emit()
+					print("stability_reached.emit()!")
+		else: 												#si ça bouge, on reset tout
 			self.ph0=self.currentPH
 			self.time_counter=0
 			self.stab_level=0
-		elif self.stab_level<self.stab_time: #ça bouge pas donc le stab progresse
-			self.stab_level+=1 
-		elif self.time_counter==self.stab_time: #ça bouge pas, le temps de stab est écoulé et le compteur arrive au bout
-			self.ph0=self.currentPH #on reprend une valeur de référence pour le pH
-			self.time_counter=0 #on reset le compteur
+			self.stable=False
+			print("1")		
 		self.stab_purcent = round((self.stab_level/self.stab_time)*100,2)
+
 
 	def close(self):
 		self.voltagechannel.close()
+		self.stab_timer.disconnect()
+		self.stab_timer.stop()
 		self.state='closed'
 
 if __name__ == "__main__":

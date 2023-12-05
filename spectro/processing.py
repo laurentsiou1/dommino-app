@@ -52,5 +52,60 @@ def plot_spectrum(wl, spectrum):
     plt.plot(block=False)
     return 1
 
+"""
+#modélise le pH en fonction de la concentration en soude d'une solution de 50mL eau + 0.050mL de HCl à 0.1M
+# x = [NaOH]+[Na-] (mol/L)
+
+#fonction sigmoïde
+def func(x, a, b, l, x0):
+    return a + b/(1+10**(-l*(x-x0)))
+
+def func_acid(x, a, b, x0):
+    #for x<2x0
+    return a-b*np.log10((2*x0-x)/x0)
+
+def func_base(x, a, b, x0, l): #, x0):
+    #for x>x0-l
+    return a+b*np.log10(1+(x-x0)/l)
+
+#def get_equivalence_point(xdata,ydata):
+    #xdata et ydata sont des np.array
+
+#fonction en 2 parties
+def pH(x, a, b, x0):
+
+
 if __name__ == "__main__":
-    Imax=max_intensity([[1,2],[3,4]])
+     
+    from scipy.optimize import curve_fit
+    
+    #Define the data to be fit
+    xdata = np.array([0,0.000218,0.000396,0.000559,0.000722,0.000813,0.000931,0.001156,0.001466,0.001822,0.001822,0.002696,0.002696,0.005389,0.005389])
+    ydata=np.array([4.1,4.22,4.42,4.75,5.42,6,6.45,6.95,7.55,8,8,8.4,8.4,8.8,8.8])
+    plt.plot(xdata, ydata, 'bo', label='data')
+    xacid=np.array(xdata[0:5]);xbase=np.array(xdata[5:14]) #0...4 et 5...11
+    yacid=np.array(ydata[0:5]);ybase=np.array(ydata[5:14])
+
+    print(xacid,yacid,xbase,ybase)
+    
+    #Constrain
+    popt_acid, pcov =curve_fit(func_acid, xacid, yacid, p0=[4.5,2.5,0.001], bounds=([0,0,0.000001], [10, 10, 0.001]))
+    popt_base, pcov =curve_fit(func_base, xbase, ybase, p0=[6,1,0.001,1], bounds=([-100,0,0.0005,0.0001], [100, 10, 0.0015, 1]))
+    print("popt_acid=",popt_acid)
+    print("popt_base=",popt_base)
+    print("function base=",func_base(xbase, *popt_base))
+    plt.plot(xacid, func_acid(xacid, *popt_acid), 'g--', label='fit: a=%5.3f, b=%5.3f, x0=%5.5f' % tuple(popt_acid))
+    plt.plot(xbase, func_base(xbase, *popt_base), 'r--', label='fit: a=%5.3f, b=%5.3f, x0==%5.5f, l=%5.5f' % tuple(popt_base))
+    plt.xlabel('[NaOH]+[Na-] (mol/L)')
+    plt.ylabel('pH')
+    plt.legend()
+    plt.title("évolution du pH en fonction de la concentration de titrant NaOH")
+    plt.show()
+
+    #résultat du fit 
+    #acid : x0=3.90*10**-4
+
+    #à reprendre plus tard
+    #Il faut faire un seul fit pour les deux parties du graphe
+    #1. Déterminer un point d'équivalence
+    #2. construire une fonction en 2 parties de part à d'autres de ce point d'équivalence. """
