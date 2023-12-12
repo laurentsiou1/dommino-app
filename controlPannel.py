@@ -42,15 +42,6 @@ class ControlPannel(object):
         self.syringe_pump=ihm.syringe_pump
         self.peristaltic_pump=ihm.peristaltic_pump
 
-        #Pousse-seringue
-        #Que faire de ce bloc ? 
-        """if syringe_pump!=None:
-            self.syringe_pump=syringe_pump
-            if self.syringe_pump.state=='open':
-                self.base_level=500-self.syringe_pump.stepper.getPosition()
-        else:
-            self.syringe_pump=None"""
-
 
     ### Méthodes pour le pH mètre
     def link_pHmeter2IHM(self):
@@ -139,7 +130,7 @@ class ControlPannel(object):
     def set_reference_position(self):
         self.syringe_pump.setReference()
         #maj levelbar
-        self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
+        self.base_level=self.syringe_pump.size-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.base_level)
         self.base_level_number.setText("%d uL" % self.base_level)
 
@@ -148,7 +139,6 @@ class ControlPannel(object):
         vol=self.unload_base_box.value()
         self.syringe_pump.simple_dispense(vol,ev=0)
         #maj levelbar
-        #self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.syringe_pump.base_level_uL)
         self.base_level_number.setText("%d uL" % self.syringe_pump.base_level_uL)
 
@@ -156,22 +146,21 @@ class ControlPannel(object):
         vol=self.load_base_box.value()
         self.syringe_pump.simple_refill(vol)
         #maj levelbar
-        #self.base_level=500-round(self.syringe_pump.stepper.getPosition(),0)
         self.base_level_bar.setProperty("value", self.syringe_pump.base_level_uL)
         self.base_level_number.setText("%d uL" % self.syringe_pump.base_level_uL)
     
     def full_reload(self):
         self.syringe_pump.full_refill()
         #maj levelbar
-        self.base_level_bar.setProperty("value", 500)
-        self.base_level_number.setText("500 uL")
+        self.base_level_bar.setProperty("value", self.syringe_pump.size)
+        self.base_level_number.setText("%d uL"%self.syringe_pump.size)
     
     #Suppose que le pousse seringue soit ouvert
     def link_SyringePump2IHM(self):
 #attention. les connexions clicked.connect de signaux avec des slots sont recréées à chaque appel.
 #Il faut donc supprimer les connexions pour pas que les slots soient effectués plusieurs fois de suite
 
-        self.base_level=500-self.syringe_pump.stepper.getPosition()
+        self.base_level=self.syringe_pump.size-self.syringe_pump.stepper.getPosition()
         
         #reference
         self.make_ref_button.disconnect()
@@ -371,8 +360,8 @@ class ControlPannel(object):
         self.gridLayout.addWidget(self.added_total, 3, 2, 1, 1)
         self.base_level_bar = QtWidgets.QProgressBar(self.centralwidget)
         self.base_level_bar.setGeometry(QtCore.QRect(550, 470, 31, 101))
-        self.base_level_bar.setMinimum(50)
-        self.base_level_bar.setMaximum(500)
+        self.base_level_bar.setMinimum(0)
+        self.base_level_bar.setMaximum(400)
         self.base_level_bar.setTextVisible(True)
         self.base_level_bar.setOrientation(QtCore.Qt.Vertical)
         self.base_level_bar.setObjectName("base_level_bar")
@@ -500,7 +489,7 @@ class ControlPannel(object):
         self.reglage_spectro.setText(_translate("MainWindow", "réglages spectro"))
         
         #pousse seringue
-        self.label_base_level.setText(_translate("MainWindow", "basic syringe level (50 - 500uL)"))
+        self.label_base_level.setText(_translate("MainWindow", "basic syringe level (0 - 400uL)"))
         self.base_level_number.setText(_translate("MainWindow", "100 uL"))
         self.unload_base_button.setText(_translate("MainWindow", "unload"))
         self.reload_base_button.setText(_translate("MainWindow", "load"))

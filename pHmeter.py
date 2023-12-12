@@ -41,7 +41,7 @@ class PHMeter:
 		self.stable=False
 		self.stab_level=0 #pourcentage de stabilité
 		self.stab_step=0.01 #pas pour lequel si on dépasse on est plus stable
-		self.stab_time=30 #seconds. If pH change < stab_step no change in 30secs 
+		self.stab_time=10 #seconds. If pH change < stab_step no change in 30secs 
 
 	def connect(self):
 		#pHmètre
@@ -171,15 +171,15 @@ class PHMeter:
 			if self.stab_level<self.stab_time: 					#en attente
 				self.stable=False
 				self.stab_level+=1 
-				print("2")
+				#print("2")
 			elif self.stab_level==self.stab_time: 				#stable
 				if self.stable==True: 								#déjà stable à l'itération précédente
-					print("3")
+					#print("3")
 					if self.time_counter==self.stab_time: 				#stable pendant toute une période
-						print("time counter= stab time")
+						#2print("time counter= stab time")
 						self.ph0=self.currentPH 						#on reprend une valeur de référence pour le pH
 						self.time_counter=0 							#reset du compteur
-						print("nouveau pH mesuré au bout du temps de stab")
+						#print("nouveau pH mesuré au bout du temps de stab")
 				else: 												#devient stable
 					self.stable=True
 					self.signals.stability_reached.emit()
@@ -189,7 +189,7 @@ class PHMeter:
 			self.time_counter=0
 			self.stab_level=0
 			self.stable=False
-			print("1")		
+			#print("1")		
 		self.stab_purcent = round((self.stab_level/self.stab_time)*100,2)
 
 

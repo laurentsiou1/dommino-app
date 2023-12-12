@@ -8,7 +8,7 @@ from IHM import IHM
 class SavingConfig(QDialog):
     def __init__(self, ihm: IHM, parent=None):
         super().__init__(parent)
-        loadUi('../config_enregistrement.ui', self)
+        loadUi('ui_files/config_enregistrement.ui', self)
         self.ihm = ihm #création d'un attribut ihm dans SavingConfig
 
         #affichage du dossier de sauvegarde courant s'il existe

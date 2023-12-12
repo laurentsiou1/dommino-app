@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pyqtgraph as pg
+from spectrumConfig import SpectrumConfigWindow
+import numpy as np
 
 from IHM import IHM
 
@@ -17,20 +19,31 @@ class TitrationWindow(object):
         self.lambdas=self.spectro_unit.wavelengths 
         self.N_lambda=len(self.lambdas)   
         self.N_mes=self.titration_sequence.N_mes
+
+        #timer pour renouvellement de l'affichage
+        self.timer_display = QtCore.QTimer()
+        self.timer_display.setInterval(1000) #10 secondes
+        self.timer_display.start()
+
+
     
     #DIRECT
     def refresh_stability_level(self):
         self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
         self.label_stability.setText(str(self.phmeter.stab_purcent)+"%")
 
+    def refreshDirectSpectrum(self):
+        if self.spectro_unit.current_absorbance_spectrum!=None:
+            self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+
     #spectre courant sur le graphe en delta 
     def updateCurrentSpectrum_delta(self): #il y a déjà un spectre enregistré
         if self.spectro_unit.current_absorbance_spectrum!=None:
+            #le spectre en delta est une donnée graphique, pas une donnée fondamentale
             self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.titration_sequence.absorbance_spectrum1[k] for k in range(self.N_lambda)]
-        
-        #cette ligne permet de tracer plusieurs courbes superposées sur un graphe. 
-        #voir spectrum config pour les couleurs
-        #self.delta_all_abs.plot(self.lambdas,self.current_absorbance_spectrum_delta)
+            self.current_delta_abs_curve.setData(self.lambdas,self.current_absorbance_spectrum_delta)
+            print("update current spectra",np.shape(self.lambdas),np.shape(self.current_absorbance_spectrum_delta))
+            #superposition sur le graphe, voir spectrumconfig pour les couleurs
 
     #ENREGISTREMENT
 
@@ -38,21 +51,24 @@ class TitrationWindow(object):
     def append_spectra_in_delta(self):
         self.spectra_j=self.delta_all_abs.plot(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
     
-    def append_vol_in_table(self,nb,vol): #nb numero de mesure
-        self.table_vol_pH[nb-1][0].setObjectName("vol"+str(nb))
-        self.grid_all_pH_vol.addWidget(self.table_vol_pH[nb-1][0], 1, nb, 1, 1)
-        self.table_vol_pH[nb-1][0].clear()
-        self.table_vol_pH[nb-1][0].setText(str(vol))
+    def append_vol_in_table(self,nb,vol): #nb numero de mesure 1 à Nmes
+        self.table_vol_pH[0][nb-1].setObjectName("vol"+str(nb))
+        self.grid_all_pH_vol.addWidget(self.table_vol_pH[0][nb-1], 1, nb, 1, 1)
+        self.table_vol_pH[0][nb-1].clear()
+        self.table_vol_pH[0][nb-1].setText(str(vol))
     
     #pH et volume
-    def append_pH_in_table(self,nb,pH): #nb=numero de la mesure
-        self.table_vol_pH[nb-1][1].setObjectName("pH"+str(nb))
-        self.grid_all_pH_vol.addWidget(self.table_vol_pH[nb-1][1], 2, nb, 1, 1)
-        self.table_vol_pH[nb-1][1].clear()
-        self.table_vol_pH[nb-1][1].setText(str(pH))
+    def append_pH_in_table(self,nb,pH): #nb=numero de la mesure 1 à Nmes
+        self.table_vol_pH[1][nb-1].setObjectName("pH"+str(nb))
+        self.grid_all_pH_vol.addWidget(self.table_vol_pH[1][nb-1], 2, nb, 1, 1)
+        self.table_vol_pH[1][nb-1].clear()
+        self.table_vol_pH[1][nb-1].setText(str(pH))
 
-    def last_vol_in_table(self):
-        self.total_volume.setText(str())
+    def append_total_vol_in_table(self,tot):
+        #self.total_volume.
+        self.grid_all_pH_vol.addWidget(self.table_vol_pH[0][self.N_mes], 1, self.N_mes+1, 1, 1)
+        self.total_volume.clear()
+        self.total_volume.setText(str(tot))
     
     #INITIALISATION
     def param_init(self):
@@ -64,22 +80,22 @@ class TitrationWindow(object):
         +"\nConcentration : "+str(self.titration_sequence.concentration)\
         +"\nFibres : "+str(self.titration_sequence.fibers)\
         +"\nFlowcell : "+str(self.titration_sequence.flowcell)\
+        +"\nDispense mode : "+str(self.titration_sequence.dispense_mode)\
         +"\nNombre de mesures : "+str(self.titration_sequence.N_mes)\
         +"\npH initial : "+str(self.titration_sequence.pH_start)\
         +"\npH final : "+str(self.titration_sequence.pH_end))
 
         #Spectro
-        #spectre en direct
-        """self.setOnDirectSpectrum()"""
-        print(self.N_mes)
+
 
         #tableau pH,volume
         self.grid_all_pH_vol.addWidget(self.label_total_volume, 0, self.N_mes+1, 1, 1)
         self.grid_all_pH_vol.addWidget(self.total_volume, 1, self.N_mes+1, 1, 1)  
         
         #tableau de données QLabels à compléter au fil de l'expérience
-        self.table_vol_pH=[[QtWidgets.QLabel(self.grid0) for k in range(self.N_mes)], \
+        self.table_vol_pH=[[QtWidgets.QLabel(self.grid0) for k in range(self.N_mes+1)], \
                          [QtWidgets.QLabel(self.grid0) for k in range(self.N_mes)]]
+        
         for j in range(1,self.N_mes+1): #1ère ligne : numeros de mesures
             #mes_j="mes"+str(j)
             self.mes_j = QtWidgets.QLabel(self.grid0)
@@ -90,6 +106,13 @@ class TitrationWindow(object):
         #pompe
         self.pump_speed_rpm.setProperty("value", 60.0)
     
+    #configuration du spectro
+    def openSpectroWindow(self):
+        self.window2 = QtWidgets.QDialog()
+        self.ui2 = SpectrumConfigWindow(self.spectro_unit,self.ihm)
+        self.ui2.setupUi(self.window2)
+        self.window2.show()
+
     def graphical_setup(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1759, 932)
@@ -131,13 +154,23 @@ class TitrationWindow(object):
         self.background_and_reference = QtWidgets.QPushButton(self.centralwidget)
         self.background_and_reference.setGeometry(QtCore.QRect(330, 20, 201, 41))
         self.background_and_reference.setObjectName("background_and_reference")
+        self.background_and_reference.clicked.connect(self.openSpectroWindow)
         self.delta_all_abs = pg.PlotWidget(self.centralwidget)
         self.delta_all_abs.setGeometry(QtCore.QRect(650, 50, 1081, 701))
         self.delta_all_abs.setObjectName("delta_all_abs")
+        self.current_delta_abs_curve=self.delta_all_abs.plot([0],[0]) 
         self.label_delta_abs = QtWidgets.QLabel(self.centralwidget)
         self.label_delta_abs.setGeometry(QtCore.QRect(650, 10, 371, 41))
         self.label_delta_abs.setObjectName("label_delta_abs")
 
+        #spectre en direct
+        #Display current spectrum
+        self.directSpectrum=self.direct_abs.plot([0],[0])
+        self.timer_display.timeout.connect(self.refreshDirectSpectrum) #abs in direct
+        
+        #graphe en delta
+        self.SpectraDelta=self.delta_all_abs.plot([0],[0])
+        
         #Dispense
         self.added_acid_label = QtWidgets.QLabel(self.centralwidget)
         self.added_acid_label.setGeometry(QtCore.QRect(70, 550, 211, 41))
@@ -161,12 +194,12 @@ class TitrationWindow(object):
         self.base_level_number.setObjectName("base_level_number")
         self.base_level_bar = QtWidgets.QProgressBar(self.centralwidget)
         self.base_level_bar.setGeometry(QtCore.QRect(50, 750, 201, 41))
-        self.base_level_bar.setMinimum(50)
-        self.base_level_bar.setMaximum(500)
+        self.base_level_bar.setMinimum(0)
+        self.base_level_bar.setMaximum(400)
         self.base_level_bar.setProperty("value", 100)
         self.base_level_bar.setTextVisible(False)
         self.base_level_bar.setOrientation(QtCore.Qt.Horizontal)
-        self.base_level_bar.setInvertedAppearance(False)
+        self.base_level_bar.setInvertedAppearance(True)
         self.base_level_bar.setObjectName("base_level_bar")
 
         #Pump
@@ -232,7 +265,7 @@ class TitrationWindow(object):
         self.label_direct_abs.setText(_translate("MainWindow", "Absorbance direct"))
         self.label_stability.setText(_translate("MainWindow", "stability"))
         self.ajout_ok.setText(_translate("MainWindow", "Ok"))
-        self.label_base_level.setText(_translate("MainWindow", "base syringe level (50 - 500uL)"))
+        self.label_base_level.setText(_translate("MainWindow", "base syringe level (0-400uL)"))
         self.base_level_number.setText(_translate("MainWindow", "100 uL"))
         self.base_level_bar.setFormat(_translate("MainWindow", "%p%"))
         self.label_pump_speed.setText(_translate("MainWindow", "pump speed rpm"))

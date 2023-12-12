@@ -50,7 +50,7 @@ class AbsorbanceMeasure(Spectrometer):
         self.active_ref_spectrum=None   #Reference
         self.current_intensity_spectrum=None    #Sample or whatever is in the cell
         self.current_absorbance_spectrum=None   #Absorbance
-        self.wavelengths=[0]
+        self.wavelengths=None
     
     def connect(self):
         od = OceanDirectAPI()

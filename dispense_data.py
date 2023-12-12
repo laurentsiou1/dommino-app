@@ -4,7 +4,7 @@ Il faut obtenir des paramètres qu'on recopiera dans le programme concerné. Ce 
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+#from scipy.optimize import curve_fit
 
 
 x0_4_05 = 0.3 #4/05/2023
@@ -73,9 +73,10 @@ def volumeToAdd_uL(current, target, model='5_05'): #pH courant et cible, modèle
     return (inverse_function(target,coefs,x0)-inverse_function(current,coefs,x0))*1000  #résultat en uL
     
 
+
 def inverse_function(pH,coefs,x0):
     [y0, ba, ca, bb, cb] = coefs
-    if type(pH)!=list:
+    if type(pH)!=list and type(pH)!=np.ndarray:
         if pH<=y0:
             x=x0-ba*(10**((y0-pH)/ca)-1)
         else:
@@ -90,7 +91,7 @@ def inverse_function(pH,coefs,x0):
     return x
 
 def plot_inverse_function(coefs1,coefs2):
-    pH=np.linspace(4,9,100)
+    pH=np.linspace(2,12,100)
     vol1=inverse_function(pH,coefs1,x0_5_05)
     vol2=inverse_function(pH,coefs2,x0_4_05)
     plt.scatter(pH_data_4_05, volume_4_05, label='4/05', color='blue')
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     #4/05
     coefs_4_05=[5.35840565, 0.01839799, 0.85479386, 0.06805281, 1.84207387]
     
-    #plot_inverse_function(coefs_5_05,coefs_4_05) 
+    plot_inverse_function(coefs_5_05,coefs_4_05) 
 
     
     #calculate_coefs(volume_5_05, pH_data_5_05, x0_5_05)
