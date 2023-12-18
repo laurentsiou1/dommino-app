@@ -167,15 +167,16 @@ class PHMeter:
 	
 	def refreshStabilityLevel(self):
 		self.time_counter+=1
+		ts=self.stab_time
 		if (abs(self.currentPH-self.ph0)<self.stab_step):	#le pH bouge pas, le stab_level progresse
-			if self.stab_level<self.stab_time: 					#en attente
+			if self.stab_level<ts: 					#en attente
 				self.stable=False
 				self.stab_level+=1 
 				#print("2")
-			elif self.stab_level==self.stab_time: 				#stable
+			elif self.stab_level==ts: 				#stable
 				if self.stable==True: 								#déjà stable à l'itération précédente
 					#print("3")
-					if self.time_counter==self.stab_time: 				#stable pendant toute une période
+					if self.time_counter==ts: 				#stable pendant toute une période
 						#2print("time counter= stab time")
 						self.ph0=self.currentPH 						#on reprend une valeur de référence pour le pH
 						self.time_counter=0 							#reset du compteur
@@ -183,14 +184,14 @@ class PHMeter:
 				else: 												#devient stable
 					self.stable=True
 					self.signals.stability_reached.emit()
-					print("stability_reached.emit()!")
+					#¶print("stability_reached.emit()!")
 		else: 												#si ça bouge, on reset tout
 			self.ph0=self.currentPH
 			self.time_counter=0
 			self.stab_level=0
 			self.stable=False
 			#print("1")		
-		self.stab_purcent = round((self.stab_level/self.stab_time)*100,2)
+		self.stab_purcent = round((self.stab_level/ts)*100,2)
 
 
 	def close(self):

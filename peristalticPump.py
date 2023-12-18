@@ -21,7 +21,8 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             self.setCurrentLimit(1) #1A
             self.setAcceleration(0.5)
             self.velocity_rpm=60
-            self.duty_cycle=(0.3+0.05*(self.velocity_rpm/60))*self.direction
+            #self.duty_cycle=(0.3+0.05*(self.velocity_rpm/60))*self.direction
+            self.duty_cycle=0.05*(self.velocity_rpm/60)*self.direction
             print("moteur configuré:\n\
             limite de courant (A):",self.getCurrentLimit(),\
             "\nAcceleration: ",self.getAcceleration(),\
@@ -35,8 +36,8 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
 
     def setVelocity_rpm(self,omega):
         self.velocity_rpm=omega
-        self.duty_cycle=0.3+0.05*(self.velocity_rpm/60)
-        self.start()
+        #self.duty_cycle=0.3+0.05*(self.velocity_rpm/60)
+        self.duty_cycle=0.05*(self.velocity_rpm/60)
 
     def start(self):
         self.setTargetVelocity(self.duty_cycle*self.direction)
@@ -46,9 +47,8 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
 
     def change_direction(self):
         self.stop()
+        time.sleep(1)
         self.direction*=-1
-        time.sleep(2)
-        self.start()
 
 if __name__=="__main__":
     pump = PeristalticPump()

@@ -870,3 +870,11 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(0.27390000000000003, 0.6296999999999999)
 
+2023-12-14 14:13:24.115170
+22°C 
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[1.735, 2.5372, 3.3537]
+Coefficients U=a*pH+b
+(a,b)=(0.26978333333333326, 0.6534833333333331)
+

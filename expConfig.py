@@ -24,6 +24,7 @@ class ExpConfig(QDialog): #(object)
         super().__init__(parent)
         self.ihm=ihm
         self.window_handler=win
+        self.V0=50000   #volume initial uL
 
     def launchTitration(self):
         
@@ -33,11 +34,12 @@ class ExpConfig(QDialog): #(object)
             self.concentration.value(),\
             self.fibers.currentText(),\
             self.flowcell.currentText(),\
+            self.V0,\
             self.dispense_mode.currentText(),\
             self.Nmes.value(),\
             self.pH_init.value(),\
             self.pH_fin.value(),\
-            self.saving_folder.text()]    #.toPlainText()]
+            self.saving_folder.text()]    
 
         
         self.ihm.titration_sequence=TitrationSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
@@ -50,6 +52,7 @@ class ExpConfig(QDialog): #(object)
         "\nConcentration : ",self.ihm.titration_sequence.concentration,\
         "\nFibres : ",self.ihm.titration_sequence.fibers,\
         "\nFlowcell : ",self.ihm.titration_sequence.flowcell,\
+        "\nVolume initial : ", self.V0,\
         "\nMode de dispense : ",self.ihm.titration_sequence.dispense_mode,\
         "\npH initial : ",self.ihm.titration_sequence.pH_start,\
         "\npH final : ",self.ihm.titration_sequence.pH_end,\

@@ -55,6 +55,10 @@ class ControlPannel(object):
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
             self.phmeter.activateStabilityLevel()
             self.phmeter.stab_timer.timeout.connect(self.refresh_stability_level)
+            self.stab_time.valueChanged.connect(self.update_stab_time)
+    
+    def update_stab_time(self):
+        self.phmeter.stab_time=self.stab_time.value()
 
     def clear_IHM(self):
         self.direct_pH.display(None) #   setDisabled()
@@ -262,6 +266,12 @@ class ControlPannel(object):
         self.direct_pH.setGeometry(QtCore.QRect(730, 80, 101, 51))
         self.direct_pH.setObjectName("direct_pH")
         self.direct_pH.setNumDigits(6)
+        self.stab_time = QtWidgets.QSpinBox(self.centralwidget)
+        self.stab_time.setGeometry(QtCore.QRect(540, 30, 50, 30))
+        self.stab_time.setMaximum(300) #300 seconds=1minute
+        self.stab_time.setSingleStep(1)
+        self.stab_time.setProperty("value", 10)
+        self.stab_time.setObjectName("stab_time")
         self.stabilisation_level = QtWidgets.QProgressBar(self.centralwidget)
         self.stabilisation_level.setGeometry(QtCore.QRect(730, 30, 101, 31))
         self.stabilisation_level.setMaximum(100)
@@ -418,7 +428,7 @@ class ControlPannel(object):
         self.group_peristaltic_pump.addWidget(self.change_dir)
         self.pump_speed_rpm = QtWidgets.QSpinBox(self.verticalLayoutWidget)
         self.pump_speed_rpm.setAccessibleName("")
-        self.pump_speed_rpm.setMaximum(240)
+        self.pump_speed_rpm.setMaximum(1200)
         self.pump_speed_rpm.setSingleStep(10)
         self.pump_speed_rpm.setProperty("value", 60)
         self.pump_speed_rpm.setObjectName("pump_speed_rpm")

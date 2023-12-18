@@ -43,6 +43,21 @@ def intensity2absorbance(spectrum, blanc_ref, dark=None):
     abs_spectrum_round = [round(a,5) for a in abs_spectrum]
     return abs_spectrum_round
 
+def correct_spectra_from_dilution(spec,dil):
+    #spec[list] spectres d'absorbance
+    #dil[list float] facteurs de dilution
+    #print(spec,dil)
+    N=len(spec)
+    if N!=len(dil):
+        raise IndexError
+    elif N>=1:
+        cs=[[0 for i in range(len(spec[0]))] for k in range(N)]
+        for k in range(N): #nb of measures
+            for i in range(len(spec[0])):
+                #print(i,k)
+                cs[k][i]=spec[k][i]*dil[k] #from beer-lambert law
+        return cs
+
 def plot_spectrum(wl, spectrum):
     sp = np.array(spectrum)#tracé
     plt.plot(wl,sp)

@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import pyqtgraph as pg
 from spectrumConfig import SpectrumConfigWindow
 import numpy as np
+import matplotlib.pyplot as plt
 
 from IHM import IHM
 
@@ -25,8 +26,6 @@ class TitrationWindow(object):
         self.timer_display.setInterval(1000) #10 secondes
         self.timer_display.start()
 
-
-    
     #DIRECT
     def refresh_stability_level(self):
         self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
@@ -42,14 +41,15 @@ class TitrationWindow(object):
             #le spectre en delta est une donnée graphique, pas une donnée fondamentale
             self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.titration_sequence.absorbance_spectrum1[k] for k in range(self.N_lambda)]
             self.current_delta_abs_curve.setData(self.lambdas,self.current_absorbance_spectrum_delta)
-            print("update current spectra",np.shape(self.lambdas),np.shape(self.current_absorbance_spectrum_delta))
+            #print("update current spectra",np.shape(self.lambdas),np.shape(self.current_absorbance_spectrum_delta))
             #superposition sur le graphe, voir spectrumconfig pour les couleurs
 
     #ENREGISTREMENT
 
     #Spectres en delta
-    def append_spectra_in_delta(self):
-        self.spectra_j=self.delta_all_abs.plot(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+    def append_spectra_in_delta(self,N):
+        a=self.delta_all_abs.plot([0],[0],pen=pg.mkPen(color=self.colors[N-1])) #pen='g'
+        a.setData(self.lambdas,self.current_absorbance_spectrum_delta)
     
     def append_vol_in_table(self,nb,vol): #nb numero de mesure 1 à Nmes
         self.table_vol_pH[0][nb-1].setObjectName("vol"+str(nb))
@@ -113,7 +113,13 @@ class TitrationWindow(object):
         self.ui2.setupUi(self.window2)
         self.window2.show()
 
-    def graphical_setup(self, MainWindow):
+    def graphical_setup(self, MainWindow, Nmes):
+
+        #données graphiques
+        cmap = plt.get_cmap('tab10')  # You can choose a different colormap
+        aa = [cmap(i) for i in np.linspace(0, 1, Nmes)]
+        self.colors = [(int(r * 255), int(g * 255), int(b * 255)) for r, g, b, _ in aa]
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1759, 932)
         MainWindow.setTabletTracking(False)
@@ -130,6 +136,13 @@ class TitrationWindow(object):
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
         self.direct_pH.setGeometry(QtCore.QRect(30, 480, 101, 41))
         self.direct_pH.setObjectName("direct_pH")
+        self.stab_time = QtWidgets.QSpinBox(self.centralwidget)
+        self.stab_time.setGeometry(QtCore.QRect(170, 520, 50, 30))
+        self.stab_time.setMaximum(300) #300 seconds=1minute
+        self.stab_time.setSingleStep(1)
+        self.stab_time.setProperty("value", self.ihm.phmeter.stab_time)
+        self.stab_time.setObjectName("stab_time")
+        self.stab_time.valueChanged.connect(self.titration_sequence.update_stab_time)
         self.stabilisation_level = QtWidgets.QProgressBar(self.centralwidget)
         self.stabilisation_level.setGeometry(QtCore.QRect(170, 480, 101, 41))
         self.stabilisation_level.setMaximum(100)
@@ -281,6 +294,6 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ihm=IHM()
     ui = TitrationWindow(ihm)
-    ui.graphic_setup(MainWindow)
+    ui.graphical_setup(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

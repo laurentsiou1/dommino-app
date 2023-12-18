@@ -104,9 +104,9 @@ class IHM:
         name = "mes_"
         header = "Mesure sur Pytitrator\n"+"date et heure : "+str(date_text)+"\n\n"
         data = ""
-        print("saving instant measure - ",self.phmeter.CALdate)
+        print("saving instant measure - ")
         if self.save_pH: #saving pH measure
-            if self.phmeter.getIsOpen():
+            if self.phmeter.state=='open':
                 name+="pH-"
                 
                 header+=("Données de la calibration courante\n"+"date et heure: "+self.phmeter.CALdate+"\n"+
@@ -121,7 +121,7 @@ class IHM:
                 header+="pH meter not connected\n\n"
 
         if self.save_titration_data: #saving dispensed volumes
-            if self.syringe_pump.getIsOpen():
+            if self.syringe_pump.state=='open':
                 name+="titr-"
                 header+=("Syringe Pump : "+str(self.syringe_pump.model)+"\n"
                 +"Syringe : "+str("500uL Trajan gas tight syringe\n"))
@@ -154,13 +154,18 @@ class IHM:
                 absorbance = self.spectro_unit.current_absorbance_spectrum
                 wl = self.spectro_unit.wavelengths
                 spectra=[wl,background,ref,sample,absorbance]
-                
                 Nc=len(spectra)-1
-                data+="lambda(nm)\tbackground (unit count)\treference ('')\tsample ('')\tabsorbance (abs unit)\n"
-                for l in range(self.spectro_unit.N_lambda):
-                    for c in range(Nc):
-                        data+=str(spectra[c][l])+'\t'
-                    data+=str(spectra[Nc][l])+'\n'
+                if background==None or ref==None: #pas de calcul d'absorbance possible
+                    data+="lambda(nm)\tsample (unit count)\n"
+                    for l in range(self.spectro_unit.N_lambda):
+                        data+=str(spectra[0][l])+'\t'
+                        data+=str(spectra[3][l])+'\n'
+                else:
+                    data+="lambda(nm)\tbackground (unit count)\treference ('')\tsample ('')\tabsorbance (abs unit)\n"
+                    for l in range(self.spectro_unit.N_lambda):
+                        for c in range(Nc):
+                            data+=str(spectra[c][l])+'\t'
+                        data+=str(spectra[Nc][l])+'\n'
             else:
                 header+="Spectrometer closed\n"
 
@@ -171,11 +176,7 @@ class IHM:
         f_out.close()
 
 
-    def createFullSequenceFile(self):
-        #création du fichier au format compatible avec le traitement de données
-        output_name_csv='test_saving_ihm'
-        
-        #remplissage du fichier       
+        """#remplissage du fichier       
         output_string = "\t"
         for j in range(N_mes-1):
             output_string += str(str(pH[j]))+'\t'
@@ -189,7 +190,7 @@ class IHM:
         
         f_out = open(self.saving_folder+'/'+output_name_csv+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output_string)
-        f_out.close()
+        f_out.close()"""
 
 if __name__=="main":
     interface = IHM()
