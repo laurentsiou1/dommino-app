@@ -32,7 +32,7 @@ from oceandirect.od_logger import od_logger
 
 
 class ControlPannel(object):
-    #Pour instancier la classe ControlPannel on doit renseigner un attribut PHMeter et un Spectrometer
+    #Pour instancier la classe ControlPannel on doit avoir instancié les classes IHM et windowhandler
     def __init__(self, ihm:IHM=None, win:WindowHandler=None):
         print("initialisation du panneau de contrôle") 
         self.ihm=ihm #ihm passé de attribut 
@@ -106,8 +106,11 @@ class ControlPannel(object):
         self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
 
     def updateSpectrum(self):
+        self.intensity_direct_plot=self.Spectrum_direct.plot([0],[0],clear = True)
+        self.intensity_direct_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
         if self.spectro_unit.current_absorbance_spectrum!=None:
-            self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+            self.abs_direct_plot=self.Abs_direct.plot([0],[0],clear = True)
+            self.abs_direct_plot.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
     
     def link_spectro2IHM(self):
         #mise sur timer
@@ -117,7 +120,8 @@ class ControlPannel(object):
         self.shutter.clicked.connect(self.changeShutterState)
         #config de l'affichage du spectre courant
         self.lambdas=self.spectro_unit.wavelengths      
-        self.directSpectrum=self.direct_Abs_widget.plot([0],[0])
+        self.abs_direct_plot=self.Abs_direct.plot([0],[0])
+        self.intensity_direct_plot=self.Spectrum_direct.plot([0],[0])
 
 #Méthodes pour l'enregistrement des données et configuration des séquences
     def openConfigWindow(self):
@@ -251,7 +255,6 @@ class ControlPannel(object):
         self.abs_label = QtWidgets.QLabel(self.centralwidget)
         self.abs_label.setGeometry(QtCore.QRect(10, 10, 421, 41))
         self.abs_label.setObjectName("abs_label")
-
         self.last_cal_label = QtWidgets.QLabel(self.centralwidget)
         self.last_cal_label.setGeometry(QtCore.QRect(530, 130, 191, 41))
         self.last_cal_label.setObjectName("last_cal_label")
@@ -261,7 +264,6 @@ class ControlPannel(object):
         self.connect_phmeter.setGeometry(QtCore.QRect(540, 320, 150, 51))
         self.connect_phmeter.setObjectName("connect_phmeter")
         self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM) #param de l'ihm
-        
         self.direct_pH = QtWidgets.QLCDNumber(self.centralwidget)
         self.direct_pH.setGeometry(QtCore.QRect(730, 80, 101, 51))
         self.direct_pH.setObjectName("direct_pH")
@@ -286,19 +288,29 @@ class ControlPannel(object):
         self.calText.setGeometry(QtCore.QRect(700, 170, 300, 241))
         self.calText.setSizeIncrement(QtCore.QSize(0, 0))
         self.calText.setObjectName("calText")
-        #calib_text = "Données de la calibration courante:\n"+"date et heure: "+str(self.phmeter.currentCALdate)+"\n"+"température: "+str(self.phmeter.currentCALtemperature)+"\nnombre de points: "+str(self.phmeter.currentCALtype)+"\nTensions mesurées: "+str(self.phmeter.currentU1)+" "+str(self.phmeter.currentU2)+" "+str(self.phmeter.currentU3)+"coefficents de calibration actuels: a="+str(self.phmeter.current_a)+", b="+str(self.phmeter.current_b)
-        """try: 
-            self.calText.appendPlainText(self.calib_text)
-        except:
-            pass"""
         self.cal_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openCalibWindow())
         self.cal_button.setGeometry(QtCore.QRect(890, 50, 121, 61))
         self.cal_button.setObjectName("cal_button")
 
         #Spectrométrie
-        self.direct_Abs_widget = pg.PlotWidget(self.centralwidget)        
-        self.direct_Abs_widget.setGeometry(QtCore.QRect(10, 50, 520, 430))
-        self.direct_Abs_widget.setObjectName("direct_Abs_widget")        
+        #graphique
+        self.graphic_tabs = QtWidgets.QTabWidget(self.centralwidget)
+        self.graphic_tabs.setGeometry(QtCore.QRect(10, 50, 511, 391))
+        self.graphic_tabs.setObjectName("graphic_tabs")
+        self.tab1 = QtWidgets.QWidget()
+        self.tab1.setObjectName("absorbance")
+        self.Abs_direct = pg.PlotWidget(self.tab1)        
+        self.Abs_direct.setGeometry(QtCore.QRect(0, 0, 511, 391))
+        self.Abs_direct.setObjectName("Abs_direct")  
+        self.graphic_tabs.addTab(self.tab1, "absorbance")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("intensity spectrum")
+        self.Spectrum_direct = pg.PlotWidget(self.tab_2)
+        self.Spectrum_direct.setGeometry(QtCore.QRect(0, 0, 511, 391))
+        self.Spectrum_direct.setObjectName("Spectrum_direct")
+        self.graphic_tabs.addTab(self.tab_2, "intensity")
+        
+      
         self.shutter = QtWidgets.QCheckBox(self.centralwidget) #clicked = lambda: self.changeShutterState())
         self.shutter.setGeometry(QtCore.QRect(250, 500, 111, 41))
         self.shutter.setObjectName("shutter")
@@ -448,7 +460,6 @@ class ControlPannel(object):
         self.saving_config = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.openSavingConfigWindow())
         self.saving_config.setGeometry(QtCore.QRect(20, 520, 171, 51))
         self.saving_config.setObjectName("saving_config")
-        #self.saving_config.clicked.connect()
         self.save_button = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.ihm.createDirectMeasureFile())
         self.save_button.setGeometry(QtCore.QRect(20, 610, 171, 51))
         self.save_button.setObjectName("save_button")
@@ -466,20 +477,6 @@ class ControlPannel(object):
         self.menubar.addAction(self.menuPanneau_de_controle.menuAction())
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        
-        #Sur les appareils connectés
-        """if self.phmeter.state=='open':
-            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH)                
-            self.direct_pH.display(self.phmeter.currentPH)
-        
-        if self.spectro_unit.state=='open':
-            self.link_spectro2IHM()
-        
-        if self.syringe_pump.state=='open':
-            self.link_SyringePump2IHM()
-        
-        if self.peristaltic_pump.state=='open':
-            self.connect_pump.clicked.connect(self.link_pump2IHM)"""
 
 
     def retranslateUi(self, MainWindow):

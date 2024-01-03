@@ -31,6 +31,9 @@ class IHM:
     syringe_pump=PhidgetStepperPump()
     peristaltic_pump=PeristalticPump()
 
+    background=None
+    reference=None
+
     def __init__(self):
         #Config for savings
         parser = ConfigParser()

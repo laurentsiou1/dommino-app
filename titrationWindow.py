@@ -36,20 +36,27 @@ class TitrationWindow(object):
             self.directSpectrum.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
 
     #spectre courant sur le graphe en delta 
-    def updateCurrentSpectrum_delta(self): #il y a déjà un spectre enregistré
+    def update_spectra(self): #il y a déjà un spectre enregistré
         if self.spectro_unit.current_absorbance_spectrum!=None:
             #le spectre en delta est une donnée graphique, pas une donnée fondamentale
             self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.titration_sequence.absorbance_spectrum1[k] for k in range(self.N_lambda)]
             self.current_delta_abs_curve.setData(self.lambdas,self.current_absorbance_spectrum_delta)
+            self.current_abs_curve.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+            
             #print("update current spectra",np.shape(self.lambdas),np.shape(self.current_absorbance_spectrum_delta))
             #superposition sur le graphe, voir spectrumconfig pour les couleurs
 
     #ENREGISTREMENT
 
     #Spectres en delta
-    def append_spectra_in_delta(self,N):
+    def append_abs_spectra(self,N,spec,delta):
+        print(spec[300:310],delta[300:310])
+        #delta
         a=self.delta_all_abs.plot([0],[0],pen=pg.mkPen(color=self.colors[N-1])) #pen='g'
-        a.setData(self.lambdas,self.current_absorbance_spectrum_delta)
+        a.setData(self.lambdas,delta)
+        #abs
+        b=self.all_abs.plot([0],[0],pen=pg.mkPen(color=self.colors[N-1]))
+        b.setData(self.lambdas,spec)
     
     def append_vol_in_table(self,nb,vol): #nb numero de mesure 1 à Nmes
         self.table_vol_pH[0][nb-1].setObjectName("vol"+str(nb))
@@ -164,17 +171,32 @@ class TitrationWindow(object):
         self.label_direct_abs = QtWidgets.QLabel(self.centralwidget)
         self.label_direct_abs.setGeometry(QtCore.QRect(10, 10, 171, 41))
         self.label_direct_abs.setObjectName("label_direct_abs")
-        self.background_and_reference = QtWidgets.QPushButton(self.centralwidget)
-        self.background_and_reference.setGeometry(QtCore.QRect(330, 20, 201, 41))
-        self.background_and_reference.setObjectName("background_and_reference")
-        self.background_and_reference.clicked.connect(self.openSpectroWindow)
-        self.delta_all_abs = pg.PlotWidget(self.centralwidget)
-        self.delta_all_abs.setGeometry(QtCore.QRect(650, 50, 1081, 701))
-        self.delta_all_abs.setObjectName("delta_all_abs")
-        self.current_delta_abs_curve=self.delta_all_abs.plot([0],[0]) 
+        self.spectro_button = QtWidgets.QPushButton(self.centralwidget)
+        self.spectro_button.setGeometry(QtCore.QRect(330, 20, 201, 41))
+        self.spectro_button.setObjectName("spectro_button")
+        self.spectro_button.clicked.connect(self.openSpectroWindow)
         self.label_delta_abs = QtWidgets.QLabel(self.centralwidget)
         self.label_delta_abs.setGeometry(QtCore.QRect(650, 10, 371, 41))
         self.label_delta_abs.setObjectName("label_delta_abs")
+
+        #graphique
+        self.abs_tabs = QtWidgets.QTabWidget(self.centralwidget)
+        self.abs_tabs.setGeometry(QtCore.QRect(650, 50, 1081, 701))
+        self.abs_tabs.setObjectName("abs_tabs")
+        
+        self.tab1 = QtWidgets.QWidget()
+        self.tab1.setObjectName("delta absorbance")
+        self.delta_all_abs = pg.PlotWidget(self.tab1)
+        self.delta_all_abs.setGeometry(QtCore.QRect(0, 0, 1081, 701))
+        self.delta_all_abs.setObjectName("delta_all_abs")
+        self.abs_tabs.addTab(self.tab1, "delta") 
+        
+        self.tab2 = QtWidgets.QWidget()
+        self.tab2.setObjectName("absorbance")
+        self.all_abs = pg.PlotWidget(self.tab2)
+        self.all_abs.setGeometry(QtCore.QRect(0, 0, 1081, 701))
+        self.all_abs.setObjectName("all_abs")
+        self.abs_tabs.addTab(self.tab2, "raw abs")
 
         #spectre en direct
         #Display current spectrum
@@ -182,7 +204,7 @@ class TitrationWindow(object):
         self.timer_display.timeout.connect(self.refreshDirectSpectrum) #abs in direct
         
         #graphe en delta
-        self.SpectraDelta=self.delta_all_abs.plot([0],[0])
+        #self.SpectraDelta=self.delta_all_abs.plot([0],[0])
         
         #Dispense
         self.added_acid_label = QtWidgets.QLabel(self.centralwidget)
@@ -282,7 +304,7 @@ class TitrationWindow(object):
         self.base_level_number.setText(_translate("MainWindow", "100 uL"))
         self.base_level_bar.setFormat(_translate("MainWindow", "%p%"))
         self.label_pump_speed.setText(_translate("MainWindow", "pump speed rpm"))
-        self.background_and_reference.setText(_translate("MainWindow", "Spectro parameters"))
+        self.spectro_button.setText(_translate("MainWindow", "Spectro parameters"))
         self.label_delta_abs.setText(_translate("MainWindow", "Absorbance spectra (Delta)"))
         self.added_acid_label.setText(_translate("MainWindow", "added acid (HCl 0.1M) uL"))
         self.panneau_de_titration.setTitle(_translate("MainWindow", "Titration window"))

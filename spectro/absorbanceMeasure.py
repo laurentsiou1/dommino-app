@@ -39,7 +39,7 @@ except:
 """
 class AbsorbanceMeasure(Spectrometer):
 
-    def __init__(self): #, od, spectro : Spectrometer): 
+    def __init__(self): #ihm:IHM est un argument optionnel 
         self.state='closed'
         #Data
         #All spectra are saved with active corrections. It can be nonlinearity and/or electric dark 
@@ -48,6 +48,7 @@ class AbsorbanceMeasure(Spectrometer):
         # the background spectrum. 
         self.active_background_spectrum=None  #Background Spectrum
         self.active_ref_spectrum=None   #Reference
+        self.reference_absorbance=None  #courbe d'absorbance juste après la prise de réf
         self.current_intensity_spectrum=None    #Sample or whatever is in the cell
         self.current_absorbance_spectrum=None   #Absorbance
         self.wavelengths=None
@@ -166,8 +167,11 @@ class AbsorbanceMeasure(Spectrometer):
         self.adv.set_enable_lamp(True)
         time.sleep(2)
         ref=self.get_averaged_spectrum()
+        ref2=self.get_averaged_spectrum()
         self.active_ref_spectrum=ref
-
+        bgd=self.active_background_spectrum
+        if bgd!=None:
+            self.reference_absorbance=sp.intensity2absorbance(ref2,ref,bgd)
 
                             ### Fonctions pas  utiles ? ###
     """def acquire_ref_and_dark_spectra(self):
@@ -192,37 +196,7 @@ class AbsorbanceMeasure(Spectrometer):
         
         #ajout sur les graphes
         AbsorbanceMeasure.add_spectrum_to_plot(self,dark_spectrum,name='dark spectrum')
-        AbsorbanceMeasure.add_spectrum_to_plot(self,ref_spectrum,name='ref spectrum')
-    
-    def add_spectrum_to_plot(self, spectrum, type=None, name='name'):
-        "type est un string 'intensity' ou 'absorbance'"
-        "name est le nom de la courbe"
-        spec = np.array(spectrum)#tracé
-        wl=self.wavelengths
-        plt.plot(wl, spec, label=name)
-        if type=='intensity':
-            plt.ylabel("Spectre d'intensité (unit counts)")
-        elif type=='absorbance':
-            plt.ylabel("Spectre d'Absorabnce (u.a.)")    
-        plt.xlabel("Longueur d'onde (nm)")
-        #print("isinteractive=",plt.isinteractive())
-        plt.plot(block=False)
-
-    def get_averaged_corrected_spectrum(self,dark_sp=None):
-        if dark_sp!=None: # argument renseigné
-            dsp=dark_sp
-            pass
-        elif self.active_dark_spectrum!=None: #attribut existant
-            dsp=self.active_dark_spectrum
-        else:   #aucun argument ni attribut de fourni
-            #print("Spectrum has no dark correction")
-            dsp=[0 for i in self.wavelengths] #correction nulle
-            #print("dsp=",dsp)
-        current_sp=self.get_averaged_spectrum()
-        #print("spectrum non corrected =", current_sp[0:10])
-        #correction de dark spectrum et nonlinearity
-        #corr_spectrum = self.device.nonlinearity_correct_spectrum2(dsp,current_sp)
-        return current_sp"""
+        AbsorbanceMeasure.add_spectrum_to_plot(self,ref_spectrum,name='ref spectrum')"""
 
     def get_optimal_integration_time(self, spectra):
         int_time_us=self.t_int*1000

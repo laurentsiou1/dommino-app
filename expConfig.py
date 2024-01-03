@@ -62,7 +62,7 @@ class ExpConfig(QDialog): #(object)
 
 
     def browsefolder(self):
-        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', "C:/Users/francois.ollitrault/Desktop")
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', "H:/A Nouvelle arbo/DOCUMENTS TECHNIQUES/Projets Collaboratifs/DOMMINO/MESURES")
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier
         #self.ihm.saving_folder=folderpath #mis à jour du nouveau répertoire dans IHM 
 

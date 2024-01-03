@@ -30,10 +30,10 @@ class TitrationSequence:
         if self.dispense_mode=='fit on 5/05/2023':
             self.target_pH_list=[4+5*k/(self.N_mes-1) for k in range(self.N_mes)]
         elif self.dispense_mode=='fixed volumes':
-            #self.target_volumes_list=[10,10,20,30,50]
-            #bonne liste [200,100,100,50,50,100,200,200,500,1500] #uL
+            self.target_volumes_list=[10,10,20,30,50] #pour test interface
+            #self.target_volumes_list=[200,100,100,50,50,100,200,200,500,1500] #uL
             #Pour 100mL de solution [400,200,200,100,100,200,400,400,1000,3000]
-            self.target_volumes_list=[400,200,200,100,100,200,400,400,1000,3000]
+            #self.target_volumes_list=[400,200,200,100,100,200,400,400,1000,3000]
             self.N_mes=len(self.target_volumes_list)+1  #bon nombre 11 #10 dispenses de base : 11 mesures
         else: #cas d'une dispense adaptée sur le pH initial. 
             self.target_pH_list=[self.pH_start+(self.pH_start-self.pH_end)*k/(self.N_mes-1) for k in range(self.N_mes)]
@@ -171,7 +171,10 @@ class TitrationSequence:
         self.window.append_pH_in_table(1,pH)
         
         #graphe en delta
-        self.window.timer_display.timeout.connect(self.window.updateCurrentSpectrum_delta) #direct
+        self.window.current_delta_abs_curve=self.window.delta_all_abs.plot([0],[0])
+        self.window.current_abs_curve=self.window.all_abs.plot([0],[0])
+        #self.window.SpectraDelta=self.window.delta_all_abs.plot([0],[0])
+        self.window.timer_display.timeout.connect(self.window.update_spectra) #direct
 
         #Lancement de la première dispense de base
         try: #On déconnecte le slot d'actualisation de valeur du pH
@@ -222,7 +225,9 @@ class TitrationSequence:
         self.measure_times[N-1]=datetime.now()
         spec=self.spectro.current_absorbance_spectrum
         pH=self.phmeter.currentPH
+
         self.pH_mes[N-1]=pH
+        delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
 
         #ajout dans les tableaux
         self.absorbance_spectra[N-1]=spec
@@ -232,7 +237,7 @@ class TitrationSequence:
         time.sleep(2) #pour laisser le temps d'afficher 
 
         #graphe en delta
-        self.window.append_spectra_in_delta(N)
+        self.window.append_abs_spectra(N,spec,delta)
 
         #Quand on a mesuré, on passe au numéro suivant, 
         if N!=self.N_mes:
@@ -340,7 +345,7 @@ class TitrationSequence:
         name_metadata = "seq_"+output_name+"_metadata_"+date_for_file
         name_formatted_data = "seq_"+output_name+"_formatted_data_"+date_for_file
 
-        f_formatted_data=open(self.saving_folder+'/'+name_formatted_data+'.txt','w')
+        f_formatted_data = open(self.saving_folder+'/'+name_formatted_data+'.txt','w')
         f_formatted_data.write(processed_formatted_data)
         f_formatted_data.close()
 
