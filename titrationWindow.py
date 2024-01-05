@@ -184,10 +184,13 @@ class TitrationWindow(object):
         self.abs_tabs.setGeometry(QtCore.QRect(650, 50, 1081, 701))
         self.abs_tabs.setObjectName("abs_tabs")
         
+        #self.abs_tabs.geometry()
+
         self.tab1 = QtWidgets.QWidget()
         self.tab1.setObjectName("delta absorbance")
         self.delta_all_abs = pg.PlotWidget(self.tab1)
         self.delta_all_abs.setGeometry(QtCore.QRect(0, 0, 1081, 701))
+        self.abs_tabs.geometry()
         self.delta_all_abs.setObjectName("delta_all_abs")
         self.abs_tabs.addTab(self.tab1, "delta") 
         

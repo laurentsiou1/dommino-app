@@ -155,7 +155,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             time.sleep(2) #stabilisation du moteur
             self.configForDispense(ev=0)
             #calculé pour revenir sur le trait 500 à partir de l'interrupteur
-            self.stepper.setTargetPosition(self.stepper.getPosition()+62)
+            self.stepper.setTargetPosition(self.stepper.getPosition()+62) #pour un type de seringue
             self.stepper.setEngaged(True)
             print("start of movement")
             while(self.stepper.getIsMoving()==True):

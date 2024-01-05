@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>titrationWindow</class>
+ <widget class="QMainWindow" name="titrationWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>1759</width>
-    <height>932</height>
+    <height>941</height>
    </rect>
   </property>
   <property name="tabletTracking">
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Titration Window</string>
   </property>
   <property name="iconSize">
    <size>
@@ -26,19 +26,19 @@
    <widget class="QLCDNumber" name="direct_pH">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>480</y>
-      <width>101</width>
-      <height>41</height>
+      <x>10</x>
+      <y>490</y>
+      <width>121</width>
+      <height>61</height>
      </rect>
     </property>
    </widget>
    <widget class="QProgressBar" name="stabilisation_level">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>480</y>
-      <width>101</width>
+      <x>150</x>
+      <y>510</y>
+      <width>151</width>
       <height>41</height>
      </rect>
     </property>
@@ -46,7 +46,7 @@
      <number>100</number>
     </property>
     <property name="value">
-     <number>15</number>
+     <number>0</number>
     </property>
     <property name="textVisible">
      <bool>false</bool>
@@ -58,21 +58,11 @@
      <string>%p%</string>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="direct_abs">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>601</width>
-      <height>351</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_pH">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>440</y>
+      <x>30</x>
+      <y>450</y>
       <width>61</width>
       <height>41</height>
      </rect>
@@ -84,21 +74,21 @@
    <widget class="QLabel" name="label_direct_abs">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>40</x>
+      <y>20</y>
       <width>171</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Absorbance direct</string>
+     <string>Intensity</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_stability">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>440</y>
+      <x>150</x>
+      <y>450</y>
       <width>71</width>
       <height>41</height>
      </rect>
@@ -133,7 +123,7 @@
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>base syringe level (50 - 500uL)</string>
+     <string>base syringe level (0 - 500uL)</string>
     </property>
    </widget>
    <widget class="QLabel" name="base_level_number">
@@ -151,7 +141,7 @@
      </font>
     </property>
     <property name="text">
-     <string>100 uL</string>
+     <string>0 uL</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="base_level_bar">
@@ -164,13 +154,13 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>50</number>
+     <number>0</number>
     </property>
     <property name="maximum">
      <number>500</number>
     </property>
     <property name="value">
-     <number>100</number>
+     <number>0</number>
     </property>
     <property name="textVisible">
      <bool>false</bool>
@@ -211,27 +201,17 @@
      <string>Spectro parameters</string>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="delta_all_abs">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>50</y>
-      <width>1081</width>
-      <height>701</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_delta_abs">
     <property name="geometry">
      <rect>
-      <x>650</x>
+      <x>670</x>
       <y>10</y>
       <width>371</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Absorbance spectra (Delta)</string>
+     <string>Absorbance (Raw and Delta)</string>
     </property>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_2">
@@ -245,7 +225,7 @@
     </property>
     <layout class="QGridLayout" name="grid_all_pH_vol">
      <item row="2" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_pH_2">
        <property name="text">
         <string>pH</string>
        </property>
@@ -254,7 +234,7 @@
      <item row="1" column="1">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>50</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -273,28 +253,28 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="label_vol">
        <property name="text">
         <string>vol</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="label_measure">
        <property name="text">
         <string>measure</string>
        </property>
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="total_volume">
        <property name="text">
         <string>550</string>
        </property>
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="label_total_volume">
        <property name="text">
         <string>total volume</string>
        </property>
@@ -360,13 +340,65 @@ Parameters ...</string>
      <number>0</number>
     </property>
     <property name="maximum">
-     <double>240.000000000000000</double>
+     <double>1000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.000000000000000</double>
     </property>
     <property name="value">
-     <double>60.000000000000000</double>
+     <double>400.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="stab_time">
+    <property name="geometry">
+     <rect>
+      <x>231</x>
+      <y>461</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>5</number>
+    </property>
+    <property name="maximum">
+     <number>600</number>
+    </property>
+    <property name="value">
+     <number>15</number>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="absorbance_tabs">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>50</y>
+      <width>1081</width>
+      <height>681</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab1">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_direct" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>591</width>
+      <height>341</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -379,17 +411,36 @@ Parameters ...</string>
      <height>18</height>
     </rect>
    </property>
-   <widget class="QMenu" name="panneau_de_titration">
+   <widget class="QMenu" name="menufile">
     <property name="title">
-     <string>Titration window</string>
+     <string>file</string>
+    </property>
+    <addaction name="actionsave"/>
+    <addaction name="actionedit_saving_folder"/>
+    <addaction name="actionquit"/>
+   </widget>
+   <widget class="QMenu" name="menuhelp">
+    <property name="title">
+     <string>help</string>
     </property>
    </widget>
-   <addaction name="panneau_de_titration"/>
+   <addaction name="menufile"/>
+   <addaction name="menuhelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionTitration_window">
+  <action name="actionsave">
    <property name="text">
-    <string>Titration window</string>
+    <string>save titration</string>
+   </property>
+  </action>
+  <action name="actionquit">
+   <property name="text">
+    <string>quit</string>
+   </property>
+  </action>
+  <action name="actionedit_saving_folder">
+   <property name="text">
+    <string>edit saving folder</string>
    </property>
   </action>
  </widget>

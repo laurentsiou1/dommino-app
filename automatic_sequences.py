@@ -7,7 +7,7 @@ from PyQt5 import QtCore, QtWidgets
 from datetime import datetime
 
 from IHM import IHM
-from titrationWindow import TitrationWindow
+from titration_window import TitrationWindow
 from windowHandler import WindowHandler
 
 from pHmeter import *
@@ -42,18 +42,21 @@ class TitrationSequence:
         #connexion des appareils
         #listing des appareils connectés
         print("\n\n### Lancement de la séquence de titrage automatique ###\n\n")
-        if self.ihm.phmeter.state=='closed':
+        
+        """if self.ihm.phmeter.state=='closed':
             try:
                 self.ihm.phmeter.connect()
                 print("pH-meter connected\n")
             except:
                 pass
+        
         if self.ihm.syringe_pump.state=='closed':
             try:
                 self.ihm.syringe_pump.connect()
                 print("syringe pump connected\n")
             except:
                 pass
+        
         if self.ihm.spectro_unit.state=='closed':
             try:
                 self.ihm.spectro_unit.connect()
@@ -65,10 +68,18 @@ class TitrationSequence:
                 self.ihm.peristaltic_pump.connect()
                 print("peristaltic pump connected\n")
             except:
-                pass
-        self.lambdas=self.spectro.wavelengths
-        self.N_lambda=len(self.lambdas)  
-
+                pass"""
+                
+        if self.phmeter.state=='open':
+            self.lambdas=self.spectro.wavelengths
+            self.N_lambda=len(self.lambdas)
+            """self.absorbance_spectra = [[1 for k in range(self.N_lambda)] for k in range(self.N_mes)]
+            self.absorbance_spectra_cd = [[1 for k in range(self.N_lambda)] for k in range(self.N_mes)]"""
+            self.absorbance_spectra = []
+            self.absorbance_spectra_cd = [] #corrected from dilution
+        else:
+            self.absorbance_spectra = []
+            self.absorbance_spectra_cd = [] #corrected from dilution
 
         #ref initial
         self.backgroundSpectrum_init=[]
@@ -79,15 +90,12 @@ class TitrationSequence:
 
         #tableaux à compléter pendant la séquence. Variable locales
         self.pH_mes = [0 for k in range(self.N_mes)]
-        self.absorbance_spectra = [[1 for k in range(self.N_lambda)] for k in range(self.N_mes)]
-        self.absorbance_spectra_cd = [[1 for k in range(self.N_lambda)] for k in range(self.N_mes)]
         self.absorbance_spectrum1 = None
         self.added_acid_uL = 0
         self.added_volumes = [0 for k in range(self.N_mes)]
-        self.volume_count = 0
+        self.total_added_volume = 0
         self.cumulate_volumes = []
         self.dilution_factors = []
-        self.total_added_volume=0
         dt=datetime.now()
         self.measure_times=[dt for k in range(self.N_mes)]
         
@@ -95,9 +103,6 @@ class TitrationSequence:
         self.added_base_uL = []
         self.current_measure = 1
         
-        #Données de sortie
-        self.absorbance_spectra_cd = [] #corrected from dilution
-
     def configure(self):
         #Normalement On doit régler le spectro avant la séquence auto. 
         #Le pH mètre est calibré manuellement aussi 
@@ -111,25 +116,35 @@ class TitrationSequence:
         self.ihm.timer3s.stop()
 
         #création de la fenêtre
-        self.window_handler.titration_window0=QtWidgets.QMainWindow()
-        self.window_handler.titration_window0.show()
-        self.window_handler.titration_window1 = TitrationWindow(self.ihm)
-        self.window_handler.titration_window1.graphical_setup(self.window_handler.titration_window0,self.N_mes)
-        self.window_handler.titration_window1.param_init() 
-        time.sleep(3)
-
+        #self.window_handler.titration_window0=QtWidgets.QMainWindow()
+        #self.window_handler.titration_window0.show()
+        
         #graphique
-        self.window=self.window_handler.titration_window1
+        self.window = TitrationWindow()
+        self.window.param_init(seq=self,ihm=self.ihm) 
+        self.window.show()
+        self.window_handler.titration_window1 = self.window
+        #time.sleep(3)
 
         #actualisation sur le pH mètre
-        self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.refresh_pH)
-        self.phmeter.activateStabilityLevel()
-        self.phmeter.stab_timer.timeout.connect(self.window.refresh_stability_level)
+        if self.phmeter.state=='open':
+            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.refresh_pH)
+            self.phmeter.activateStabilityLevel()
+            self.phmeter.stab_timer.timeout.connect(self.window.refresh_stability_level)
+        
         #Pousses seringue
-        self.syringe.full_refill()
-        self.window.base_level_number.setText("%d uL" %self.syringe.base_level_uL)
-        self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
-        self.window.ajout_ok.clicked.connect(self.acid_added)
+        if self.syringe.state=='open':
+            if (self.syringe.base_level_uL-self.syringe.size)>=10: #uL
+                self.syringe.full_refill()
+            else:
+                pass
+            self.window.base_level_number.setText("%d uL" %self.syringe.base_level_uL)
+            self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
+        else:
+            pass
+        
+        self.window.ajout_ok.clicked.connect(self.acid_added)   #permet de déclencher la séquence auto
+        #proprement dite
 
     def update_stab_time(self):
         self.phmeter.stab_time=self.window.stab_time.value()
@@ -139,8 +154,8 @@ class TitrationSequence:
         vol=self.window.added_acid.value()
         self.added_acid_uL=vol
         self.added_volumes[0]=vol
-        self.volume_count+=vol
-        self.cumulate_volumes.append(self.volume_count)
+        self.total_added_volume+=vol
+        self.cumulate_volumes.append(self.total_added_volume)
         self.dilution_factors.append((vol+self.V0)/self.V0)
         self.window.append_vol_in_table(1,vol)
 
@@ -163,7 +178,9 @@ class TitrationSequence:
         
         #ajout dans les tableaux
         self.absorbance_spectrum1=spec
-        self.absorbance_spectra[0]=spec
+        self.window.absorbance_spectrum1=spec
+        #self.absorbance_spectra[0]=spec
+        self.absorbance_spectra.append(spec)
         self.pH_mes[0]=pH
         print("pH_mes=",self.pH_mes)
 
@@ -201,9 +218,9 @@ class TitrationSequence:
         
         #ajout sur le tableau
         self.added_volumes[N-1]=vol
-        self.volume_count+=vol
-        self.cumulate_volumes.append(self.volume_count)
-        self.dilution_factors.append((vol+self.V0)/self.V0)
+        self.total_added_volume+=vol
+        self.cumulate_volumes.append(self.total_added_volume)
+        self.dilution_factors.append((self.total_added_volume+self.V0)/self.V0)
         self.window.append_vol_in_table(N,vol) #N numéro de mesure
 
         #niveau de la seringue
@@ -219,18 +236,18 @@ class TitrationSequence:
             #de l'electrode ne pourra enclencher la fonction  
         except:
             pass
-
-        N=self.current_measure
+        
         #mesure
+        N=self.current_measure
         self.measure_times[N-1]=datetime.now()
         spec=self.spectro.current_absorbance_spectrum
         pH=self.phmeter.currentPH
-
-        self.pH_mes[N-1]=pH
-        delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
-
+        
         #ajout dans les tableaux
-        self.absorbance_spectra[N-1]=spec
+        self.pH_mes[N-1]=pH
+        #self.absorbance_spectra[N-1]=spec
+        self.absorbance_spectra.append(spec)
+        delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
 
         #affichage pH
         self.window.append_pH_in_table(N,pH) #N numéro de la mesure
@@ -239,6 +256,9 @@ class TitrationSequence:
         #graphe en delta
         self.window.append_abs_spectra(N,spec,delta)
 
+        #actu des données
+        self.window.append_total_vol_in_table(self.total_added_volume)  #effacer la valeur précédente
+        
         #Quand on a mesuré, on passe au numéro suivant, 
         if N!=self.N_mes:
             self.current_measure+=1
@@ -246,12 +266,10 @@ class TitrationSequence:
             self.phmeter.signals.stability_reached.connect(self.mesureN) #mise en attente pour mesure suivante
         else: #on est sur la dernière mesure
             #actions à réaliser à la fin du titrage
-            self.total_added_volume=sum(self.added_volumes)
-            self.window.append_total_vol_in_table(self.total_added_volume)
-            self.absorbance_spectra_cd=sp.correct_spectra_from_dilution(self.absorbance_spectra,self.dilution_factors)
             self.createFullSequenceFiles()
 
     def createFullSequenceFiles(self):
+        #cette fonction s'adapte à une séquence terminée ou en cours (cas d'interruption de séquence)
         #création d'un fichier compatible avec le traitement de données
         #Ainsi que d'un fichier metadata qui contient toutes les informations annexes à propos de l'expérience
         dt=datetime.now()
@@ -261,7 +279,9 @@ class TitrationSequence:
             +"date et heure de l'enregistrement : "+date_txt+"\n\n"
         
         print("saving titration sequence data")
-        
+        print(self.pH_mes,self.absorbance_spectra)
+        self.N_mes=min(len(self.pH_mes),len(self.absorbance_spectra)) #if one measure is missing
+
         data="measure n°\t"    #entête
         for k in range(self.N_mes):
             data+=str(k+1)+'\t'
@@ -270,7 +290,9 @@ class TitrationSequence:
         if self.syringe.state=='open':
             metadata+=("Syringe Pump : "+str(self.syringe.model)+"\n"
             +"Syringe : "+str("500uL Trajan gas tight syringe\n\n"))
-            data+="dispensed volumes (uL)\t"                                                                                                   
+            data+="dispensed volumes (uL)\t"   
+            print(self.N_mes,self.added_volumes,self.cumulate_volumes,self.dilution_factors)
+                                                                                                           
             for k in range(self.N_mes):
                 data+=str(self.added_volumes[k])+'\t'   
             data+='\t'+str(self.total_added_volume)+'\ncumulate\t'                                                                           
@@ -283,6 +305,7 @@ class TitrationSequence:
         else:
             metadata+="Syringe pump not connected\n\n"    
         
+        processed_formatted_data=''
         if self.phmeter.state=='open':
             metadata+=("Ph meter\nCurrent calibration data\n"+"date et heure: "+self.phmeter.CALdate+"\n"+
             "température: "+str(self.phmeter.CALtemperature)+"\n"+"nombre de points: "+str(self.phmeter.CALtype)+"\n"+
@@ -324,6 +347,9 @@ class TitrationSequence:
                 data+=str(table[self.N_mes][l])+'\n'
 
             #absorbance corrected from dilution
+            print(self.absorbance_spectra,self.dilution_factors,len(self.absorbance_spectra),len(self.dilution_factors))
+            self.absorbance_spectra_cd=sp.correct_spectra_from_dilution(self.absorbance_spectra,self.dilution_factors[0:self.N_mes])
+            #on ne prend que les dilutions factors pour lequels on a un spectre enregistré 
             table_formatted = [self.spectro.wavelengths]+self.absorbance_spectra_cd
             for l in range(self.spectro.N_lambda):  #spectres
                 for c in range(self.N_mes):

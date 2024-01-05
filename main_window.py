@@ -2,8 +2,8 @@
 
 from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineEdit, QPushButton
 from ui.panneau_de_controle import Ui_MainWindow
-
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 from IHM import IHM
@@ -26,7 +26,6 @@ from oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from oceandirect.od_logger import od_logger
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-
     def __init__(self, parent=None, ihm:IHM=None, win:WindowHandler=None):
         #graphique
         super(MainWindow,self).__init__(parent)
@@ -276,8 +275,8 @@ if __name__=="__main__":
     #créations des classes nécessaires
     itf=IHM()
     win=WindowHandler()
-    MainWindow = MainWindow(ihm=itf,win=win)
-    MainWindow.show()
+    window = MainWindow(ihm=itf,win=win)
+    window.show()
 
     rc=app.exec_()
     sys.exit(rc)

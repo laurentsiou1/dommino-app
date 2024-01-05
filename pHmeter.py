@@ -35,14 +35,15 @@ class PHMeter:
 
 	def __init__(self):
 		self.state='closed'
-		
 		self.stab_timer = QtCore.QTimer()
 		self.stab_timer.setInterval(1000)
 		self.stable=False
 		self.stab_level=0 #pourcentage de stabilité
 		self.stab_step=0.01 #pas pour lequel si on dépasse on est plus stable
 		self.stab_time=10 #seconds. If pH change < stab_step no change in 30secs 
-
+		#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
+		self.signals=CustomSignals()
+	
 	def connect(self):
 		#pHmètre
 		U_pH = VoltageInput() #pH-mètre
@@ -57,10 +58,7 @@ class PHMeter:
 				self.currentVoltage=U_pH.getVoltage()
 				self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
 				self.state='open'
-				print("pH mètre connecté")
-
-				#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
-				self.signals=CustomSignals()
+				print("pH mètre connecté")	
 			else:
 				self.state='closed'
 				print("pH-mètre non connecté")
@@ -68,6 +66,7 @@ class PHMeter:
 			self.state='closed'
 			print("pH-mètre non connecté")
 		self.voltagechannel=U_pH
+
 	
 	def getCalData(self):
 		#print("passage dans get cal data")
@@ -184,7 +183,7 @@ class PHMeter:
 				else: 												#devient stable
 					self.stable=True
 					self.signals.stability_reached.emit()
-					#¶print("stability_reached.emit()!")
+					#print("stability_reached.emit()!")
 		else: 												#si ça bouge, on reset tout
 			self.ph0=self.currentPH
 			self.time_counter=0

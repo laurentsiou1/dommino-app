@@ -72,10 +72,9 @@ class AbsorbanceMeasure(Spectrometer):
             print("Spectro non connecté")
         #print("ID spectro: ", device_ids)
         
-        self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
-        self.N_lambda = len(self.wavelengths)
-        
         if self.state=='open':
+            self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
+            self.N_lambda = len(self.wavelengths)
             self.model=spectro.get_model()
             #print(self.model)
             self.ocean_manager=od #instance de la classe OceanDirectAPI
