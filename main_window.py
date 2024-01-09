@@ -85,6 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.phmeter.currentVoltage=voltage        
         pH = volt2pH(self.phmeter.a,self.phmeter.b,voltage)
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
+        
         self.direct_pH.display(pH)
         #print("voltage change")
     

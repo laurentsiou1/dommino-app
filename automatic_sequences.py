@@ -70,7 +70,7 @@ class TitrationSequence:
             except:
                 pass"""
                 
-        if self.phmeter.state=='open':
+        if self.spectro.state=='open':
             self.lambdas=self.spectro.wavelengths
             self.N_lambda=len(self.lambdas)
             """self.absorbance_spectra = [[1 for k in range(self.N_lambda)] for k in range(self.N_mes)]
