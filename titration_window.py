@@ -155,6 +155,8 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
         #pH meter
         self.stab_time.setProperty("value", self.phmeter.stab_time)
         self.stab_time.valueChanged.connect(seq.update_stab_time)
+        self.stab_step.setProperty("value", self.phmeter.stab_step)
+        self.stab_step.valueChanged.connect(seq.update_stab_step)
 
         #saving
         self.actionsave.triggered.connect(seq.createFullSequenceFiles)

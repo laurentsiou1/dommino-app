@@ -1,44 +1,35 @@
 "programme pour tests"
 
-#print "taper enter lorsque stabilisé", nn = input()
-
-# a=input("taper entrer lorsque l'électrode est en contact du tampon pH4\n")
-
-# print(str(a))
-
 from Phidget22.Phidget import *
+from Phidget22.Devices.Log import *
+from Phidget22.LogLevel import *
 from Phidget22.Devices.VoltageInput import *
+import time
 
-U_pH = VoltageInput() #pH-mètre
-U_pH.setDeviceSerialNumber(432846)
-#U_pH.setHubPort(4) seulement pour les device avec VINT
-U_pH.setChannel(0)
-U_pH.openWaitForAttachment(5000)
+def onVoltageChange(self, voltage):
+	print("Voltage: " + str(voltage))
 
-U_stepper = VoltageInput() #tension d'alim du stepper
-U_stepper.setDeviceSerialNumber(683442)
-U_stepper.setHubPort(0) #seulement pour les device avec VINT
-U_stepper.setChannel(0)
-U_stepper.openWaitForAttachment(5000)
+def onError(self, code, description):
+	print("Code: " + ErrorEventCode.getName(code))
+	print("Description: " + str(description))
+	print("----------")
 
-deviceName1 = U_pH.getDeviceName()
-print("device pH meter: " + str(deviceName1))
-deviceName2 = U_stepper.getDeviceName()
-print("Device stepper: " + str(deviceName2))
+def main():
+	Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
+	voltageInput0 = VoltageInput()
 
+	voltageInput0.setHubPort(3)
+	voltageInput0.setDeviceSerialNumber(683442)q
+	voltageInput0.setOnVoltageChangeHandler(onVoltageChange)
+	voltageInput0.setOnErrorHandler(onError)
 
-# count = U_pH.getDeviceChannelCount(ChannelClass.PHIDCHCLASS_VOLTAGEINPUT)
-# print("number of voltage input channels: " + str(count))
-# channel = U_pH.getChannel()
-# print("Channel: " + str(channel))
-# #U_pH.setChannel(1)
+	voltageInput0.openWaitForAttachment(5000)
 
-# attached = U_pH.getAttached()
-# print("Attached: " + str(attached))
+	try:
+		input("Press Enter to Stop\n")
+	except (Exception, KeyboardInterrupt):
+		pass
 
+	voltageInput0.close()
 
-# channel = U_stepper.getChannel()
-# print("Channel: " + str(channel))
-
-# attached = U_pH.getAttached()
-# print("Attached: " + str(attached))
+main()

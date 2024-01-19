@@ -30,10 +30,10 @@ class TitrationSequence:
         if self.dispense_mode=='fit on 5/05/2023':
             self.target_pH_list=[4+5*k/(self.N_mes-1) for k in range(self.N_mes)]
         elif self.dispense_mode=='fixed volumes':
-            self.target_volumes_list=[10,10,20,30,50] #pour test interface
-            #self.target_volumes_list=[200,100,100,50,50,100,200,200,500,1500] #uL
-            #Pour 100mL de solution [400,200,200,100,100,200,400,400,1000,3000]
-            #self.target_volumes_list=[400,200,200,100,100,200,400,400,1000,3000]
+            #self.target_volumes_list=[10,10,20,30,50] #pour test interface
+            self.target_volumes_list=[288,189,125,76,45,30,33,53,89,143,213,300] #after 11/01/2024 for 50mL
+            #self.target_volumes_list=[200,100,100,50,50,100,200,200,500,1500] #before 11/01/2024 for 50mL
+            #[400,200,200,100,100,200,400,400,1000,3000] #before 11/01/2024 for 100mL
             self.N_mes=len(self.target_volumes_list)+1  #bon nombre 11 #10 dispenses de base : 11 mesures
         else: #cas d'une dispense adaptée sur le pH initial. 
             self.target_pH_list=[self.pH_start+(self.pH_start-self.pH_end)*k/(self.N_mes-1) for k in range(self.N_mes)]
@@ -148,6 +148,9 @@ class TitrationSequence:
 
     def update_stab_time(self):
         self.phmeter.stab_time=self.window.stab_time.value()
+    
+    def update_stab_step(self):
+        self.phmeter.stab_step=self.window.stab_step.value()
 
     def acid_added(self): #déclenchée lorsque l'on a ajouté l'acide et cliqué sur OK
         #modif et affichage volume

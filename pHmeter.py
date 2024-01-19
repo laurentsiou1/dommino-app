@@ -6,6 +6,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal, QObject
 
 from Phidget22.Phidget import *
+from Phidget22.Devices.Log import *
 from Phidget22.Devices.VoltageInput import *
 from Phidget22.Devices.PHSensor import *
 #from controlPannel import ControlPannel
@@ -47,31 +48,68 @@ class PHMeter:
 	def connect(self):
 		#pHmètre
 		U_pH = VoltageInput() #pH-mètre
-		U_pH.setDeviceSerialNumber(432846)
-		U_pH.setChannel(0)
-		try:
-			U_pH.openWaitForAttachment(1000)
-			if U_pH.getIsOpen():
-				U_pH.setDataRate(3)
-				U_pH.setVoltageChangeTrigger(0.00001) #seuill de déclenchement (Volt)
-				self.getCalData()
-				self.currentVoltage=U_pH.getVoltage()
-				self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
-				self.state='open'
-				print("pH mètre connecté")	
-			else:
-				self.state='closed'
-				print("pH-mètre non connecté")
-		except:
+		#U_pH.setDeviceSerialNumber(432846)	#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
+		#U_pH.setChannel(0)
+		U_pH.setDeviceSerialNumber(683442)	#pH mètre ADP1000_0
+		U_pH.setHubPort(3)
+		self.model='Phidget ADP1000_0'
+		self.electrode='Oakton double-junction epoxy'
+		#try:
+		U_pH.openWaitForAttachment(3000)
+		if U_pH.getIsOpen():
+			#U_pH.setDataRate(3)
+			#U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
+			self.getCalData()
+			self.currentVoltage=U_pH.getVoltage()
+			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
+			self.state='open'
+			print("pH mètre connecté")	
+		else:
 			self.state='closed'
 			print("pH-mètre non connecté")
+		#except:
+		#	self.state='closed'
+		#	print("pH-mètre non connecté")
 		self.voltagechannel=U_pH
+
+	#fonction de détection ne fonctionne pas encore
+	"""def getPhmeterModel(self):
+		#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
+		U_1130=VoltageInput()
+		U_1130.setDeviceSerialNumber(432846)	
+		U_1130.setChannel(0)	
+
+		#pH mètre ADP_1000 branché sur la broche 3 du VINT
+		U_ADP1000 = VoltageInput() 
+		U_ADP1000.setDeviceSerialNumber(683442)
+		U_ADP1000.setChannel(3)		
+
+		try:
+			U_ADP1000.openWaitForAttachment(1000)
+			if U_pH.getIsOpen():
+				self.model='Phidget ADP1000_0'
+				V=ADP1000.getVoltage()	
+				if abs(V-0.25)<=0.01:
+					self.electrode_state='unplugged'
+				else:
+					self.electrode_state='unplugged'
+		try:
+			U_1130.openWaitForAttachment(1000)
+			if U_1130.getIsOpen():
+				self.model='Phidget pH adapter 1130_0'
+				V=U_1130.getVoltage()	
+				if abs(V)<=0.01:
+					self.electrode_state='unplugged'
+				else:
+					self.electrode_state='plugged'"""
 
 	
 	def getCalData(self):
 		#print("passage dans get cal data")
 		parser = ConfigParser()
 		parser.read(cal_data_path)
+		self.model=parser.get('data', 'phmeter')
+		self.electrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
 		self.CALtemperature=float(parser.get('data', 'temperature'))
 		self.CALtype=parser.get('data', 'calib_type')
@@ -95,6 +133,8 @@ class PHMeter:
 	def onCalibrationChange(self):
 		parser = ConfigParser()
 		parser.read(cal_data_path)
+		#self.model=parser.get('data', 'phmeter')
+		#self.electrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
 		self.CALtemperature=float(parser.get('data', 'temperature'))
 		#c'est un string : à convertir en set puis à ordonner
@@ -113,7 +153,8 @@ class PHMeter:
 	def saveCalData(self,date,temperature,caltype,u_cal,coeffs):
 		parser = ConfigParser()
 		parser.read(cal_data_path)
-		
+		parser.set('data', 'phmeter', str(self.model))
+		parser.set('data', 'electrode', str(self.electrode))
 		parser.set('data', 'date', str(date)) 
 		parser.set('data', 'temperature', str(temperature))
 		#print("caltype ",caltype)
@@ -136,7 +177,7 @@ class PHMeter:
 
 		#sauvegarde de toutes les calibration
 		oldCal = open("config/CALlog.txt", "a")
-		oldCal.write(str(date)+"\n"+str(temperature)+"°C \nType de calibration: "+str(caltype)+"\nVoltages calib:\n"+str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
+		oldCal.write("pH meter : "+str(self.model)+"\npH probe : "+str(self.electrode)+"\n"+str(date)+"\n"+str(temperature)+"°C \nType de calibration: "+str(caltype)+"\nVoltages calib:\n"+str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
 		oldCal.close()
 
 	def computeCalCoefs(self,u_cal,pH_buffers):
@@ -161,6 +202,11 @@ class PHMeter:
 	def activateStabilityLevel(self):
 		self.ph0=self.currentPH
 		self.stab_timer.start()
+		try:
+			self.stab_timer.disconnect() #important pour ne pas executer la fonction plusieurs fois à chaque appel
+		except:
+			pass
+			#print("ne peut pas deconnecter les signaux sur le timer")
 		self.stab_timer.timeout.connect(self.refreshStabilityLevel)
 		self.time_counter=0
 	
@@ -172,18 +218,25 @@ class PHMeter:
 				self.stable=False
 				self.stab_level+=1 
 				#print("2")
-			elif self.stab_level==ts: 				#stable
-				if self.stable==True: 								#déjà stable à l'itération précédente
-					#print("3")
-					if self.time_counter==ts: 				#stable pendant toute une période
-						#2print("time counter= stab time")
-						self.ph0=self.currentPH 						#on reprend une valeur de référence pour le pH
-						self.time_counter=0 							#reset du compteur
-						#print("nouveau pH mesuré au bout du temps de stab")
-				else: 												#devient stable
+			else:	#self.stab_level>=ts	#elif self.stab_level==ts: 				#stable
+				self.stab_level=ts
+				if self.stable==False:
 					self.stable=True
 					self.signals.stability_reached.emit()
-					#print("stability_reached.emit()!")
+				if self.stable==False or self.time_counter>=ts:
+					self.ph0=self.currentPH #on reprend une valeur de référence pour le pH
+					self.time_counter=0 #reset du compteur	
+			#elif self.stab_level>=ts:
+
+				"""if self.stable==True: 								#déjà stable à l'itération précédente
+					#print("3")
+					if self.time_counter>=ts:#stable pendant toute une période
+						#2print("time counter= stab time")						
+						#print("nouveau pH mesuré au bout du temps de stab")
+				else:#devient stable
+					self.stable=True
+					self.signals.stability_reached.emit()
+					#print("stability_reached.emit()!")"""		
 		else: 												#si ça bouge, on reset tout
 			self.ph0=self.currentPH
 			self.time_counter=0
@@ -192,34 +245,44 @@ class PHMeter:
 			#print("1")		
 		self.stab_purcent = round((self.stab_level/ts)*100,2)
 
-
 	def close(self):
 		self.voltagechannel.close()
 		self.stab_timer.disconnect()
 		self.stab_timer.stop()
 		self.state='closed'
 
+	def onError(self, code, description):
+		print("Code: " + ErrorEventCode.getName(code))
+		print("Description: " + str(description))
+		print("----------")
+
 if __name__ == "__main__":
-    #création d'un canal pour la tension d'entrée
-	ch = VoltageInput()
-	ch.setDeviceSerialNumber(432846)
-	ch.setChannel(0)
-	ch.openWaitForAttachment(1000)
-	ch.setOnVoltageChangeHandler(PHMeter.DoOnVoltageChange)
 	
-	phm = PHMeter(ch)
-	phm.configure_pHmeter()
-
-	#ch.setOnVoltageChangeHandler(PHMeter.DoOnVoltageChange)
+	phm=PHMeter()
+	phm.connect()
 	
-	#ch.setDataRate(1)
-	#ch.setVoltageChangeTrigger(0.0001) #précision de 10mV
-
-	# pH_set = (4,7)
-	# CALcoefs=phm.Two_point_calibration(pH_set)
-
-	# ch.setSensorType(VoltageSensorType.SENSOR_TYPE_1130_PH)
-	# sensorValue = ch.getSensorValue() #pour comparer aux valeurs calculées avec calibration
-	# print("SensorValue: pH = " + str(sensorValue))
-
-	ch.close()
+	
+	"""Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
+	U_pH = VoltageInput()
+	U_pH.setOnErrorHandler(PHMeter.onError)
+	
+	U_pH.setDeviceSerialNumber(683442)	#pH mètre ADP1000_0
+	U_pH.setHubPort(3)
+	U_pH.openWaitForAttachment(2000)
+	if U_pH.getIsOpen():
+		print("connectéé")
+		#print(U_pH.getDataRate())
+		#print(U_pH.getMinDataRate(),U_pH.getMaxDataRate())
+		#print(U_pH.getMinDataInterval(),U_pH.getMaxDataInterval())
+		currentVoltage=U_pH.getVoltage()
+		print(currentVoltage)
+		
+		#U_pH.setDataInterval(int(1000))	#ms
+		print("aa")
+		#U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
+		print("aaa")
+		
+	else:
+		print("non détecté")
+	#except:
+	#	pass"""

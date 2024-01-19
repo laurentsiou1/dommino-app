@@ -73,10 +73,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
             self.phmeter.activateStabilityLevel()
             self.phmeter.stab_timer.timeout.connect(self.refresh_stability_level)
+            self.update_stab_time()
             self.stab_time.valueChanged.connect(self.update_stab_time)
+            self.update_stab_step()
+            self.stab_step.valueChanged.connect(self.update_stab_step)
     
     def update_stab_time(self):
         self.phmeter.stab_time=self.stab_time.value()
+    
+    def update_stab_step(self):
+        self.phmeter.stab_step=self.stab_step.value()
 
     def clear_IHM(self):
         self.direct_pH.display(None) #   setDisabled()
@@ -100,7 +106,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.window1.show()
     
     def onCalibrationChange(self):
-        self.calib_text = "Current calibration data:\n"+"date: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
+        self.calib_text = "Current calibration data:\npH meter : "+str(self.phmeter.model)+"\nelectrode : "+str(self.phmeter.electrode)+"\ndate: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
         self.calText.clear()
         self.calText.appendPlainText(self.calib_text)
 

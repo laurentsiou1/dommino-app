@@ -33,10 +33,10 @@ class CalBox(object):
         self.buttonBox.setObjectName("buttonBox")
         #print("passage!")
 
-        self.direct_voltage = QtWidgets.QLCDNumber(Dialog)
-        self.direct_voltage.setGeometry(QtCore.QRect(210, 80, 211, 131))
-        self.direct_voltage.setObjectName("direct_voltage")
-        self.direct_voltage.setNumDigits(5)
+        self.direct_voltage_mV = QtWidgets.QLCDNumber(Dialog)
+        self.direct_voltage_mV.setGeometry(QtCore.QRect(210, 80, 211, 131))
+        self.direct_voltage_mV.setObjectName("direct_voltage_mV")
+        self.direct_voltage_mV.setNumDigits(6)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(260, 40, 131, 41))
         self.label.setObjectName("label")
@@ -87,7 +87,7 @@ class CalBox(object):
         #affichage de la tension déjà affichée sur le panneau de contrôle
         #if self.phmeter.getIsOpen():
             #U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
-            #self.direct_voltage.display(U)
+            #self.direct_voltage_mV.display(U)
     
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -99,8 +99,11 @@ class CalBox(object):
         self.label_2.setText(_translate("Dialog", "Tensions enregistrées"))
 
     def setOnDirectVoltage(self): #, ch, voltage):
-        #self.direct_voltage self.=voltage
-        self.direct_voltage.display(self.phmeter.currentVoltage)
+        #self.direct_voltage_mV self.=voltage
+        #if self.phmeter.model=='Phidget ADP1000_0':
+        self.direct_voltage_mV.display(1000*self.phmeter.currentVoltage)
+        """elif self.phmeter.model=='Phidget 1130':
+            self.direct_voltage.display(self.phmeter.currentVoltage)"""
 
     def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
         U=self.phmeter.currentVoltage
