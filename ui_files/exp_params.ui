@@ -238,7 +238,7 @@
    <property name="geometry">
     <rect>
      <x>580</x>
-     <y>530</y>
+     <y>540</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -282,9 +282,9 @@
   <widget class="QLabel" name="Nmes_label">
    <property name="geometry">
     <rect>
-     <x>450</x>
-     <y>530</y>
-     <width>131</width>
+     <x>580</x>
+     <y>500</y>
+     <width>121</width>
      <height>41</height>
     </rect>
    </property>
@@ -408,6 +408,44 @@
    </property>
    <property name="text">
     <string>Saving folder</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="V0">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>540</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="decimals">
+    <number>1</number>
+   </property>
+   <property name="minimum">
+    <double>10.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>200.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.100000000000000</double>
+   </property>
+   <property name="value">
+    <double>50.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="V0_label">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>500</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Volume initial (mL)</string>
    </property>
   </widget>
  </widget>

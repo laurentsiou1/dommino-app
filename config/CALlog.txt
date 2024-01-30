@@ -926,3 +926,23 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(-0.05770666666666668, 0.4023833333333335)
 
+pH meter : Phidget ADP1000_0
+pH probe : Oakton double-junction epoxy
+2024-01-23 11:26:06.470970
+22°C 
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[0.17321, -0.00162, -0.17336]
+Coefficients U=a*pH+b
+(a,b)=(-0.0577616666666667, 0.40374166666666705)
+
+pH meter : Phidget ADP1000_0
+pH probe : Oakton double-junction epoxy
+2024-01-26 16:00:25.637149
+22°C 
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[0.17333, -0.00142, -0.17391]
+Coefficients U=a*pH+b
+(a,b)=(-0.05787333333333335, 0.4044466666666669)
+

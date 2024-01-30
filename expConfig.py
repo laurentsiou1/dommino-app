@@ -24,7 +24,7 @@ class ExpConfig(QDialog): #(object)
         super().__init__(parent)
         self.ihm=ihm
         self.window_handler=win
-        self.V0=50000   #volume initial uL
+        #self.V_init=1000*self.V0.value()   #volume initial uL
 
     def launchTitration(self):
         
@@ -34,7 +34,7 @@ class ExpConfig(QDialog): #(object)
             self.concentration.value(),\
             self.fibers.currentText(),\
             self.flowcell.currentText(),\
-            self.V0,\
+            1000*self.V0.value(),\
             self.dispense_mode.currentText(),\
             self.Nmes.value(),\
             self.pH_init.value(),\
@@ -52,7 +52,7 @@ class ExpConfig(QDialog): #(object)
         "\nConcentration : ",self.ihm.titration_sequence.concentration,\
         "\nFibres : ",self.ihm.titration_sequence.fibers,\
         "\nFlowcell : ",self.ihm.titration_sequence.flowcell,\
-        "\nVolume initial : ", self.V0,\
+        "\nVolume initial : ", self.ihm.titration_sequence.V_init,\
         "\nMode de dispense : ",self.ihm.titration_sequence.dispense_mode,\
         "\npH initial : ",self.ihm.titration_sequence.pH_start,\
         "\npH final : ",self.ihm.titration_sequence.pH_end,\
@@ -130,7 +130,18 @@ class ExpConfig(QDialog): #(object)
         self.label_flowcell = QtWidgets.QLabel(Dialog)
         self.label_flowcell.setGeometry(QtCore.QRect(20, 490, 351, 41))
         self.label_flowcell.setObjectName("label_flowcell")
-        
+        self.V0 = QtWidgets.QDoubleSpinBox(Dialog)
+        self.V0.setGeometry(QtCore.QRect(420, 540, 121, 41))
+        self.V0.setDecimals(1)
+        self.V0.setMinimum(10.0)
+        self.V0.setMaximum(200.0)
+        self.V0.setSingleStep(0.1)
+        self.V0.setProperty("value", 50.0)
+        self.V0.setObjectName("V0")
+        self.V0_label = QtWidgets.QLabel(Dialog)
+        self.V0_label.setGeometry(QtCore.QRect(420, 500, 121, 41))
+        self.V0_label.setObjectName("V0_label")
+
         self.Nmes = QtWidgets.QSpinBox(Dialog)
         self.Nmes.setGeometry(QtCore.QRect(580, 530, 121, 41))
         self.Nmes.setMinimum(3)
@@ -167,8 +178,8 @@ class ExpConfig(QDialog): #(object)
         self.dispense_mode.setEditable(True)
         self.dispense_mode.setMaxVisibleItems(10)
         self.dispense_mode.setObjectName("dispense_mode")
+        self.dispense_mode.addItem("5th order polynomial fit on dommino 23/01/2024")
         self.dispense_mode.addItem("fixed volumes")
-        self.dispense_mode.addItem("fit on 5/05/2023")
         self.dispense_mode.addItem("complete processing")
         self.dispense_mode_label = QtWidgets.QLabel(Dialog)
         self.dispense_mode_label.setGeometry(QtCore.QRect(420, 310, 261, 41))
@@ -215,6 +226,7 @@ class ExpConfig(QDialog): #(object)
         self.Nmes_label.setText(_translate("Dialog", "N mesures"))
         self.saving_folder_label.setText(_translate("Dialog", "Saving folder"))
         self.browse.setText(_translate("Dialog", "browse"))
+        self.V0_label.setText(_translate("Dialog", "Volume initial (mL)"))
 
 #Lancement direct du programme avec run
 if __name__ == "__main__":

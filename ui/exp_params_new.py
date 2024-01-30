@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../exp_params.ui'
+# Form implementation generated from reading ui file 'ui_files/exp_params.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(721, 731)
+        Dialog.resize(726, 682)
         self.dialogbox = QtWidgets.QDialogButtonBox(Dialog)
         self.dialogbox.setGeometry(QtCore.QRect(480, 50, 221, 61))
         self.dialogbox.setOrientation(QtCore.Qt.Horizontal)
@@ -73,7 +73,7 @@ class Ui_Dialog(object):
         self.flowcell_label.setGeometry(QtCore.QRect(20, 490, 351, 41))
         self.flowcell_label.setObjectName("flowcell_label")
         self.Nmes = QtWidgets.QSpinBox(Dialog)
-        self.Nmes.setGeometry(QtCore.QRect(580, 530, 121, 41))
+        self.Nmes.setGeometry(QtCore.QRect(580, 540, 121, 41))
         self.Nmes.setMinimum(3)
         self.Nmes.setMaximum(20)
         self.Nmes.setProperty("value", 10)
@@ -85,7 +85,7 @@ class Ui_Dialog(object):
         self.pH_fin_label.setGeometry(QtCore.QRect(580, 400, 121, 41))
         self.pH_fin_label.setObjectName("pH_fin_label")
         self.Nmes_label = QtWidgets.QLabel(Dialog)
-        self.Nmes_label.setGeometry(QtCore.QRect(450, 530, 131, 41))
+        self.Nmes_label.setGeometry(QtCore.QRect(580, 500, 121, 41))
         self.Nmes_label.setObjectName("Nmes_label")
         self.pH_init = QtWidgets.QDoubleSpinBox(Dialog)
         self.pH_init.setGeometry(QtCore.QRect(420, 440, 121, 41))
@@ -114,15 +114,23 @@ class Ui_Dialog(object):
         self.dispense_mode_label.setGeometry(QtCore.QRect(420, 310, 261, 41))
         self.dispense_mode_label.setObjectName("dispense_mode_label")
         self.saving_folder = QtWidgets.QPlainTextEdit(Dialog)
-        self.saving_folder.setGeometry(QtCore.QRect(20, 660, 681, 41))
+        self.saving_folder.setGeometry(QtCore.QRect(20, 620, 681, 41))
         self.saving_folder.setPlainText("")
         self.saving_folder.setObjectName("saving_folder")
         self.saving_folder_label = QtWidgets.QLabel(Dialog)
-        self.saving_folder_label.setGeometry(QtCore.QRect(20, 620, 351, 41))
+        self.saving_folder_label.setGeometry(QtCore.QRect(20, 580, 351, 41))
         self.saving_folder_label.setObjectName("saving_folder_label")
-        self.browse = QtWidgets.QToolButton(Dialog)
-        self.browse.setGeometry(QtCore.QRect(230, 610, 161, 41))
-        self.browse.setObjectName("browse")
+        self.V0 = QtWidgets.QDoubleSpinBox(Dialog)
+        self.V0.setGeometry(QtCore.QRect(420, 540, 121, 41))
+        self.V0.setDecimals(1)
+        self.V0.setMinimum(10.0)
+        self.V0.setMaximum(200.0)
+        self.V0.setSingleStep(0.1)
+        self.V0.setProperty("value", 50.0)
+        self.V0.setObjectName("V0")
+        self.V0_label = QtWidgets.QLabel(Dialog)
+        self.V0_label.setGeometry(QtCore.QRect(420, 500, 121, 41))
+        self.V0_label.setObjectName("V0_label")
 
         self.retranslateUi(Dialog)
         self.dialogbox.accepted.connect(Dialog.accept) # type: ignore
@@ -155,7 +163,7 @@ class Ui_Dialog(object):
         self.dispense_mode.setItemText(1, _translate("Dialog", "fixed volumes"))
         self.dispense_mode_label.setText(_translate("Dialog", "mode de dispense"))
         self.saving_folder_label.setText(_translate("Dialog", "Saving folder"))
-        self.browse.setText(_translate("Dialog", "browse"))
+        self.V0_label.setText(_translate("Dialog", "Volume initial (mL)"))
 
 
 if __name__ == "__main__":

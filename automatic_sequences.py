@@ -26,7 +26,7 @@ class TitrationSequence:
 
         #Données de config
         [self.experience_name,self.description,self.OM_type,self.concentration,self.fibers,\
-            self.flowcell,self.V0,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,self.saving_folder]=config
+            self.flowcell,self.V_init,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,self.saving_folder]=config
         if self.dispense_mode=='fit on 5/05/2023':
             self.target_pH_list=[4+5*k/(self.N_mes-1) for k in range(self.N_mes)]
         elif self.dispense_mode=='fixed volumes':
@@ -36,7 +36,8 @@ class TitrationSequence:
             #[400,200,200,100,100,200,400,400,1000,3000] #before 11/01/2024 for 100mL
             self.N_mes=len(self.target_volumes_list)+1  #bon nombre 11 #10 dispenses de base : 11 mesures
         else: #cas d'une dispense adaptée sur le pH initial. 
-            self.target_pH_list=[self.pH_start+(self.pH_start-self.pH_end)*k/(self.N_mes-1) for k in range(self.N_mes)]
+            self.target_pH_list=[self.pH_start+(self.pH_end-self.pH_start)*k/(self.N_mes-1) for k in range(self.N_mes)]
+            print("target pH list = ", self.target_pH_list)
             self.target_acid=50
 
         #connexion des appareils
@@ -159,7 +160,7 @@ class TitrationSequence:
         self.added_volumes[0]=vol
         self.total_added_volume+=vol
         self.cumulate_volumes.append(self.total_added_volume)
-        self.dilution_factors.append((vol+self.V0)/self.V0)
+        self.dilution_factors.append((vol+self.V_init)/self.V_init)
         self.window.append_vol_in_table(1,vol)
 
         try:
@@ -213,17 +214,22 @@ class TitrationSequence:
         if self.dispense_mode=='fixed volumes':
             vol=self.target_volumes_list[N-2]
             self.syringe.dispense(vol)
-        elif self.dispense_mode=='fit on 5/05/2023':
+        elif self.dispense_mode=='5th order polynomial fit on dommino 23/01/2024':
             current=self.pH_mes[N-2] #lors de la mesure 1 de base, le pH est pH_mes[0]
             target=self.target_pH_list[N-1]
-            vol=volumeToAdd_uL(current, target, model='fit on 5/05/2023')
+            n=N
+            while target <= current and n<=self.N_mes-1:    #dans le cas où le pH monte trop vite accidentelement    
+                target=self.target_pH_list[n]   #on remonte dans le liste des pH cibles
+                n+=1
+            print("current ph, target pH : ", current, target)
+            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024')
             self.syringe.dispense(vol)
         
         #ajout sur le tableau
         self.added_volumes[N-1]=vol
         self.total_added_volume+=vol
         self.cumulate_volumes.append(self.total_added_volume)
-        self.dilution_factors.append((self.total_added_volume+self.V0)/self.V0)
+        self.dilution_factors.append((self.total_added_volume+self.V_init)/self.V_init)
         self.window.append_vol_in_table(N,vol) #N numéro de mesure
 
         #niveau de la seringue

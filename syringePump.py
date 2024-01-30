@@ -6,8 +6,9 @@ from Phidget22.Devices.DigitalInput import *
 from Phidget22.Devices.DigitalOutput import *
 from Phidget22.Devices.Stepper import *
 import time
+import dispense_data
 
-def dispense_function(pH,coefs,x0):
+"""def dispense_function(pH,coefs,x0):
     [y0, ba, ca, bb, cb] = coefs
     if type(pH)!=list:
         if pH<=y0:
@@ -21,15 +22,12 @@ def dispense_function(pH,coefs,x0):
                 x.append(x0-ba*(10**((y0-y)/ca)-1))
             else:
                 x.append(x0+bb*(10**((y-y0)/cb)-1))
-    return x
+    return x"""
 
 def volumeToAdd_uL(current, target, model='fixed volumes'): #pH courant et cible, modèle choisi par défaut le 5/05
-    if model=='fit on 5/05/2023':
-        x0, coefs = 0.38, [5.44910654, 0.0393133,  1.34849333, 0.03735145, 1.92836309]
-    elif model=='fixed volumes':
-        x0, coefs = 0.35, [0,0,0,0,0] #à compléter
-    return int((dispense_function(target,coefs,x0)-dispense_function(current,coefs,x0))*1000)  #résultat en uL
-
+    if model=='5th order polynomial fit on dommino 23/01/2024':
+        vol = dispense_data.get_volume_to_dispense_uL(current,target)
+    return int(vol)
 
 class SyringePump: #Nouvelle classe SyringePump globale : classe mère
         
@@ -67,7 +65,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     
     def __init__(self,syringe_type='SGE500'): #par défaut une SGE500uL
         self.syringe_type=syringe_type
-        
+        print("syringe type : ",self.syringe_type)
         self.state='closed'
 
     def connect(self):
@@ -87,7 +85,10 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.stepper.setAcceleration(5)
             print("acceleration stepper : ", self.stepper.getAcceleration())
             if self.syringe_type=='SGE500': #Trajan SGE 500uL
-                self.stepper.setRescaleFactor(-0.013115) 
+                #rescale factor calculé le 25/01/2024
+                print("le syringe type est bon")
+                self.stepper.setRescaleFactor(-0.01298) #rescale factor = -0.013115 avant 25/01/2024
+                #baisse le rescale factor augmente la course
                 #450uL dispensés sur une échelle de 30500 positions avec scale factor=1
                 #soit 76,25 microsteps pour 1 uL.     
                 self.size = 400 #en uL : c'est le volume utilse de la seringue. 
@@ -155,7 +156,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             time.sleep(2) #stabilisation du moteur
             self.configForDispense(ev=0)
             #calculé pour revenir sur le trait 500 à partir de l'interrupteur
-            self.stepper.setTargetPosition(self.stepper.getPosition()+62) #pour un type de seringue
+            #dépend de la seringue, des tubings, de l'ensemble
+            self.stepper.setTargetPosition(self.stepper.getPosition()+50) #valeur le 25/01 #+62 jusqu'à présent
+            
             self.stepper.setEngaged(True)
             print("start of movement")
             while(self.stepper.getIsMoving()==True):
@@ -239,7 +242,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         else:
             print("syringe level before unfill = ", self.base_level_uL)
         disp=False #par défaut, avant dispense : pas encore de dispense effectuée
-        if vol <= self.size-pos0:
+        if vol >= 0 and vol <= self.size-pos0:
             self.configForDispense(ev)
             self.stepper.setTargetPosition(pos0+vol)
             #lancement
@@ -269,7 +272,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                     print("volume cumulé de fluide ajouté = ", self.added_total_uL)
                     disp=True #seulement si toutes les conditions sont réunies, la dispense\
                     #aura eu lieu
-        else:
+        elif vol<0:
+            print("Impossible de dispenser : volume négatif")
+        else:   #volume trop grand
             print("Volume diponible dans la seringue insuffisant, \
                   la dispense doit se faire en plusieurs étapes")
         return disp #bool about dispense was achived or not 
