@@ -65,7 +65,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     
     def __init__(self,syringe_type='SGE500'): #par défaut une SGE500uL
         self.syringe_type=syringe_type
-        print("syringe type : ",self.syringe_type)
+        #print("syringe type : ",self.syringe_type)
         self.state='closed'
 
     def connect(self):
@@ -242,7 +242,8 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         else:
             print("syringe level before unfill = ", self.base_level_uL)
         disp=False #par défaut, avant dispense : pas encore de dispense effectuée
-        if vol >= 0 and vol <= self.size-pos0:
+        if vol >= 0 and vol <= self.size-pos0+10:   
+            #+10 est une marge pour pouvoir dépasser légèrement le niveau complet     
             self.configForDispense(ev)
             self.stepper.setTargetPosition(pos0+vol)
             #lancement
@@ -250,7 +251,6 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             if valid:
                 self.stepper.setEngaged(True)
                 print("start of movement")
-                #print(self)
                 while(self.stepper.getIsMoving()==True):
                     pass
                 print("end of movement")
@@ -263,13 +263,11 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 delta=round((position-pos0),0)
                 self.base_level_uL-=delta
                 #print("Position atteinte après dispense: ", position)
-                print("syringe level = ",self.base_level_uL)
+                #print("syringe level = ",self.base_level_uL)
                 if ev==1:
                     self.added_base_uL+=delta
                     self.added_total_uL+=delta
                     self.base_dispense_log.append(delta)
-                    print("volume cumulé de base ajouté = ", self.added_base_uL)
-                    print("volume cumulé de fluide ajouté = ", self.added_total_uL)
                     disp=True #seulement si toutes les conditions sont réunies, la dispense\
                     #aura eu lieu
         elif vol<0:
@@ -297,23 +295,22 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         else:           #vol>level
             r2=r-level
             print("r2=",r2)
-            if r2<=0: #r<=level        #On commence par dispenser le reste
+            if r2<=0: #r<=level     #On peut dispenser le reste sans recharger
+                #donc on commence par dispenser le reste
+                self.simple_dispense(r)
+                self.full_refill()
+                #puis les dispenses entières
+                for i in range(q):
+                    self.simple_dispense(capacity)
+                    self.full_refill()
+            else: #r>level:     #Le reste est supérieur au niveau de la seringue
+                print("recharge pour dispense du reste")
+                self.full_refill()
                 self.simple_dispense(r)
                 self.full_refill()
                 for i in range(q):
                     self.simple_dispense(capacity)
                     self.full_refill()
-            else: #r>level:
-                print("dispense volume disponible")
-                self.simple_dispense(level)
-                self.full_refill()
-                for i in range(q):
-                    print("on passe à la dispense")
-                    self.simple_dispense(capacity)
-                    print("on passe à la recharge")
-                    self.full_refill()
-                print("dernière dispense")
-                self.simple_dispense(r2)
         print("fin de dispense %f uL" %vol)
 
 

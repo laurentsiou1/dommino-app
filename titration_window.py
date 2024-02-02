@@ -150,7 +150,7 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
 
         #pompe
         if self.peristaltic_pump.state=='open':
-            self.pump_speed_rpm.setProperty("value", self.peristaltic_pump.velocity_rpm)
+            self.pump_speed_volt.setProperty("value", self.peristaltic_pump.current_speed)
 
         #pH meter
         self.stab_time.setProperty("value", self.phmeter.stab_time)

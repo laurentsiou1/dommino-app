@@ -9,7 +9,7 @@ from Phidget22.Phidget import *
 from Phidget22.Devices.Log import *
 from Phidget22.Devices.VoltageInput import *
 from Phidget22.Devices.PHSensor import *
-#from controlPannel import ControlPannel
+
 import math
 import numpy as np
 from configparser import ConfigParser
@@ -17,9 +17,11 @@ import os
 from pathlib import Path
 import re
 
+#Récupère le fichier des données de calibration par défaut
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
-cal_data_path = os.path.join(ROOT_DIR, "config\cal_data.ini")
+default_app_settings_file = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+#print(default_app_settings_file)
 
 def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
 	#U=a*pH+b
@@ -36,80 +38,73 @@ class PHMeter:
 
 	def __init__(self):
 		self.state='closed'
+
+
 		self.stab_timer = QtCore.QTimer()
 		self.stab_timer.setInterval(1000)
 		self.stable=False
 		self.stab_level=0 #pourcentage de stabilité
 		self.stab_step=0.01 #pas pour lequel si on dépasse on est plus stable
 		self.stab_time=10 #seconds. If pH change < stab_step no change in 30secs 
+		
 		#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
 		self.signals=CustomSignals()
-	
-	def connect(self):
+
+		parser = ConfigParser()
+		parser.read(default_app_settings_file)
+		self.cal_data_path=parser.get('files', 'default')
+		self.model=parser.get('phmeter', 'default')
+		self.electrode=parser.get('electrode', 'default')
+
+	def connect(self,phmeter,electrode):
 		#pHmètre
+		self.model=phmeter
+		self.electrode=electrode
 		U_pH = VoltageInput() #pH-mètre
-		#U_pH.setDeviceSerialNumber(432846)	#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
-		#U_pH.setChannel(0)
-		U_pH.setDeviceSerialNumber(683442)	#pH mètre ADP1000_0
-		U_pH.setHubPort(3)
-		self.model='Phidget ADP1000_0'
-		self.electrode='Oakton double-junction epoxy'
-		#try:
-		U_pH.openWaitForAttachment(3000)
-		if U_pH.getIsOpen():
-			#U_pH.setDataRate(3)
-			#U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
+		if phmeter=='Phidget ADP1000':
+			#se branche sur le port 3 du VINT
+			U_pH.setDeviceSerialNumber(683442)
+			U_pH.setHubPort(3)
+			self.connect2(U_pH)
+		elif phmeter=='Phidget 1130':
+			#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
+			U_pH.setDeviceSerialNumber(432846)	
+			U_pH.setChannel(0)
+			self.connect2(U_pH)
+			U_pH.setDataRate(3)
+			U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
+	def connect2(self,channel):
+		channel.openWaitForAttachment(3000)
+		if channel.getIsOpen():
 			self.getCalData()
-			self.currentVoltage=U_pH.getVoltage()
+			self.currentVoltage=channel.getVoltage()
 			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
 			self.state='open'
 			print("pH mètre connecté")	
 		else:
 			self.state='closed'
 			print("pH-mètre non connecté")
-		#except:
-		#	self.state='closed'
-		#	print("pH-mètre non connecté")
-		self.voltagechannel=U_pH
+		self.voltagechannel=channel
 
-	#fonction de détection ne fonctionne pas encore
-	"""def getPhmeterModel(self):
-		#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
-		U_1130=VoltageInput()
-		U_1130.setDeviceSerialNumber(432846)	
-		U_1130.setChannel(0)	
 
-		#pH mètre ADP_1000 branché sur la broche 3 du VINT
-		U_ADP1000 = VoltageInput() 
-		U_ADP1000.setDeviceSerialNumber(683442)
-		U_ADP1000.setChannel(3)		
-
-		try:
-			U_ADP1000.openWaitForAttachment(1000)
-			if U_pH.getIsOpen():
-				self.model='Phidget ADP1000_0'
-				V=ADP1000.getVoltage()	
-				if abs(V-0.25)<=0.01:
-					self.electrode_state='unplugged'
-				else:
-					self.electrode_state='unplugged'
-		try:
-			U_1130.openWaitForAttachment(1000)
-			if U_1130.getIsOpen():
-				self.model='Phidget pH adapter 1130_0'
-				V=U_1130.getVoltage()	
-				if abs(V)<=0.01:
-					self.electrode_state='unplugged'
-				else:
-					self.electrode_state='plugged'"""
-
+	def load_calibration(self,path):
+		self.cal_data_path=path
+		#Changement dans le fichier contenant le chemin du fichier de calibration par defaut
+		parser = ConfigParser()
+		parser.read(default_app_settings_file)
+		#print(default_app_settings_file)
+		#print(self.cal_data_path)
+		parser.set('files', 'default', str(self.cal_data_path))
+		#écriture du nouveau chemin de cal par défaut
+		cal_path_file = open(default_app_settings_file,'w')
+		parser.write(cal_path_file) 
+		cal_path_file.close()
 	
 	def getCalData(self):
-		#print("passage dans get cal data")
 		parser = ConfigParser()
-		parser.read(cal_data_path)
-		self.model=parser.get('data', 'phmeter')
-		self.electrode=parser.get('data', 'electrode')
+		parser.read(self.cal_data_path)
+		self.CALmodel=parser.get('data', 'phmeter')
+		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
 		self.CALtemperature=float(parser.get('data', 'temperature'))
 		self.CALtype=parser.get('data', 'calib_type')
@@ -132,17 +127,15 @@ class PHMeter:
 	
 	def onCalibrationChange(self):
 		parser = ConfigParser()
-		parser.read(cal_data_path)
-		#self.model=parser.get('data', 'phmeter')
-		#self.electrode=parser.get('data', 'electrode')
+		parser.read(self.cal_data_path)
+		self.CALmodel=parser.get('data', 'phmeter')
+		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
 		self.CALtemperature=float(parser.get('data', 'temperature'))
 		#c'est un string : à convertir en set puis à ordonner
 		l=re.findall('\d+',parser.get('data', 'calib_type'))
 		ll=[int(x) for x in l]
 		self.CALtype=sorted(ll) 
-		#print(l,ll)
-		#print("pHmeter.onCalibrationCHange",self.CALtype)
 		self.U1=float(parser.get('data', 'U1'))
 		self.U2=float(parser.get('data', 'U2'))
 		self.U3=float(parser.get('data', 'U3'))
@@ -157,17 +150,13 @@ class PHMeter:
 		parser.set('data', 'electrode', str(self.electrode))
 		parser.set('data', 'date', str(date)) 
 		parser.set('data', 'temperature', str(temperature))
-		#print("caltype ",caltype)
-		#print("str(caltype) ",str(caltype))
 		parser.set('data', 'calib_type', str(caltype))
-		#print(u_cal)
 		try:
 			parser.set('data', 'U1', str(float(u_cal[0])))
 			parser.set('data', 'U2', str(float(u_cal[1])))
 			parser.set('data', 'U3', str(float(u_cal[2])))
 		except:
 			pass
-		#print(coeffs)
 		parser.set('data', 'a', str(float(coeffs[0])))
 		parser.set('data', 'b', str(float(coeffs[1])))
 		
@@ -177,7 +166,7 @@ class PHMeter:
 
 		#sauvegarde de toutes les calibration
 		oldCal = open("config/CALlog.txt", "a")
-		oldCal.write("pH meter : "+str(self.model)+"\npH probe : "+str(self.electrode)+"\n"+str(date)+"\n"+str(temperature)+"°C \nType de calibration: "+str(caltype)+"\nVoltages calib:\n"+str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
+		oldCal.write("pH meter : "+str(self.CALmodel)+"\npH probe : "+str(self.CALelectrode)+"\n"+str(date)+"\n"+str(temperature)+"°C \nType de calibration: "+str(caltype)+"\nVoltages calib:\n"+str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
 		oldCal.close()
 
 	def computeCalCoefs(self,u_cal,pH_buffers):
@@ -250,6 +239,7 @@ class PHMeter:
 		self.stab_timer.disconnect()
 		self.stab_timer.stop()
 		self.state='closed'
+		print("pH meter closed")
 
 	def onError(self, code, description):
 		print("Code: " + ErrorEventCode.getName(code))
@@ -286,3 +276,34 @@ if __name__ == "__main__":
 		print("non détecté")
 	#except:
 	#	pass"""
+	
+		#fonction de détection ne fonctionne pas encore
+	"""def getPhmeterModel(self):
+		#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
+		U_1130=VoltageInput()
+		U_1130.setDeviceSerialNumber(432846)	
+		U_1130.setChannel(0)	
+
+		#pH mètre ADP_1000 branché sur la broche 3 du VINT
+		U_ADP1000 = VoltageInput() 
+		U_ADP1000.setDeviceSerialNumber(683442)
+		U_ADP1000.setChannel(3)		
+
+		try:
+			U_ADP1000.openWaitForAttachment(1000)
+			if U_pH.getIsOpen():
+				self.model='Phidget ADP1000_0'
+				V=ADP1000.getVoltage()	
+				if abs(V-0.25)<=0.01:
+					self.electrode_state='unplugged'
+				else:
+					self.electrode_state='unplugged'
+		try:
+			U_1130.openWaitForAttachment(1000)
+			if U_1130.getIsOpen():
+				self.model='Phidget pH adapter 1130_0'
+				V=U_1130.getVoltage()	
+				if abs(V)<=0.01:
+					self.electrode_state='unplugged'
+				else:
+					self.electrode_state='plugged'"""

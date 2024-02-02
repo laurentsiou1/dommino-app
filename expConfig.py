@@ -15,7 +15,7 @@ from IHM import IHM
 from automatic_sequences import TitrationSequence
 
 from windowHandler import WindowHandler
-from titrationWindow import TitrationWindow
+from titration_window import TitrationWindow
 
 
 class ExpConfig(QDialog): #(object)

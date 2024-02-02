@@ -185,7 +185,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>pump speed rpm</string>
+     <string>pump speed (mean voltage)</string>
     </property>
    </widget>
    <widget class="QPushButton" name="background_and_reference">
@@ -324,7 +324,7 @@ Description :
 Parameters ...</string>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="pump_speed_rpm">
+   <widget class="QDoubleSpinBox" name="pump_speed_volt">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -337,16 +337,19 @@ Parameters ...</string>
      <string/>
     </property>
     <property name="decimals">
-     <number>0</number>
+     <number>1</number>
+    </property>
+    <property name="minimum">
+     <double>3.000000000000000</double>
     </property>
     <property name="maximum">
-     <double>1000.000000000000000</double>
+     <double>12.000000000000000</double>
     </property>
     <property name="singleStep">
-     <double>0.000000000000000</double>
+     <double>0.100000000000000</double>
     </property>
     <property name="value">
-     <double>400.000000000000000</double>
+     <double>4.000000000000000</double>
     </property>
    </widget>
    <widget class="QSpinBox" name="stab_time">

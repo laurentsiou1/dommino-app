@@ -1,5 +1,9 @@
 # main_window.py
 
+from configparser import ConfigParser
+import os
+from pathlib import Path
+
 from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineEdit, QPushButton
 from ui.panneau_de_controle import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -25,11 +29,21 @@ from Phidget22.Devices.Stepper import Stepper
 from oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from oceandirect.od_logger import od_logger
 
+path = Path(__file__)
+ROOT_DIR = path.parent.absolute()
+app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None, ihm:IHM=None, win:WindowHandler=None):
         #graphique
         super(MainWindow,self).__init__(parent)
         self.setupUi(self)
+
+        parser = ConfigParser()
+        parser.read(app_default_settings)
+        self.phmeter_selection_box.setCurrentText(str(parser.get('phmeter', 'default')))
+        self.electrode_selection_box.setCurrentText(str(parser.get('electrode', 'default')))
+
         #ajout
         self.Abs_direct = pg.PlotWidget(self.tab1)
         self.Abs_direct.setGeometry(QtCore.QRect(0, 0, 511, 371))
@@ -37,6 +51,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.Spectrum_direct = pg.PlotWidget(self.tab_2)
         self.Spectrum_direct.setGeometry(QtCore.QRect(0, 0, 511, 371))
         self.Spectrum_direct.setObjectName("Spectrum_direct")
+        
+        
         
         #appareils
         print("initialisation du panneau de contrôle") 
@@ -49,6 +65,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         #connexions
         self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM)
+        self.phmeter_selection_box.currentIndexChanged.connect(self.updateDefaultSettings)
+        self.electrode_selection_box.currentIndexChanged.connect(self.updateDefaultSettings)
         self.cal_button.clicked.connect(self.openCalibWindow)
         self.reglage_spectro.clicked.connect(self.OnClick_reglage_spectro)
         self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
@@ -63,11 +81,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     ### Méthodes pour le pH mètre
     def link_pHmeter2IHM(self):
+        phmeter_model=self.phmeter_selection_box.currentText()
+        electrode=self.electrode_selection_box.currentText()
         if self.phmeter.state=='closed':
-            self.phmeter.connect()
+            self.phmeter.connect(phmeter_model,electrode)
         if self.phmeter.state=='open':
             #affichage des données de calibration
-            self.onCalibrationChange()
+            self.refreshCalibrationText()
             #pH en direct
             self.direct_pH.display(self.phmeter.currentPH) #pH instantané
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
@@ -77,6 +97,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.stab_time.valueChanged.connect(self.update_stab_time)
             self.update_stab_step()
             self.stab_step.valueChanged.connect(self.update_stab_step)
+            self.load_calibration_button.clicked.connect(self.load_calibration)
     
     def update_stab_time(self):
         self.phmeter.stab_time=self.stab_time.value()
@@ -85,13 +106,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.phmeter.stab_step=self.stab_step.value()
 
     def clear_IHM(self):
-        self.direct_pH.display(None) #   setDisabled()
+        #pH meter
+        self.direct_pH.display(None)
+        self.calib_text_box.clear()
+        self.stabilisation_level.setProperty("value", 0)
+        #Spectro
+
 
     def displayDirectPH(self,ch,voltage): #arguments immuables
         self.phmeter.currentVoltage=voltage        
         pH = volt2pH(self.phmeter.a,self.phmeter.b,voltage)
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
-        
         self.direct_pH.display(pH)
         #print("voltage change")
     
@@ -99,16 +124,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
         self.stability_label.setText(str(self.phmeter.stab_purcent)+"%")
 
+    def load_calibration(self):
+        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', "config")
+        print(filepath)
+        self.phmeter.load_calibration(filepath)
+        self.phmeter.getCalData()
+        self.refreshCalibrationText()
+
     def openCalibWindow(self):
         self.window1 = QtWidgets.QDialog()
         self.ui1 = CalBox(self.ihm.phmeter, self, self.ihm)
         self.ui1.setupUi(self.window1)
         self.window1.show()
     
-    def onCalibrationChange(self):
-        self.calib_text = "Current calibration data:\npH meter : "+str(self.phmeter.model)+"\nelectrode : "+str(self.phmeter.electrode)+"\ndate: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
-        self.calText.clear()
-        self.calText.appendPlainText(self.calib_text)
+    def refreshCalibrationText(self):
+        self.calib_text = "Current calibration data:\npH meter : "+str(self.phmeter.CALmodel)+"\nelectrode : "+str(self.phmeter.CALelectrode)+"\ndate: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
+        self.calib_text_box.clear()
+        self.calib_text_box.appendPlainText(self.calib_text)
 
     ### Méthodes pour le spectromètre
     def OnClick_reglage_spectro(self):
@@ -168,6 +200,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def openSavingConfigWindow(self):
         self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
         self.win4.show()
+
+    def updateDefaultSettings(self):
+        #actualisation des paramètres affichés par défaut à l'ouverture de la fenetre
+        parser = ConfigParser()
+        parser.read(app_default_settings)
+        parser.set('files', 'default', str(self.phmeter.cal_data_path))
+        parser.set('phmeter', 'default', str(self.phmeter.model))
+        parser.set('electrode', 'default', str(self.phmeter.electrode))
+        file = open(app_default_settings,'w')
+        parser.write(file)
+        file.close()
 
     ### Méthodes pour le pousse-seringue
     def connectSyringePump(self):
@@ -271,10 +314,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.start_pump.clicked.connect(self.peristaltic_pump.start)
         self.stop_pump.clicked.connect(self.peristaltic_pump.stop)
         self.change_dir.clicked.connect(self.peristaltic_pump.change_direction)
-        self.pump_speed_rpm.valueChanged.connect(self.update_pump_speed)
+        self.pump_speed_volt.valueChanged.connect(self.update_pump_speed)
 
     def update_pump_speed(self):
-        self.peristaltic_pump.setVelocity_rpm(self.pump_speed_rpm.value())
+        self.peristaltic_pump.setSpeed_voltage(self.pump_speed_volt.value())
 
 if __name__=="__main__":
     import sys

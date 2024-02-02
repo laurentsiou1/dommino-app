@@ -18,9 +18,10 @@ from syringePump import PhidgetStepperPump
 from peristalticPump import PeristalticPump
 
 path = Path(__file__)
-print(path)
 ROOT_DIR = path.parent.absolute()
+app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
+
 
 
 class IHM:

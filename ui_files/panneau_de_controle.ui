@@ -27,7 +27,7 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>200</y>
+      <y>220</y>
       <width>101</width>
       <height>51</height>
      </rect>
@@ -37,7 +37,7 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>150</y>
+      <y>180</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -61,9 +61,9 @@
    <widget class="QLabel" name="pH_label">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>200</y>
-      <width>51</width>
+      <x>550</x>
+      <y>220</y>
+      <width>41</width>
       <height>51</height>
      </rect>
     </property>
@@ -88,7 +88,7 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>120</y>
+      <y>150</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -114,7 +114,7 @@
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>10</y>
+      <y>60</y>
       <width>191</width>
       <height>41</height>
      </rect>
@@ -140,7 +140,7 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>270</y>
+      <y>290</y>
       <width>101</width>
       <height>51</height>
      </rect>
@@ -191,8 +191,8 @@
    <widget class="QLabel" name="label_base_level">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>420</y>
+      <x>550</x>
+      <y>430</y>
       <width>301</width>
       <height>41</height>
      </rect>
@@ -201,7 +201,7 @@
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>basic syringe level (50 - 500uL)</string>
+     <string>base syringe level (0 - 400uL)</string>
     </property>
    </widget>
    <widget class="QLabel" name="base_level_number">
@@ -460,7 +460,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>340</y>
+      <y>360</y>
       <width>151</width>
       <height>51</height>
      </rect>
@@ -511,9 +511,9 @@
    <widget class="QPushButton" name="connect_syringe_pump">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>530</x>
       <y>660</y>
-      <width>151</width>
+      <width>181</width>
       <height>41</height>
      </rect>
     </property>
@@ -568,7 +568,7 @@
     <property name="geometry">
      <rect>
       <x>640</x>
-      <y>90</y>
+      <y>120</y>
       <width>51</width>
       <height>31</height>
      </rect>
@@ -580,13 +580,13 @@
      <number>15</number>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="calText">
+   <widget class="QPlainTextEdit" name="calib_text_box">
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>50</y>
+      <y>100</y>
       <width>331</width>
-      <height>361</height>
+      <height>311</height>
      </rect>
     </property>
    </widget>
@@ -629,12 +629,12 @@
      <string>Stop</string>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="pump_speed_rpm">
+   <widget class="QDoubleSpinBox" name="pump_speed_volt">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>430</x>
       <y>740</y>
-      <width>51</width>
+      <width>71</width>
       <height>31</height>
      </rect>
     </property>
@@ -642,16 +642,19 @@
      <string/>
     </property>
     <property name="decimals">
-     <number>0</number>
+     <number>1</number>
+    </property>
+    <property name="minimum">
+     <double>3.000000000000000</double>
     </property>
     <property name="maximum">
-     <double>1200.000000000000000</double>
+     <double>12.000000000000000</double>
     </property>
     <property name="singleStep">
-     <double>10.000000000000000</double>
+     <double>0.100000000000000</double>
     </property>
     <property name="value">
-     <double>400.000000000000000</double>
+     <double>4.000000000000000</double>
     </property>
    </widget>
    <widget class="QPushButton" name="change_dir">
@@ -659,7 +662,7 @@
      <rect>
       <x>240</x>
       <y>740</y>
-      <width>191</width>
+      <width>171</width>
       <height>31</height>
      </rect>
     </property>
@@ -671,7 +674,7 @@
     <property name="geometry">
      <rect>
       <x>570</x>
-      <y>90</y>
+      <y>120</y>
       <width>51</width>
       <height>31</height>
      </rect>
@@ -684,6 +687,95 @@
     </property>
     <property name="singleStep">
      <double>0.010000000000000</double>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="phmeter_selection_box">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>20</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+    <property name="currentText">
+     <string>Phidget ADP1000</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Phidget ADP1000</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Phidget 1130</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>HI5221</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Metrohm titrando</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>other</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="electrode_selection_box">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>70</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Oakton epoxy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VWR 662-1793</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>metrohm 6.0232.100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>metrohm 6.0259.100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>other</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="load_calibration_button">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>20</y>
+      <width>331</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select an existing calibration</string>
     </property>
    </widget>
   </widget>

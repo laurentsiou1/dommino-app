@@ -69,7 +69,7 @@ class CalBox(object):
 
         self.buttonBox.accepted.connect(self.validateCal) #lorsqu'on clique sur valider, la calibration est enregsitrée
         self.buttonBox.accepted.connect(self.phmeter.onCalibrationChange)        
-        self.buttonBox.accepted.connect(self.motherWindow.onCalibrationChange)        
+        self.buttonBox.accepted.connect(self.motherWindow.refreshCalibrationText)        
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
         
@@ -99,11 +99,10 @@ class CalBox(object):
         self.label_2.setText(_translate("Dialog", "Tensions enregistrées"))
 
     def setOnDirectVoltage(self): #, ch, voltage):
-        #self.direct_voltage_mV self.=voltage
-        #if self.phmeter.model=='Phidget ADP1000_0':
+        print("setondirectvoltage")
         self.direct_voltage_mV.display(1000*self.phmeter.currentVoltage)
         """elif self.phmeter.model=='Phidget 1130':
-            self.direct_voltage.display(self.phmeter.currentVoltage)"""
+            self.direct_voltage_mV.display(1000*self.phmeter.currentVoltage)"""
 
     def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
         U=self.phmeter.currentVoltage

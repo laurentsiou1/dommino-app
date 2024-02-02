@@ -17,12 +17,15 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         try:
             self.openWaitForAttachment(4000)
             print("moteur de pompe alimenté")
-            self.direction=1 # +1 or -1 according to the direction
+            #sécu
             self.setCurrentLimit(1) #1A
             self.setAcceleration(0.5)
-            self.velocity_rpm=400
-            #self.duty_cycle=(0.3+0.05*(self.velocity_rpm/60))*self.direction
-            self.duty_cycle=0.05*(self.velocity_rpm/60)*self.direction
+            #param
+            self.direction=1 # +1 or -1 according to the direction
+            self.mean_voltage=4
+            self.duty_cycle=self.mean_voltage/12
+            self.target_speed=self.direction*self.duty_cycle
+            self.current_speed=self.getTargetVelocity()
             print("moteur configuré:\n\
             limite de courant (A):",self.getCurrentLimit(),\
             "\nAcceleration: ",self.getAcceleration(),\
@@ -34,13 +37,14 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             print("moteur de pompe non alimenté")
             self.state='closed'
 
-    def setVelocity_rpm(self,omega):
-        self.velocity_rpm=omega
-        #self.duty_cycle=0.3+0.05*(self.velocity_rpm/60)
-        self.duty_cycle=0.05*(self.velocity_rpm/60)*self.direction
+    def setSpeed_voltage(self,v):
+        self.duty_cycle=v/12
+        self.current_speed=self.getTargetVelocity()
+        if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
+            self.setTargetVelocity(self.duty_cycle*self.direction)
 
     def start(self):
-        self.setTargetVelocity(self.duty_cycle*self.direction)
+        self.setTargetVelocity(self.target_speed)
 
     def stop(self): 
         self.setTargetVelocity(0)        
