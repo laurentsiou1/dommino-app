@@ -29,6 +29,19 @@ def volumeToAdd_uL(current, target, model='fixed volumes'): #pH courant et cible
         vol = dispense_data.get_volume_to_dispense_uL(current,target)
     return int(vol)
 
+def getPhStep(current):
+    #fonction donnant le pas de pH à viser en fonction du pH. 
+    #fonction affine en deux parties. C'est un triangle. 
+    #A pH4 le pas est de 0.3. Il est de 0.5 à pH6.5 et de 0.4 à pH10
+    if current<=6.5:
+        step=0.08*current-0.02
+    else:
+        step=-0.028*current+0.68
+    return step
+
+#global GAIN_ON_PH_STEP
+GAIN_ON_PH_STEP = 0.5
+
 class SyringePump: #Nouvelle classe SyringePump globale : classe mère
         
     mode = 'manual' #peut être 'titration'

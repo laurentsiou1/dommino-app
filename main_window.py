@@ -52,8 +52,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.Spectrum_direct.setGeometry(QtCore.QRect(0, 0, 511, 371))
         self.Spectrum_direct.setObjectName("Spectrum_direct")
         
-        
-        
         #appareils
         print("initialisation du panneau de contrôle") 
         self.ihm=ihm
@@ -126,7 +124,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_calibration(self):
         filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', "config")
-        print(filepath)
+        #print(filepath)
         self.phmeter.load_calibration(filepath)
         self.phmeter.getCalData()
         self.refreshCalibrationText()
@@ -192,11 +190,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     #Méthodes pour l'enregistrement des données et configuration des séquences
     def openConfigWindow(self):
-        self.window3 = QtWidgets.QDialog()
-        self.ui3 = ExpConfig(self.ihm, self.win)
-        self.ui3.setupUi(self.window3)
-        self.window3.show()
-    
+        #self.window3 = QtWidgets.QDialog()
+        self.win.expConfig = ExpConfig(self.ihm, self.win)
+        #self.ui3.setupUi(self.window3)
+        #self.window3.show()
+        self.win.expConfig.show()
+
     def openSavingConfigWindow(self):
         self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
         self.win4.show()

@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 from IHM import IHM
 
 class TitrationWindow(QMainWindow,Ui_titrationWindow):
+    
     def __init__(self, parent=None):
         super(TitrationWindow,self).__init__(parent)
         self.setupUi(self)
-
 
         #ajouts
         size=self.absorbance_tabs.size()
@@ -52,6 +52,8 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
         #if self.spectro_unit.current_intensity_spectrum!=None:
         if self.spectro_unit.state=='open':
             self.direct_intensity_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
+
+
 
     #spectre courant sur le graphe en delta 
     def update_spectra(self): #il y a déjà un spectre enregistré
@@ -104,10 +106,10 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
         
         self.N_mes=seq.N_mes
 
-        #timer pour renouvellement de l'affichage
+        """#timer pour renouvellement de l'affichage
         self.timer_display = QtCore.QTimer()
         self.timer_display.setInterval(1000) #10 secondes
-        self.timer_display.start()
+        self.timer_display.start()"""
 
         #Paramètres d'expérience
         self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(seq.experience_name)\
@@ -119,7 +121,9 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
         +"\nDispense mode : "+str(seq.dispense_mode)\
         +"\nNombre de mesures : "+str(seq.N_mes)\
         +"\npH initial : "+str(seq.pH_start)\
-        +"\npH final : "+str(seq.pH_end))
+        +"\npH final : "+str(seq.pH_end)\
+        +"\nFixed delay for chemical stability: "+str(seq.fixed_delay_sec//60)+"minutes, "+str(seq.fixed_delay_sec%60)+"secondes\n"\
+        +"Agitation delay (pump stopped) : "+str(seq.mixing_delay_sec//60)+"minutes, "+str(seq.mixing_delay_sec%60)+"secondes\n\n")
 
         #Spectro
         if ihm.spectro_unit.state=='open':
@@ -127,6 +131,9 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
             self.N_lambda=len(self.lambdas) 
         #Display current spectrum
         self.timer_display.timeout.connect(self.refreshDirectSpectrum) #abs in direct
+
+        #display countdown
+        self.timer_display.timeout.connect(seq.refreshCountdown)
         
         #graphique
         cmap = plt.get_cmap('tab10')  # You can choose a different colormap

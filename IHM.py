@@ -20,9 +20,7 @@ from peristalticPump import PeristalticPump
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
-
-
+#app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
 
 class IHM:
     #Sous sytèmes 
@@ -35,10 +33,15 @@ class IHM:
     background=None
     reference=None
 
+    #constantes de paramétrage de l'application
+    #FIXED_DELAY_SEC = 75 #temps en secondes pour que le liquide parcourt l'ensemble du circuit
+    #75secondes à vitesse minimale
+    #MIXING_DELAY_SEC = 10 #temps de mélange pour que la solution soit homogène après un ajout
+
     def __init__(self):
         #Config for savings
         parser = ConfigParser()
-        parser.read(app_config_path)
+        parser.read(app_default_settings)
         
         self.saving_folder=parser.get('saving_parameters', 'folder')
         self.save_absorbance=parser.get('saving_parameters', 'save_absorbance')   
@@ -88,8 +91,8 @@ class IHM:
               
     def updateConfigFile(self):
         parser = ConfigParser()
-        parser.read(app_config_path)
-        file = open(app_config_path,'r+')
+        parser.read(app_default_settings)
+        file = open(app_default_settings,'r+')
         parser.set('saving_parameters', 'folder', str(self.saving_folder)) 
         parser.set('saving_parameters', 'save_absorbance', str(self.save_absorbance)) 
         parser.set('saving_parameters', 'save_pH', str(self.save_pH)) 

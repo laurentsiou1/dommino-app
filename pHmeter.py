@@ -21,7 +21,8 @@ import re
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 default_app_settings_file = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-#print(default_app_settings_file)
+new_cal_file = os.path.join(ROOT_DIR, "config/latest_cal.ini")
+
 
 def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
 	#U=a*pH+b
@@ -127,7 +128,7 @@ class PHMeter:
 	
 	def onCalibrationChange(self):
 		parser = ConfigParser()
-		parser.read(self.cal_data_path)
+		parser.read(new_cal_file)
 		self.CALmodel=parser.get('data', 'phmeter')
 		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
@@ -145,7 +146,7 @@ class PHMeter:
 	
 	def saveCalData(self,date,temperature,caltype,u_cal,coeffs):
 		parser = ConfigParser()
-		parser.read(cal_data_path)
+		parser.read(new_cal_file)
 		parser.set('data', 'phmeter', str(self.model))
 		parser.set('data', 'electrode', str(self.electrode))
 		parser.set('data', 'date', str(date)) 
@@ -160,7 +161,7 @@ class PHMeter:
 		parser.set('data', 'a', str(float(coeffs[0])))
 		parser.set('data', 'b', str(float(coeffs[1])))
 		
-		file = open(cal_data_path,'w')	#qu'est-ce qu'apporte r+ ou lieu de w
+		file = open(new_cal_file,'w')	#qu'est-ce qu'apporte r+ ou lieu de w
 		parser.write(file) 
 		file.close()
 

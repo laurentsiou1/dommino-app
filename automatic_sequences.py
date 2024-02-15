@@ -5,7 +5,7 @@ En lien entre les instruments et la fenêtre titration_window
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from IHM import IHM
 from titration_window import TitrationWindow
@@ -16,11 +16,17 @@ from syringePump import *
 import spectro.processing as sp
 
 class TitrationSequence:
+
+    #AGITATION_DELAY_SEC = 10 #20secondes après la dispense on attend un peu avant de rallumer la pompe
+    #FIXED_DELAY_SEC = 30 #5 minutes de temps d'équilibrage fixe
+    DISPLAY_DELAY_MS = 5000 #for letting the screen display once the measure in taken
+    MAXIMUM_DELTA_PH = 0.6  #for dispense mode 'varibale step'
     
     def __init__(self, ihm:IHM, win:WindowHandler, config):
         
         # Create a QTimer object
-        self.measure_timer = QTimer()    #Ípermet à l'interface de s'actualiser et aussi au fluide de circuler
+        self.pause_timer = QTimer()    #for interface refreshing
+        self.measure_timer = QTimer()   #chemical equilibrum and fluid circulation
 
         self.ihm=ihm
         self.spectro=ihm.spectro_unit
@@ -31,12 +37,18 @@ class TitrationSequence:
 
         #Données de config
         [self.experience_name,self.description,self.OM_type,self.concentration,self.fibers,\
-            self.flowcell,self.V_init,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,self.saving_folder]=config
-        if self.dispense_mode=='fit on 5/05/2023':
+        self.flowcell,self.V_init,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,\
+        self.fixed_delay_sec,self.mixing_delay_sec,self.saving_folder]=config
+        print("dispense mode ",self.dispense_mode)
+        if self.dispense_mode=='fixed step':
             self.target_pH_list=[4+5*k/(self.N_mes-1) for k in range(self.N_mes)]
+        elif self.dispense_mode=='variable step':
+            [self.A1,self.m1,self.lK1,self.A2,self.m2,self.lK2,self.pH0]=dispense_data.absorbance_model_26_01_2024
+            print("INSTANCIATION DES VARIABLES")
+            self.max_delta=0.6
         elif self.dispense_mode=='fixed volumes':
-            #self.target_volumes_list=[10,10,20,30,50] #pour test interface
-            self.target_volumes_list=[288,189,125,76,45,30,33,53,89,143,213,300] #after 11/01/2024 for 50mL
+            self.target_volumes_list=[10,10,20,30,50] #pour test interface
+            #self.target_volumes_list=[288,189,125,76,45,30,33,53,89,143,213,300] #after 11/01/2024 for 50mL
             #self.target_volumes_list=[200,100,100,50,50,100,200,200,500,1500] #before 11/01/2024 for 50mL
             #[400,200,200,100,100,200,400,400,1000,3000] #before 11/01/2024 for 100mL
             self.N_mes=len(self.target_volumes_list)+1  #bon nombre 11 #10 dispenses de base : 11 mesures
@@ -44,6 +56,7 @@ class TitrationSequence:
             self.target_pH_list=[self.pH_start+(self.pH_end-self.pH_start)*k/(self.N_mes-1) for k in range(self.N_mes)]
             print("target pH list = ", self.target_pH_list)
             self.target_acid=50
+            #print("DANS LE ELSE")
 
         #connexion des appareils
         #listing des appareils connectés
@@ -74,7 +87,9 @@ class TitrationSequence:
         self.cumulate_volumes = []
         self.dilution_factors = []
         dt=datetime.now()
-        self.measure_times=[dt for k in range(self.N_mes)]
+        self.measure_times=[]     #[dt for k in range(self.N_mes)]
+        self.measure_delays=[]
+        self.stability_param=[]    #liste de tuples (epsilon, dt) pour le pH-mètres
         
         #itération
         self.added_base_uL = []
@@ -101,7 +116,6 @@ class TitrationSequence:
         self.window.param_init(seq=self,ihm=self.ihm) 
         self.window.show()
         self.window_handler.titration_window1 = self.window
-        #time.sleep(3)
 
         #actualisation sur le pH mètre
         if self.phmeter.state=='open':
@@ -129,7 +143,29 @@ class TitrationSequence:
     def update_stab_step(self):
         self.phmeter.stab_step=self.window.stab_step.value()
 
+    def refreshCountdown(self):
+        self.window.countdown.setProperty("value", self.measure_timer.remainingTime()//1000)
+    
+    def waitFixedDelay(self):
+        self.pump.start()
+        self.measure_timer.singleShot(1000*self.fixed_delay_sec,self.waitForPhStability)
+    
+    def waitForPhStability(self):
+        if self.phmeter.stable==True: #cas déjà stable
+            #On fait la mesure
+            if self.current_measure>1:
+                self.mesureN()
+            else:
+                self.mesure1_acid()  
+        else: #pas stable, mise en attente de stabilité
+            #connection signal/slot
+            if self.current_measure>1:
+                self.phmeter.signals.stability_reached.connect(self.mesureN) 
+            else:
+                self.phmeter.signals.stability_reached.connect(self.mesure1_acid)
+
     def acid_added(self): #déclenchée lorsque l'on a ajouté l'acide et cliqué sur OK
+        self.acid_added_time=datetime.now()
         #modif et affichage volume
         vol=self.window.added_acid.value()
         self.added_acid_uL=vol
@@ -145,28 +181,26 @@ class TitrationSequence:
             #permet de déconnecter la laison dans le cas où on clique plusieurs fois sur le bouton
         except:
             pass
-        if self.phmeter.stable==True:   #cas déjà stable
-            print("cas pH metre stable")
-            self.mesure1_acid() #On fait la mesure 
-        else:       #cas normal mise en attente pour stabilité
-            #connection du slot mesure1_acid avec le signal stability_reached
-            self.phmeter.signals.stability_reached.connect(self.mesure1_acid)
+        self.pause_timer.singleShot(1000*self.mixing_delay_sec,self.waitFixedDelay) 
 
     def mesure1_acid(self): 
         #la fonction s'execute une fois après un clic sur OK, lorsque le pH est stabilisé
 
         ## 1) Mesure
-        self.measure_times[0]=datetime.now()
+        #self.measure_times[0]=datetime.now()
+        dt=datetime.now()
+        self.measure_times.append(dt)
+        self.measure_delays.append(dt-self.acid_added_time)
+        
         spec=self.spectro.current_absorbance_spectrum
         pH=self.phmeter.currentPH
+        self.stability_param.append((self.phmeter.stab_step, self.phmeter.stab_time))
         
         #ajout dans les tableaux
         self.absorbance_spectrum1=spec
         self.window.absorbance_spectrum1=spec
-        #self.absorbance_spectra[0]=spec
         self.absorbance_spectra.append(spec)
         self.pH_mes[0]=pH
-        #print("pH_mes=",self.pH_mes)
 
         #affichage pH
         self.window.append_pH_in_table(1,pH)
@@ -174,77 +208,51 @@ class TitrationSequence:
         #graphe en delta
         self.window.current_delta_abs_curve=self.window.delta_all_abs.plot([0],[0])
         self.window.current_abs_curve=self.window.all_abs.plot([0],[0])
-        #self.window.SpectraDelta=self.window.delta_all_abs.plot([0],[0])
         self.window.timer_display.timeout.connect(self.window.update_spectra) #direct
         ## Fin Mesure
-
-        ## 2) Dispense
-        self.current_measure=2
-
-        try: #On déconnecte le slot d'actualisation de valeur du pH
+        #temps d'afficher à l'écran les mesures faites
+        self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.dispenseN)
+        
+    
+    def dispenseN(self):
+        self.current_measure+=1
+        #deconnexion
+        try:
             self.phmeter.signals.stability_reached.disconnect()
         except:
             pass
-        
-        print("repere avant add base")
-        self.add_base() #premier ajout de base correspond à la mesure n°2      
-        print("repere apres add base")  
-        self.measure_timer.singleShot(5000,self.goToNextMeasure)
+        self.add_base()
+        self.pause_timer.singleShot(1000*self.mixing_delay_sec,self.waitFixedDelay)  
     
-    #Séquence pour ajouter la base
-    def add_base(self):
-        N=self.current_measure
-        if self.dispense_mode=='fixed volumes':
-            vol=self.target_volumes_list[N-2]
-            self.syringe.dispense(vol)
-        elif self.dispense_mode=='5th order polynomial fit on dommino 23/01/2024':
-            current=self.pH_mes[N-2] #lors de la mesure 1 de base, le pH est pH_mes[0]
-            target=self.target_pH_list[N-1]
-            n=N
-            while target <= current and n<=self.N_mes-1:    #dans le cas où le pH monte trop vite accidentelement    
-                target=self.target_pH_list[n]   #on remonte dans le liste des pH cibles
-                n+=1
-            #print("current ph, target pH : ", current, target)
-            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024')
-            self.syringe.dispense(vol)
-        
-        #ajout sur le tableau
-        self.added_volumes[N-1]=vol
-        self.total_added_volume+=vol
-        self.cumulate_volumes.append(self.total_added_volume)
-        self.dilution_factors.append((self.total_added_volume+self.V_init)/self.V_init)
-        self.window.append_vol_in_table(N,vol) #N numéro de mesure
-
-        #niveau de la seringue
-        self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
-        self.window.base_level_number.setText("%d uL" % self.syringe.base_level_uL)
-
-        #print("added_volumes=",self.added_volumes)
-
-    #Séquence d'executions pour chaque ajout de base
+    #for N>=2
     def mesureN(self):
+        
         try: #On déconnecte le slot d'actualisation de valeur du pH
             self.phmeter.signals.stability_reached.disconnect() #le signal de stabilité 
             #de l'electrode ne pourra enclencher la fonction  
         except:
             pass
-        print("passage dans mesureN avec N=",self.current_measure)
+
+        print("passage dans mesureN avec N = ", self.current_measure)
         
         #mesure
         N=self.current_measure
-        self.measure_times[N-1]=datetime.now()
+        dt=datetime.now()
+        self.measure_times.append(dt)
+        self.measure_delays.append(dt-self.measure_times[N-2])  #N>=2
+        #self.measure_times[N-1]=datetime.now()
         spec=self.spectro.current_absorbance_spectrum
         pH=self.phmeter.currentPH
+        self.stability_param.append((self.phmeter.stab_step, self.phmeter.stab_time))
         
         #ajout dans les tableaux
         self.pH_mes[N-1]=pH
-        #self.absorbance_spectra[N-1]=spec
         self.absorbance_spectra.append(spec)
         delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
 
         #affichage pH
         self.window.append_pH_in_table(N,pH) #N numéro de la mesure
-        time.sleep(2) #pour laisser le temps d'afficher 
+        #time.sleep(2) #pour laisser le temps d'afficher 
 
         #graphe en delta
         self.window.append_abs_spectra(N,spec,delta)
@@ -253,27 +261,68 @@ class TitrationSequence:
         self.window.append_total_vol_in_table(self.total_added_volume)  #effacer la valeur précédente
         
         ##Mesure suivante 
-        if N!=self.N_mes:
-            self.current_measure+=1
-            #deconnexion
-            try:
-                self.phmeter.signals.stability_reached.disconnect()
-            except:
-                pass
-            self.add_base()
-            self.measure_timer.singleShot(5000,self.goToNextMeasure)
-            #self.measure_timer.start()
+        if N!=self.N_mes and pH<=self.pH_end-0.4:
+            #temps d'affichage avant de relancer le stepper
+            self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.dispenseN)
         else: #dernière mesure
             #actions à réaliser à la fin du titrage
-            self.createFullSequenceFiles()
+            self.createFullSequenceFiles()    
+    
+    #Séquence pour ajouter la base
+    def add_base(self):
+        N=self.current_measure
+        
+        self.pump.stop()    #arrêt de la pompe pour laisser le temps de mélanger
+        vol=self.dispenseFromModel(N)
+        
+        #ajout sur le tableau
+        self.added_volumes[N-1]=vol
+        self.total_added_volume+=vol
+        self.cumulate_volumes.append(self.total_added_volume)
+        self.dilution_factors.append((self.total_added_volume+self.V_init)/self.V_init)
 
-    def goToNextMeasure(self):
-        if self.phmeter.stable==True:
-            print("cas du phmetre deja stable dans mesure n°",self.current_measure)
-            self.mesureN()
-        else:
-            self.phmeter.signals.stability_reached.connect(self.mesureN)
+        #niveau de la seringue
+        self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
+        self.window.base_level_number.setText("%d uL" % self.syringe.base_level_uL)
 
+    def dispenseFromModel(self,N):
+        if self.dispense_mode=='fixed volumes':
+            vol=self.target_volumes_list[N-2]
+            self.window.append_vol_in_table(N,vol) #affichage sur l'ecran avant dispense
+            time.sleep(1)
+            self.syringe.dispense(vol)  #lancement stepper
+        elif self.dispense_mode=='fixed step':
+            current=self.pH_mes[N-2] #lors de la mesure 1 de base, le pH est pH_mes[0]
+            target=self.target_pH_list[N-1]
+            n=N
+            while target <= current and n<=self.N_mes-1:    #dans le cas où le pH monte trop vite accidentelement    
+                target=self.target_pH_list[n]   #on remonte dans le liste des pH cibles
+                n+=1
+            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024')
+            self.window.append_vol_in_table(N,vol) #affichage sur l'ecran avant dispense
+            self.syringe.dispense(vol) #lancement du stepper       
+        elif self.dispense_mode=='variable step':
+            current=self.pH_mes[N-2]
+            target=current+dispense_data.delta_pH(self.A1,self.m1,self.lK1,self.A2,self.m2,self.lK2,current,self.pH0,self.max_delta)
+            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024')
+            self.window.append_vol_in_table(N,vol)
+            self.syringe.dispense(vol) #lancement du stepper 
+        #to develop
+        """elif self.dispense_mode=='variable step with feedback': #à développer
+            ph0=self.pH_mes[N-2]
+            target=ph0+getPhStep(ph0)
+            vol1=GAIN_ON_PH_STEP*volumeToAdd_uL(ph0, target, model='5th order polynomial fit on dommino 23/01/2024')
+            self.syringe.dispense(vol1) #lancement du stepper 
+            #boucle de correction
+            ph1=self.phmeter.currentPH
+            reached_ratio=(ph1-ph0)/(target-ph0)    #how much the target pH is reached
+            if reached_ratio>0.8:
+                #la dispense est validée
+                pass
+            else:
+                new_gain=old_gain*old_gain/reached_ratio"""
+        return vol
+    
     def createFullSequenceFiles(self):
         #cette fonction s'adapte à une séquence terminée ou en cours (cas d'interruption de séquence)
         #création d'un fichier compatible avec le traitement de données
@@ -281,13 +330,22 @@ class TitrationSequence:
         dt=datetime.now()
         date_for_file=str(dt.strftime("%m-%d-%Y_%Hh%Mmin%Ss"))
         date_txt=str(dt.strftime("%m/%d/%Y %H:%M:%S"))
-        metadata = "Sequence automatique sur Pytitrator\n"\
+        metadata = "Sequence automatique sur titreur DOMMINO\n"\
             +"Nom : "+self.experience_name+"\n"\
             +"Description : "+self.description+"\n"\
-            +"date et heure de l'enregistrement : "+date_txt+"\n\n"
+            +"date et heure de l'enregistrement : " + date_txt\
+            +"\nType de matière organique : "+str(self.OM_type)\
+            +"\nConcentration : "+str(self.concentration)\
+            +"\nFibres : "+str(self.fibers)\
+            +"\nFlowcell : "+str(self.flowcell)\
+            +"\nDispense mode : "+str(self.dispense_mode)\
+            +"\nNombre de mesures : "+str(self.N_mes)\
+            +"\npH initial : "+str(self.pH_start)\
+            +"\npH final : "+str(self.pH_end)\
+            +"\nFixed delay for chemical stability: "+str(self.fixed_delay_sec//60)+"minutes, "+str(self.fixed_delay_sec%60)+"secondes\n"\
+            +"Agitation delay (pump stopped) : "+str(self.mixing_delay_sec//60)+"minutes, "+str(self.mixing_delay_sec%60)+"secondes\n\n"
         
         print("saving titration sequence data")
-        #print(self.pH_mes,self.absorbance_spectra)
         self.N_mes=min(len(self.pH_mes),len(self.absorbance_spectra)) #if one measure is missing
 
         data="measure n°\t"    #entête
@@ -321,8 +379,21 @@ class TitrationSequence:
             "coefficents de calibration actuels: a="+str(self.phmeter.a)+ "; b="+str(self.phmeter.b)+"\n\n")
             data+="pH\t"
             for k in range(self.N_mes):
-                data+=str(self.pH_mes[k])+'\t'   
-            data+="\nV0 (uL)\t"+str(self.V_init)+"\n\nwavelengths (nm)\tabsorbance\n"     #volume en uL
+                data+=str(self.pH_mes[k])+'\t'
+            data+="\ntimes\t"   #heures de mesures
+            for k in range(self.N_mes):
+                data+=str(self.measure_times[k].strftime("%H:%M:%S"))+'\t'   
+            data+="\ndelays between measures\t \t"   #temps entre mesures
+            for k in range(self.N_mes):
+                data+=str(self.measure_delays[k].seconds//60)+":"+str(self.measure_delays[k].seconds%60)+'\t' 
+            data+="\nepsilon stab\t"
+            for k in range(self.N_mes):
+                data+=str(self.stability_param[k][0])+'\t'
+            data+="\ndt stab\t"
+            for k in range(self.N_mes):
+                data+=str(self.stability_param[k][1])+'\t'
+            data+="\nV0 (uL)\t"+str(self.V_init)+"\n\n"    #volume en uL
+            data+="wavelengths (nm)\tabsorbance\n" 
             processed_formatted_data="\t"   #corrected from dilution
             for k in range(self.N_mes):
                 processed_formatted_data+=str(self.pH_mes[k])+'\t'
@@ -330,9 +401,9 @@ class TitrationSequence:
         else:
             metadata+="pH meter not connected\n\n"
 
-        for k in range(self.N_mes):
+        """for k in range(self.N_mes):
             metadata+="mes"+str(k+1)+" : "+str(self.measure_times[k].strftime("%H:%M:%S"))+'\n'   
-        metadata+='\n' 
+        metadata+='\n' """
 
         if self.spectro.state=='open':
             metadata+=("Spectrometer : "+str(self.spectro.model)+"\n"

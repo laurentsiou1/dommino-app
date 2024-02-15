@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>sequenceConfig</class>
+ <widget class="QDialog" name="sequenceConfig">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
-    <height>682</height>
+    <width>731</width>
+    <height>783</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QDialogButtonBox" name="dialogbox">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>390</x>
      <y>50</y>
-     <width>221</width>
+     <width>311</width>
      <height>61</height>
     </rect>
    </property>
@@ -34,7 +34,7 @@
     <rect>
      <x>10</x>
      <y>50</y>
-     <width>551</width>
+     <width>361</width>
      <height>41</height>
     </rect>
    </property>
@@ -105,7 +105,7 @@
     <string>Nom de l'expérience</string>
    </property>
   </widget>
-  <widget class="QLabel" name="OMtype_label">
+  <widget class="QLabel" name="OM_type_label">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -131,7 +131,7 @@
     <string>Concentration (ppmC)</string>
    </property>
   </widget>
-  <widget class="QLabel" name="exp_description_label">
+  <widget class="QLabel" name="description_label">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -144,7 +144,7 @@
     <string>Description</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="exp_description">
+  <widget class="QPlainTextEdit" name="description">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -157,7 +157,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QComboBox" name="OMtype">
+  <widget class="QComboBox" name="OM_type">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -247,7 +247,7 @@
     <number>3</number>
    </property>
    <property name="maximum">
-    <number>20</number>
+    <number>30</number>
    </property>
    <property name="value">
     <number>13</number>
@@ -355,14 +355,24 @@
     <bool>true</bool>
    </property>
    <property name="currentText">
-    <string>fit on 5/05/2023</string>
+    <string>variable step</string>
    </property>
    <property name="maxVisibleItems">
     <number>10</number>
    </property>
    <item>
     <property name="text">
-     <string>fit on 5/05/2023</string>
+     <string>variable step</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>fixed step</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>with feedback</string>
     </property>
    </item>
    <item>
@@ -382,19 +392,6 @@
    </property>
    <property name="text">
     <string>mode de dispense</string>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="saving_folder">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>620</y>
-     <width>681</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="plainText">
-    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="saving_folder_label">
@@ -448,13 +445,103 @@
     <string>Volume initial (mL)</string>
    </property>
   </widget>
+  <widget class="QLabel" name="fixed_delay_label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>670</y>
+     <width>341</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Fixed delay for stabilization (seconds)</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="fixed_delay_box">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>710</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>1200</number>
+   </property>
+   <property name="value">
+    <number>300</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="mixing_delay_label">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>670</y>
+     <width>201</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Mixing delay</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="agitation_delay_box">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>710</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>300</number>
+   </property>
+   <property name="value">
+    <number>20</number>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="browse">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>620</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Browse</string>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="autoRaise">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="saving_folder">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>620</y>
+     <width>531</width>
+     <height>41</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>dialogbox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>sequenceConfig</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -470,7 +557,7 @@
   <connection>
    <sender>dialogbox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>sequenceConfig</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
