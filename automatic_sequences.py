@@ -15,12 +15,15 @@ from pHmeter import *
 from syringePump import *
 import spectro.processing as sp
 
+MAXIMUM_DELTA_PH = 0.6  #for dispense mode 'varibale step'
+TOLERANCE_ON_FINAL_PH = 0.2 #pH.  #if pH>final_pH-gap then sequence is finished and data is saved
+
 class TitrationSequence:
 
     #AGITATION_DELAY_SEC = 10 #20secondes après la dispense on attend un peu avant de rallumer la pompe
     #FIXED_DELAY_SEC = 30 #5 minutes de temps d'équilibrage fixe
     DISPLAY_DELAY_MS = 5000 #for letting the screen display once the measure in taken
-    MAXIMUM_DELTA_PH = 0.6  #for dispense mode 'varibale step'
+    ACID_STABILIZATION_DELAY_SEC = 300 #5 minutes c'est OK
     
     def __init__(self, ihm:IHM, win:WindowHandler, config):
         
@@ -45,7 +48,7 @@ class TitrationSequence:
         elif self.dispense_mode=='variable step':
             [self.A1,self.m1,self.lK1,self.A2,self.m2,self.lK2,self.pH0]=dispense_data.absorbance_model_26_01_2024
             print("INSTANCIATION DES VARIABLES")
-            self.max_delta=0.6
+            self.max_delta=MAXIMUM_DELTA_PH
         elif self.dispense_mode=='fixed volumes':
             self.target_volumes_list=[10,10,20,30,50] #pour test interface
             #self.target_volumes_list=[288,189,125,76,45,30,33,53,89,143,213,300] #after 11/01/2024 for 50mL
@@ -82,8 +85,11 @@ class TitrationSequence:
         self.pH_mes = [0 for k in range(self.N_mes)]
         self.absorbance_spectrum1 = None
         self.added_acid_uL = 0
+        self.added_base_uL = [0 for k in range(self.N_mes)]
         self.added_volumes = [0 for k in range(self.N_mes)]
+        self.total_added_base_uL=0
         self.total_added_volume = 0
+        self.cumulate_base_uL = []
         self.cumulate_volumes = []
         self.dilution_factors = []
         dt=datetime.now()
@@ -92,7 +98,6 @@ class TitrationSequence:
         self.stability_param=[]    #liste de tuples (epsilon, dt) pour le pH-mètres
         
         #itération
-        self.added_base_uL = []
         self.current_measure = 1
         
     def configure(self):
@@ -169,8 +174,11 @@ class TitrationSequence:
         #modif et affichage volume
         vol=self.window.added_acid.value()
         self.added_acid_uL=vol
+        self.added_base_uL[0]=0
         self.added_volumes[0]=vol
+        self.total_added_base_uL+=self.added_base_uL[0]
         self.total_added_volume+=vol
+        self.cumulate_base_uL.append(self.total_added_base_uL)
         self.cumulate_volumes.append(self.total_added_volume)
         self.dilution_factors.append((vol+self.V_init)/self.V_init)
         self.window.append_vol_in_table(1,vol)
@@ -261,7 +269,7 @@ class TitrationSequence:
         self.window.append_total_vol_in_table(self.total_added_volume)  #effacer la valeur précédente
         
         ##Mesure suivante 
-        if N!=self.N_mes and pH<=self.pH_end-0.4:
+        if N!=self.N_mes and pH<=self.pH_end-TOLERANCE_ON_FINAL_PH:
             #temps d'affichage avant de relancer le stepper
             self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.dispenseN)
         else: #dernière mesure
@@ -276,8 +284,11 @@ class TitrationSequence:
         vol=self.dispenseFromModel(N)
         
         #ajout sur le tableau
+        self.added_base_uL[N-1]=vol
         self.added_volumes[N-1]=vol
+        self.total_added_base_uL+=vol
         self.total_added_volume+=vol
+        self.cumulate_base_uL.append(self.total_added_base_uL)
         self.cumulate_volumes.append(self.total_added_volume)
         self.dilution_factors.append((self.total_added_volume+self.V_init)/self.V_init)
 
@@ -356,14 +367,14 @@ class TitrationSequence:
         if self.syringe.state=='open':
             metadata+=("Syringe Pump : "+str(self.syringe.model)+"\n"
             +"Syringe : "+str("500uL Trajan gas tight syringe\n\n"))
-            data+="dispensed volumes (uL)\t"   
-            #print(self.N_mes,self.added_volumes,self.cumulate_volumes,self.dilution_factors)
-                                                                                                           
+            data+="added acid (uL)\t"+str(self.added_acid_uL)+"\n"
+            data+="dispensed base (uL)\t"                                                               
             for k in range(self.N_mes):
-                data+=str(self.added_volumes[k])+'\t'   
-            data+='\t'+str(self.total_added_volume)+'\ncumulate\t'                                                                           
+                data+=str(self.added_base_uL[k])+'\t'   
+            data+='\t'+str(self.total_added_volume)                                                                       
+            data+='\ncumulate base (uL)\t'
             for k in range(self.N_mes):
-                data+=str(self.cumulate_volumes[k])+'\t'   
+                data+=str(self.cumulate_base_uL[k])+'\t'   
             data+='\ndilution factors\t'
             for k in range(self.N_mes):
                 data+=str(self.dilution_factors[k])+'\t' 
@@ -383,7 +394,7 @@ class TitrationSequence:
             data+="\ntimes\t"   #heures de mesures
             for k in range(self.N_mes):
                 data+=str(self.measure_times[k].strftime("%H:%M:%S"))+'\t'   
-            data+="\ndelays between measures\t \t"   #temps entre mesures
+            data+="\ndelays between measures\t"   #temps entre mesures
             for k in range(self.N_mes):
                 data+=str(self.measure_delays[k].seconds//60)+":"+str(self.measure_delays[k].seconds%60)+'\t' 
             data+="\nepsilon stab\t"
@@ -392,7 +403,8 @@ class TitrationSequence:
             data+="\ndt stab\t"
             for k in range(self.N_mes):
                 data+=str(self.stability_param[k][1])+'\t'
-            data+="\nV0 (uL)\t"+str(self.V_init)+"\n\n"    #volume en uL
+            data+="\nV0 (uL)\t"+str(self.V_init)+"\n"    #volume en uL
+            data+="Pump mean voltage (Volt) : "+str(12*self.pump.duty_cycle)+"\n\n"    #vitesse de pompe
             data+="wavelengths (nm)\tabsorbance\n" 
             processed_formatted_data="\t"   #corrected from dilution
             for k in range(self.N_mes):

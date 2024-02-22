@@ -39,9 +39,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
 
     def setSpeed_voltage(self,v):
         self.duty_cycle=v/12
+        self.target_speed=self.duty_cycle*self.direction
         self.current_speed=self.getTargetVelocity()
         if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
-            self.setTargetVelocity(self.duty_cycle*self.direction)
+            self.setTargetVelocity(self.target_speed)
 
     def start(self):
         self.setTargetVelocity(self.target_speed)
