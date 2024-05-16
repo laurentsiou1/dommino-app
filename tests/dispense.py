@@ -1,4 +1,4 @@
-"programme pour tests"
+"test de quantités dispensées"
 
 import dispense_data
 

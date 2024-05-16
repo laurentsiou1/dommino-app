@@ -15,7 +15,7 @@ from pHmeter import *
 from syringePump import *
 import spectro.processing as sp
 
-MAXIMUM_DELTA_PH = 0.6  #for dispense mode 'varibale step'
+MAXIMUM_DELTA_PH = 0.8  #for dispense mode 'varibale step'
 TOLERANCE_ON_FINAL_PH = 0.2 #pH.  #if pH>final_pH-gap then sequence is finished and data is saved
 
 class TitrationSequence:

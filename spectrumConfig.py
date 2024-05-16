@@ -203,7 +203,7 @@ class SpectrumConfigWindow(object):
         if self.spectro_unit.state=='open':
             self.shutter.setChecked(self.spectro_unit.adv.get_enable_lamp())   
             self.NLcorr_box.setChecked(self.spectro_unit.device.get_nonlinearity_correction_usage())
-            if self.spectro_unit.model!='OceanST':
+            if self.spectro_unit.model!='OceanST' and self.spectro_unit.model!='OceanSR6':
                 self.EDcorr_box.setChecked(self.spectro_unit.device.get_electric_dark_correction_usage())
                 self.EDcorr_box.clicked.connect(self.change_EDcorr_state)
             else:

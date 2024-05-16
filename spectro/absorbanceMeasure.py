@@ -87,6 +87,11 @@ class AbsorbanceMeasure(Spectrometer):
                 #2k pix pour 700nm
                 self.device.set_integration_time(30000)      
                 print("spectro sr2 reconnu")
+            elif self.model=='OceanSR6':
+                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
+                #2k pix pour 700nm à vérifier pour le SR6
+                self.device.set_integration_time(80000)      #sature à 70000 unit count
+                print("spectro SR6 reconnu")
             elif self.model=='OceanST':
                 self.device.set_boxcar_width(2) #moyennage sur 5 points (2n+1) 
                 #2k pix pour 400nm
@@ -101,17 +106,18 @@ class AbsorbanceMeasure(Spectrometer):
                 print("type de spectro non reconnu")
             self.device.set_scans_to_average(10) #to declare after int time
             self.device.set_nonlinearity_correction_usage(False)
-            if self.model!='OceanST':
+            if self.model!='OceanST' and self.model!='OceanSR6':
                 self.device.set_electric_dark_correction_usage(True) #non pris en charge par le ST
             else:
                 self.device.set_electric_dark_correction_usage(False)
+                print("electric dark non activé")
             
             
             #time attributes in milliseconds. SDK methods outputs are in microseconds (us)
             self.t_int=self.device.get_integration_time()//1000 
             self.t_int_max=self.device.get_maximum_integration_time()//1000 
             self.t_int_min=self.device.get_minimum_integration_time()//1000 
-            #print("min tint=",self.t_int_min,"\tmax tint=",self.t_int_max)
+            print("min tint=",self.t_int_min,"\tmax tint=",self.t_int_max)
             self.averaging=self.device.get_scans_to_average()
             self.boxcar=self.device.get_boxcar_width()
             
