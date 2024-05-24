@@ -7,10 +7,10 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer
 from datetime import datetime, timedelta
 
-from IHM import IHM
-from titration_window import TitrationWindow
-from custom_sequence_window import CustomSequenceWindow
-from windowHandler import WindowHandler
+#from IHM import IHM
+from windows.titration_window import TitrationWindow
+from windows.custom_sequence_window import CustomSequenceWindow
+#from windowHandler import WindowHandler
 
 from pHmeter import *
 from syringePump import *
@@ -35,7 +35,7 @@ class ClassicSequence(AutomaticSequence):
     DISPLAY_DELAY_MS = 5000 #for letting the screen display once the measure in taken
     ACID_STABILIZATION_DELAY_SEC = 300 #5 minutes c'est OK
     
-    def __init__(self, ihm:IHM, win:WindowHandler, config):
+    def __init__(self, ihm, win, config):
         
         # Create a QTimer object
         self.pause_timer = QTimer()    #for interface refreshing
@@ -501,7 +501,7 @@ class ClassicSequence(AutomaticSequence):
 
 class CustomSequence(AutomaticSequence):    
 
-    def __init__(self, ihm:IHM, win:WindowHandler, config):
+    def __init__(self, ihm, win, config):
         
         # Create a QTimer object
         self.pause_timer = QTimer()    #for interface refreshing

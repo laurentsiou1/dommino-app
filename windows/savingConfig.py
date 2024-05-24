@@ -3,10 +3,10 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QCheckBox
 from PyQt5.uic import loadUi
-from IHM import IHM
+#from IHM import IHM
 
 class SavingConfig(QDialog):
-    def __init__(self, ihm: IHM, parent=None):
+    def __init__(self, ihm, parent=None):
         super().__init__(parent)
         loadUi('ui_files/config_enregistrement.ui', self)
         self.ihm = ihm #création d'un attribut ihm dans SavingConfig

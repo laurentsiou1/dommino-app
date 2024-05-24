@@ -5,11 +5,11 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from ui.custom_sequence import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
-from spectrumConfig import SpectrumConfigWindow
+from windows.spectrumConfig import SpectrumConfigWindow
 import numpy as np
 import matplotlib.pyplot as plt
 
-from IHM import IHM
+#from IHM import IHM
 
 class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     
@@ -104,7 +104,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.total_volume.setText(str(tot))
     
     #INITIALISATION
-    def param_init(self, seq, ihm:IHM=None): #seq est de la classe automatic_sequence
+    def param_init(self, seq, ihm=None): #seq est de la classe automatic_sequence
 
         self.ihm=ihm
         self.spectro_unit=ihm.spectro_unit

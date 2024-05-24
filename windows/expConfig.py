@@ -12,21 +12,18 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from ui.config_sequence import Ui_sequenceConfig
 
-from IHM import IHM
+#from IHM import IHM
 from automatic_sequences import AutomaticSequence, ClassicSequence, CustomSequence
 
-from windowHandler import WindowHandler
-from titration_window import TitrationWindow
+#from windows.titration_window import TitrationWindow
 
 
 class ExpConfig(QDialog,Ui_sequenceConfig): #(object)
     
-    def __init__(self, ihm:IHM, win:WindowHandler, parent=None):
+    def __init__(self, ihm, parent=None):
         super(ExpConfig,self).__init__(parent)
         self.setupUi(self)
         self.ihm=ihm
-        self.window_handler=win
-        print(ihm.saving_folder)
 
         #graphique
         #défaut
@@ -85,7 +82,7 @@ class ExpConfig(QDialog,Ui_sequenceConfig): #(object)
             self.sequence_config_file.text(),\
             self.saving_folder.text()]
 
-            self.ihm.titration_sequence=CustomSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
+            self.ihm.titration_sequence=CustomSequence(self.ihm,config) #création de l'objet dans l'IHM
             self.ihm.titration_sequence.configure()
             
             #affichage des données pour la séquence auto
@@ -116,7 +113,7 @@ class ExpConfig(QDialog,Ui_sequenceConfig): #(object)
             self.agitation_delay_box.value(),\
             self.saving_folder.text()]
             
-            self.ihm.titration_sequence=ClassicSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
+            self.ihm.titration_sequence=ClassicSequence(self.ihm,config) #création de l'objet dans l'IHM
             self.ihm.titration_sequence.configure()
         
             #affichage des données pour la séquence auto

@@ -10,12 +10,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
-from IHM import IHM
-from expConfig import ExpConfig
-from calBox import CalBox
-from spectrumConfig import SpectrumConfigWindow
-from savingConfig import SavingConfig
-from windowHandler import WindowHandler
+#from IHM import IHM
+#from expConfig import ExpConfig
+#from calBox import CalBox
+#from spectrumConfig import SpectrumConfigWindow
+#from savingConfig import SavingConfig
+#from windowHandler import WindowHandler
 
 from pHmeter import *
 from spectro.absorbanceMeasure import AbsorbanceMeasure
@@ -31,16 +31,17 @@ from oceandirect.od_logger import od_logger
 
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
-app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None, ihm:IHM=None, win:WindowHandler=None):
+    def __init__(self, ihm, parent=None):
         #graphique
         super(MainWindow,self).__init__(parent)
         self.setupUi(self)
 
         parser = ConfigParser()
         parser.read(app_default_settings)
+        print(app_default_settings)
         self.phmeter_selection_box.setCurrentText(str(parser.get('phmeter', 'default')))
         self.electrode_selection_box.setCurrentText(str(parser.get('electrode', 'default')))
 
@@ -55,7 +56,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #appareils
         print("initialisation du panneau de contrôle") 
         self.ihm=ihm
-        self.win=win
+        #self.win=win
         self.phmeter=ihm.phmeter
         self.spectro_unit=ihm.spectro_unit
         self.syringe_pump=ihm.syringe_pump
@@ -70,8 +71,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
         self.connect_pump.clicked.connect(self.connectPeristalticPump)   
         
-        self.titration_button.clicked.connect(self.openConfigWindow)
-        self.saving_config.clicked.connect(self.openSavingConfigWindow)
+        self.titration_button.clicked.connect(self.ihm.openConfigWindow)
+        self.saving_config.clicked.connect(self.ihm.openSavingConfigWindow)
         self.save_button.clicked.connect(self.ihm.createDirectMeasureFile)
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
@@ -147,13 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spectro_unit.connect()
         if self.spectro_unit.state=='open':
             self.link_spectro2IHM()
-        self.openSpectroWindow()
-
-    def openSpectroWindow(self):
-        self.window2 = QtWidgets.QDialog()
-        self.ui2 = SpectrumConfigWindow(self.spectro_unit,self.ihm)
-        self.ui2.setupUi(self.window2)
-        self.window2.show()
+        self.ihm.openSpectroWindow()
     
     def changeShutterState(self):
         #if self.spectro_unit.state=='open':
@@ -189,16 +184,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.intensity_direct_plot=self.Spectrum_direct.plot([0],[0])
 
     #Méthodes pour l'enregistrement des données et configuration des séquences
-    def openConfigWindow(self):
+    """def openConfigWindow(self):
         #self.window3 = QtWidgets.QDialog()
         self.win.expConfig = ExpConfig(self.ihm, self.win)
         #self.ui3.setupUi(self.window3)
         #self.window3.show()
-        self.win.expConfig.show()
+        self.win.expConfig.show()"""
 
-    def openSavingConfigWindow(self):
+    """def openSavingConfigWindow(self):
         self.win4 = SavingConfig(self.ihm) #l'instance de IHM est passée en attribut
-        self.win4.show()
+        self.win4.show()"""
 
     def updateDefaultSettings(self):
         #actualisation des paramètres affichés par défaut à l'ouverture de la fenetre

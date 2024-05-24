@@ -17,6 +17,16 @@ from spectro.absorbanceMeasure import AbsorbanceMeasure
 from syringePump import PhidgetStepperPump
 from peristalticPump import PeristalticPump
 
+#from windowHandler import WindowHandler
+from windows.main_window import MainWindow
+from windows.expConfig import ExpConfig
+from windows.calBox import CalBox
+from windows.custom_sequence_window import CustomSequenceWindow
+from windows.spectrumConfig import SpectrumConfigWindow
+from windows.savingConfig import SavingConfig
+#from windows. import 
+
+
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
@@ -197,6 +207,25 @@ class IHM:
         f_out = open(self.saving_folder+'/'+name+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output)
         f_out.close()    
+    
+
+    ### Gestionnaire des fenêtres ###
+
+    def openControlPanel(self):
+        self.controlPanel=MainWindow(self)
+        self.controlPanel.show()
+
+    def openSavingConfigWindow(self):
+        self.win1 = SavingConfig(self)
+        self.win1.show()
+
+    def openConfigWindow(self):
+        self.expConfig = ExpConfig(self)
+        self.expConfig.show()
+
+    def openSpectroWindow(self):
+        self.spectroWindow = SpectrumConfigWindow(self)
+        self.spectroWindow.show()
 
 if __name__=="main":
     interface = IHM()

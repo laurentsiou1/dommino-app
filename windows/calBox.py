@@ -11,10 +11,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from pHmeter import *
 from datetime import datetime
-from IHM import IHM
+#from IHM import IHM
 
 class CalBox(object):
-    def __init__(self, phm, control_pannel, ihm : IHM):
+    def __init__(self, phm, control_pannel, ihm):
         self.ihm=ihm
         self.phmeter=phm
         self.motherWindow=control_pannel

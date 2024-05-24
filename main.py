@@ -1,23 +1,14 @@
 "Programme principal de l'application"
 
-#modules et classes pour l'interface
 from PyQt5 import QtWidgets
-from controlPannel import ControlPannel
 from IHM import IHM
-from windowHandler import WindowHandler
 
-### Lancement IHM ###
-
+#Lancement application
 import sys
-app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
-itf=IHM()
-win=WindowHandler()
-ui = ControlPannel(ihm=itf,win=win)
-ui.setupUi(MainWindow)
-MainWindow.show()        
-sys.exit(app.exec_())
-
+qApp = QtWidgets.QApplication(sys.argv)
+app=IHM()
+app.openControlPanel() 
+sys.exit(qApp.exec_())
 
 """
 https://www.hostinger.fr/tutoriels/commandes-git
