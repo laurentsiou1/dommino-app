@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QDialog
 from ui.config_sequence import Ui_sequenceConfig
 
 from IHM import IHM
-from automatic_sequences import TitrationSequence
+from automatic_sequences import AutomaticSequence, ClassicSequence, CustomSequence
 
 from windowHandler import WindowHandler
 from titration_window import TitrationWindow
@@ -27,20 +27,81 @@ class ExpConfig(QDialog,Ui_sequenceConfig): #(object)
         self.ihm=ihm
         self.window_handler=win
         print(ihm.saving_folder)
+
         #graphique
-        self.saving_folder.setText(self.ihm.saving_folder)
+        #défaut
+        self.dispense_mode.setCurrentText(self.ihm.dispense_mode)
+        self.sequence_config_file.setText(self.ihm.sequence_config_file)
+        #mise en gris
+        self.grey_out_widgets()
+
+        self.browse1.clicked.connect(self.browseConfigFile)
+        self.saving_folder.setText(self.ihm.saving_folder)  #dossier de sauvegarde
         self.browse.clicked.connect(self.browsefolder)
         self.dialogbox.accepted.connect(self.launchTitration)
+        self.dialogbox.accepted.connect(self.updateSettings)
+        self.dispense_mode.currentTextChanged.connect(self.grey_out_widgets)
+
+    def grey_out_widgets(self):
+        if self.dispense_mode.currentText()=="from file":
+            self.V0.setDisabled(True)
+            self.Nmes.setDisabled(True)
+            self.pH_init.setDisabled(True)
+            self.pH_fin.setDisabled(True)
+            self.fixed_delay_box.setDisabled(True)
+            self.agitation_delay_box.setDisabled(True)
+            self.sequence_config_file.setDisabled(False) #chemin fichier de sequence
+        else:
+            self.V0.setDisabled(False)
+            self.Nmes.setDisabled(False)
+            self.pH_init.setDisabled(False)
+            self.pH_fin.setDisabled(False)
+            self.fixed_delay_box.setDisabled(False)
+            self.agitation_delay_box.setDisabled(False)
+            self.sequence_config_file.setDisabled(True) #chemin du fichier de sequence
 
     def browsefolder(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', "H:/A Nouvelle arbo/DOCUMENTS TECHNIQUES/Projets Collaboratifs/DOMMINO/MESURES")
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier
         self.ihm.saving_folder=self.saving_folder.text()
-        self.ihm.updateConfigFile()
+        self.ihm.updateSettings()
+    
+    def browseConfigFile(self):
+        filepath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', "H:/A Nouvelle arbo/DOCUMENTS TECHNIQUES/Projets Collaboratifs/DOMMINO/CONCEPTION/V1/logiciel", filter="*.csv")
+        self.sequence_config_file.setText(filepath) #affichage du chemin de dossier
+        self.ihm.sequence_config_file=filepath
     
     def launchTitration(self):
         
-        config = [self.exp_name.toPlainText(),\
+        if self.dispense_mode.currentText() == "from file":
+            config = [self.exp_name.toPlainText(),\
+            self.description.toPlainText(),\
+            self.OM_type.currentText(),\
+            self.concentration.value(),\
+            self.fibers.currentText(),\
+            self.flowcell.currentText(),\
+            self.dispense_mode.currentText(),\
+            #fichier de config de sequence
+            self.sequence_config_file.text(),\
+            self.saving_folder.text()]
+
+            self.ihm.titration_sequence=CustomSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
+            self.ihm.titration_sequence.configure()
+            
+            #affichage des données pour la séquence auto
+            print("\nNom de l'expérience : ",self.exp_name.toPlainText(),\
+            "\nDescription : ",self.description.toPlainText(),\
+            "\nType de matière organique : ",self.OM_type.currentText(),\
+            "\nConcentration : ",self.concentration.value(),\
+            "\nFibres : ",self.fibers.currentText(),\
+            "\nFlowcell : ",self.flowcell.currentText(),\
+            
+            "\nMode de dispense : ","from file",\
+            "\nFichier de configuration de séquence : ",self.sequence_config_file.text(),\
+            "\nDossier de sauvegarde du titrage : ",self.ihm.titration_sequence.saving_folder)
+
+        else:
+            config = [self.exp_name.toPlainText(),\
             self.description.toPlainText(),\
             self.OM_type.currentText(),\
             self.concentration.value(),\
@@ -54,25 +115,30 @@ class ExpConfig(QDialog,Ui_sequenceConfig): #(object)
             self.fixed_delay_box.value(),\
             self.agitation_delay_box.value(),\
             self.saving_folder.text()]
+            
+            self.ihm.titration_sequence=ClassicSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
+            self.ihm.titration_sequence.configure()
         
-        self.ihm.titration_sequence=TitrationSequence(self.ihm,self.window_handler,config) #création de l'objet dans l'IHM
-        self.ihm.titration_sequence.configure()
-        
-        #affichage des données pour la séquence auto
-        print("\nNom de l'expérience : ",self.ihm.titration_sequence.experience_name,\
-        "\nDescription : ",self.ihm.titration_sequence.description,\
-        "\nType de matière organique : ",self.ihm.titration_sequence.OM_type,\
-        "\nConcentration : ",self.ihm.titration_sequence.concentration,\
-        "\nFibres : ",self.ihm.titration_sequence.fibers,\
-        "\nFlowcell : ",self.ihm.titration_sequence.flowcell,\
-        "\nVolume initial : ", self.ihm.titration_sequence.V_init,\
-        "\nMode de dispense : ",self.ihm.titration_sequence.dispense_mode,\
-        "\npH initial : ",self.ihm.titration_sequence.pH_start,\
-        "\npH final : ",self.ihm.titration_sequence.pH_end,\
-        "\nNombre de mesures : ",self.ihm.titration_sequence.N_mes,\
-        "\nFidex delay between measures (seconds): ", self.ihm.titration_sequence.fixed_delay_sec,\
-        "\nMixing delay for pump pausing (seconds): ", self.ihm.titration_sequence.mixing_delay_sec,\
-        "\nDossier de sauvegarde du titrage : ",self.ihm.titration_sequence.saving_folder)
+            #affichage des données pour la séquence auto
+            print("\nNom de l'expérience : ",self.exp_name.toPlainText(),\
+            "\nDescription : ",self.description.toPlainText(),\
+            "\nType de matière organique : ",self.OM_type.currentText(),\
+            "\nConcentration : ",self.concentration.value(),\
+            "\nFibres : ",self.fibers.currentText(),\
+            "\nFlowcell : ",self.flowcell.currentText(),\
+            "\nMode de dispense : ",self.dispense_mode.currentText(),\
+            "\nVolume initial : ", self.V0.value(),\
+            "\npH initial : ",self.ihm.titration_sequence.pH_start,\
+            "\npH final : ",self.ihm.titration_sequence.pH_end,\
+            "\nNombre de mesures : ",self.ihm.titration_sequence.N_mes,\
+            "\nFidex delay between measures (seconds): ", self.ihm.titration_sequence.fixed_delay_sec,\
+            "\nMixing delay for pump pausing (seconds): ", self.ihm.titration_sequence.mixing_delay_sec,\
+            "\nFichier de configuration de séquence : ",self.ihm.titration_sequence.sequence_config_file,\
+            "\nDossier de sauvegarde du titrage : ",self.ihm.titration_sequence.saving_folder)
+    
+    def updateSettings(self):
+        self.ihm.dispense_mode=self.dispense_mode.currentText()
+        self.ihm.updateSettings('expConfig')
 
 #Lancement direct du programme avec run
 if __name__ == "__main__":

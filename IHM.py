@@ -50,16 +50,22 @@ class IHM:
         self.create_detailed_param_file=parser.get('saving_parameters', 'create_detailed_param_file')
         self.compatible_format=parser.get('saving_parameters', 'compatible_format')         
   
-        #Configs for Automatic titration sequence
+        #Configs for Automatic sequence
         self.experience_name=None
         self.description=None
         self.OM_type=None #type of organic matter
         self.concentration=None
         self.fibers=None
         self.flowcell=None
+        self.N_mes=None #number of pH/spectra measures
+        self.dispense_mode=parser.get('sequence', 'dispense_mode')  
+
+        #classic
         self.initial_pH=None
         self.final_pH=None
-        self.N_mes=None #number of pH/spectra measures
+
+        #custom
+        self.sequence_config_file=parser.get('custom sequence', 'sequence_file') 
 
         #création d'un timer pour le renouvellement du pH sur calBox 
         self.timer1s = QtCore.QTimer()
@@ -89,7 +95,7 @@ class IHM:
         if self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
               
-    def updateConfigFile(self):
+    def updateSettings(self):
         parser = ConfigParser()
         parser.read(app_default_settings)
         file = open(app_default_settings,'r+')
@@ -102,6 +108,16 @@ class IHM:
         parser.write(file) 
         file.close()
         print("update saving configuration")
+    
+    def updateSettings(self, window):
+        if window=='expConfig':
+            parser = ConfigParser()
+            parser.read(app_default_settings)
+            file = open(app_default_settings,'r+')
+            parser.set('custom sequence', 'sequence_file', str(self.sequence_config_file))
+            parser.set('sequence','dispense_mode',str(self.dispense_mode))
+            parser.write(file)
+            file.close()
 
     def createDirectMeasureFile(self):
         set = {}
@@ -180,24 +196,7 @@ class IHM:
         output=header+"\n\n"+data
         f_out = open(self.saving_folder+'/'+name+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output)
-        f_out.close()
-
-
-        """#remplissage du fichier       
-        output_string = "\t"
-        for j in range(N_mes-1):
-            output_string += str(str(pH[j]))+'\t'
-        output_string += str(pH[N_mes-1])+'\n'    
-
-        for l in range(N_lambda): #chaque élément de la liste correspond à une ligne sur le .csv
-            output_string += str(wl[l])+'\t'
-            for j in range(N_mes-1):
-                output_string += str(Absorbance_set[j][l])+'\t'
-            output_string += str(Absorbance_set[N_mes-1][l])+'\n'
-        
-        f_out = open(self.saving_folder+'/'+output_name_csv+'.txt','w') #création d'un fichier dans le répertoire
-        f_out.write(output_string)
-        f_out.close()"""
+        f_out.close()    
 
 if __name__=="main":
     interface = IHM()

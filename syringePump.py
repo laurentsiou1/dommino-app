@@ -69,6 +69,18 @@ class SyringePump: #Nouvelle classe SyringePump globale : classe mère
             self.model='unknown'
 
 
+"Fenetre de controle des seringues"
+#from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog
+from ui.syringe_panel import Ui_SyringePanel
+
+class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
+    
+    def __init__(self, ihm, win, parent=None):
+        super(SyringeWindow,self).__init__(parent)
+        self.setupUi(self)
+
+
 class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     
     stepper = Stepper() #contrôle du stepper

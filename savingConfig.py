@@ -23,7 +23,7 @@ class SavingConfig(QDialog):
         self.browse.clicked.connect(self.browsefolder) #browse folder
         
         self.buttonBox.accepted.connect(self.updateIHM) #mise à jour des attributs IHM
-        self.buttonBox.accepted.connect(self.ihm.updateConfigFile) #puis maj dans le fichier de config
+        self.buttonBox.accepted.connect(self.ihm.updateSettings) #puis maj dans le fichier de config
     
     def browsefolder(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', "C:/Users/francois.ollitrault/Desktop")

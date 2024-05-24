@@ -323,7 +323,7 @@ if __name__=="__main__":
     app = QApplication(sys.argv)
     #créations des classes nécessaires
     itf=IHM()
-    win=WindowHandler()
+    win=WindowHandler(itf)
     window = MainWindow(ihm=itf,win=win)
     window.show()
 

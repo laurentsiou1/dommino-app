@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 
 from IHM import IHM
 from titration_window import TitrationWindow
+from custom_sequence_window import CustomSequenceWindow
 from windowHandler import WindowHandler
 
 from pHmeter import *
@@ -18,10 +19,19 @@ import spectro.processing as sp
 MAXIMUM_DELTA_PH = 0.8  #for dispense mode 'varibale step'
 TOLERANCE_ON_FINAL_PH = 0.2 #pH.  #if pH>final_pH-gap then sequence is finished and data is saved
 
-class TitrationSequence:
+class AutomaticSequence:
 
-    #AGITATION_DELAY_SEC = 10 #20secondes après la dispense on attend un peu avant de rallumer la pompe
-    #FIXED_DELAY_SEC = 30 #5 minutes de temps d'équilibrage fixe
+    def refreshCountdown(self):
+        self.window.countdown.setProperty("value", self.measure_timer.remainingTime()//1000)
+    
+    def update_stab_time(self):
+        self.phmeter.stab_time=self.window.stab_time.value()
+    
+    def update_stab_step(self):
+        self.phmeter.stab_step=self.window.stab_step.value()
+
+class ClassicSequence(AutomaticSequence):
+
     DISPLAY_DELAY_MS = 5000 #for letting the screen display once the measure in taken
     ACID_STABILIZATION_DELAY_SEC = 300 #5 minutes c'est OK
     
@@ -42,7 +52,23 @@ class TitrationSequence:
         [self.experience_name,self.description,self.OM_type,self.concentration,self.fibers,\
         self.flowcell,self.V_init,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,\
         self.fixed_delay_sec,self.mixing_delay_sec,self.saving_folder]=config
-        print("dispense mode ",self.dispense_mode)
+        
+        #affichage des données pour la séquence auto
+        print("\nNom de l'expérience : ",self.experience_name,\
+        "\nDescription : ",self.description,\
+        "\nType de matière organique : ",self.OM_type,\
+        "\nConcentration : ",self.concentration,\
+        "\nFibres : ",self.fibers,\
+        "\nFlowcell : ",self.flowcell,\
+        "\nMode de dispense : ",self.dispense_mode,\
+        "\nVolume initial : ", self.V_init,\
+        "\npH initial : ",self.pH_start,\
+        "\npH final : ",self.pH_end,\
+        "\nNombre de mesures : ",self.N_mes,\
+        "\nFidex delay between measures (seconds): ", self.fixed_delay_sec,\
+        "\nMixing delay for pump pausing (seconds): ", self.mixing_delay_sec,\
+        "\nDossier de sauvegarde du titrage : ",self.saving_folder)
+        
         if self.dispense_mode=='fixed step':
             self.target_pH_list=[4+5*k/(self.N_mes-1) for k in range(self.N_mes)]
         elif self.dispense_mode=='variable step':
@@ -141,15 +167,6 @@ class TitrationSequence:
         
         self.window.ajout_ok.clicked.connect(self.acid_added)   #permet de déclencher la séquence auto
         #proprement dite
-
-    def update_stab_time(self):
-        self.phmeter.stab_time=self.window.stab_time.value()
-    
-    def update_stab_step(self):
-        self.phmeter.stab_step=self.window.stab_step.value()
-
-    def refreshCountdown(self):
-        self.window.countdown.setProperty("value", self.measure_timer.remainingTime()//1000)
     
     def waitFixedDelay(self):
         self.pump.start()
@@ -482,6 +499,86 @@ class TitrationSequence:
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
         self.window.direct_pH.display(pH)
 
+class CustomSequence(AutomaticSequence):    
+
+    def __init__(self, ihm:IHM, win:WindowHandler, config):
+        
+        # Create a QTimer object
+        self.pause_timer = QTimer()    #for interface refreshing
+        self.measure_timer = QTimer()   #chemical equilibrum and fluid circulation
+
+        self.ihm=ihm
+        self.spectro=ihm.spectro_unit
+        self.phmeter=ihm.phmeter
+        self.syringe=ihm.syringe_pump
+        self.pump=ihm.peristaltic_pump
+        self.window_handler=win
+
+        #Données de config      #comme titration sequence mais avec le fichier de config
+        [self.experience_name,self.description,self.OM_type,self.concentration,self.fibers,\
+        self.flowcell,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
+        self.param=config
+        
+        #affichage des données pour la séquence auto
+        print("\nNom de l'expérience : ",self.experience_name,\
+        "\nDescription : ",self.description,\
+        "\nType de matière organique : ",self.OM_type,\
+        "\nConcentration : ",self.concentration,\
+        "\nFibres : ",self.fibers,\
+        "\nFlowcell : ",self.flowcell,\
+        "\nMode de dispense : ",self.dispense_mode,\
+        "\nFichier de configuration de séquence : ",self.sequence_config_file,\
+        "\nDossier de sauvegarde du titrage : ",self.saving_folder)
+    
+    def configure(self):
+    
+        #Récupération des données du tableau d'instructions de la séquence
+        self.readSequenceInstructions()
+
+        #graphique
+        self.window = CustomSequenceWindow(self.window_handler)
+        self.window.param_init(seq=self,ihm=self.ihm) 
+        self.window.show()
+        self.window_handler.sequence_window1 = self.window
+
+        #actualisation sur le pH mètre
+        if self.phmeter.state=='open':
+            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.refresh_pH)
+            self.phmeter.activateStabilityLevel()
+            self.phmeter.stab_timer.timeout.connect(self.window.refresh_stability_level)
+        
+        #Pousses seringue
+        if self.syringe.state=='open':
+            if (self.syringe.base_level_uL-self.syringe.size)>=10: #uL
+                self.syringe.full_refill()
+            else:
+                pass
+            self.window.base_level_number.setText("%d uL" %self.syringe.base_level_uL)
+            self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
+        else:
+            pass
+
+        self.ihm.timer1s.stop()
+        self.ihm.timer3s.stop()
+
+    def readSequenceInstructions(self):
+        file = self.sequence_config_file    #chaine de caracteres
+        print("file:",file)
+        import csv
+        with open(str(file), newline='') as f:
+            reader = csv.reader(f, delimiter=';')
+            print("reader=",reader)
+            tab = []
+            for l in reader:
+                row = l[0:5]
+                tab.append(row)
+                #print(row)
+        self.instruction_table=tab[1:]
+        self.N_mes=len(self.instruction_table)
+
+    def createFullSequenceFiles(self):
+        pass
+
 if __name__=="__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -493,7 +590,7 @@ if __name__=="__main__":
     #sys.exit(app.exec_())
 
     config=['nom','description','matière organique',1,'fibres','flowcell',50,'dispense mode', 10, 4, 9, "C:/Users/francois.ollitrault/Desktop"]
-    sq=TitrationSequence(itf,win,config)        
+    sq=AutomaticSequence(itf,win,config)        
     #pour visualisation du fichier de données
     sq.spectro.active_background_spectrum=[0 for k in range(sq.N_lambda)]
     sq.spectro.active_ref_spectrum=[1 for k in range(sq.N_lambda)]
