@@ -9,35 +9,37 @@ from datetime import datetime
 
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageInput import *
-from oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
-from oceandirect.od_logger import od_logger
+from lib.oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
+from lib.oceandirect.od_logger import od_logger
 
-from pHmeter import PHMeter
-from spectro.absorbanceMeasure import AbsorbanceMeasure
-from syringePump import PhidgetStepperPump
-from peristalticPump import PeristalticPump
+#Instruments
+from subsystems.pHmeter import PHMeter
+from subsystems.absorbanceMeasure import AbsorbanceMeasure
+from subsystems.syringePump import Dispenser, PhidgetStepperPump
+from subsystems.peristalticPump import PeristalticPump
 
-#from windowHandler import WindowHandler
+#Windows
 from windows.main_window import MainWindow
 from windows.expConfig import ExpConfig
 from windows.calBox import CalBox
 from windows.custom_sequence_window import CustomSequenceWindow
 from windows.spectrumConfig import SpectrumConfigWindow
 from windows.savingConfig import SavingConfig
-#from windows. import 
-
+from windows.syringe_window import SyringeWindow
 
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
-app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 #app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
 
 class IHM:
+
+    app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
     #Sous sytèmes 
     #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
     spectro_unit=AbsorbanceMeasure()
     phmeter=PHMeter()
-    syringe_pump=PhidgetStepperPump()
+    dispenser=Dispenser()
+    #syringe_pump=PhidgetStepperPump()
     peristaltic_pump=PeristalticPump()
 
     background=None
@@ -51,8 +53,7 @@ class IHM:
     def __init__(self):
         #Config for savings
         parser = ConfigParser()
-        parser.read(app_default_settings)
-        
+        parser.read(self.app_default_settings)
         self.saving_folder=parser.get('saving_parameters', 'folder')
         self.save_absorbance=parser.get('saving_parameters', 'save_absorbance')   
         self.save_pH=parser.get('saving_parameters', 'save_pH')
@@ -80,22 +81,12 @@ class IHM:
         #création d'un timer pour le renouvellement du pH sur calBox 
         self.timer1s = QtCore.QTimer()
         self.timer1s.setInterval(1000)
-        self.timer1s.start()     
-        #création d'un timer pour le renouvellement du spectre affiché
-        self.timer3s = QtCore.QTimer()
-        self.timer3s.setInterval(3000)
-        self.timer3s.start()
-        #timer pour le rafraichissement des spectres dans spectrum Config. 
-        #La période sera modifiée selon les param du spectro avg Tint
-        self.timer_spectra = QtCore.QTimer()
-        self.timer_spectra.setInterval(3000)
-        self.timer_spectra.start()        
+        self.timer1s.start() 
     
     def close_all_devices(self):
         print("Closing all device")
         self.timer1s.stop()
-        self.timer3s.stop()
-        self.timer_spectra.stop()
+
         if self.spectro_unit.state=='open':
             self.spectro_unit.close(self.spectro_unit.id)
         if self.phmeter.state=='open':
@@ -107,8 +98,8 @@ class IHM:
               
     def updateSettings(self):
         parser = ConfigParser()
-        parser.read(app_default_settings)
-        file = open(app_default_settings,'r+')
+        parser.read(self.app_default_settings)
+        file = open(self.app_default_settings,'r+')
         parser.set('saving_parameters', 'folder', str(self.saving_folder)) 
         parser.set('saving_parameters', 'save_absorbance', str(self.save_absorbance)) 
         parser.set('saving_parameters', 'save_pH', str(self.save_pH)) 
@@ -122,8 +113,8 @@ class IHM:
     def updateSettings(self, window):
         if window=='expConfig':
             parser = ConfigParser()
-            parser.read(app_default_settings)
-            file = open(app_default_settings,'r+')
+            parser.read(self.app_default_settings)
+            file = open(self.app_default_settings,'r+')
             parser.set('custom sequence', 'sequence_file', str(self.sequence_config_file))
             parser.set('sequence','dispense_mode',str(self.dispense_mode))
             parser.write(file)
@@ -226,6 +217,14 @@ class IHM:
     def openSpectroWindow(self):
         self.spectroWindow = SpectrumConfigWindow(self)
         self.spectroWindow.show()
+
+    def openCalibWindow(self):
+        self.calib_window = CalBox(self)
+        self.calib_window.show()
+
+    def openSyringePanel(self):
+        self.syringePanel = SyringeWindow(self)
+        self.syringePanel.show()
 
 if __name__=="main":
     interface = IHM()

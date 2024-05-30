@@ -1,17 +1,24 @@
 "Classe de la fenêtre pour gestion spectromètre et lampe"
 
-import pyqtgraph as pg
-
-from oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectrometer as Sp
-from oceandirect.od_logger import od_logger
-from spectro.absorbanceMeasure import AbsorbanceMeasure
-import spectro.processing as proc
+from lib.oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectrometer as Sp
+from lib.oceandirect.od_logger import od_logger
+from subsystems.absorbanceMeasure import AbsorbanceMeasure
+import subsystems.processing as proc
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.spectro_param import Ui_spectro_config
 from PyQt5.QtWidgets import QDialog
+import pyqtgraph as pg
 
 _translate = QtCore.QCoreApplication.translate
+
+from configparser import ConfigParser
+import os
+from pathlib import Path
+
+path = Path(__file__)
+ROOT_DIR = path.parent.absolute()
+app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
 
 class SpectrumConfigWindow(QDialog,Ui_spectro_config):
 
@@ -20,235 +27,111 @@ class SpectrumConfigWindow(QDialog,Ui_spectro_config):
         self.setupUi(self)
         self.spectro_unit=ihm.spectro_unit
         self.ihm=ihm
-        
+    
+        self.refreshing_rate=1000 #ms
+
         #spectro connecté
         if self.spectro_unit.state=='open':
-            self.shutter.setChecked(self.spectro_unit.adv.get_enable_lamp())   
+            self.shutter.setChecked(self.spectro_unit.pin13_shutter.getState())  
             self.NLcorr_box.setChecked(self.spectro_unit.device.get_nonlinearity_correction_usage())
-            if self.spectro_unit.model!='OceanST' and self.spectro_unit.model!='OceanSR6':
+            if self.spectro_unit.model=='OceanST' or self.spectro_unit.model=='OceanSR6':
+                self.EDcorr_box.setDisabled(True)
+            else:
                 self.EDcorr_box.setChecked(self.spectro_unit.device.get_electric_dark_correction_usage())
                 self.EDcorr_box.clicked.connect(self.change_EDcorr_state)
-            else:
-                self.EDcorr_box.setChecked(False)
             
-            #config des paramètres selon valeurs actuelles du spectro
-            t_int=self.spectro_unit.t_int #time in millisecondes
+            self.lambdas=self.spectro_unit.wavelengths
+
+            #Affichage des paramètres selon valeurs actuelles du spectro
+            device = "device model : "+self.spectro_unit.model
+            self.label_model.setText(device)
             self.Tint.setMinimum(self.spectro_unit.t_int_min) #milliseconds
             self.Tint.setMaximum(self.spectro_unit.t_int_max)
-            self.Tint.setProperty("value", t_int)  
+            self.Tint.setProperty("value", self.spectro_unit.t_int)  
             self.avg.setProperty("value", self.spectro_unit.averaging)
-            self.acquisition_delay=t_int*self.spectro_unit.averaging
+            self.acquisition_delay_display.setText(_translate("Dialog", "acquisition delay : %0.2f seconds"% float(self.spectro_unit.acquisition_delay/1000) ))
 
+            #connexions
             self.Tint.valueChanged.connect(self.update_integration_time)
-            self.Tint.valueChanged.connect(self.update_acquisition_delay)
             self.avg.valueChanged.connect(self.update_averaging)
-
-
-            self.lambdas=self.spectro_unit.wavelengths
-            #connexion boutons à l'initialisation
-            self.refresh_background_button.clicked.connect(self.update_background_spectrum) #background spectrum
-            self.ihm.timer_spectra.timeout.connect(self.update_intensity_spectrum) #intensity_widget spectrum (corrected)  
-            self.refresh_ref_button.clicked.connect(self.update_ref_spectrum) #ref spectrum
+            self.shutter.clicked.connect(self.changeShutterState)
+            #enregistrement
+            self.refresh_background.clicked.connect(self.spectro_unit.acquire_background_spectrum)
+            self.refresh_background.clicked.connect(self.refreshShutterState)
+            self.refresh_ref.clicked.connect(self.spectro_unit.acquire_ref_spectrum)
+            self.refresh_ref.clicked.connect(self.refreshShutterState)
             
             #actualisation des spectres périodiquement
-            self.ihm.timer_spectra.timeout.connect(self.refresh_all_spectra_on_timer)
-            self.ihm.timer_spectra.timeout.connect(self.refresh_displayed_intensity_spectrum) #mise sur timer
-            
-            #affichage_graphique
-            self.refresh_rate=self.acquisition_delay//1000+2000 #en millisecondes
-            self.ihm.timer_spectra.timeout.connect(self.update_refreshing_rate)
+            self.spectro_unit.timer.timeout.connect(self.refreshScreen)
+
+            #Clic sur OK
+            self.buttonBox.accepted.connect(self.updateDefaultParameters)
     
+    def refreshScreen(self):  
+        bgd=(self.spectro_unit.active_background_spectrum!=None)
+        ref=(self.spectro_unit.active_ref_spectrum!=None)
+        
+        #Actu des graphes
+        #Intensity
+        self.intensity_plot=self.intensity_widget.plot([0],[0],pen="r",clear = True)
+        self.intensity_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
+        if bgd: #background enregistré
+            a=self.background_widget.plot([0],[0],clear = True)
+            self.dark_plot=a
+            self.dark_plot.clear()
+            self.dark_plot.setData(self.lambdas,self.spectro_unit.active_background_spectrum) 
+        if ref: #réf enregistrée
+            self.ref_plot=self.reference_widget.plot([0],[0],pen="g",clear = True)
+            self.ref_plot.setData(self.lambdas,self.spectro_unit.active_ref_spectrum)
+        if bgd*ref: #absorbance
+            self.abs_plot=self.absorbance_widget.plot([0],[0],pen="y",clear = True)
+            self.abs_plot.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+            delay_sec=float(self.spectro_unit.Aproc_delay/1000) 
+            self.absorbance_processing_delay_display.setText("Absorbance computation delay : %f seconds" %delay_sec)
+
+        #actu des delays
+        self.acquisition_delay_display.setText(_translate("Dialog", "acquisition delay : %0.2f seconds"% float(self.spectro_unit.acquisition_delay/1000) ))
+        self.recording_delay_display.setText("processing delay : %f seconds" %self.spectro_unit.Irec_time)
+        self.averaging_delay_display.setText("averaging delay : %f seconds" %self.spectro_unit.avg_delay)          
+        self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : %0.2f seconds"% float(self.spectro_unit.refresh_rate/1000) ))   
+
     def changeShutterState(self):
-        #if self.spectro_unit.state=='open':
         self.spectro_unit.changeShutterState()
+        self.refreshShutterState()
+
+    def refreshShutterState(self):
+        self.shutter.setChecked(self.spectro_unit.pin13_shutter.getState())
         
     def change_NLcorr_state(self):
         state=not(self.spectro_unit.device.get_nonlinearity_correction_usage())
         self.spectro_unit.device.set_nonlinearity_correction_usage(state)
-        #self.spectro_unit.device.apply_nonlinearity=True
     
     def change_EDcorr_state(self):
         state=not(self.spectro_unit.device.get_electric_dark_correction_usage())
         self.spectro_unit.device.set_electric_dark_correction_usage(state)
-
-    def refresh_all_spectra_on_timer(self):
-        #in any case
-        self.refresh_displayed_intensity_spectrum()
-        dark=(self.spectro_unit.active_background_spectrum!=None)
-        ref=(self.spectro_unit.active_ref_spectrum!=None)
-        if dark:
-            #dark spectrum
-            self.refresh_displayed_background_spectrum() #refresh du graphe
-        if ref:
-            #ref spectrum
-            self.refresh_displayed_ref_spectrum() #refresh
-        if dark*ref:    
-            #absorbance
-            self.update_absorbance_spectrum()
-            self.refresh_displayed_absorbance_spectrum()
     
-    def update_background_spectrum(self):
-        self.spectro_unit.acquire_background_spectrum()
-    
-    def update_intensity_spectrum(self):    #spectre courant intensité
-        spec=AbsorbanceMeasure.get_averaged_spectrum(self.spectro_unit)
-        self.spectro_unit.current_intensity_spectrum=spec
-        
-    def update_ref_spectrum(self):
-        self.spectro_unit.acquire_ref_spectrum()
-
-    def update_absorbance_spectrum(self):
-        self.spectro_unit.current_absorbance_spectrum=proc.intensity2absorbance(self.spectro_unit.current_intensity_spectrum,self.spectro_unit.active_ref_spectrum,self.spectro_unit.active_background_spectrum)
-
-    def refresh_displayed_background_spectrum(self):
-        a=self.dark_widget.plot([0],[0],clear = True)
-        self.dark_plot=a
-        self.dark_plot.clear()
-        self.dark_plot.setData(self.lambdas,self.spectro_unit.active_background_spectrum)
-        
-    def refresh_displayed_intensity_spectrum(self):
-        self.intensity_plot=self.intensity_widget.plot([0],[0],pen="r",clear = True)
-        self.intensity_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
-    
-    def refresh_displayed_ref_spectrum(self):
-        self.ref_plot=self.ref_widget.plot([0],[0],pen="g",clear = True)
-        self.ref_plot.setData(self.lambdas,self.spectro_unit.active_ref_spectrum)  
-
-    def refresh_displayed_absorbance_spectrum(self):
-        self.abs_plot=self.abs_widget.plot([0],[0],pen="y",clear = True)
-        self.abs_plot.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)  
-
     def update_integration_time(self):
         t_ms=self.Tint.value()
         t_us=1000*t_ms #us
         self.spectro_unit.device.set_integration_time(t_us)
-        self.spectro_unit.t_int=t_ms #modifie dans la classe AbsorbanceMeasure
+        self.spectro_unit.t_int=t_ms
+        self.spectro_unit.update_acquisition_delay()
 
     def update_averaging(self):
         a=self.avg.value()
         self.spectro_unit.device.set_scans_to_average(a)
-        self.spectro_unit.averaging=a #modifie l'attribut de la classe absorbance
+        self.spectro_unit.averaging=a
+        self.spectro_unit.update_acquisition_delay()
 
-    def update_acquisition_delay(self):
-        dl=self.spectro_unit.t_int*self.spectro_unit.averaging
-        self.acquisition_delay=dl #millisecondes
-        seconds=dl/1000
-        self.acquisition_delay_display.setText(_translate("Dialog", "durée d\'acquisition : %0.1fs"% seconds ))
-    
-    def update_refreshing_rate(self):
-        r=self.acquisition_delay+2000
-        self.refresh_rate=r
-        self.ihm.timer_spectra.setInterval(r)    
-        self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : %0.1fs"% float(r/1000) ))    
-
-    """def setupUi(self, Dialog):
-        Dialog.setObjectName("Configuration du spectromètre")
-        Dialog.resize(1799, 954)
-        self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(1690, 850, 81, 71))
-        self.buttonBox.setOrientation(QtCore.Qt.Vertical)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName("buttonBox")
-        
-        self.dark_widget = pg.PlotWidget(Dialog)
-        self.dark_widget.setGeometry(QtCore.QRect(960, 20, 521, 291))
-        self.dark_widget.setObjectName("dark_widget")
-        self.ref_widget = pg.PlotWidget(Dialog)
-        self.ref_widget.setGeometry(QtCore.QRect(960, 320, 521, 311))
-        self.ref_widget.setObjectName("ref_widget")
-        
-        self.abs_widget = pg.PlotWidget(Dialog) 
-        self.abs_widget.setGeometry(QtCore.QRect(10, 50, 941, 621))
-        self.abs_widget.setObjectName("abs_widget")
-        self.intensity_widget = pg.PlotWidget(Dialog)
-        self.intensity_widget.setGeometry(QtCore.QRect(960, 640, 521, 291))
-        self.intensity_widget.setObjectName("intensity_widget")
-        
-        self.label_dark = QtWidgets.QLabel(Dialog)
-        self.label_dark.setGeometry(QtCore.QRect(1560, 130, 191, 31))
-        self.label_dark.setObjectName("label_dark")
-        self.label_ref = QtWidgets.QLabel(Dialog)
-        self.label_ref.setGeometry(QtCore.QRect(1560, 440, 91, 31))
-        self.label_ref.setObjectName("label_ref")
-        self.label_intensity = QtWidgets.QLabel(Dialog)
-        self.label_intensity.setGeometry(QtCore.QRect(1560, 760, 101, 31))
-        self.label_intensity.setObjectName("label_intensity")
-        self.label_abs = QtWidgets.QLabel(Dialog)
-        self.label_abs.setGeometry(QtCore.QRect(20, 10, 91, 31))
-        self.label_abs.setObjectName("label_abs")
-        
-        #boutons de mise à jour réf et dark
-        self.refresh_background_button = QtWidgets.QPushButton(Dialog)
-        self.refresh_background_button.setGeometry(QtCore.QRect(1560, 180, 81, 31))
-        self.refresh_background_button.setObjectName("refresh_background_button")
-        self.refresh_ref_button = QtWidgets.QPushButton(Dialog)
-        self.refresh_ref_button.setGeometry(QtCore.QRect(1560, 490, 81, 31))
-        self.refresh_ref_button.setObjectName("refresh_ref_button")
-    
-
-        self.Tint = QtWidgets.QSpinBox(Dialog) 
-        self.Tint.setGeometry(QtCore.QRect(30, 700, 71, 31))
-
-        self.Tint.setObjectName("Tint")
-        self.avg = QtWidgets.QSpinBox(Dialog)
-        self.avg.setGeometry(QtCore.QRect(180, 700, 71, 31))
-        self.avg.setMinimum(1)
-        self.avg.setMaximum(500)
-        self.avg.setObjectName("avg")
-
-        self.label_tint = QtWidgets.QLabel(Dialog)
-        self.label_tint.setGeometry(QtCore.QRect(50, 680, 51, 21))
-        self.label_tint.setObjectName("label_tint")
-        self.label_avg = QtWidgets.QLabel(Dialog)
-        self.label_avg.setGeometry(QtCore.QRect(200, 680, 61, 21))
-        self.label_avg.setObjectName("label_avg")
-        self.shutter = QtWidgets.QCheckBox(Dialog, clicked = lambda: self.changeShutterState())
-        self.shutter.setGeometry(QtCore.QRect(340, 710, 131, 31))
-        self.shutter.setObjectName("shutter")
-        self.NLcorr_box = QtWidgets.QCheckBox(Dialog, clicked = lambda: self.change_NLcorr_state())
-        self.NLcorr_box.setGeometry(QtCore.QRect(450, 710, 250, 31))
-        self.NLcorr_box.setObjectName("NLcorr_box")
-        self.EDcorr_box = QtWidgets.QCheckBox(Dialog) #, clicked = lambda: self.change_EDcorr_state())
-        self.EDcorr_box.setGeometry(QtCore.QRect(450, 810, 250, 31))
-        self.EDcorr_box.setObjectName("EDcorr_box")
-
-        self.acquisition_delay_display = QtWidgets.QLabel(Dialog)
-        self.acquisition_delay_display.setGeometry(QtCore.QRect(30, 770, 251, 31))
-        self.acquisition_delay_display.setObjectName("acquisition_delay_display")
-        self.processing_delay_display = QtWidgets.QLabel(Dialog)
-        self.processing_delay_display.setGeometry(QtCore.QRect(30, 820, 251, 31))
-        self.processing_delay_display.setObjectName("processing_delay_display")
-        self.refresh_rate_display = QtWidgets.QLabel(Dialog)
-        self.refresh_rate_display.setGeometry(QtCore.QRect(30, 870, 400, 31))
-        self.refresh_rate_display.setObjectName("refresh_rate_display")
-
-
-        self.retranslateUi(Dialog)
-        self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
-        self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
-        QtCore.QMetaObject.connectSlotsByName(Dialog)"""
-        
-        
-
-
-    """def retranslateUi(self, Dialog):
-        #_translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Configuration du spectromètre"))
-        self.label_dark.setText(_translate("Dialog", "Dark Spectrum"))
-        self.label_ref.setText(_translate("Dialog", "Référence"))
-        self.label_intensity.setText(_translate("Dialog", "Intensité"))
-        self.label_abs.setText(_translate("Dialog", "Absorbance"))
-        self.refresh_background_button.setText(_translate("Dialog", "refresh"))
-        self.refresh_ref_button.setText(_translate("Dialog", "refresh"))
-        self.label_tint.setText(_translate("Dialog", "T int"))
-        self.label_avg.setText(_translate("Dialog", "averaging"))
-        self.shutter.setText(_translate("Dialog", "Shutter"))
-        self.NLcorr_box.setText(_translate("Dialog", "Non Linearity correction"))
-        self.EDcorr_box.setText(_translate("Dialog", "Electric dark correction"))
-        self.acquisition_delay_display.setText(_translate("Dialog", "durée d\'acquisition : "))
-        self.processing_delay_display.setText(_translate("Dialog", "durée de calcul : "))
-        self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : "))"""
-
+    def updateDefaultParameters(self):
+        parser = ConfigParser()
+        parser.read(self.ihm.app_default_settings)
+        file = open(self.ihm.app_default_settings,'r+')
+        parser.set('spectrometry', 'model', str(self.spectro_unit.model))
+        parser.set('spectrometry', 'tint', str(self.spectro_unit.t_int))
+        parser.set('spectrometry', 'avg', str(self.spectro_unit.averaging))
+        parser.write(file)
+        file.close()
 
 if __name__ == "__main__":
     logger = od_logger()

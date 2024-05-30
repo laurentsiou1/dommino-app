@@ -12,9 +12,9 @@ from windows.titration_window import TitrationWindow
 from windows.custom_sequence_window import CustomSequenceWindow
 #from windowHandler import WindowHandler
 
-from pHmeter import *
-from syringePump import *
-import spectro.processing as sp
+from subsystems.pHmeter import *
+from subsystems.syringePump import *
+import subsystems.processing as sp
 
 MAXIMUM_DELTA_PH = 0.8  #for dispense mode 'varibale step'
 TOLERANCE_ON_FINAL_PH = 0.2 #pH.  #if pH>final_pH-gap then sequence is finished and data is saved

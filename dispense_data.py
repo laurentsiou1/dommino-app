@@ -52,6 +52,22 @@ def delta_pH(A1,m1,lK1,A2,m2,lK2,pH,pH0,max_delta):
 #A1=[0.1317,0.0419],m1=0.416,lK1=3.90,A2=[0.0727,0.1392],m2=0.197,lK2=9.94,pH0=6.486
 absorbance_model_26_01_2024 = [[0.1317,0.0419],0.416,3.90,[0.0727,0.1392],0.197,9.94,6.486]
 
+"""def dispense_function(pH,coefs,x0):
+    [y0, ba, ca, bb, cb] = coefs
+    if type(pH)!=list:
+        if pH<=y0:
+            x=x0-ba*(10**((y0-pH)/ca)-1)
+        else:
+            x=x0+bb*(10**((pH-y0)/cb)-1)
+    else:
+        x=[]
+        for y in pH:
+            if y<=y0:
+                x.append(x0-ba*(10**((y0-y)/ca)-1))
+            else:
+                x.append(x0+bb*(10**((y-y0)/cb)-1))
+    return x"""
+
 class ReferenceData:
     #Cette classe modélise un titrage qui peut servir de référence à plusieurs niveaux
     

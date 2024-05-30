@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1799</width>
-    <height>954</height>
+    <height>962</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,9 +19,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>1690</x>
+     <x>1640</x>
      <y>850</y>
-     <width>81</width>
+     <width>131</width>
      <height>71</height>
     </rect>
    </property>
@@ -32,27 +32,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="darkSpectrum">
-   <property name="geometry">
-    <rect>
-     <x>960</x>
-     <y>20</y>
-     <width>521</width>
-     <height>291</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QGraphicsView" name="abs_courante">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>941</width>
-     <height>621</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_dark">
+  <widget class="QLabel" name="label_background">
    <property name="geometry">
     <rect>
      <x>1560</x>
@@ -62,17 +42,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Dark Spectrum</string>
-   </property>
-  </widget>
-  <widget class="QGraphicsView" name="reference">
-   <property name="geometry">
-    <rect>
-     <x>960</x>
-     <y>320</y>
-     <width>521</width>
-     <height>311</height>
-    </rect>
+    <string>Background</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_ref">
@@ -88,16 +58,6 @@
     <string>Référence</string>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="intensity">
-   <property name="geometry">
-    <rect>
-     <x>960</x>
-     <y>640</y>
-     <width>521</width>
-     <height>291</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_intensity">
    <property name="geometry">
     <rect>
@@ -108,23 +68,23 @@
     </rect>
    </property>
    <property name="text">
-    <string>Intensité</string>
+    <string>Intensity</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_abs">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>10</y>
-     <width>91</width>
-     <height>31</height>
+     <y>30</y>
+     <width>121</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Absorbance</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="refresh_dark_spectrum">
+  <widget class="QPushButton" name="refresh_background">
    <property name="geometry">
     <rect>
      <x>1560</x>
@@ -217,10 +177,10 @@
   <widget class="QCheckBox" name="shutter">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>370</x>
      <y>710</y>
      <width>131</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -231,42 +191,155 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>770</y>
-     <width>251</width>
-     <height>31</height>
+     <y>760</y>
+     <width>401</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>durée d'acquisition : </string>
+    <string>acquisition delay : </string>
    </property>
   </widget>
-  <widget class="QLabel" name="processing_delay_display">
+  <widget class="QLabel" name="recording_delay_display">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>820</y>
-     <width>251</width>
-     <height>31</height>
+     <y>810</y>
+     <width>341</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>durée de calcul : </string>
+    <string>recording delay : </string>
    </property>
   </widget>
   <widget class="QLabel" name="refresh_rate_display">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>870</y>
-     <width>261</width>
-     <height>31</height>
+     <x>580</x>
+     <y>890</y>
+     <width>341</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>période de rafraîchissement : </string>
+    <string>refreshing rate : </string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="EDcorr_box">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>800</y>
+     <width>241</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Electric dark correction</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="NLcorr_box">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>710</y>
+     <width>241</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nonlinearity correction</string>
+   </property>
+  </widget>
+  <widget class="PlotWidget" name="background_widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>960</x>
+     <y>10</y>
+     <width>551</width>
+     <height>301</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="PlotWidget" name="reference_widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>959</x>
+     <y>319</y>
+     <width>551</width>
+     <height>311</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="PlotWidget" name="intensity_widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>960</x>
+     <y>640</y>
+     <width>551</width>
+     <height>311</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="PlotWidget" name="absorbance_widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>931</width>
+     <height>581</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_model">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>30</y>
+     <width>301</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>device model : </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="averaging_delay_display">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>860</y>
+     <width>341</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>averaging delay : </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="absorbance_processing_delay_display">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>910</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>absorbance processing delay : </string>
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">pyqtgraph</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
