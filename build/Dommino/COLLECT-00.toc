@@ -1,0 +1,1823 @@
+([('Dommino.exe',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\build\\Dommino\\Dommino.exe',
+   'EXECUTABLE'),
+  ('python39.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\python39.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qoffscreen.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qoffscreen.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qwebgl.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qwebgl.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qsvg.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qsvg.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qminimal.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qminimal.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qicns.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qicns.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qgif.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qgif.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qtga.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qtga.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qtiff.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qtiff.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qwindows.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qwindows.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qjpeg.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qjpeg.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qwebp.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qwebp.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platformthemes\\qxdgdesktopportal.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platformthemes\\qxdgdesktopportal.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\generic\\qtuiotouchplugin.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\generic\\qtuiotouchplugin.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qico.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qico.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qwbmp.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qwbmp.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\iconengines\\qsvgicon.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\iconengines\\qsvgicon.dll',
+   'BINARY'),
+  ('matplotlib.libs\\msvcp140-8fe972c21762050da1adf4b84a93423e.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib.libs\\msvcp140-8fe972c21762050da1adf4b84a93423e.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\styles\\qwindowsvistastyle.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\styles\\qwindowsvistastyle.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\libEGL.dll',
+   '\\\\SV-FILES\\COMMUN\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\libEGL.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\opengl32sw.dll',
+   '\\\\SV-FILES\\COMMUN\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\opengl32sw.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\d3dcompiler_47.dll',
+   '\\\\SV-FILES\\COMMUN\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\d3dcompiler_47.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\libGLESv2.dll',
+   '\\\\SV-FILES\\COMMUN\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\libGLESv2.dll',
+   'BINARY'),
+  ('_decimal.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_decimal.pyd',
+   'EXTENSION'),
+  ('_hashlib.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_hashlib.pyd',
+   'EXTENSION'),
+  ('_lzma.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_lzma.pyd',
+   'EXTENSION'),
+  ('_bz2.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_bz2.pyd',
+   'EXTENSION'),
+  ('unicodedata.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\unicodedata.pyd',
+   'EXTENSION'),
+  ('select.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\select.pyd',
+   'EXTENSION'),
+  ('_socket.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_socket.pyd',
+   'EXTENSION'),
+  ('_ctypes.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_ctypes.pyd',
+   'EXTENSION'),
+  ('_uuid.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_uuid.pyd',
+   'EXTENSION'),
+  ('_ssl.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_ssl.pyd',
+   'EXTENSION'),
+  ('pyexpat.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\pyexpat.pyd',
+   'EXTENSION'),
+  ('_multiprocessing.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_multiprocessing.pyd',
+   'EXTENSION'),
+  ('_queue.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_queue.pyd',
+   'EXTENSION'),
+  ('PyQt5\\QtGui.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\QtGui.pyd',
+   'EXTENSION'),
+  ('_elementtree.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_elementtree.pyd',
+   'EXTENSION'),
+  ('matplotlib\\_path.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\_path.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('matplotlib\\ft2font.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\ft2font.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\core\\_multiarray_umath.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\core\\_multiarray_umath.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\linalg\\_umath_linalg.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\linalg\\_umath_linalg.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('_overlapped.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_overlapped.pyd',
+   'EXTENSION'),
+  ('_asyncio.pyd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\_asyncio.pyd',
+   'EXTENSION'),
+  ('contourpy\\_contourpy.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\contourpy\\_contourpy.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_webp.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PIL\\_webp.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingtk.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PIL\\_imagingtk.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingcms.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PIL\\_imagingcms.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imaging.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PIL\\_imaging.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('matplotlib\\backends\\_backend_agg.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\backends\\_backend_agg.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('kiwisolver\\_cext.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\kiwisolver\\_cext.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('matplotlib\\_tri.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\_tri.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('matplotlib\\_qhull.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\_qhull.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('matplotlib\\_image.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\_image.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('matplotlib\\_c_internal_utils.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\_c_internal_utils.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PyQt5\\sip.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\sip.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PyQt5\\QtTest.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\QtTest.pyd',
+   'EXTENSION'),
+  ('PyQt5\\QtSvg.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\QtSvg.pyd',
+   'EXTENSION'),
+  ('numpy\\core\\_multiarray_tests.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\core\\_multiarray_tests.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\mtrand.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\mtrand.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_sfc64.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_sfc64.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_philox.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_philox.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_pcg64.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_pcg64.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_mt19937.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_mt19937.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\bit_generator.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\bit_generator.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_generator.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_generator.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_bounded_integers.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_bounded_integers.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_common.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\random\\_common.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\fft\\_pocketfft_internal.cp39-win_amd64.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy\\fft\\_pocketfft_internal.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('PyQt5\\QtCore.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\QtCore.pyd',
+   'EXTENSION'),
+  ('PyQt5\\QtWidgets.pyd',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\QtWidgets.pyd',
+   'EXTENSION'),
+  ('VCRUNTIME140.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Core.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Core.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Gui.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Gui.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\MSVCP140.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\MSVCP140.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Quick.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Quick.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5WebSockets.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5WebSockets.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Network.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Network.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Svg.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Svg.dll',
+   'BINARY'),
+  ('VCRUNTIME140_1.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5DBus.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5DBus.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Widgets.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Widgets.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\VCRUNTIME140.dll',
+   '\\\\SV-FILES\\COMMUN\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\VCRUNTIME140_1.dll',
+   '\\\\SV-FILES\\COMMUN\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('libcrypto-1_1.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\libcrypto-1_1.dll',
+   'BINARY'),
+  ('libffi-7.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\libffi-7.dll',
+   'BINARY'),
+  ('libssl-1_1.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\DLLs\\libssl-1_1.dll',
+   'BINARY'),
+  ('python3.dll',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\python3.dll',
+   'BINARY'),
+  ('numpy.libs\\libopenblas64__v0.3.23-293-gc2f4bdbb-gcc_10_3_0-2bde3a66a51006b2b53eb373ff767a3f.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\numpy.libs\\libopenblas64__v0.3.23-293-gc2f4bdbb-gcc_10_3_0-2bde3a66a51006b2b53eb373ff767a3f.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Test.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Test.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\MSVCP140_1.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\MSVCP140_1.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Qml.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Qml.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5QmlModels.dll',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5QmlModels.dll',
+   'BINARY'),
+  ('config\\app_default_settings.ini',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\config\\app_default_settings.ini',
+   'DATA'),
+  ('base_library.zip',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\build\\Dommino\\base_library.zip',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qtprintsupport.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qtprintsupport.py',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qtwebenginewidgets.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qtwebenginewidgets.py',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qtquickwidgets.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qtquickwidgets.py',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qtwebkit.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qtwebkit.py',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qaxcontainer.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qaxcontainer.py',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qscintilla.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qscintilla.py',
+   'DATA'),
+  ('PyQt5\\uic\\widget-plugins\\qtcharts.py',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\uic\\widget-plugins\\qtcharts.py',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D11.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D11.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C5s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C5s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D13.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D13.csv',
+   'DATA'),
+  ('pyqtgraph\\icons\\ctrl.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\icons\\ctrl.png',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C1s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C1s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C2s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C2s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBD1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBD1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L8.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L8.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\PAL-relaxed.hex',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\PAL-relaxed.hex',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D3.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D3.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L13.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L13.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-R2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-R2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBTD1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBTD1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBTC2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBTC2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C3s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C3s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L15.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L15.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBTC1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBTC1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L19.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L19.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C5.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C5.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D8.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D8.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-R1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-R1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L6.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L6.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C6s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C6s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBTL1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBTL1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-I2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-I2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L16.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L16.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L5.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L5.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\cividis.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\cividis.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L17.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L17.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\plasma.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\plasma.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C7s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C7s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-I1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-I1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-R4.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-R4.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\viridis.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\viridis.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L12.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L12.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L18.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L18.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBC1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBC1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D10.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D10.csv',
+   'DATA'),
+  ('pyqtgraph\\icons\\auto.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\icons\\auto.png',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBL1.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBL1.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L4.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L4.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L9.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L9.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L14.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L14.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D9.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D9.csv',
+   'DATA'),
+  ('pyqtgraph\\icons\\invisibleEye.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\icons\\invisibleEye.svg',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBTL2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBTL2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L3.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L3.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L10.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L10.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L7.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L7.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D12.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D12.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D6.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D6.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CC0 legal code - applies to virids, magma, '
+   'plasma, inferno and cividis.txt',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CC0 '
+   'legal code - applies to virids, magma, plasma, inferno and cividis.txt',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C6.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C6.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D7.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D7.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CC-BY license - applies to CET color map data.txt',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CC-BY '
+   'license - applies to CET color map data.txt',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-R3.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-R3.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\magma.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\magma.csv',
+   'DATA'),
+  ('pyqtgraph\\icons\\lock.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\icons\\lock.png',
+   'DATA'),
+  ('pyqtgraph\\icons\\default.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\icons\\default.png',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBC2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBC2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\inferno.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\inferno.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C4s.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C4s.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-I3.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-I3.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C7.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C7.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C4.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C4.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D4.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D4.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-D1A.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-D1A.csv',
+   'DATA'),
+  ('pyqtgraph\\icons\\icons.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\icons\\icons.svg',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\PAL-relaxed_bright.hex',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\PAL-relaxed_bright.hex',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-L11.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-L11.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-CBL2.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-CBL2.csv',
+   'DATA'),
+  ('pyqtgraph\\colors\\maps\\CET-C3.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\pyqtgraph\\colors\\maps\\CET-C3.csv',
+   'DATA'),
+  ('matplotlib\\mpl-data\\matplotlibrc',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\matplotlibrc',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\forward.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\forward.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\hand.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\hand.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\subplots.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\subplots.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\filesave_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\filesave_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pncbi8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pncbi8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\home.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\home.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-paper.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-paper.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-pastel.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-pastel.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmss10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmss10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizTwoSymBol.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizTwoSymBol.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono-Oblique.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono-Oblique.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\zoom_to_rect.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\zoom_to_rect.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneral.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneral.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvl8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvl8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\matplotlib.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\data_x_x2_x3.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\data_x_x2_x3.csv',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\cmtt10.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\cmtt10.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\jacksboro_fault_dem.npz',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\jacksboro_fault_dem.npz',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pbkl8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pbkl8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\putri8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\putri8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizFiveSymReg.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizFiveSymReg.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizThreeSymReg.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizThreeSymReg.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\back-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\back-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmex10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmex10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\putbi8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\putbi8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\grayscale.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\grayscale.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizTwoSymReg.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizTwoSymReg.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\forward.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\forward.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\help_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\help_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\Stocks.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\Stocks.csv',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans-BoldOblique.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans-BoldOblique.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pagdo8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pagdo8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\forward_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\forward_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pplbi8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pplbi8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\LICENSE_DEJAVU',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\LICENSE_DEJAVU',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pzdr.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pzdr.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\matplotlib.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-talk.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-talk.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\forward-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\forward-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUniBol.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUniBol.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\qt4_editor_options.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\qt4_editor_options.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvbo8an.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvbo8an.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\_classic_test_patch.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\_classic_test_patch.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\back_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\back_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\logo2.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\logo2.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\home.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\home.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\home_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\home_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pplb8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pplb8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pbkdi8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pbkdi8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\home.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\home.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\subplots_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\subplots_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\fivethirtyeight.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\fivethirtyeight.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\back.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\back.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvlo8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvlo8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-notebook.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-notebook.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pncb8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pncb8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUniBolIta.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUniBolIta.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\grace_hopper.jpg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\grace_hopper.jpg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-bright.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-bright.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif-BoldItalic.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif-BoldItalic.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\kpsewhich.lua',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\kpsewhich.lua',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono-BoldOblique.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono-BoldOblique.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-darkgrid.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-darkgrid.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\Solarize_Light2.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\Solarize_Light2.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\msft.csv',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\msft.csv',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\ptmb8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\ptmb8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\move.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\move.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\psyr.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\psyr.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\hand.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\hand.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\membrane.dat',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\membrane.dat',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneralBolIta.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneralBolIta.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\forward.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\forward.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-dark.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-dark.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\axes_grid\\bivariate_normal.npy',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\axes_grid\\bivariate_normal.npy',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvb8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvb8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\matplotlib_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pncr8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pncr8a.afm',
+   'DATA'),
+  ('matplotlib.libs\\.load-order-matplotlib-3.8.2',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib.libs\\.load-order-matplotlib-3.8.2',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\dark_background.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\dark_background.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\back.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\back.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\_mpl-gallery.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\_mpl-gallery.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pcrr8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pcrr8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\filesave.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\filesave.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\README.txt',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\README.txt',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvro8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvro8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\move.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\move.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\zoom_to_rect_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\zoom_to_rect_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\s1045.ima.gz',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\s1045.ima.gz',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\_mpl-gallery-nogrid.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\_mpl-gallery-nogrid.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\filesave.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\filesave.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneralBol.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneralBol.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\move_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\move_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-white.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-white.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pcrro8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pcrro8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\zoom_to_rect.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\zoom_to_rect.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\ptmr8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\ptmr8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvb8an.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvb8an.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizFourSymReg.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizFourSymReg.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\topobathy.npz',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\topobathy.npz',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\ptmbi8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\ptmbi8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-whitegrid.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-whitegrid.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\classic.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\classic.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizOneSymReg.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizOneSymReg.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans-Oblique.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans-Oblique.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\help-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\help-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-ticks.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-ticks.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica-BoldOblique.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica-BoldOblique.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\cmr10.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\cmr10.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\filesave.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\filesave.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pzcmi8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pzcmi8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\back.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\back.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-Italic.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-Italic.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\ptmri8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\ptmri8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\fast.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\fast.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier-Bold.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier-Bold.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\goog.npz',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\goog.npz',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pbkd8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pbkd8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-deep.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-deep.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\ggplot.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\ggplot.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizOneSymBol.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizOneSymBol.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-BoldItalic.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-BoldItalic.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\subplots.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\subplots.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\matplotlib.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-Bold.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-Bold.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmsy10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmsy10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\move.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\move.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\cmmi10.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\cmmi10.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvro8an.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvro8an.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmb10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmb10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUni.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUni.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\help.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\help.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-colorblind.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-colorblind.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansDisplay.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansDisplay.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pagd8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pagd8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\cmex10.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\cmex10.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\help.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\help.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\filesave-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\filesave-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica-Oblique.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica-Oblique.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pplr8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pplr8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmr10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmr10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif-Italic.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif-Italic.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvr8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvr8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizThreeSymBol.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizThreeSymBol.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-muted.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-muted.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\readme.txt',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\readme.txt',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUniIta.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXNonUniIta.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneralItalic.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXGeneralItalic.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\Minduka_Present_Blue_Pack.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\Minduka_Present_Blue_Pack.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\move-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\move-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\cmsy10.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\cmsy10.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\putb8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\putb8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\LICENSE_STIX',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\LICENSE_STIX',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\zoom_to_rect.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\zoom_to_rect.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-Roman.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Times-Roman.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\subplots.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\subplots.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\plot_directive\\plot_directive.css',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\plot_directive\\plot_directive.css',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmmi10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmmi10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif-Bold.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif-Bold.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica-Bold.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Helvetica-Bold.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-dark-palette.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-dark-palette.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvr8an.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvr8an.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\bmh.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\bmh.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pbkli8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pbkli8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\qt4_editor_options_large.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\qt4_editor_options_large.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\cmtt10.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\cmtt10.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\qt4_editor_options.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\qt4_editor_options.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier-BoldOblique.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier-BoldOblique.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pplri8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pplri8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Symbol.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Symbol.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono-Bold.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSansMono-Bold.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\phvbo8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\phvbo8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pagk8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pagk8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerif.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\hand.pdf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\hand.pdf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\ZapfDingbats.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\ZapfDingbats.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\eeg.dat',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\eeg.dat',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerifDisplay.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSerifDisplay.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\help.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\help.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\tableau-colorblind10.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\tableau-colorblind10.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pagko8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pagko8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans-Bold.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans-Bold.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\qt4_editor_options.png',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\qt4_editor_options.png',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\zoom_to_rect-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\zoom_to_rect-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\putr8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\putr8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\subplots-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\subplots-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pncri8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pncri8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\images\\home-symbolic.svg',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\images\\home-symbolic.svg',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pcrb8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pcrb8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-poster.mplstyle',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\stylelib\\seaborn-v0_8-poster.mplstyle',
+   'DATA'),
+  ('matplotlib\\mpl-data\\sample_data\\embedding_in_wx3.xrc',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\sample_data\\embedding_in_wx3.xrc',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\afm\\pcrbo8a.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\afm\\pcrbo8a.afm',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\ttf\\STIXSizFourSymBol.ttf',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\STIXSizFourSymBol.ttf',
+   'DATA'),
+  ('matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier-Oblique.afm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\pdfcorefonts\\Courier-Oblique.afm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_he.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_he.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_de.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_de.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_sv.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sv.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_tr.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_tr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_hu.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_hu.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_gd.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_gd.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_cs.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_cs.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ko.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ko.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ru.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ru.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_en.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_en.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_tr.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_tr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_he.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_he.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ar.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ar.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_gl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_gl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_bg.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_bg.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_hu.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_hu.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_gd.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_gd.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_pt.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_pt.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_zh_CN.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_zh_CN.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_da.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_da.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_da.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_da.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_bg.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_bg.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ja.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ja.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ca.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ca.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_it.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_it.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_cs.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_cs.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_uk.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_uk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ca.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ca.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ar.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ar.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_bg.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_bg.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_gl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_gl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ja.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ja.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_fr.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_fr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_tr.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_tr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ca.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ca.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_de.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_de.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_hu.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_hu.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_pl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_pl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_sl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_fi.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_fi.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_fr.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ko.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ko.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ja.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ja.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ru.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ru.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_sk.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_sk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ko.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ko.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_uk.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_uk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_lv.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_lv.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ar.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ar.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_sl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_sl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_da.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_da.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_en.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_en.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_lt.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_lt.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_de.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_de.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_es.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_es.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_lv.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_lv.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_es.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_es.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_fa.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fa.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_sk.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_sk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_it.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_it.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_zh_TW.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_zh_TW.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_fi.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fi.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_pl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_pl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_zh_TW.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_zh_TW.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_zh_CN.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_zh_CN.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_fr.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_fr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ru.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ru.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_en.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_en.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_uk.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_uk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_pl.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_pl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_it.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_it.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_zh_TW.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_zh_TW.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_sk.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_es.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_es.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_cs.qm',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator_env\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_cs.qm',
+   'DATA')],)
