@@ -16,9 +16,12 @@ path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 
-def volumeToAdd_uL(current, target, model='fixed volumes'): #pH courant et cible, modèle choisi par défaut le 5/05
+def volumeToAdd_uL(current, target, model='fixed volumes', oxygen=True): #pH courant et cible, modèle choisi par défaut le 5/05
     if model=='5th order polynomial fit on dommino 23/01/2024':
         vol = dispense_data.get_volume_to_dispense_uL(current,target)
+    elif oxygen==False:
+        vol = dispense_data.get_volume_to_dispense_uL(current,target)
+        #Compléter avec les données issues des mesures IPGP avec bullage N2.
     return int(vol)
 
 def getPhStep(current):
@@ -31,12 +34,47 @@ def getPhStep(current):
         step=-0.028*current+0.68
     return step
 
+def identifier(x):
+    if x==0:
+        y='A'
+    elif x==1:
+        y='B'
+    elif x==2:
+        y='C'
+    elif x=='A':
+        y=0
+    elif x=='B':
+        y=1
+    elif x=='C':
+        y=2
+    else:
+        y='error'
+    return y
+
 class Dispenser:
 
     def __init__(self):
         self.syringe_A=PhidgetStepperPump('A')
         self.syringe_B=PhidgetStepperPump('B')
         self.syringe_C=PhidgetStepperPump('C')
+        self.syringes=[self.syringe_A,self.syringe_B,self.syringe_C]
+        self.update_infos()
+        self.state=['closed','closed','closed']
+    
+    def update_infos(self):
+        self.infos=self.syringe_A.infos+"\n"+self.syringe_B.infos+"\n"+self.syringe_C.infos
+
+    def connect(self):
+        self.syringe_A.connect()
+        self.syringe_B.connect()
+        self.syringe_C.connect()
+        self.state=[self.syringe_A.state,self.syringe_B.state,self.syringe_C.state]
+        self.update_infos()
+    
+    def refill_empty_syringes(self):
+        for syr in self.syringes:
+            if syr.state=='open' and syr.level_uL<syr.size:   #not empty
+                syr.full_refill()
 
 #global
 GAIN_ON_PH_STEP = 0.5
@@ -45,13 +83,11 @@ class SyringePump: #Nouvelle classe SyringePump globale : classe mère
 
     mode = 'manual' #peut être 'titration'
 
-    #niveau courant des seringues
-    acid_level_uL=None
-    base_level_uL=None
+    #niveau courant
+    level_uL=None
 
     #monitoring de la dispense sur le titrage
-    added_acid_uL = 0
-    added_base_uL = 0
+    added_vol_uL = 0
     added_total_uL = 0
 
     acid_dispense_log = []
@@ -76,20 +112,23 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     reference_switch = DigitalInput() #interrupteur pour positionnement de référence
     electrovanne = DigitalOutput() #contrôle électrovannes
     
-    def __init__(self,id,syringe_type='SGE500'): #par défaut une SGE500uL
+    def __init__(self,id,syringe_type='Trajan SGE 500uL'): #par défaut une Trajan SGE 500uL
         
         self.syringe_type=syringe_type
+        self.model='Phidget Stepper STC1005_0'
+        self.id=id
         if id=='A':
             self.stepper.setHubPort(0)
-            self.id='syringe_a'
+            self.id='Syringe A'
         elif id=='B':
             self.stepper.setHubPort(1)
-            self.id='syringe_b'
+            self.id='Syringe B'
         elif id=='C':
             self.stepper.setHubPort(2)
-            self.id='syringe_c'
+            self.id='Syringe C'
         
         self.state='closed'
+        self.infos=self.id+" : "+self.state
 
         parser = ConfigParser()
         parser.read(app_default_settings)
@@ -98,12 +137,11 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.concentration=float(parser.get(self.id, 'concentration'))
 
     def connect(self):
-        self.model='Phidget Stepper STC 10005_0 Syringe Pump'
-        #Stepper
         
+        #Stepper
         try:
             self.stepper.openWaitForAttachment(4000)
-            print("stepper connecté")
+            print("stepper "+self.id+" connected")
             print("limite de courant actuelle : ", self.stepper.getCurrentLimit())
             self.stepper.setCurrentLimit(0.2) #0.1A
             print("limite de courant après réglage : ", self.stepper.getCurrentLimit())
@@ -111,7 +149,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             print("limite de vittesse stepper : ", self.stepper.getVelocityLimit())
             self.stepper.setAcceleration(5)
             print("acceleration stepper : ", self.stepper.getAcceleration())
-            if self.syringe_type=='SGE500': #Trajan SGE 500uL
+            if self.syringe_type=='Trajan SGE 500uL': #Trajan SGE 500uL
                 #rescale factor calculé le 25/01/2024
                 print("le syringe type est bon")
                 self.stepper.setRescaleFactor(-0.01298) #rescale factor = -0.013115 avant 25/01/2024
@@ -122,33 +160,44 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 #uL use only 400 on a 500uL syringe
                 #Pour ne pas toucher le bout de la seringue
             else:
-                print("dans le else")
                 self.stepper.setRescaleFactor(-0.01303) #avant 0.013115
             print("rescale factor = ", self.stepper.getRescaleFactor())
         except:
-            print("stepper non connecté")
+            print("stepper "+self.id+" not connected")
         
         #Interrupteurs, electrovanne
         self.security_switch.setDeviceSerialNumber(432846)
         self.security_switch.setChannel(1)
+        print("security switch : ")
+        try:
+            self.security_switch.openWaitForAttachment(1000)
+            print("connected\n")
+        except:
+            print("not connected\n")
+
         self.reference_switch.setDeviceSerialNumber(432846)
         self.reference_switch.setChannel(0)
+        print("reference switch : ")
+        try:
+            self.reference_switch.openWaitForAttachment(1000)
+            print("connected\n")
+        except:
+            print("not connected\n")
         
         self.electrovanne.setDeviceSerialNumber(432846)
         self.electrovanne.setChannel(1)
-        print(self.reference_switch)
-        print(self.electrovanne)
+        print("electrovalve : ")
         try:
-            self.security_switch.openWaitForAttachment(1000)
-            self.reference_switch.openWaitForAttachment(1000)
             self.electrovanne.openWaitForAttachment(1000)
-            print("electrovanne et interrupteurs connectés")
+            print("connected\n")
         except:
-            print("problème pour la connexion de l'électrovanne ou des interrupteurs")
+            print("not connected\n")
         
         if (self.stepper.getIsOpen() and self.security_switch.getIsOpen() and \
         self.reference_switch.getIsOpen() and self.electrovanne.getIsOpen()):
             self.state='open'
+            self.infos=self.id+" : "+self.state+"\nSyringe : "+self.syringe_type\
+                +"\nReagent : "+self.reagent+"\nConcentration : "+self.concentration+" mol/L"
         else:
             self.state='closed'
         #L'attribut state ne garantit pas que tous les appareils passifs sont branchés
@@ -159,8 +208,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         if self.state=='open':
             self.reference_switch.setOnStateChangeHandler(self.ReferenceStop)
             self.security_switch.setOnStateChangeHandler(self.SecurityStop)
-            self.base_level_uL=self.size
-            #self.stepper.setOnStoppedHandler(PhidgetStepperPump.onMotorStop)  #test
+            self.level_uL=self.size
 
     def ForceStop(self):
         self.stepper.setEngaged(False)
@@ -172,7 +220,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.stepper.setEngaged(False)
             print("interrupteur ouvert : arrêt du moteur")
             self.simple_refill(54) #54uL ajusté à l'oeil
-            self.base_level_uL=0
+            self.level_uL=0
         else:   #l'interrupteur se referme, le moteur repart de l'autre côté, rien à faire
             pass
 
@@ -193,7 +241,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.stepper.setEngaged(False)
             print("end of movement")
             time.sleep(2) #stabilisation méca du steper
-            self.base_level_uL=self.size
+            self.level_uL=self.size
             self.setReference()
             print("Moteur remis en position initiale : prêt à dispenser")
         else: #le piston se remet en position 0, rien à faire 
@@ -265,9 +313,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         pos0 = self.stepper.getPosition()
         #print("position avant dispense : ",pos0)
         if ev==1:
-            print("syringe level before dispense = ",self.base_level_uL)
+            print("syringe level before dispense = ",self.level_uL)
         else:
-            print("syringe level before unfill = ", self.base_level_uL)
+            print("syringe level before unfill = ", self.level_uL)
         disp=False #par défaut, avant dispense : pas encore de dispense effectuée
         if vol >= 0 and vol <= self.size-pos0+10:   
             #+10 est une marge pour pouvoir dépasser légèrement le niveau complet     
@@ -288,11 +336,11 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 #affichage de la position atteinte
                 position = self.stepper.getPosition()
                 delta=round((position-pos0),0)
-                self.base_level_uL-=delta
+                self.level_uL-=delta
                 #print("Position atteinte après dispense: ", position)
-                #print("syringe level = ",self.base_level_uL)
+                #print("syringe level = ",self.level_uL)
                 if ev==1:
-                    self.added_base_uL+=delta
+                    self.added_vol_uL+=delta
                     self.added_total_uL+=delta
                     self.base_dispense_log.append(delta)
                     disp=True #seulement si toutes les conditions sont réunies, la dispense\
@@ -313,7 +361,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
 
         print("début de dispense %f uL" %vol)
         capacity=self.size
-        level=self.base_level_uL
+        level=self.level_uL
         q=vol//capacity
         r=vol%capacity
         print("q,r=",q,r)
@@ -360,7 +408,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             position = self.stepper.getPosition()
             print("Position atteinte après recharge: ", position)
             delta=round((position-pos0),0)
-            self.base_level_uL-=delta #idelta est negatif
+            self.level_uL-=delta #idelta est negatif
     
     #def refill(self, vol):
     
@@ -566,7 +614,9 @@ class KDS_Legato100(SyringePump):
             self.send("wrun")
             self.waitForStop()
 
-    def run_sequence(self,seq):
+
+
+    """def run_sequence(self,seq):
     # seq est une liste de volumes en microlitres [50, 30, 20, 10, 15, 30, 80, 200] par exemple
         a=input("Voulez-vous recharger la seringue ? 'y' for YES, any key otherwise : ")
         #Recharge optionnelle au début
@@ -583,6 +633,6 @@ class KDS_Legato100(SyringePump):
             pos=end_pos
             print("position courante: ", pos)
         #input("Taper entrée pour remettre la seringue en position initiale")
-        self.refill(pos) #remet en position initiale
+        self.refill(pos) #remet en position initiale"""
 
 

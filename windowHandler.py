@@ -2,7 +2,7 @@
 
 #from IHM import IHM
 
-from windows.main_window import MainWindow
+from windows.control_panel import ControlPanel
 """from expConfig import ExpConfig
 from calBox import CalBox
 from spectrumConfig import SpectrumConfigWindow
@@ -17,7 +17,7 @@ class WindowHandler():
         self.ihm=ihm
 
     def openControlPanel(self):
-        self.controlPanel=MainWindow(self.ihm)
+        self.controlPanel=ControlPanel(self.ihm)
         self.controlPanel.show()
     
     def openSpectroWindow(self):

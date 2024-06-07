@@ -257,11 +257,9 @@ class Ui_SyringePanel(object):
         self.checkbox_A.setText(_translate("SyringePanel", "Syringe A"))
         self.checkbox_B.setText(_translate("SyringePanel", "Syringe B"))
         self.checkbox_C.setText(_translate("SyringePanel", "Syringe C"))
-        self.reagentB.setPlainText(_translate("SyringePanel", "Base (NaOH)\n"
-""))
+        self.reagentB.setPlainText(_translate("SyringePanel", "Base (NaOH)\n"""))
         self.reagentC.setPlainText(_translate("SyringePanel", "Reagent unknown"))
-        self.reagentA.setPlainText(_translate("SyringePanel", "Acid (HCl)\n"
-""))
+        self.reagentA.setPlainText(_translate("SyringePanel", "Acid (HCl)\n"""))
 
 
 if __name__ == "__main__":

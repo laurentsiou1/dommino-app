@@ -27,7 +27,7 @@ path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
 
-class MainWindow(QMainWindow, Ui_ControlPanel):
+class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):
         
         #appareils
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow, Ui_ControlPanel):
         self.peristaltic_pump=ihm.peristaltic_pump
         
         #graphique
-        super(MainWindow,self).__init__(parent)
+        super(ControlPanel,self).__init__(parent)
         self.setupUi(self)
 
         #Paramètres affichés
@@ -60,8 +60,6 @@ class MainWindow(QMainWindow, Ui_ControlPanel):
         self.Spectrum_direct = pg.PlotWidget(self.tab_2)
         self.Spectrum_direct.setGeometry(QtCore.QRect(0, 0, 511, 371))
         self.Spectrum_direct.setObjectName("Spectrum_direct")
-        
-
 
         #connexions
         self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM)
@@ -73,9 +71,10 @@ class MainWindow(QMainWindow, Ui_ControlPanel):
         self.open_syringe_panel.clicked.connect(self.ihm.openSyringePanel)
         self.connect_pump.clicked.connect(self.connectPeristalticPump)   
         
-        self.titration_button.clicked.connect(self.ihm.openConfigWindow)
-        self.saving_config.clicked.connect(self.ihm.openSavingConfigWindow)
-        self.save_button.clicked.connect(self.ihm.createDirectMeasureFile)
+        self.configure_sequence.clicked.connect(self.ihm.openConfigWindow)
+        self.actionchange_folder.triggered.connect(self.ihm.openSavingConfigWindow)    #choix dossier
+        self.save_button.clicked.connect(self.ihm.createDirectMeasureFile)  #deux façons de sauver les données
+        self.actionsave.triggered.connect(self.ihm.createDirectMeasureFile) 
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.clear_IHM)

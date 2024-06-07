@@ -76,7 +76,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>271</width>
+      <width>351</width>
       <height>41</height>
      </rect>
     </property>
@@ -123,11 +123,11 @@
      <string>last calibration</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="titration_button">
+   <widget class="QPushButton" name="configure_sequence">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>720</y>
+      <x>30</x>
+      <y>700</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -162,24 +162,11 @@
      <string>Spectrometry settings</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="saving_config">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>600</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Configure data saving</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="save_button">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>660</y>
+      <x>30</x>
+      <y>630</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -313,10 +300,10 @@
      <widget class="QGraphicsView" name="Abs_direct">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>511</width>
-        <height>431</height>
+        <x>10</x>
+        <y>20</y>
+        <width>411</width>
+        <height>301</height>
        </rect>
       </property>
      </widget>
@@ -328,8 +315,8 @@
      <widget class="QGraphicsView" name="Spectrum_direct">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>50</y>
+        <x>50</x>
+        <y>10</y>
         <width>421</width>
         <height>281</height>
        </rect>
@@ -1375,37 +1362,28 @@
      <height>18</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuPanneau_de_controle">
+   <widget class="QMenu" name="menu_file">
     <property name="title">
      <string>file</string>
     </property>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
     <addaction name="actionsave"/>
     <addaction name="actionchange_folder"/>
    </widget>
-   <widget class="QMenu" name="menuedit">
-    <property name="title">
-     <string>edit</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuhelp">
+   <widget class="QMenu" name="menu_help">
     <property name="title">
      <string>help</string>
     </property>
-    <addaction name="separator"/>
     <addaction name="actionget_help"/>
    </widget>
-   <widget class="QMenu" name="menuparameters">
+   <widget class="QMenu" name="menu_settings">
     <property name="title">
-     <string>parameters</string>
+     <string>settings</string>
     </property>
     <addaction name="actionSyringes_parameters"/>
    </widget>
-   <addaction name="menuPanneau_de_controle"/>
-   <addaction name="menuedit"/>
-   <addaction name="menuhelp"/>
-   <addaction name="menuparameters"/>
+   <addaction name="menu_file"/>
+   <addaction name="menu_settings"/>
+   <addaction name="menu_help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionget_help">
@@ -1420,12 +1398,17 @@
   </action>
   <action name="actionchange_folder">
    <property name="text">
-    <string>change folder</string>
+    <string>edit saving folder</string>
    </property>
   </action>
   <action name="actionSyringes_parameters">
    <property name="text">
     <string>Syringes parameters</string>
+   </property>
+  </action>
+  <action name="actionSaving_parameters">
+   <property name="text">
+    <string>Saving parameters</string>
    </property>
   </action>
  </widget>

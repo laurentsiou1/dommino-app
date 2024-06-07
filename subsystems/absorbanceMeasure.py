@@ -67,6 +67,8 @@ class AbsorbanceMeasure(Spectrometer):
         #timer pour acquisition des spectres
         self.timer = QtCore.QTimer()
         self.timer.setInterval(3000)
+        
+        self.update_infos()
 
     def connect(self):
         od = OceanDirectAPI()
@@ -85,10 +87,8 @@ class AbsorbanceMeasure(Spectrometer):
         else:
             self.state='closed'
             print("Spectro non connecté")
-        #print("ID spectro: ", device_ids)
         
         if self.state=='open':
-            
             self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
             self.N_lambda = len(self.wavelengths)
             self.model=spectro.get_model()
@@ -141,6 +141,21 @@ class AbsorbanceMeasure(Spectrometer):
             
             self.timer.start()
             self.timer.timeout.connect(self.updateSpectra)
+        
+        self.update_infos()
+    
+    def update_infos(self):
+        if self.state=='open':
+            self.infos="Spectrometer : connected"
+            +"\nModel : "+str(self.model)\
+            +"\nIntegration time (ms) : "+str(self.t_int/1000)\
+            +"\nAveraging : "+str(self.spectro.averaging)\
+            +"\nBoxcar : "+str(self.boxcar)+"\n"
+            +"\nNonlinearity correction usage : "+str(self.device.get_nonlinearity_correction_usage())\
+            +"\nElectric dark correction usage : "+str(self.device.get_electric_dark_correction_usage())
+            +"\nAbsorbance formula : A = log10[(reference-background)/(sample-background)]\n" 
+        else:
+            self.infos="Spectrometer not connected"
 
     def close(self,id): #fermeture de l'objet absorbanceMeasure
         self.timer.stop()

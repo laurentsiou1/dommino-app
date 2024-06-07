@@ -19,10 +19,11 @@ from subsystems.syringePump import Dispenser, PhidgetStepperPump
 from subsystems.peristalticPump import PeristalticPump
 
 #Windows
-from windows.main_window import MainWindow
-from windows.expConfig import ExpConfig
+from windows.control_panel import ControlPanel
+from windows.sequence_config import SequenceConfig
 from windows.calBox import CalBox
 from windows.custom_sequence_window import CustomSequenceWindow
+from windows.titration_window import TitrationWindow
 from windows.spectrumConfig import SpectrumConfigWindow
 from windows.savingConfig import SavingConfig
 from windows.syringe_window import SyringeWindow
@@ -54,12 +55,12 @@ class IHM:
         #Config for savings
         parser = ConfigParser()
         parser.read(self.app_default_settings)
-        self.saving_folder=parser.get('saving_parameters', 'folder')
-        self.save_absorbance=parser.get('saving_parameters', 'save_absorbance')   
-        self.save_pH=parser.get('saving_parameters', 'save_pH')
-        self.save_titration_data=parser.get('saving_parameters', 'save_titration_data')
-        self.create_detailed_param_file=parser.get('saving_parameters', 'create_detailed_param_file')
-        self.compatible_format=parser.get('saving_parameters', 'compatible_format')         
+        self.saving_folder=parser.get('saving parameters', 'folder')
+        self.save_absorbance=parser.get('saving parameters', 'save_absorbance')   
+        self.save_pH=parser.get('saving parameters', 'save_pH')
+        self.save_titration_data=parser.get('saving parameters', 'save_titration_data')
+        self.create_detailed_param_file=parser.get('saving parameters', 'create_detailed_param_file')
+        self.compatible_format=parser.get('saving parameters', 'compatible_format')         
   
         #Configs for Automatic sequence
         self.experience_name=None
@@ -100,25 +101,26 @@ class IHM:
         parser = ConfigParser()
         parser.read(self.app_default_settings)
         file = open(self.app_default_settings,'r+')
-        parser.set('saving_parameters', 'folder', str(self.saving_folder)) 
-        parser.set('saving_parameters', 'save_absorbance', str(self.save_absorbance)) 
-        parser.set('saving_parameters', 'save_pH', str(self.save_pH)) 
-        parser.set('saving_parameters', 'save_titration_data', str(self.save_titration_data)) 
-        parser.set('saving_parameters', 'create_detailed_param_file', str(self.create_detailed_param_file)) 
-        parser.set('saving_parameters', 'compatible_format', str(self.compatible_format)) 
+        parser.set('saving parameters', 'folder', str(self.saving_folder)) 
+        parser.set('saving parameters', 'save_absorbance', str(self.save_absorbance)) 
+        parser.set('saving parameters', 'save_pH', str(self.save_pH)) 
+        parser.set('saving parameters', 'save_titration_data', str(self.save_titration_data)) 
+        parser.set('saving parameters', 'create_detailed_param_file', str(self.create_detailed_param_file)) 
+        parser.set('saving parameters', 'compatible_format', str(self.compatible_format)) 
         parser.write(file) 
         file.close()
         print("update saving configuration")
     
-    def updateSettings(self, window):
-        if window=='expConfig':
+    """def updateSettings(self, window):
+        if window=='seqConfig':
             parser = ConfigParser()
             parser.read(self.app_default_settings)
             file = open(self.app_default_settings,'r+')
             parser.set('custom sequence', 'sequence_file', str(self.sequence_config_file))
             parser.set('sequence','dispense_mode',str(self.dispense_mode))
+            parser.set('saving parameters','folder',self.seq.saving_folder.text())
             parser.write(file)
-            file.close()
+            file.close()"""
 
     def createDirectMeasureFile(self):
         set = {}
@@ -203,7 +205,7 @@ class IHM:
     ### Gestionnaire des fenêtres ###
 
     def openControlPanel(self):
-        self.controlPanel=MainWindow(self)
+        self.controlPanel=ControlPanel(self)
         self.controlPanel.show()
 
     def openSavingConfigWindow(self):
@@ -211,8 +213,8 @@ class IHM:
         self.win1.show()
 
     def openConfigWindow(self):
-        self.expConfig = ExpConfig(self)
-        self.expConfig.show()
+        self.seqConfig = SequenceConfig(self)
+        self.seqConfig.show()
 
     def openSpectroWindow(self):
         self.spectroWindow = SpectrumConfigWindow(self)
@@ -225,6 +227,14 @@ class IHM:
     def openSyringePanel(self):
         self.syringePanel = SyringeWindow(self)
         self.syringePanel.show()
+
+    def openSequenceWindow(self,type):
+        if type=="classic":
+            self.sequenceWindow = TitrationWindow(self)
+            self.sequenceWindow.show()
+        elif type=="custom":
+            self.sequenceWindow = CustomSequenceWindow(self)
+            self.sequenceWindow.show()
 
 if __name__=="main":
     interface = IHM()

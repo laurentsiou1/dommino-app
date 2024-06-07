@@ -40,7 +40,6 @@ class PHMeter:
 	def __init__(self):
 		self.state='closed'
 
-
 		self.stab_timer = QtCore.QTimer()
 		self.stab_timer.setInterval(1000)
 		self.stable=False
@@ -57,6 +56,8 @@ class PHMeter:
 		self.cal_data_path=parser.get('files', 'default')
 		self.model=parser.get('phmeter', 'default')
 		self.electrode=parser.get('electrode', 'default')
+
+		self.update_infos()
 
 	def connect(self,phmeter,electrode):
 		#pHmètre
@@ -75,6 +76,8 @@ class PHMeter:
 			self.connect2(U_pH)
 			U_pH.setDataRate(3)
 			U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
+		self.update_infos()
+
 	def connect2(self,channel):
 		channel.openWaitForAttachment(3000)
 		if channel.getIsOpen():
@@ -88,6 +91,15 @@ class PHMeter:
 			print("pH-mètre non connecté")
 		self.voltagechannel=channel
 
+	def update_infos(self):
+		if self.state=='open':
+			self.infos="Ph meter : "+self.state+"\nModel : "+self.model+"\nElectrode : "\
+			+self.electrode+"\nCurrent calibration data"+"\ndate et heure: "+self.CALdate\
+			+"\ntempérature: "+str(self.CALtemperature)+"\nNombre de points: "+str(self.CALtype)\
+			+"\nTensions mesurées: U4="+str(self.U1)+"V; U7="+str(self.U2)+"V; U10="+str(self.U3)+"V"\
+			+"\nCurrent calibration coefficients: a="+str(self.a)+ "; b="+str(self.b)
+		else:
+			self.infos="Ph meter : closed"
 
 	def load_calibration(self,path):
 		self.cal_data_path=path
@@ -144,6 +156,7 @@ class PHMeter:
 		self.a = float(parser.get('data', 'a'))
 		self.b = float(parser.get('data', 'b'))
 		print(self.CALdate, "calibration change on ph meter")
+		self.update_infos()
 	
 	def saveCalData(self,date,temperature,caltype,u_cal,coeffs):
 		parser = ConfigParser()

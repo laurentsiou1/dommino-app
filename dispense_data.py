@@ -4,6 +4,7 @@ Module appelé pendant la séquence pour obtenir les bons volumes à dispenser
 Fit polynomial de degré 5 sur la courbe de dispense à la pipette du 23/01/2024
 Fit fait sur excel
 """
+
 import numpy as np
 import math
 
@@ -25,14 +26,17 @@ def polynomial_5th_order(x, a5, a4, a3, a2, a1, a0):
             v.append(a5*ph**5+a4*ph**4+a3*ph**3+a2*ph**2+a1*ph+a0)
     return v
 
-def dispense_function_uL(pH, model='polynomial 5th order', ref_data='dommino 23/01/2024'):
+def dispense_function_uL(pH, model='polynomial 5th order', ref_data='dommino 23/01/2024', oxygen=True):
     if model=='polynomial 5th order' and ref_data=='dommino 23/01/2024':
         (a5, a4, a3, a2, a1, a0) = tuple(param_dommino_23_01_2024)
         v = polynomial_5th_order(pH, a5, a4, a3, a2, a1, a0)
+    elif oxygen==False:
+        pass
+        #compléter avec des données de IPGP. bullage N2
     return v
 
-def get_volume_to_dispense_uL(current_pH, target_pH):
-    return dispense_function_uL(target_pH)-dispense_function_uL(current_pH)
+def get_volume_to_dispense_uL(current_pH, target_pH, oxygen=True):
+    return dispense_function_uL(target_pH, oxygen)-dispense_function_uL(current_pH, oxygen)
 
 #Fonctions pour la répartition des points de pH
 def f_ratio_deprotone(x,m,lK):  #sigmoide modelise f1 f2 dans le traitement 
@@ -67,6 +71,21 @@ absorbance_model_26_01_2024 = [[0.1317,0.0419],0.416,3.90,[0.0727,0.1392],0.197,
             else:
                 x.append(x0+bb*(10**((y-y0)/cb)-1))
     return x"""
+
+#à développer pour plus tard
+"""elif self.dispense_mode=='variable step with feedback': #à développer
+    ph0=self.pH_mes[N-2]
+    target=ph0+getPhStep(ph0)
+    vol1=GAIN_ON_PH_STEP*volumeToAdd_uL(ph0, target, model='5th order polynomial fit on dommino 23/01/2024')
+    self.syringe.dispense(vol1) #lancement du stepper 
+    #boucle de correction
+    ph1=self.phmeter.currentPH
+    reached_ratio=(ph1-ph0)/(target-ph0)    #how much the target pH is reached
+    if reached_ratio>0.8:
+        #la dispense est validée
+        pass
+    else:
+        new_gain=old_gain*old_gain/reached_ratio"""
 
 class ReferenceData:
     #Cette classe modélise un titrage qui peut servir de référence à plusieurs niveaux

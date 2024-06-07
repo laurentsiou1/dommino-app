@@ -615,12 +615,12 @@
    </property>
    <item>
     <property name="text">
-     <string>Yes</string>
+     <string>True</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>No</string>
+     <string>False</string>
     </property>
    </item>
   </widget>

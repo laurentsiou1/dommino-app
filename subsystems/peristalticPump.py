@@ -4,6 +4,7 @@ from Phidget22.Phidget import *
 from Phidget22.Devices.DCMotor import *
 import time
 
+
 class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMotor
 
     def __init__(self):
@@ -12,6 +13,8 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.setChannel(0)
         self.setHubPort(2)
         self.state='closed'
+        self.circuit_delay_sec=30
+        self.update_infos()
 
     def connect(self):
         try:
@@ -36,26 +39,43 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         except:
             print("moteur de pompe non alimenté")
             self.state='closed'
+        self.update_infos()
 
+    def update_infos(self):
+        if self.state=='open':
+            self.infos="Peristaltic Pump : Connected"
+            +"\nPump model : 12VDC Motor"\
+            +"\nCircuit delay : "+self.circuit_delay_sec+"seconds"\
+            +"\nCurrent speed (Volts) : "+self.mean_voltage
+        else:
+            self.infos="Peristaltic pump not connected"
+
+    #@require_attribute('state', 'open')
     def setSpeed_voltage(self,v):
+        self.mean_voltage=v
         self.duty_cycle=v/12
         self.target_speed=self.duty_cycle*self.direction
         self.current_speed=self.getTargetVelocity()
         if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
             self.setTargetVelocity(self.target_speed)
+        self.update_infos()
 
+    #@require_attribute('state', 'open')
     def start(self):
-        self.setTargetVelocity(self.target_speed)
+        if self.state=='open':
+            self.setTargetVelocity(self.target_speed)
 
+    #@require_attribute('state', 'open')
     def stop(self): 
-        self.setTargetVelocity(0)        
+        if self.state=='open':
+            self.setTargetVelocity(0)        
 
+    #@require_attribute('state', 'open')
     def change_direction(self):
         self.stop()
         time.sleep(1)
         self.direction*=-1
         self.start()
-
 
 if __name__=="__main__":
     pump = PeristalticPump()

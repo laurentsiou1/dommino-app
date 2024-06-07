@@ -221,6 +221,7 @@ class Ui_sequenceConfig(object):
         self.oxygen_label.setText(_translate("sequenceConfig", "Oxygen"))
         self.oxygen_box.setItemText(0, _translate("sequenceConfig", "Yes"))
         self.oxygen_box.setItemText(1, _translate("sequenceConfig", "No"))
+        #self.oxygen_box.currentText()
 
 
 if __name__ == "__main__":
