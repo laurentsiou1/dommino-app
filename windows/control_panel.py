@@ -7,6 +7,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineEdit, QPushButton
 from ui.control_panel import Ui_ControlPanel
 from PyQt5 import QtCore, QtGui, QtWidgets
+#from PyQt5.QtGui import QPixmap
 
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -27,6 +28,9 @@ path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
 
+ICON_GREEN_LED="windows/green-led-on.png"
+ICON_RED_LED="windows/red-led-on.png"
+
 class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):
         
@@ -41,7 +45,10 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         #graphique
         super(ControlPanel,self).__init__(parent)
         self.setupUi(self)
-
+        
+        self.pixmap_red=QtGui.QPixmap(ICON_RED_LED)
+        self.pixmap_green=QtGui.QPixmap(ICON_GREEN_LED)
+        
         #Paramètres affichés
         parser = ConfigParser()
         parser.read(app_default_settings)
@@ -50,8 +57,17 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.electrode_selection_box.setCurrentText(str(parser.get('electrode', 'default')))
         #Spectromètre
         self.label_device.setText("device : "+self.spectro_unit.model)
-        
         #self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
+        
+        self.update_lights()
+        self.led_spectro.setScaledContents(True)
+        self.led_phmeter.setScaledContents(True)
+        self.led_disp.setScaledContents(True)
+        self.led_pump.setScaledContents(True)
+
+        #self.led_spectro.resize(pixmap.width(),pixmap.height())
+        #self.setCentralWidget(self.led_spectro)
+        #self.resize(pixmap.width(), pixmap.height())
 
         #ajout
         self.Abs_direct = pg.PlotWidget(self.tab1)
@@ -79,6 +95,23 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.clear_IHM)
 
+    def select_pixmap(self, state):
+        if state=='open':
+            px=self.pixmap_green
+        elif state=='closed':
+            px=self.pixmap_red
+        elif state==['closed','closed','closed']:
+            px=self.pixmap_red
+        else:
+            px=self.pixmap_green
+        return px
+
+    def update_lights(self):
+        self.led_spectro.setPixmap(self.select_pixmap(self.ihm.spectro_unit.state))
+        self.led_phmeter.setPixmap(self.select_pixmap(self.ihm.phmeter.state))
+        self.led_disp.setPixmap(self.select_pixmap(self.ihm.dispenser.state))
+        self.led_pump.setPixmap(self.select_pixmap(self.ihm.peristaltic_pump.state))
+
     ### Méthodes pour le pH mètre
     def link_pHmeter2IHM(self):
         phmeter_model=self.phmeter_selection_box.currentText()
@@ -88,6 +121,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         if self.phmeter.state=='open':
             #affichage des données de calibration
             self.refreshCalibrationText()
+            self.led_phmeter.setPixmap(self.pixmap_green)
             #pH en direct
             self.direct_pH.display(self.phmeter.currentPH) #pH instantané
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
@@ -142,6 +176,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         if self.spectro_unit.state=='closed':
             self.spectro_unit.connect()
         if self.spectro_unit.state=='open':
+            self.led_spectro.setPixmap(self.pixmap_green)
             self.link_spectro2IHM()
         self.ihm.openSpectroWindow()
     
@@ -193,6 +228,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def connectSyringePump(self):
         self.syringe_pump.connect()
         if self.syringe_pump.state=='open':
+            self.led_disp.setPixmap(self.pixmap_green)
             self.link_SyringePump2IHM()
 
     #Suppose que le pousse seringue soit ouvert
@@ -284,6 +320,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def connectPeristalticPump(self):
         self.peristaltic_pump.connect()
         if self.peristaltic_pump.state=='open':
+            self.led_pump.setPixmap(self.pixmap_green)
             self.link_pump2IHM()
     
     def link_pump2IHM(self):

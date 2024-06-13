@@ -26,7 +26,7 @@
    <widget class="QLCDNumber" name="direct_pH">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>660</x>
       <y>220</y>
       <width>101</width>
       <height>51</height>
@@ -36,7 +36,7 @@
    <widget class="QProgressBar" name="stabilisation_level">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>660</x>
       <y>180</y>
       <width>101</width>
       <height>31</height>
@@ -61,7 +61,7 @@
    <widget class="QLabel" name="pH_label">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>620</x>
       <y>220</y>
       <width>41</width>
       <height>51</height>
@@ -87,7 +87,7 @@
    <widget class="QLabel" name="stability_label">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>660</x>
       <y>150</y>
       <width>101</width>
       <height>31</height>
@@ -113,7 +113,7 @@
    <widget class="QLabel" name="last_cal_label">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>780</x>
       <y>60</y>
       <width>191</width>
       <height>41</height>
@@ -139,7 +139,7 @@
    <widget class="QPushButton" name="cal_button">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>660</x>
       <y>290</y>
       <width>101</width>
       <height>51</height>
@@ -231,7 +231,7 @@
    <widget class="QPushButton" name="connect_phmeter">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>610</x>
       <y>360</y>
       <width>151</width>
       <height>51</height>
@@ -257,10 +257,10 @@
    <widget class="QPushButton" name="stop_syringe">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>650</x>
       <y>580</y>
       <width>81</width>
-      <height>31</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -270,7 +270,7 @@
    <widget class="QPushButton" name="connect_syringe_pump">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>610</x>
       <y>450</y>
       <width>121</width>
       <height>51</height>
@@ -291,11 +291,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab1">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Absorbance</string>
      </attribute>
      <widget class="QGraphicsView" name="Abs_direct">
       <property name="geometry">
@@ -310,7 +310,7 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Intensity</string>
      </attribute>
      <widget class="QGraphicsView" name="Spectrum_direct">
       <property name="geometry">
@@ -327,7 +327,7 @@
    <widget class="QSpinBox" name="stab_time">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>710</x>
       <y>120</y>
       <width>51</width>
       <height>31</height>
@@ -343,7 +343,7 @@
    <widget class="QPlainTextEdit" name="calib_text_box">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>780</x>
       <y>100</y>
       <width>331</width>
       <height>311</height>
@@ -433,7 +433,7 @@
    <widget class="QDoubleSpinBox" name="stab_step">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>640</x>
       <y>120</y>
       <width>51</width>
       <height>31</height>
@@ -452,7 +452,7 @@
    <widget class="QComboBox" name="phmeter_selection_box">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>590</x>
       <y>20</y>
       <width>171</width>
       <height>31</height>
@@ -493,7 +493,7 @@
    <widget class="QComboBox" name="electrode_selection_box">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>610</x>
       <y>70</y>
       <width>151</width>
       <height>31</height>
@@ -528,7 +528,7 @@
    <widget class="QPushButton" name="load_calibration_button">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>780</x>
       <y>20</y>
       <width>331</width>
       <height>31</height>
@@ -1097,7 +1097,7 @@
      <rect>
       <x>560</x>
       <y>520</y>
-      <width>161</width>
+      <width>171</width>
       <height>41</height>
      </rect>
     </property>
@@ -1350,6 +1350,58 @@
     </property>
     <property name="text">
      <string>ref</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="led_spectro">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>510</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>led spectro</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="led_phmeter">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>370</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>led phm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="led_disp">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>460</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>led disp</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="led_pump">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>620</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>led pump</string>
     </property>
    </widget>
   </widget>

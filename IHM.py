@@ -9,10 +9,13 @@ from datetime import datetime
 
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageInput import *
+from Phidget22.Devices.Manager import *
+
 from lib.oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from lib.oceandirect.od_logger import od_logger
 
 #Instruments
+from subsystems.system import System
 from subsystems.pHmeter import PHMeter
 from subsystems.absorbanceMeasure import AbsorbanceMeasure
 from subsystems.syringePump import Dispenser, PhidgetStepperPump
@@ -37,21 +40,21 @@ class IHM:
     app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
     #Sous sytèmes 
     #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
+    system=System()
     spectro_unit=AbsorbanceMeasure()
     phmeter=PHMeter()
     dispenser=Dispenser()
-    #syringe_pump=PhidgetStepperPump()
     peristaltic_pump=PeristalticPump()
 
-    background=None
-    reference=None
-
-    #constantes de paramétrage de l'application
-    #FIXED_DELAY_SEC = 75 #temps en secondes pour que le liquide parcourt l'ensemble du circuit
-    #75secondes à vitesse minimale
-    #MIXING_DELAY_SEC = 10 #temps de mélange pour que la solution soit homogène après un ajout
+    manager=Manager()
 
     def __init__(self):
+
+        if self.system.state=='connected':
+            print("Instrument connected and under tension")
+        else:
+            print("The instrument is rather not connected to computer or not under tension")
+
         #Config for savings
         parser = ConfigParser()
         parser.read(self.app_default_settings)
@@ -70,7 +73,7 @@ class IHM:
         self.fibers=None
         self.flowcell=None
         self.N_mes=None #number of pH/spectra measures
-        self.dispense_mode=parser.get('sequence', 'dispense_mode')  
+        self.dispense_mode=parser.get('sequence', 'dispense_mode')
 
         #classic
         self.initial_pH=None
@@ -83,7 +86,30 @@ class IHM:
         self.timer1s = QtCore.QTimer()
         self.timer1s.setInterval(1000)
         self.timer1s.start() 
-    
+
+        #Gestion des connexions/déconnexions
+        self.manager.setOnAttachHandler(self.AttachHandler)
+        self.manager.setOnDetachHandler(self.DetachHandler)
+        self.manager.open()
+
+    def AttachHandler(self, man, channel):
+        attachedDevice = channel
+        serialNumber = attachedDevice.getDeviceSerialNumber()
+        deviceName = attachedDevice.getDeviceName()
+        print("Hello to Device " + str(deviceName) + ", Serial Number: " + str(serialNumber)+"channel : "+str(channel))
+
+    def DetachHandler(self, man, channel):
+        detachedDevice = channel
+        serialNumber = detachedDevice.getDeviceSerialNumber()
+        deviceName = detachedDevice.getDeviceName()
+        print("Goodbye Device " + str(deviceName) + ", Serial Number: " + str(serialNumber)+"channel : "+str(channel))
+
+        if serialNumber==432846:
+            self.phmeter.state='closed'
+        if serialNumber==683442:
+            self.dispenser.state=['closed','closed','closed']
+            self.peristaltic_pump.state='closed'
+
     def close_all_devices(self):
         print("Closing all device")
         self.timer1s.stop()
@@ -134,7 +160,6 @@ class IHM:
         if self.save_pH: #saving pH measure
             if self.phmeter.state=='open':
                 name+="pH-"
-                
                 header+=("Données de la calibration courante\n"+"date et heure: "+self.phmeter.CALdate+"\n"+
                 "température: "+str(self.phmeter.CALtemperature)+"\n"+"nombre de points: "+str(self.phmeter.CALtype)+"\n"+
                 "Tensions mesurées: U4="+str(self.phmeter.U1)+"V; U7="+str(self.phmeter.U2)+"V; U10="+str(self.phmeter.U3)+"V\n"+

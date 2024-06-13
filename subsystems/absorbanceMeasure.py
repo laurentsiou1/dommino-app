@@ -39,15 +39,12 @@ class AbsorbanceMeasure(Spectrometer):
     pin1_deuterium = DigitalOutput()
     pin1_deuterium.setDeviceSerialNumber(432846)
     pin1_deuterium.setChannel(5)
-    pin1_deuterium.openWaitForAttachment(1000)
     pin5_halogen = DigitalOutput()
     pin5_halogen.setDeviceSerialNumber(432846)
     pin5_halogen.setChannel(4)
-    pin5_halogen.openWaitForAttachment(1000)
     pin13_shutter = DigitalOutput()
     pin13_shutter.setDeviceSerialNumber(432846)
     pin13_shutter.setChannel(3)
-    pin13_shutter.openWaitForAttachment(1000)
 
     def __init__(self): #ihm:IHM est un argument optionnel 
         self.state='closed'
@@ -79,6 +76,9 @@ class AbsorbanceMeasure(Spectrometer):
             try:
                 spectro = od.open_device(self.id) #crée une instance de la classe Spectrometer
                 adv = Spectrometer.Advanced(spectro)
+                self.pin1_deuterium.openWaitForAttachment(1000)
+                self.pin5_halogen.openWaitForAttachment(1000)
+                self.pin13_shutter.openWaitForAttachment(1000)
                 self.state='open'
                 print("Spectro connecté")
             except:
@@ -129,8 +129,10 @@ class AbsorbanceMeasure(Spectrometer):
             
             if self.model!='OceanST' or self.model!='OceanSR6':
                 self.device.set_electric_dark_correction_usage(False)   #non pris en charge par le ST
+                self.electric_dark=False
             else:
                 self.device.set_electric_dark_correction_usage(True) 
+                self.electric_dark=True
 
             #time attributes in milliseconds. SDK methods outputs are in microseconds (us)
             self.t_int=self.device.get_integration_time()//1000 
@@ -146,13 +148,13 @@ class AbsorbanceMeasure(Spectrometer):
     
     def update_infos(self):
         if self.state=='open':
-            self.infos="Spectrometer : connected"
-            +"\nModel : "+str(self.model)\
+            self.infos="Spectrometer : connected"\
+            +"\nModel : "+self.model\
             +"\nIntegration time (ms) : "+str(self.t_int/1000)\
-            +"\nAveraging : "+str(self.spectro.averaging)\
-            +"\nBoxcar : "+str(self.boxcar)+"\n"
+            +"\nAveraging : "+str(self.averaging)\
+            +"\nBoxcar : "+str(self.boxcar)+"\n"\
             +"\nNonlinearity correction usage : "+str(self.device.get_nonlinearity_correction_usage())\
-            +"\nElectric dark correction usage : "+str(self.device.get_electric_dark_correction_usage())
+            +"\nElectric dark correction usage : "+str(self.electric_dark)\
             +"\nAbsorbance formula : A = log10[(reference-background)/(sample-background)]\n" 
         else:
             self.infos="Spectrometer not connected"
