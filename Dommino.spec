@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('config/app_default_settings.ini','config'),('lib/oceandirect/lib/OceanDirect.dll','lib/oceandirect/lib')],
+    datas=[('config/app_default_settings.ini','config'),('lib/oceandirect/lib/OceanDirect.dll','lib/oceandirect/lib'),('lib/Phidget22.dll','lib')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

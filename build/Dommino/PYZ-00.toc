@@ -1036,6 +1036,10 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\lib\\email\\utils.py',
    'PYMODULE'),
+  ('file_manager',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\file_manager.py',
+   'PYMODULE'),
   ('fnmatch',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\\lib\\fnmatch.py',
@@ -3432,21 +3436,21 @@
    'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
    'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\calBox.py',
    'PYMODULE'),
+  ('windows.control_panel',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\control_panel.py',
+   'PYMODULE'),
   ('windows.custom_sequence_window',
    'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
    'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\custom_sequence_window.py',
    'PYMODULE'),
-  ('windows.expConfig',
-   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
-   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\expConfig.py',
-   'PYMODULE'),
-  ('windows.main_window',
-   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
-   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\main_window.py',
-   'PYMODULE'),
   ('windows.savingConfig',
    'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
    'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\savingConfig.py',
+   'PYMODULE'),
+  ('windows.sequence_config',
+   'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
+   'Collaboratifs\\DOMMINO\\PROGRAMMATION\\pytitrator\\windows\\sequence_config.py',
    'PYMODULE'),
   ('windows.spectrumConfig',
    'H:\\A Nouvelle arbo\\DOCUMENTS TECHNIQUES\\Projets '
