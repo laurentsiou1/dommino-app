@@ -18,6 +18,7 @@ import file_manager as fm
 class AutomaticSequence:
     
     DISPLAY_DELAY_MS = 5000 #for letting the screen display once the measure in taken
+    ALGO_TEST_PH = [4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10] #pour tester l'algo
     
     measure_timer = QTimer()    #timer between measures
     pause_timer = QTimer()    #pausing delay
@@ -352,7 +353,13 @@ class CustomSequence(AutomaticSequence):
             self.N_lambda=len(self.lambdas)
         self.absorbance_spectra = []
         self.absorbance_spectra_cd = [] #corrected from dilution
-        self.dispensed_volumes = [[0,0,0] for i in range(self.N_mes)]   #table of volumes on 3 syringes 
+        self.absorbance_spectrum1 =[] #première mesure de spectre
+        self.added_volumes = [[0,0,0] for i in range(self.N_mes)]   #table of volumes on 3 syringes 
+        self.cumulate_volume = 0
+        self.cumulate_volumes = []
+        self.dilution_factors = []
+        self.measure_times=[]     #[dt for k in range(self.N_mes)]
+        self.stability_param=[] 
 
     def update_infos(self):
         print(self.experience_name,self.description)
@@ -366,7 +373,7 @@ class CustomSequence(AutomaticSequence):
         
         #Création de la fenêtre graphique comme attribut de IHM
         self.ihm.openSequenceWindow('custom')
-        window=self.ihm.sequenceWindow
+        self.window=self.ihm.sequenceWindow
 
         #live pH
         if self.phmeter.state=='open':
@@ -380,56 +387,73 @@ class CustomSequence(AutomaticSequence):
                 print("syringe pump "+identifier(k)+" not ready for use")
         self.dispenser.refill_empty_syringes()     
 
-
         #verification que tous les instruments nécessaires sont connectés. 
         #Doit on avoir tous les instruments connectés pour lancer séquence ?
         #On veut pouvoir aussi lancer pour tester, quelque soit les instrucments connectés. 
         #Mais il faut savoir si un instrument nécessaire à l'éxecution n'est pas connecté.
-
+    
     def run_sequence(self):
-        k=0
-        while k<self.N_mes-1:
-            self.measure_index=k+1
-            self.execute_instruction(self.instruction_table[k])
+        self.measure_index=0
+        self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.run_instruction)
+
+    def run_instruction(self):
+        self.measure_index+=1
+        self.execute_instruction(self.instruction_table[self.measure_index-1])
     
     def execute_instruction(self, line):
+        print("executing instruction ", self.measure_index, ":", line)
         syringe_id=line[0]  #'A' or 'B'
         dispense_type=line[1]   #'DISP_ON_PH' or 'DISP_VOL_UL'
         value=line[2]   #50uL or pH4.5 ...
         delay_stop=line[3]  #30sec
         delay_mes=line[4]   #300sec
-
-        if self.pump.state=='open':
-            self.pump.stop()    #arrêt pompe
-
+        self.delay_run=delay_mes-delay_stop
+        print("durée de pompage", self.delay_run,"seconds")
+        print("delay stop =",delay_stop,"seconds")
+        
+        if self.pump.state=='open': #arrêt pompe
+            self.pump.stop()    
+        
         num=identifier(syringe_id)
         syringe=self.dispenser.syringes[num]
-        if syringe.state=='open':
-            syringe.dispense(dispense_type,value)   #dispense
+        if syringe.state=='open':   #dispense
+            if dispense_type=='DISP_ON_PH': #config for dispense
+                target = value
+                print("oxygene",self.oxygen)
+                #vol = dispense_data.get_volume_to_dispense_uL(self.phmeter.currentPH,target,self.oxygen)
+                print("simulated pH =", self.ALGO_TEST_PH[self.measure_index-2])
+                vol = dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-2]),target,self.oxygen)
+            elif dispense_type=='DISP_VOL_UL':
+                vol = value
+            syringe.dispense(vol)   
+            self.added_volumes[self.N_mes-1][num]
+            self.cumulate_volume += vol
+            self.cumulate_volumes.append(vol)
+            self.dilution_factors.append((self.cumulate_volume+self.V_init)/self.V_init)
+        
+        self.pause_timer.singleShot(1000*delay_stop,self.waitForMeasure) #mise en attente
 
-        delay_run=delay_mes-delay_stop
-        print(delay_run)
-        print(self.waitForMeasure(delay_run))
-        self.pause_timer.singleShot(1000*delay_stop,self.waitForMeasure(delay_run)) #mise en attente
-
-        ##Mesure suivante
-        if self.measure_index!=self.N_mes: #temps d'affichage avant de relancer le stepper
-            self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.dispenseN)
-        else: #dernière mesure
-            fm.createFullSequenceFiles(self)   
-
-    def waitForMeasure(self, delay_run):
+    def waitForMeasure(self):
         self.pump.start()
-        self.measure_timer.singleShot(1000*(delay_run),self.measure)
+        self.measure_timer.singleShot(1000*(self.delay_run),self.measure)
     
     def measure(self):
+        print("taking measure\n")
         if self.phmeter.state=='open':
             pH=self.phmeter.currentPH
             self.pH_mes.append(pH)  #ajout dans les tableaux
         if self.spectro.state=='open':
             spec=self.spectro.current_absorbance_spectrum
+            if self.absorbance_spectra==[]:
+                self.absorbance_spectrum1=spec  #premier spectre
             self.absorbance_spectra.append(spec)
             self.delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+        
+        ##Mesure suivante
+        if self.measure_index==self.N_mes: #dernière mesure
+            fm.createFullSequenceFiles(self)
+        else:
+            self.measure_timer.singleShot(self.DISPLAY_DELAY_MS,self.run_instruction)
 
     def dispense(self,dispense_type,value):
         if dispense_type=='DISP_ON_PH':

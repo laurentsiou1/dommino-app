@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1071</width>
-    <height>662</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -191,86 +191,11 @@
     <string>%p%</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="Ca">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>180</y>
-     <width>101</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="decimals">
-    <number>6</number>
-   </property>
-   <property name="minimum">
-    <double>0.000001000000000</double>
-   </property>
-   <property name="maximum">
-    <double>10.000000000000000</double>
-   </property>
-   <property name="singleStep">
-    <double>0.000001000000000</double>
-   </property>
-   <property name="value">
-    <double>0.100000000000000</double>
-   </property>
-  </widget>
-  <widget class="QDoubleSpinBox" name="Cb">
-   <property name="geometry">
-    <rect>
-     <x>630</x>
-     <y>180</y>
-     <width>101</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="decimals">
-    <number>6</number>
-   </property>
-   <property name="minimum">
-    <double>0.000001000000000</double>
-   </property>
-   <property name="maximum">
-    <double>10.000000000000000</double>
-   </property>
-   <property name="singleStep">
-    <double>0.000001000000000</double>
-   </property>
-   <property name="value">
-    <double>0.010000000000000</double>
-   </property>
-  </widget>
-  <widget class="QDoubleSpinBox" name="Cc">
-   <property name="geometry">
-    <rect>
-     <x>890</x>
-     <y>180</y>
-     <width>101</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="decimals">
-    <number>6</number>
-   </property>
-   <property name="minimum">
-    <double>0.000001000000000</double>
-   </property>
-   <property name="maximum">
-    <double>10.000000000000000</double>
-   </property>
-   <property name="singleStep">
-    <double>0.000001000000000</double>
-   </property>
-   <property name="value">
-    <double>0.001000000000000</double>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_reagent">
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>80</y>
+     <y>100</y>
      <width>211</width>
      <height>51</height>
     </rect>
@@ -428,7 +353,7 @@
     <string>load</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="full_reload_B">
+  <widget class="QPushButton" name="full_reload_button_B">
    <property name="geometry">
     <rect>
      <x>590</x>
@@ -454,7 +379,7 @@
     <string>dispense</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="full_reload_C">
+  <widget class="QPushButton" name="full_reload_button_C">
    <property name="geometry">
     <rect>
      <x>850</x>
@@ -506,7 +431,7 @@
     <number>400</number>
    </property>
   </widget>
-  <widget class="QPushButton" name="full_reload_A">
+  <widget class="QPushButton" name="full_reload_button_A">
    <property name="geometry">
     <rect>
      <x>330</x>
@@ -640,9 +565,9 @@
    <property name="geometry">
     <rect>
      <x>280</x>
-     <y>20</y>
+     <y>30</y>
      <width>21</width>
-     <height>381</height>
+     <height>371</height>
     </rect>
    </property>
    <property name="orientation">
@@ -665,93 +590,335 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkbox_A">
+  <widget class="QPushButton" name="stop">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>530</y>
+     <width>81</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>STOP</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="added_B_uL">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>640</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0 uL</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="added_C_uL">
+   <property name="geometry">
+    <rect>
+     <x>890</x>
+     <y>640</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0 uL</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="added_A_uL">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>640</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0 uL</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="added_total">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>670</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>0 uL</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="Line" name="line_8">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>630</y>
+     <width>701</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_added_volume">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>640</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>added volume (uL)</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="Line" name="line_9">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>660</y>
+     <width>701</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_total_volume">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>670</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>total (uL)</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="Line" name="line_10">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>690</y>
+     <width>701</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="reset">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>650</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="reagentA">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>100</y>
+     <width>181</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Acid (HCl)</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="reagentB">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>100</y>
+     <width>181</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Base (NaOH)</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="reagentC">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>100</y>
+     <width>181</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reagent unknown</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="syringeA">
    <property name="geometry">
     <rect>
      <x>370</x>
      <y>20</y>
      <width>101</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
     <string>Syringe A</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
-  <widget class="QCheckBox" name="checkbox_B">
+  <widget class="QLabel" name="syringeB">
    <property name="geometry">
     <rect>
      <x>630</x>
      <y>20</y>
      <width>101</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
     <string>Syringe B</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
-  <widget class="QCheckBox" name="checkbox_C">
+  <widget class="QLabel" name="syringeC">
    <property name="geometry">
     <rect>
      <x>890</x>
      <y>20</y>
      <width>101</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
     <string>Syringe C</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
-  <widget class="QPlainTextEdit" name="reagentB">
+  <widget class="QLabel" name="Ca">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>80</y>
-     <width>104</width>
+     <x>330</x>
+     <y>180</y>
+     <width>181</width>
      <height>51</height>
     </rect>
    </property>
-   <property name="plainText">
-    <string>Base (NaOH)
-</string>
+   <property name="text">
+    <string>0.001</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="reagentC">
+  <widget class="QLabel" name="Cb">
    <property name="geometry">
     <rect>
-     <x>890</x>
-     <y>80</y>
-     <width>104</width>
+     <x>590</x>
+     <y>180</y>
+     <width>181</width>
      <height>51</height>
     </rect>
    </property>
-   <property name="plainText">
-    <string>Reagent unknown</string>
+   <property name="text">
+    <string>0.01</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="reagentA">
+  <widget class="QLabel" name="Cc">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>80</y>
-     <width>104</width>
+     <x>850</x>
+     <y>180</y>
+     <width>181</width>
      <height>51</height>
     </rect>
    </property>
-   <property name="plainText">
-    <string>Acid (HCl)
-</string>
+   <property name="text">
+    <string>1</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>

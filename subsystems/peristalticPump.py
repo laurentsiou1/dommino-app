@@ -11,7 +11,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         DCMotor.__init__(self)
         self.setDeviceSerialNumber(683442)
         self.setChannel(0)
-        self.setHubPort(2)
+        self.setHubPort(3)
         self.state='closed'
         self.circuit_delay_sec=30
         self.update_infos()
@@ -43,10 +43,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
 
     def update_infos(self):
         if self.state=='open':
-            self.infos="Peristaltic Pump : Connected"
+            self.infos="Peristaltic Pump : Connected"\
             +"\nPump model : 12VDC Motor"\
-            +"\nCircuit delay : "+self.circuit_delay_sec+"seconds"\
-            +"\nCurrent speed (Volts) : "+self.mean_voltage
+            +"\nCircuit delay : "+str(self.circuit_delay_sec)+"seconds"\
+            +"\nCurrent speed (Volts) : "+str(self.mean_voltage)
         else:
             self.infos="Peristaltic pump not connected"
 
@@ -76,6 +76,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         time.sleep(1)
         self.direction*=-1
         self.start()
+    
+    def close(self):
+        self.state='closed'
+        print("Peristaltic pump closed")
 
 if __name__=="__main__":
     pump = PeristalticPump()

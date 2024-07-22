@@ -45,8 +45,13 @@ class SpectrumConfigWindow(QDialog,Ui_spectro_config):
             #Affichage des paramètres selon valeurs actuelles du spectro
             device = "device model : "+self.spectro_unit.model
             self.label_model.setText(device)
-            self.Tint.setMinimum(self.spectro_unit.t_int_min) #milliseconds
-            self.Tint.setMaximum(self.spectro_unit.t_int_max)
+            if self.spectro_unit.model=='OceanSR6':
+                self.Tint.setMinimum(self.spectro_unit.device.get_minimum_integration_time()//1000+1) #milliseconds
+                self.Tint.setMaximum(self.spectro_unit.device.get_maximum_integration_time()//1000)
+            if self.spectro_unit.model=='OceanST':
+                self.Tint.setMinimum(self.spectro_unit.device.get_minimum_integration_time()//1000+1) #milliseconds
+                self.Tint.setMaximum(self.spectro_unit.device.get_maximum_integration_time()//1000)
+                print(self.spectro_unit.device.get_minimum_integration_time()//1000,self.spectro_unit.device.get_maximum_integration_time()//1000)
             self.Tint.setProperty("value", self.spectro_unit.t_int)  
             self.avg.setProperty("value", self.spectro_unit.averaging)
             self.acquisition_delay_display.setText(_translate("Dialog", "acquisition delay : %0.2f seconds"% float(self.spectro_unit.acquisition_delay/1000) ))

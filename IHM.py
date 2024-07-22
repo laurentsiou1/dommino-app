@@ -78,6 +78,10 @@ class IHM:
         #classic
         self.initial_pH=None
         self.final_pH=None
+        self.added_total_uL = 0
+        self.added_A_uL = 0
+        self.added_B_uL = 0
+        self.added_C_uL = 0
 
         #custom
         self.sequence_config_file=parser.get('custom sequence', 'sequence_file') 
@@ -93,35 +97,58 @@ class IHM:
         self.manager.open()
 
     def AttachHandler(self, man, channel):
-        attachedDevice = channel
-        serialNumber = attachedDevice.getDeviceSerialNumber()
-        deviceName = attachedDevice.getDeviceName()
-        print("Hello to Device " + str(deviceName) + ", Serial Number: " + str(serialNumber)+"channel : "+str(channel))
+        serialNumber = channel.getDeviceSerialNumber()
+        deviceName = channel.getDeviceName()
+        channelName = channel.getChannelName()
+        ch_num=channel.getChannel()
+        hubPort=channel.getHubPort()
+        isChannel=channel.getIsChannel()
+        print("Connected : ",serialNumber,deviceName,"port : ",hubPort,isChannel,channelName,"channel : ",ch_num)
 
     def DetachHandler(self, man, channel):
-        detachedDevice = channel
-        serialNumber = detachedDevice.getDeviceSerialNumber()
-        deviceName = detachedDevice.getDeviceName()
-        print("Goodbye Device " + str(deviceName) + ", Serial Number: " + str(serialNumber)+"channel : "+str(channel))
+        serialNumber = channel.getDeviceSerialNumber()
+        deviceName = channel.getDeviceName()
+        channelName = channel.getChannelName()
+        ch_num=channel.getChannel()
+        hubPort=channel.getHubPort()
+        isChannel=channel.getIsChannel()
+        #print("Disconnected : ",serialNumber,"--",deviceName,"--","port : ",hubPort,isChannel,"--",channelName,"--","channel : ",ch_num)
 
-        if serialNumber==432846:
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Voltage Input' and ch_num==0:
             self.phmeter.state='closed'
-        if serialNumber==683442:
-            self.dispenser.state=['closed','closed','closed']
+            print("pH meter disconnected")
+            self.controlPanel.led_phmeter.setPixmap(self.controlPanel.pixmap_red)
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==1:
+            #electrovanne de pousse seringue non connectee
+            self.dispenser.state[0]='closed'
+            print("Pousse seringue débranché")
+            self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
+        if deviceName=='4A Stepper Phidget' and hubPort==0:
+            self.dispenser.state[0]='closed'
+            print("Pousse seringue débranché")
+            self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
+        if deviceName=='4A DC Motor Phidget' and hubPort==2:
             self.peristaltic_pump.state='closed'
+            print("Pompe péristaltique débranchée")
+            self.controlPanel.led_pump.setPixmap(self.controlPanel.pixmap_red)
+        #digitaloutput de controle de lampe non connecte
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==3:
+            self.spectro_unit.state='closed'
+            print("Lamp not connected with card")
+            self.controlPanel.led_spectro.setPixmap(self.controlPanel.pixmap_red)
 
     def close_all_devices(self):
         print("Closing all device")
         self.timer1s.stop()
-
         if self.spectro_unit.state=='open':
             self.spectro_unit.close(self.spectro_unit.id)
         if self.phmeter.state=='open':
             self.phmeter.close()
-        if self.syringe_pump.state=='open':
-            self.syringe_pump.close()
+        if self.dispenser.state=='open':
+            self.dispenser.close()
         if self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
+        
               
     def updateSettings(self):
         parser = ConfigParser()

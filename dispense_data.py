@@ -36,7 +36,7 @@ def dispense_function_uL(pH, model='polynomial 5th order', ref_data='dommino 23/
     return v
 
 def get_volume_to_dispense_uL(current_pH, target_pH, oxygen=True):
-    return dispense_function_uL(target_pH, oxygen)-dispense_function_uL(current_pH, oxygen)
+    return dispense_function_uL(target_pH, oxygen=oxygen)-dispense_function_uL(current_pH, oxygen=oxygen)
 
 #Fonctions pour la répartition des points de pH
 def f_ratio_deprotone(x,m,lK):  #sigmoide modelise f1 f2 dans le traitement 

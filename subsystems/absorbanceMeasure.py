@@ -1,10 +1,4 @@
-"Définition de la classe Spectrometer dans le cadre de l'instrument pytitrator"
-
-"""Le spectro SR2 n'est pas muni de fonctionnalité buffer (qui permet de voir en direct)
-Il faut donc à intervalle régulier, faire une mesure de spectre et l'afficher
-Les fonctions :        
-    adv.set_data_buffer_enable(True) #ne fonctionne pas sur le SR2        
-    sur le SR2 on ne peut pas piloter la lampe non plus seulement le shutter"""
+"classe Spectrometer permettant de piloter l'ensemble Spectromètre et lampe"
 
 from lib.oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectrometer, FeatureID
 from lib.oceandirect.od_logger import od_logger
@@ -109,8 +103,8 @@ class AbsorbanceMeasure(Spectrometer):
                 self.device.set_integration_time(1000*self.t_int)
                 self.device.set_scans_to_average(self.averaging)
             else:
+                self.device.set_integration_time(15000) 
                 self.device.set_scans_to_average(10)
-                self.device.set_integration_time(10000)  
             
             if self.model=='OceanSR2':  #2k pix pour 700nm
                 self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)    

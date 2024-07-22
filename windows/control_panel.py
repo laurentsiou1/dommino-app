@@ -39,7 +39,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.phmeter=ihm.phmeter
         self.spectro_unit=ihm.spectro_unit
         self.dispenser=ihm.dispenser
-        self.syringe_pump=self.dispenser.syringe_A
+        #self.syringe_pump=self.dispenser.syringe_A
         self.peristaltic_pump=ihm.peristaltic_pump
         
         #graphique
@@ -58,6 +58,35 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         #Spectromètre
         self.label_device.setText("device : "+self.spectro_unit.model)
         #self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
+        
+        #Pousse seringues
+        self.reagentA.setText(self.dispenser.syringe_A.reagent)   #string
+        self.reagentB.setText(self.dispenser.syringe_B.reagent)
+        self.reagentC.setText(self.dispenser.syringe_C.reagent)
+        self.Ca.setText(str(self.dispenser.syringe_A.concentration))   #float
+        self.Cb.setText(str(self.dispenser.syringe_B.concentration))
+        self.Cc.setText(str(self.dispenser.syringe_C.concentration))
+        if self.dispenser.syringe_A.use==False:
+            self.syringeA.setDisabled(True)   #bool
+            self.reagentA.setDisabled(True)
+            self.Ca.setDisabled(True)
+            self.levelbarA.setDisabled(True)
+            self.level_number_A.setDisabled(True)
+            self.added_A_uL.setDisabled(True)
+        if self.dispenser.syringe_B.use==False:
+            self.syringeB.setDisabled(True)   #bool
+            self.reagentB.setDisabled(True)
+            self.Cb.setDisabled(True)
+            self.levelbarB.setDisabled(True)
+            self.level_number_B.setDisabled(True)
+            self.added_B_uL.setDisabled(True)
+        if self.dispenser.syringe_C.use==False:
+            self.syringeC.setDisabled(True)   #bool
+            self.reagentC.setDisabled(True)
+            self.Cc.setDisabled(True)
+            self.levelbarC.setDisabled(True)
+            self.level_number_C.setDisabled(True)
+            self.added_C_uL.setDisabled(True)
         
         self.update_lights()
         self.led_spectro.setScaledContents(True)
@@ -86,13 +115,16 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
         self.open_syringe_panel.clicked.connect(self.ihm.openSyringePanel)
         self.connect_pump.clicked.connect(self.connectPeristalticPump)   
+        self.connect_all_devices.clicked.connect(self.connectAllDevices)
         
         self.configure_sequence.clicked.connect(self.ihm.openConfigWindow)
-        self.actionchange_folder.triggered.connect(self.ihm.openSavingConfigWindow)    #choix dossier
+        self.action_change_folder.triggered.connect(self.ihm.openSavingConfigWindow)    #choix dossier
         self.save_button.clicked.connect(self.ihm.createDirectMeasureFile)  #deux façons de sauver les données
-        self.actionsave.triggered.connect(self.ihm.createDirectMeasureFile) 
+        self.action_save.triggered.connect(self.ihm.createDirectMeasureFile) 
+        self.action_syringe_param.triggered.connect(self.ihm.openSyringePanel) #config des seringues
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
+        self.close_all.clicked.connect(self.update_lights)
         self.close_all.clicked.connect(self.clear_IHM)
 
     def select_pixmap(self, state):
@@ -111,6 +143,18 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.led_phmeter.setPixmap(self.select_pixmap(self.ihm.phmeter.state))
         self.led_disp.setPixmap(self.select_pixmap(self.ihm.dispenser.state))
         self.led_pump.setPixmap(self.select_pixmap(self.ihm.peristaltic_pump.state))
+
+    ##Méthodes multi instruments
+    def connectAllDevices(self):
+        self.connectPeristalticPump()
+        self.link_pHmeter2IHM()
+        self.connectSyringePump()
+        self.spectro_unit.connect()
+        if self.spectro_unit.state=='open':
+            self.led_spectro.setPixmap(self.pixmap_green)
+            self.link_spectro2IHM()
+            self.spectro_unit.acquire_background_spectrum()
+            self.spectro_unit.acquire_ref_spectrum()
 
     ### Méthodes pour le pH mètre
     def link_pHmeter2IHM(self):
@@ -226,19 +270,24 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
     ### Méthodes pour le pousse-seringue
     def connectSyringePump(self):
-        self.syringe_pump.connect()
-        if self.syringe_pump.state=='open':
+        #self.syringe_pump.connect()
+        self.dispenser.connect()
+        if self.dispenser.state=='open':
             self.led_disp.setPixmap(self.pixmap_green)
             self.link_SyringePump2IHM()
 
     #Suppose que le pousse seringue soit ouvert
-    def link_SyringePump2IHM(self):
+    def link_SyringePump2IHM(self): #fonction non utilisee pour le moment. Deja programmer le controle des seringues sur le panneau.
     #attention. les connexions clicked.connect de signaux avec des slots sont recréées à chaque appel.
     #Il faut donc supprimer les connexions pour pas que les slots soient effectués plusieurs fois de suite
-        self.base_level=self.syringe_pump.size-self.syringe_pump.stepper.getPosition()
+        """self.level_A=self.dispenser.syringe_A.size-self.dispenser.syringe_A.stepper.getPosition()
+        self.level_B=self.dispenser.syringe_B.size-self.dispenser.syringe_B.stepper.getPosition()
+        self.level_C=self.dispenser.syringe_C.size-self.dispenser.syringe_C.stepper.getPosition()
+        
+        
         #reference
-        self.make_ref_button.disconnect()
-        self.make_ref_button.clicked.connect(self.set_reference_position)
+        self.make_ref_A.disconnect()
+        self.make_ref_A.clicked.connect(self.set_reference_position)
         #action buttons
         self.stop_syringe.disconnect()
         self.stop_syringe.clicked.connect(self.syringe_pump.ForceStop)
@@ -257,7 +306,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         #Display
         self.base_level_bar.setProperty("value", self.base_level)
         self.base_level_number.setText("%d uL" % self.base_level)
-        self.added_base.setText("0")       
+        self.added_base.setText("0")     """  
 
     def set_reference_position(self):
         self.syringe_pump.setReference()

@@ -19,6 +19,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         super(CustomSequenceWindow,self).__init__(parent)
         self.setupUi(self)
         self.ihm=ihm
+        #self.spectro_unit=self.ihm.spectro_unit
         #ajouts
         size=self.spectra_tabs.size()
         rect=QtCore.QRect(QtCore.QPoint(0,0),size)
@@ -59,7 +60,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
 
         #Spectro
         if ihm.spectro_unit.state=='open':
-            self.lambdas=self.spectro_unit.wavelengths 
+            self.lambdas=self.ihm.spectro_unit.wavelengths 
             self.N_lambda=len(self.lambdas)
 
         #Display current spectrum
@@ -130,23 +131,23 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.countdown.setProperty("value", self.seq.measure_timer.remainingTime()//1000)
 
     def refresh_stability_level(self):
-        self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
-        self.label_stability.setText(str(self.phmeter.stab_purcent)+"%")
+        self.stabilisation_level.setProperty("value", self.ihm.phmeter.stab_purcent)
+        self.label_stability.setText(str(self.ihm.phmeter.stab_purcent)+"%")
 
     def refreshDirectSpectrum(self):
         #if self.spectro_unit.current_intensity_spectrum!=None:
-        if self.spectro_unit.state=='open':
-            self.direct_intensity_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
+        if self.ihm.spectro_unit.state=='open':
+            self.direct_intensity_plot.setData(self.lambdas,self.ihm.spectro_unit.current_intensity_spectrum)
 
 
 
     #spectre courant sur le graphe en delta 
     def update_spectra(self): #il y a déjà un spectre enregistré
-        if self.spectro_unit.current_absorbance_spectrum!=None:
-            self.current_abs_curve.setData(self.lambdas,self.spectro_unit.current_absorbance_spectrum)
+        if self.ihm.spectro_unit.current_absorbance_spectrum!=None:
+            self.current_abs_curve.setData(self.lambdas,self.ihm.spectro_unit.current_absorbance_spectrum)
             if self.absorbance_spectrum1!=None:
                 #le spectre en delta est une donnée graphique, pas une donnée fondamentale
-                self.current_absorbance_spectrum_delta=[self.spectro_unit.current_absorbance_spectrum[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+                self.current_absorbance_spectrum_delta=[self.ihm.spectro_unit.current_absorbance_spectrum[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
                 self.current_delta_abs_curve.setData(self.lambdas,self.current_absorbance_spectrum_delta)
 
     #ENREGISTREMENT
