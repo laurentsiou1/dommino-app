@@ -64,7 +64,72 @@ def createFullSequenceFiles(seq):
     data="measure n°\t"    #entête
     for k in range(seq.N_mes):
         data+=str(k+1)+'\t'
-    data+='\ttotal\n'
+
+    #DISPENSER
+    print(seq.dispense_mode)
+    if seq.dispense_mode=='from file':
+        data+="\nsyringe A\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.added_volumes[k][0])+'\t'
+        data+="\nsyringe B\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.added_volumes[k][1])+'\t'
+        data+="\nsyringe C\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.added_volumes[k][2])+'\t'
+        data+="\ncumulate\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.cumulate_volumes[k])+'\t'
+        data+="\nDilution\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.dilution_factors[k])+'\t'
+    else:
+        data+='\ttotal\n'
+        data+="added acid (uL)\t"+str(seq.added_acid_uL)+"\n"
+        data+="dispensed base (uL)\t"                                                               
+        for k in range(seq.N_mes):
+            data+=str(seq.added_base_uL[k])+'\t'   
+        data+='\t'+str(seq.total_added_volume)                                                                       
+        data+='\ncumulate base (uL)\t'
+        for k in range(seq.N_mes):
+            data+=str(seq.cumulate_base_uL[k])+'\t'   
+        data+='\ndilution factors\t'
+        for k in range(seq.N_mes):
+            data+=str(seq.dilution_factors[k])+'\t' 
+        data+='\n' 
+    
+    processed_formatted_data=''
+    
+    #PHMETER
+    if seq.phmeter.state=='open':    
+        """if seq.dispense_mode=='from file':
+            data+="\npH\t"
+            for k in range(seq.N_mes):
+                data+=str(seq.pH_mes[k])+'\t'
+        else:"""
+        data+="\npH\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.pH_mes[k])+'\t'
+        data+="\ntimes\t"   #heures de mesures
+        for k in range(seq.N_mes):
+            data+=str(seq.measure_times[k].strftime("%H:%M:%S"))+'\t'   
+        data+="\ndelays between measures\t"   #temps entre mesures
+        for k in range(seq.N_mes):
+            data+=str(seq.measure_delays[k].seconds//60)+":"+str(seq.measure_delays[k].seconds%60)+'\t' 
+        data+="\nepsilon stab\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.stability_param[k][0])+'\t'
+        data+="\ndt stab\t"
+        for k in range(seq.N_mes):
+            data+=str(seq.stability_param[k][1])+'\t'
+        data+="\nV0 (uL)\t"+str(seq.V_init)+"\n"    #volume en uL
+        data+="Pump mean voltage (Volt) : "+str(12*seq.pump.duty_cycle)+"\n\n"    #vitesse de pompe
+        data+="wavelengths (nm)\tabsorbance\n" 
+            
+        processed_formatted_data="\t"   #corrected from dilution
+        for k in range(seq.N_mes):
+            processed_formatted_data+=str(seq.pH_mes[k])+'\t'
+        processed_formatted_data+="\n"
     
     if seq.spectro.state=='open':           
         #absorbance measured
@@ -83,56 +148,6 @@ def createFullSequenceFiles(seq):
             for c in range(seq.N_mes):
                 processed_formatted_data+=str(table_formatted[c][l])+'\t'
             processed_formatted_data+=str(table_formatted[seq.N_mes][l])+'\n'
-
-    #DISPENSER
-    print(seq.dispense_mode)
-    if seq.dispense_mode=='from file':
-        data+=str(seq.dispensed_volumes)
-    else:
-        data+="added acid (uL)\t"+str(seq.added_acid_uL)+"\n"
-        data+="dispensed base (uL)\t"                                                               
-        for k in range(seq.N_mes):
-            data+=str(seq.added_base_uL[k])+'\t'   
-        data+='\t'+str(seq.total_added_volume)                                                                       
-        data+='\ncumulate base (uL)\t'
-        for k in range(seq.N_mes):
-            data+=str(seq.cumulate_base_uL[k])+'\t'   
-        data+='\ndilution factors\t'
-        for k in range(seq.N_mes):
-            data+=str(seq.dilution_factors[k])+'\t' 
-        data+='\n' 
-        
-    processed_formatted_data=''
-    
-    
-    #PHMETER
-    if seq.phmeter.state=='open':    
-        if seq.dispense_mode=='from file':
-            data=str(seq.pH_mes)
-        else:
-            data+="pH\t"
-            for k in range(seq.N_mes):
-                data+=str(seq.pH_mes[k])+'\t'
-            data+="\ntimes\t"   #heures de mesures
-            for k in range(seq.N_mes):
-                data+=str(seq.measure_times[k].strftime("%H:%M:%S"))+'\t'   
-            data+="\ndelays between measures\t"   #temps entre mesures
-            for k in range(seq.N_mes):
-                data+=str(seq.measure_delays[k].seconds//60)+":"+str(seq.measure_delays[k].seconds%60)+'\t' 
-            data+="\nepsilon stab\t"
-            for k in range(seq.N_mes):
-                data+=str(seq.stability_param[k][0])+'\t'
-            data+="\ndt stab\t"
-            for k in range(seq.N_mes):
-                data+=str(seq.stability_param[k][1])+'\t'
-            data+="\nV0 (uL)\t"+str(seq.V_init)+"\n"    #volume en uL
-            data+="Pump mean voltage (Volt) : "+str(12*seq.pump.duty_cycle)+"\n\n"    #vitesse de pompe
-            data+="wavelengths (nm)\tabsorbance\n" 
-            processed_formatted_data="\t"   #corrected from dilution
-            for k in range(seq.N_mes):
-                processed_formatted_data+=str(seq.pH_mes[k])+'\t'
-            processed_formatted_data+="\n"
-
     
     name_formatted_data = "seq_"+seq.experience_name+"_formatted_data_"+date_for_file
     f_formatted_data = open(seq.saving_folder+'/'+name_formatted_data+'.txt','w')

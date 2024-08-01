@@ -1,6 +1,6 @@
 """fenêtre de séquence sur mesure"""
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from ui.custom_sequence import Ui_CustomSequenceWindow
 
@@ -10,6 +10,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import file_manager as fm
+
+ICON_PLAY="windows/play_icon.png"
+ICON_PAUSE="windows/pause_icon.png"
 
 class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     
@@ -44,6 +47,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         #connexions
         self.spectrometry.clicked.connect(self.ihm.openSpectroWindow)
         self.syringes.clicked.connect(self.ihm.openSyringePanel)
+        self.pause_resume_button.clicked.connect(self.ihm.seq.pause_resume)
 
         ##Initialisation en fonction de la config 
         seq=self.ihm.seq
@@ -74,6 +78,11 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         aa = [cmap(i) for i in np.linspace(0, 1, self.N_mes)]
         self.colors = [(int(r * 255), int(g * 255), int(b * 255)) for r, g, b, _ in aa]
         
+        self.pixmap_play=QtGui.QPixmap(ICON_PLAY)
+        self.pixmap_pause=QtGui.QPixmap(ICON_PAUSE)
+        #self.pause_resume_button.setPixmap(self.pixmap_pause)
+        self.pause_resume_button.setIcon(QtGui.QIcon(ICON_PAUSE))
+        
         #tableau de données "QLabels" volume/pH mesuré. à compléter au fil de l'expérience
         #2 colonnes et autant de lignes que N_mes
         self.table_vol_pH=[[QtWidgets.QLabel(self.gridLayoutWidget),QtWidgets.QLabel(self.gridLayoutWidget)] for k in range(self.N_mes)]
@@ -92,7 +101,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         
         #Tableau volume dispensé/pH mesuré
         #Mise en forme. A compléter par la suite
-        for j in range(self.N_mes):
+        for j in range(self.N_mes+1):
             for k in range(2):
                 self.mes_jk = QtWidgets.QLabel(self.gridLayoutWidget)
                 self.mes_jk.setAlignment(QtCore.Qt.AlignCenter)
@@ -104,12 +113,8 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         """for j in range(1,self.N_mes+1): 
             self.syr_j = QtWidgets.QLabel(self.gridLayoutWidget_2)
             self.syr_j.setAlignment(QtCore.Qt.AlignCenter)
-            self.grid_instructions_pH_vol.addWidget(self.syr_j, j, 0, 1, 1)
+            self.grid_mes_pH_vol.addWidget(self.syr_j, j, 0, 1, 1)
             self.syr_j.setText(str(j))"""
-        """self.syr1=QtWidgets.QLabel(self.gridLayoutWidget_2)
-        self.syr1.setAlignment(QtCore.Qt.AlignCenter)
-        self.grid_instructions_pH_vol.addWidget(self.syr1, 1, 1, 1, 1)
-        self.syr1.setText('B')"""
 
         #peristaltic pump
         if seq.pump.state=='open':
@@ -139,8 +144,6 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         if self.ihm.spectro_unit.state=='open':
             self.direct_intensity_plot.setData(self.lambdas,self.ihm.spectro_unit.current_intensity_spectrum)
 
-
-
     #spectre courant sur le graphe en delta 
     def update_spectra(self): #il y a déjà un spectre enregistré
         if self.ihm.spectro_unit.current_absorbance_spectrum!=None:
@@ -163,21 +166,37 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         b.setData(self.lambdas,spec)
     
     def append_vol_in_table(self,nb,vol): #nb numero de mesure 1 à Nmes
-        self.table_vol_pH[0][nb-1].setObjectName("vol"+str(nb))
-        self.grid_instructions_pH_vol.addWidget(self.table_vol_pH[0][nb-1], 1, nb, 1, 1)
-        self.table_vol_pH[0][nb-1].clear()
-        self.table_vol_pH[0][nb-1].setText(str(vol))
+        self.table_vol_pH[nb-1][0].setObjectName("vol"+str(nb))
+        self.table_vol_pH[nb-1][1].setAlignment(QtCore.Qt.AlignCenter)
+        self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][0], nb, 0, 1, 1)
+        self.table_vol_pH[nb-1][0].clear()
+        self.table_vol_pH[nb-1][0].setText(str(vol))
+        #print(self.table_vol_pH[nb-1][0])
     
     #pH et volume
     def append_pH_in_table(self,nb,pH): #nb=numero de la mesure 1 à Nmes
-        self.table_vol_pH[1][nb-1].setObjectName("pH"+str(nb))
-        self.grid_instructions_pH_vol.addWidget(self.table_vol_pH[1][nb-1], 2, nb, 1, 1)
-        self.table_vol_pH[1][nb-1].clear()
-        self.table_vol_pH[1][nb-1].setText(str(pH))
+        self.table_vol_pH[nb-1][1].setObjectName("pH"+str(nb))
+        self.table_vol_pH[nb-1][1].setAlignment(QtCore.Qt.AlignCenter)
+        self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][1], nb, 1, 1, 1)
+        self.table_vol_pH[nb-1][1].clear()
+        self.table_vol_pH[nb-1][1].setText(str(pH))
+        #print(self.table_vol_pH)
 
-    def append_total_vol_in_table(self,tot):
+    def pause(self):
+        self.pause_resume_button.setIcon(QtGui.QIcon(ICON_PLAY))
+
+    def resume(self):
+        self.pause_resume_button.setIcon(QtGui.QIcon(ICON_PAUSE))
+
+    def closeEvent(self, event):
+        print("User has clicked the red x on the custom sequence window")
+        event.accept()
+        self.ihm.dispenser.stop()
+
+
+    """def append_total_vol_in_table(self,tot):
         #self.total_volume.
-        self.grid_instructions_pH_vol.addWidget(self.table_vol_pH[0][self.N_mes], 1, self.N_mes+1, 1, 1)
+        self.grid_mes_pH_vol.addWidget(self.table_vol_pH[0][self.N_mes], 1, self.N_mes+1, 1, 1)
         self.total_volume.clear()
-        self.total_volume.setText(str(tot))
+        self.total_volume.setText(str(tot))"""
     

@@ -94,10 +94,9 @@ class Dispenser:
         self.use=[self.syringe_A.use,self.syringe_B.use,self.syringe_C.use]
         self.update_infos()
         self.state='closed'
-        
     
     def update_infos(self):
-        state=self.refresh_state()
+        self.refresh_state()
         self.infos=self.syringe_A.infos+"\n"+self.syringe_B.infos+"\n"+self.syringe_C.infos
 
     def refresh_state(self):
@@ -126,7 +125,7 @@ class Dispenser:
             self.syringe_B.connect()
         if self.use[2]:
             self.syringe_C.connect()
-        self.state=[self.syringe_A.state,self.syringe_B.state,self.syringe_C.state]
+        self.refresh_state()
         self.update_infos()
     
     def refill_empty_syringes(self):
@@ -134,9 +133,10 @@ class Dispenser:
             if syr.state=='open' and syr.level_uL<syr.size:   #not empty
                 syr.full_refill()
 
-    def ForceStop(self):
-        self.stepper.setEngaged(False)
-        print("arrêt forcé du stepper")
+    def stop(self):
+        for syr in self.syringes:
+            syr.stopSyringe()
+        print("Stop dispenser")
     
     def close(self):
         self.syringe_A.close()
@@ -495,8 +495,6 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             delta=round((position-pos0),0)
             self.level_uL-=delta #idelta est negatif
     
-    #def refill(self, vol):
-    
     def full_refill(self):
         pos0=self.stepper.getPosition()
         self.configForRefill()
@@ -518,6 +516,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         #print("Remise à zéro. Position: ",pos1)
     
     def close(self):
+        self.stopSyringe()
         self.stepper.close()
         self.security_switch.close()
         self.reference_switch.close()
@@ -525,28 +524,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         print('Closing syringe pump ',self.id)
         self.state='closed'
     
-    """def setZeroPosition(self):
-        dx = int(input("entrer le déplacement voulu : "))
-        if dx<0:
-            self.simple_refill(-dx) #
-        else:
-            self.simple_dispense(dx)
-        pos=self.stepper.getPosition()
-        self.stepper.addPositionOffset(-pos)
-        pos1=self.stepper.getPosition()
-        print("position du moteur après mise à zéro : ", pos1)"""
-
-    """
-    def empty_syringe(self, vol):
-        pos0=self.stepper.getPosition()
-        self.configForDispense(0) #electrovanne connectée sur recharge
-        self.stepper.setTargetPosition(self.size) #recharge donc target supérieur à position courante
-        #lancement
-        self.validity_code()
-        #affichage de la position atteinte
-        position = self.stepper.getPosition()
-        print("Position atteinte après vidage: ", position)"""
-
+    def stopSyringe(self):
+        if self.state=='open':
+            self.stepper.setEngaged(False)
 
 if __name__=="__main__":
     sp=PhidgetStepperPump()

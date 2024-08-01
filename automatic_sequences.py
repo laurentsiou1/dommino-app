@@ -34,6 +34,7 @@ class AutomaticSequence:
         self.pump=ihm.peristaltic_pump
 
         self.timer_seconds.start()
+        self.is_running=True
     
     def update_stab_time(self):
         self.phmeter.stab_time=self.window.stab_time.value()
@@ -325,6 +326,7 @@ class CustomSequence(AutomaticSequence):
         # Create a QTimer object
         self.pause_timer = QTimer()    #for interface refreshing
         self.measure_timer = QTimer()   #chemical equilibrum and fluid circulation
+        self.is_running=True    #flag indicating the running/pause state of sequence
 
         self.ihm=ihm
         self.spectro=ihm.spectro_unit
@@ -334,8 +336,9 @@ class CustomSequence(AutomaticSequence):
         
         #Données de config      #comme titration sequence mais avec le fichier de config
         [self.experience_name,self.description,self.OM_type,self.concentration,self.oxygen,self.fibers,\
-        self.flowcell,self.V_init,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
+        self.flowcell,v_init_mL,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
         self.param=config
+        self.V_init=1000*v_init_mL
         
         dt=datetime.now()
         self.start_date=str(dt.strftime("%m/%d/%Y %H:%M:%S"))
@@ -359,6 +362,7 @@ class CustomSequence(AutomaticSequence):
         self.cumulate_volumes = []
         self.dilution_factors = []
         self.measure_times=[]     #[dt for k in range(self.N_mes)]
+        self.measure_delays=[]
         self.stability_param=[] 
 
     def update_infos(self):
@@ -394,11 +398,14 @@ class CustomSequence(AutomaticSequence):
     
     def run_sequence(self):
         self.measure_index=0
-        self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.run_instruction)
+        self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
 
-    def run_instruction(self):
-        self.measure_index+=1
-        self.execute_instruction(self.instruction_table[self.measure_index-1])
+    def goToNextInstruction(self):
+        if self.is_running:
+            self.measure_index+=1
+            self.execute_instruction(self.instruction_table[self.measure_index-1])
+        else:
+            pass
     
     def execute_instruction(self, line):
         print("executing instruction ", self.measure_index, ":", line)
@@ -415,23 +422,11 @@ class CustomSequence(AutomaticSequence):
             self.pump.stop()    
         
         num=identifier(syringe_id)
-        syringe=self.dispenser.syringes[num]
-        if syringe.state=='open':   #dispense
-            if dispense_type=='DISP_ON_PH': #config for dispense
-                target = value
-                print("oxygene",self.oxygen)
-                #vol = dispense_data.get_volume_to_dispense_uL(self.phmeter.currentPH,target,self.oxygen)
-                print("simulated pH =", self.ALGO_TEST_PH[self.measure_index-2])
-                vol = dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-2]),target,self.oxygen)
-            elif dispense_type=='DISP_VOL_UL':
-                vol = value
-            syringe.dispense(vol)   
-            self.added_volumes[self.N_mes-1][num]
-            self.cumulate_volume += vol
-            self.cumulate_volumes.append(vol)
-            self.dilution_factors.append((self.cumulate_volume+self.V_init)/self.V_init)
+        self.syringe=self.dispenser.syringes[num]
+        if self.syringe.state=='open':   #dispense
+            self.dispense(num,dispense_type,value)
         
-        self.pause_timer.singleShot(1000*delay_stop,self.waitForMeasure) #mise en attente
+        self.pause_timer.singleShot(1000*delay_stop,self.waitForMeasure) #mise en attente avant mesure
 
     def waitForMeasure(self):
         self.pump.start()
@@ -439,9 +434,20 @@ class CustomSequence(AutomaticSequence):
     
     def measure(self):
         print("taking measure\n")
+        N=self.measure_index
+        dt=datetime.now()
+        self.measure_times.append(dt)
+        if N==1:
+            self.measure_delays.append(dt-dt)  
+        else: #N>=2
+            self.measure_delays.append(dt-self.measure_times[N-2])  
+        
         if self.phmeter.state=='open':
             pH=self.phmeter.currentPH
             self.pH_mes.append(pH)  #ajout dans les tableaux
+            self.stability_param.append((self.phmeter.stab_step, self.phmeter.stab_time))
+            self.window.append_pH_in_table(N,pH)    #affichage
+        
         if self.spectro.state=='open':
             spec=self.spectro.current_absorbance_spectrum
             if self.absorbance_spectra==[]:
@@ -453,16 +459,53 @@ class CustomSequence(AutomaticSequence):
         if self.measure_index==self.N_mes: #dernière mesure
             fm.createFullSequenceFiles(self)
         else:
-            self.measure_timer.singleShot(self.DISPLAY_DELAY_MS,self.run_instruction)
+            self.measure_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
 
-    def dispense(self,dispense_type,value):
+    def dispense(self,num,dispense_type,value):
+        #num : index of syringe
         if dispense_type=='DISP_ON_PH':
             current=self.phmeter.currentPH
             target=value    #pH value
-            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
+            print("simulated pH =", self.ALGO_TEST_PH[self.measure_index-1])
+            print("target=",target)
+            print("measure index = ",self.measure_index)
+            #vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
+            #vol=dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen) 
+            vol=dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-1]),target,self.oxygen) #simulating ph values
+            print("vol=",vol)
             self.syringe.dispense(vol)
-        if dispense_type=='DISP_VOL_UL':
+            self.window.append_vol_in_table(self.measure_index,vol)
+        elif dispense_type=='DISP_VOL_UL':
             self.syringe.dispense(value)    #volume value
+            self.window.append_vol_in_table(self.measure_index,value)
+        
+        self.added_volumes[self.N_mes-1][num] = vol
+        self.cumulate_volume += vol
+        self.cumulate_volumes.append(self.cumulate_volume)
+        self.dilution_factors.append((self.cumulate_volume+self.V_init)/self.V_init)
+    
+    def pause_resume(self):
+        if self.is_running:
+            self.window.pause()
+            self.pause()
+        else:
+            self.resume()
+            self.window.resume()
+
+    def pause(self):
+        self.is_running=False
+        print("sequence on pause. current instruction finishing")
+
+    def resume(self):
+        self.is_running=True
+        self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
+        print("running again")
+
+    def close_sequence(self):
+        self.pause()
+        self.pump.stop
+        self.syringe.stop
+        del self    #Suppression de l'objet"""
 
 if __name__=="__main__":
     import sys

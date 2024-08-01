@@ -119,13 +119,20 @@ class IHM:
             print("pH meter disconnected")
             self.controlPanel.led_phmeter.setPixmap(self.controlPanel.pixmap_red)
         if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==1:
-            #electrovanne de pousse seringue non connectee
-            self.dispenser.state[0]='closed'
+            #Sorties digitales pour pousse seringue
+            self.dispenser.state='closed'
             print("Pousse seringue débranché")
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
         if deviceName=='4A Stepper Phidget' and hubPort==0:
-            self.dispenser.state[0]='closed'
-            print("Pousse seringue débranché")
+            #stepper A de pousse seringue débranché
+            self.dispenser.syringe_A.state='closed'
+            print("Stepperpump A disconnected")
+        if deviceName=='4A Stepper Phidget' and hubPort==1:
+            #stepper B de pousse seringue débranché
+            self.dispenser.syringe_B.state='closed'
+            print("Stepperpump B disconnected")
+        self.dispenser.refresh_state()
+        if self.dispenser.state=='closed':
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
         if deviceName=='4A DC Motor Phidget' and hubPort==2:
             self.peristaltic_pump.state='closed'
@@ -148,7 +155,6 @@ class IHM:
             self.dispenser.close()
         if self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
-        
               
     def updateSettings(self):
         parser = ConfigParser()
@@ -253,6 +259,8 @@ class IHM:
         f_out.write(output)
         f_out.close()    
     
+    """def close_sequence(self):
+        del self.seq"""
 
     ### Gestionnaire des fenêtres ###
 

@@ -152,13 +152,13 @@ class ReferenceData:
 
 if __name__=="__main__":
     #obtention de la courbe de référence
-    dataSet = ReferenceData(A1=[0.1317,0.0419],m1=0.416,lK1=3.90,A2=[0.0727,0.1392],m2=0.197,lK2=9.94)    #26/01/2024
+    """dataSet = ReferenceData(A1=[0.1317,0.0419],m1=0.416,lK1=3.90,A2=[0.0727,0.1392],m2=0.197,lK2=9.94)    #26/01/2024
     #d'après le fichier matlab
     pH0 = dataSet.min_abs_variation()
     print(pH0)
-    dataSet.plot_functions(0.8)    #max_delta
+    dataSet.plot_functions(0.8)    #max_delta"""
 
-    """
+    import matplotlib.pyplot as plt
     #Plot dispense function
     plt.scatter(pH_dommino_23_01_2024, v_23_01_2024, label='dommino 23/01', color='black')
     x=np.linspace(3.5,10.5,100)
@@ -169,7 +169,7 @@ if __name__=="__main__":
     plt.title('Fit sur les données du 23/01/2024 avec les deux pH-mètres')
     plt.legend()
     plt.show()
-    """
+    
 
     """
     while(True):
