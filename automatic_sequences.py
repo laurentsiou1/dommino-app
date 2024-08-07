@@ -19,22 +19,13 @@ class AutomaticSequence:
     
     DISPLAY_DELAY_MS = 5000 #for letting the screen display once the measure in taken
     ALGO_TEST_PH = [4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10] #pour tester l'algo
-    
-    measure_timer = QTimer()    #timer between measures
-    pause_timer = QTimer()    #pausing delay
 
-    timer_seconds = QTimer()
-    timer_seconds.setInterval(1000)
-    
     def __init__(self, ihm):
         self.ihm=ihm
         self.spectro=ihm.spectro_unit
         self.phmeter=ihm.phmeter
         self.syringe=ihm.syringe_pump
         self.pump=ihm.peristaltic_pump
-
-        self.timer_seconds.start()
-        self.is_running=True
     
     def update_stab_time(self):
         self.phmeter.stab_time=self.window.stab_time.value()
@@ -217,7 +208,7 @@ class ClassicSequence(AutomaticSequence):
         self.window.current_delta_abs_curve=self.window.delta_all_abs.plot([0],[0])
         self.window.current_abs_curve=self.window.all_abs.plot([0],[0])
         self.window.timer_display.timeout.connect(self.window.update_spectra) #direct
-        ## Fin Mesure
+        
         #temps d'afficher à l'écran les mesures faites
         self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.dispenseN)
         
@@ -340,8 +331,8 @@ class CustomSequence(AutomaticSequence):
         self.param=config
         self.V_init=1000*v_init_mL
         
-        dt=datetime.now()
-        self.start_date=str(dt.strftime("%m/%d/%Y %H:%M:%S"))
+        t_start=datetime.now()
+        self.start_date=str(t_start.strftime("%m/%d/%Y %H:%M:%S"))
         #Récupération des données du tableau d'instructions de la séquence
         self.syringes_to_use, self.instruction_table = fm.readSequenceInstructions(self.sequence_config_file)
         self.N_mes=len(self.instruction_table)
@@ -356,7 +347,7 @@ class CustomSequence(AutomaticSequence):
             self.N_lambda=len(self.lambdas)
         self.absorbance_spectra = []
         self.absorbance_spectra_cd = [] #corrected from dilution
-        self.absorbance_spectrum1 =[] #première mesure de spectre
+        self.absorbance_spectrum1 = None #première mesure de spectre
         self.added_volumes = [[0,0,0] for i in range(self.N_mes)]   #table of volumes on 3 syringes 
         self.cumulate_volume = 0
         self.cumulate_volumes = []
@@ -379,11 +370,11 @@ class CustomSequence(AutomaticSequence):
         self.ihm.openSequenceWindow('custom')
         self.window=self.ihm.sequenceWindow
 
-        #live pH
+        """#live pH
         if self.phmeter.state=='open':
             self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.refresh_pH)
             self.phmeter.activateStabilityLevel()
-            self.phmeter.stab_timer.timeout.connect(self.window.refresh_stability_level)
+            self.phmeter.stab_timer.timeout.connect(self.window.refresh_phmeter)"""
         
         #Pousses seringue
         for k in range(3):
@@ -413,8 +404,8 @@ class CustomSequence(AutomaticSequence):
         dispense_type=line[1]   #'DISP_ON_PH' or 'DISP_VOL_UL'
         value=line[2]   #50uL or pH4.5 ...
         delay_stop=line[3]  #30sec
-        delay_mes=line[4]   #300sec
-        self.delay_run=delay_mes-delay_stop
+        self.delay_mes=line[4]   #300sec
+        self.delay_run=self.delay_mes-delay_stop
         print("durée de pompage", self.delay_run,"seconds")
         print("delay stop =",delay_stop,"seconds")
         
@@ -435,13 +426,17 @@ class CustomSequence(AutomaticSequence):
     def measure(self):
         print("taking measure\n")
         N=self.measure_index
-        dt=datetime.now()
-        self.measure_times.append(dt)
+        tm=datetime.now()
+        tm=tm.replace(microsecond=0)
+        self.measure_times.append(tm)
         if N==1:
-            self.measure_delays.append(dt-dt)  
+            dt=tm-tm
         else: #N>=2
-            self.measure_delays.append(dt-self.measure_times[N-2])  
-        
+            dt=tm-self.measure_times[N-2]
+        self.measure_delays.append(dt)
+        self.window.append_time_in_table(N,dt)  #time
+        self.time_mes_last=tm
+
         if self.phmeter.state=='open':
             pH=self.phmeter.currentPH
             self.pH_mes.append(pH)  #ajout dans les tableaux
@@ -450,10 +445,11 @@ class CustomSequence(AutomaticSequence):
         
         if self.spectro.state=='open':
             spec=self.spectro.current_absorbance_spectrum
-            if self.absorbance_spectra==[]:
+            if self.absorbance_spectrum1==None:
                 self.absorbance_spectrum1=spec  #premier spectre
             self.absorbance_spectra.append(spec)
-            self.delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+            delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+            self.window.append_abs_spectra(N,spec,delta)    #ajout du spectre
         
         ##Mesure suivante
         if self.measure_index==self.N_mes: #dernière mesure
@@ -471,9 +467,9 @@ class CustomSequence(AutomaticSequence):
             print("measure index = ",self.measure_index)
             #vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
             #vol=dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen) 
-            vol=dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-1]),target,self.oxygen) #simulating ph values
+            vol=int(dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-1]),target,self.oxygen)) #simulating ph values
             print("vol=",vol)
-            self.syringe.dispense(vol)
+            self.syringe.dispense(int(vol/10))  #division par 10 pour test
             self.window.append_vol_in_table(self.measure_index,vol)
         elif dispense_type=='DISP_VOL_UL':
             self.syringe.dispense(value)    #volume value

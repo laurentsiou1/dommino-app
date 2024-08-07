@@ -52,6 +52,7 @@ class AbsorbanceMeasure(Spectrometer):
         self.reference_absorbance=None  #courbe d'absorbance juste après la prise de réf
         self.current_intensity_spectrum=None    #Sample or whatever is in the cell
         self.current_absorbance_spectrum=None   #Absorbance
+        self.absorbance_spectrum1=None
         self.wavelengths=None
         self.model=""
         

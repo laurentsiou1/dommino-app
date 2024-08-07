@@ -44,8 +44,10 @@ class PHMeter:
 		self.stab_timer.setInterval(1000)
 		self.stable=False
 		self.stab_level=0 #pourcentage de stabilité
-		self.stab_step=0.01 #pas pour lequel si on dépasse on est plus stable
-		self.stab_time=10 #seconds. If pH change < stab_step no change in 30secs 
+		parser = ConfigParser()
+		parser.read(default_app_settings_file)
+		self.stab_time = int(parser.get('phmeter', 'delta'))
+		self.stab_step = float(parser.get('phmeter', 'epsilon'))
 		
 		#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
 		self.signals=CustomSignals()
@@ -84,6 +86,8 @@ class PHMeter:
 			self.getCalData()
 			self.currentVoltage=channel.getVoltage()
 			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
+			
+			
 			self.state='open'
 			print("pH mètre connecté")	
 		else:
@@ -134,6 +138,7 @@ class PHMeter:
 		self.currentVoltage=voltage #self.voltagechannel.getVoltage()
 		#print("current voltage=",self.currentVoltage)
 		self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)  
+		print(self.currentPH)
 	
 	def activatePHmeter(self):
 		#si le voltagechangetrigger est à zéro, l'évènement se produit périodiquement

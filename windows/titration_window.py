@@ -114,8 +114,6 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
         if self.spectro_unit.state=='open':
             self.direct_intensity_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
 
-
-
     #spectre courant sur le graphe en delta 
     def update_spectra(self): #il y a déjà un spectre enregistré
         if self.spectro_unit.current_absorbance_spectrum!=None:

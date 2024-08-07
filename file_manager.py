@@ -158,5 +158,3 @@ def createFullSequenceFiles(seq):
     f_data = open(seq.saving_folder+'/'+name_data+'.txt','w') #création d'un fichier dans le répertoire
     f_data.write(data)
     f_data.close()
-    
-    

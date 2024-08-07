@@ -194,7 +194,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="level_number_A">
+   <widget class="QLabel" name="levelA_uL">
     <property name="geometry">
      <rect>
       <x>850</x>
@@ -632,37 +632,6 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QProgressBar" name="levelbarA">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>650</y>
-      <width>51</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>0</number>
-    </property>
-    <property name="maximum">
-     <number>500</number>
-    </property>
-    <property name="value">
-     <number>100</number>
-    </property>
-    <property name="textVisible">
-     <bool>true</bool>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-    <property name="invertedAppearance">
-     <bool>false</bool>
-    </property>
-    <property name="format">
-     <string>%p%</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_added_volume">
     <property name="geometry">
      <rect>
@@ -703,7 +672,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="level_number_B">
+   <widget class="QLabel" name="levelB_uL">
     <property name="geometry">
      <rect>
       <x>980</x>
@@ -737,7 +706,7 @@
      <number>0</number>
     </property>
     <property name="maximum">
-     <number>500</number>
+     <number>400</number>
     </property>
     <property name="value">
      <number>400</number>
@@ -755,7 +724,7 @@
      <string>%p%</string>
     </property>
    </widget>
-   <widget class="QLabel" name="level_number_C">
+   <widget class="QLabel" name="levelC_uL">
     <property name="geometry">
      <rect>
       <x>1110</x>
@@ -774,37 +743,6 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QProgressBar" name="levelbarC">
-    <property name="geometry">
-     <rect>
-      <x>1130</x>
-      <y>650</y>
-      <width>51</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>0</number>
-    </property>
-    <property name="maximum">
-     <number>500</number>
-    </property>
-    <property name="value">
-     <number>50</number>
-    </property>
-    <property name="textVisible">
-     <bool>true</bool>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-    <property name="invertedAppearance">
-     <bool>false</bool>
-    </property>
-    <property name="format">
-     <string>%p%</string>
     </property>
    </widget>
    <widget class="QLabel" name="added_B_uL">
@@ -1193,6 +1131,68 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="levelbarA">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>650</y>
+      <width>51</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>400</number>
+    </property>
+    <property name="value">
+     <number>400</number>
+    </property>
+    <property name="textVisible">
+     <bool>true</bool>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="format">
+     <string>%p%</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="levelbarC">
+    <property name="geometry">
+     <rect>
+      <x>1130</x>
+      <y>650</y>
+      <width>51</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>400</number>
+    </property>
+    <property name="value">
+     <number>400</number>
+    </property>
+    <property name="textVisible">
+     <bool>true</bool>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="format">
+     <string>%p%</string>
     </property>
    </widget>
   </widget>

@@ -4,6 +4,13 @@ from Phidget22.Phidget import *
 from Phidget22.Devices.DCMotor import *
 import time
 
+from configparser import ConfigParser
+import os
+from pathlib import Path
+
+path = Path(__file__)
+ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
+app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 
 class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMotor
 
@@ -13,6 +20,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.setChannel(0)
         self.setHubPort(3)
         self.state='closed'
+        self.duty_cycle=0
         self.circuit_delay_sec=30
         self.update_infos()
 
@@ -25,7 +33,11 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             self.setAcceleration(0.5)
             #param
             self.direction=1 # +1 or -1 according to the direction
-            self.mean_voltage=4
+            parser = ConfigParser()
+            parser.read(app_default_settings)
+            voltage=parser.get('pump', 'speed_volts')
+            print("voltage=",voltage)
+            self.mean_voltage=float(voltage)
             self.duty_cycle=self.mean_voltage/12
             self.target_speed=self.direction*self.duty_cycle
             self.current_speed=self.getTargetVelocity()

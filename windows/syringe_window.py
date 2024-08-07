@@ -18,8 +18,6 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         #graphic
         super(SyringeWindow,self).__init__(parent)
         self.setupUi(self)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
         
         self.ihm=ihm
         self.dispenser=ihm.dispenser
@@ -37,6 +35,7 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.Ca.setText(str(self.syringe_A.concentration))   #float
         self.Cb.setText(str(self.syringe_B.concentration))
         self.Cc.setText(str(self.syringe_C.concentration))
+        self.refresh_volumes()
 
         #Mise en gris des cases non utilisées
         if self.syringe_A.use==False:
@@ -82,7 +81,7 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
             self.dispense_box_C.setDisabled(True)
 
         #connexions pour modifs
-        self.buttonBox.accepted.connect(self.updateDefaultParameters)
+        #self.buttonBox.accepted.connect(self.updateDefaultParameters)
         """self.checkbox_A.clicked.connect(self.update_syringes_config)
         self.checkbox_B.clicked.connect(self.update_syringes_config)
         self.checkbox_C.clicked.connect(self.update_syringes_config)
@@ -103,7 +102,7 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.make_ref_C.clicked.connect(self.ref_C)
         #stop
         self.stop.disconnect()
-        self.stop.clicked.connect(self.dispenser.ForceStop)
+        self.stop.clicked.connect(self.dispenser.stop)
         #reset
         self.reset.disconnect()
         self.reset.clicked.connect(self.reset_volume_count)
@@ -135,60 +134,60 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
     
     def ref_A(self):
         self.syringe_A.setReference()
-        self.maj_levelbars()
+        self.refresh_volumes()
     def ref_B(self):
         self.syringe_B.setReference()
-        self.maj_levelbars()
+        self.refresh_volumes()
     def ref_C(self):
         self.syringe_C.setReference()
-        self.maj_levelbars()
+        self.refresh_volumes()
     def unload_A(self):
         vol=self.unload_box_A.value()
         self.syringe_A.simple_dispense(vol,ev=0)
-        self.maj_levelbars()
+        self.refresh_volumes()
     def unload_B(self):
         vol=self.unload_box_B.value()
         self.syringe_B.simple_dispense(vol,ev=0)
-        self.maj_levelbars()
+        self.refresh_volumes()
     def unload_C(self):
         vol=self.unload_box_C.value()
         self.syringe_C.simple_dispense(vol,ev=0)
-        self.maj_levelbars()
+        self.refresh_volumes()
     def load_A(self):
         vol=self.load_box_A.value()
         self.syringe_A.simple_refill(vol)
-        self.maj_levelbars()
+        self.refresh_volumes()
     def load_B(self):
         vol=self.load_box_B.value()
         self.syringe_B.simple_refill(vol)
-        self.maj_levelbars()
+        self.refresh_volumes()
     def load_C(self):
         vol=self.load_box_C.value()
         self.syringe_C.simple_refill(vol)
-        self.maj_levelbars()
+        self.refresh_volumes()
     def full_reload_A(self):
         self.syringe_A.full_refill()
-        self.maj_levelbars()
+        self.refresh_volumes()
     def full_reload_B(self):
         self.syringe_B.full_refill()
-        self.maj_levelbars()
+        self.refresh_volumes()
     def full_reload_C(self):
         self.syringe_C.full_refill()
-        self.maj_levelbars()
+        self.refresh_volumes()
     def dispense_A(self):
         vol=self.dispense_box_A.value()
         self.syringe_A.simple_dispense(vol)
-        self.maj_levelbars()
+        self.refresh_volumes()
         self.maj_volume_count()
     def dispense_B(self):
         vol=self.dispense_box_B.value()
         self.syringe_B.simple_dispense(vol)
-        self.maj_levelbars()
+        self.refresh_volumes()
         self.maj_volume_count()
     def dispense_C(self):
         vol=self.dispense_box_C.value()
         self.syringe_C.simple_dispense(vol)
-        self.maj_levelbars()
+        self.refresh_volumes()
         self.maj_volume_count()
 
     def reset_volume_count(self):
@@ -198,20 +197,19 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.dispenser.vol.added_total_uL=0
         self.maj_volume_count()
 
-    def maj_levelbars(self):
+    def refresh_volumes(self):
         self.levelbarA.setProperty("value", self.syringe_A.level_uL)
         self.levelA_uL.setText("%d uL" % self.syringe_A.level_uL)
         self.levelbarB.setProperty("value", self.syringe_B.level_uL)
         self.levelB_uL.setText("%d uL" % self.syringe_B.level_uL)
         self.levelbarC.setProperty("value", self.syringe_C.level_uL)
         self.levelC_uL.setText("%d uL" % self.syringe_C.level_uL)
-    
-    def maj_volume_count(self):
         self.added_A_uL.setText("%d" %self.syringe_A.added_vol_uL)
         self.added_B_uL.setText("%d" %self.syringe_B.added_vol_uL)
         self.added_C_uL.setText("%d" %self.syringe_C.added_vol_uL)
         self.added_total.setText("%d" %self.dispenser.vol.added_total_uL)
-
+        self.ihm.controlPanel.refresh_volumes() #Sur controlPanel également
+    
     def update_syringes_config(self):
         self.syringe_A.use=self.checkbox_A.isChecked()   #bool
         self.syringe_B.use=self.checkbox_B.isChecked()
@@ -223,18 +221,21 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.syringe_B.concentration=self.Cb.value()
         self.syringe_C.concentration=self.Cc.value()
 
-    def updateDefaultParameters(self):
+    """def updateDefaultParameters(self):
         parser = ConfigParser()
         parser.read(self.ihm.app_default_settings)
         file = open(self.ihm.app_default_settings,'r+')
         parser.set(self.dispenser.syringe_A.id, 'use', str(self.syringe_A.use))
         parser.set(self.dispenser.syringe_A.id, 'reagent', str(self.syringe_A.reagent))
         parser.set(self.dispenser.syringe_A.id, 'concentration', str(self.syringe_A.concentration))
+        parser.set(self.dispenser.syringe_A.id, 'level', str(self.syringe_A.level_uL))
         parser.set(self.dispenser.syringe_B.id, 'use', str(self.syringe_B.use))
         parser.set(self.dispenser.syringe_B.id, 'reagent', str(self.syringe_B.reagent))
         parser.set(self.dispenser.syringe_B.id, 'concentration', str(self.syringe_B.concentration))
+        parser.set(self.dispenser.syringe_B.id, 'level', str(self.syringe_B.level_uL))
         parser.set(self.dispenser.syringe_C.id, 'use', str(self.syringe_C.use))
         parser.set(self.dispenser.syringe_C.id, 'reagent', str(self.syringe_C.reagent))
         parser.set(self.dispenser.syringe_C.id, 'concentration', str(self.syringe_C.concentration))
+        parser.set(self.dispenser.syringe_C.id, 'level', str(self.syringe_C.level_uL))
         parser.write(file)
-        file.close()
+        file.close()"""

@@ -30,6 +30,7 @@ from windows.titration_window import TitrationWindow
 from windows.spectrumConfig import SpectrumConfigWindow
 from windows.savingConfig import SavingConfig
 from windows.syringe_window import SyringeWindow
+from windows.DispenserParamWindow import DispenserParamWindow
 
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
@@ -91,6 +92,11 @@ class IHM:
         self.timer1s.setInterval(1000)
         self.timer1s.start() 
 
+        #display timer
+        self.timer_display = QtCore.QTimer()    #timer every 0.1s
+        self.timer_display.setInterval(100)
+        self.timer_display.start()
+
         #Gestion des connexions/déconnexions
         self.manager.setOnAttachHandler(self.AttachHandler)
         self.manager.setOnDetachHandler(self.DetachHandler)
@@ -147,6 +153,7 @@ class IHM:
     def close_all_devices(self):
         print("Closing all device")
         self.timer1s.stop()
+        self.updateDefaultParam()
         if self.spectro_unit.state=='open':
             self.spectro_unit.close(self.spectro_unit.id)
         if self.phmeter.state=='open':
@@ -156,30 +163,26 @@ class IHM:
         if self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
               
-    def updateSettings(self):
+    def updateDefaultParam(self):
+        #Updates current parameters as default in file
         parser = ConfigParser()
         parser.read(self.app_default_settings)
         file = open(self.app_default_settings,'r+')
-        parser.set('saving parameters', 'folder', str(self.saving_folder)) 
-        parser.set('saving parameters', 'save_absorbance', str(self.save_absorbance)) 
-        parser.set('saving parameters', 'save_pH', str(self.save_pH)) 
-        parser.set('saving parameters', 'save_titration_data', str(self.save_titration_data)) 
-        parser.set('saving parameters', 'create_detailed_param_file', str(self.create_detailed_param_file)) 
-        parser.set('saving parameters', 'compatible_format', str(self.compatible_format)) 
+        if self.peristaltic_pump.state=='open':
+            parser.set('pump', 'speed_volts', str(self.peristaltic_pump.mean_voltage))
+        if self.phmeter.state=='open':
+            parser.set('phmeter', 'epsilon', str(self.phmeter.stab_step))
+            parser.set('phmeter', 'delta', str(self.phmeter.stab_time))
+            parser.set('files', 'default', str(self.phmeter.cal_data_path))
+            parser.set('phmeter', 'default', str(self.phmeter.model))
+            parser.set('electrode', 'default', str(self.phmeter.electrode))
+        if self.dispenser.state=='open':
+            parser.set(self.dispenser.syringe_A.id, 'level', str(self.dispenser.syringe_A.level_uL))
+            parser.set(self.dispenser.syringe_B.id, 'level', str(self.dispenser.syringe_B.level_uL))
+            parser.set(self.dispenser.syringe_C.id, 'level', str(self.dispenser.syringe_C.level_uL))
         parser.write(file) 
         file.close()
-        print("update saving configuration")
-    
-    """def updateSettings(self, window):
-        if window=='seqConfig':
-            parser = ConfigParser()
-            parser.read(self.app_default_settings)
-            file = open(self.app_default_settings,'r+')
-            parser.set('custom sequence', 'sequence_file', str(self.sequence_config_file))
-            parser.set('sequence','dispense_mode',str(self.dispense_mode))
-            parser.set('saving parameters','folder',self.seq.saving_folder.text())
-            parser.write(file)
-            file.close()"""
+        print("updates current parameters in default file")
 
     def createDirectMeasureFile(self):
         set = {}
@@ -283,6 +286,10 @@ class IHM:
     def openCalibWindow(self):
         self.calib_window = CalBox(self)
         self.calib_window.show()
+
+    def openDispenserParam(self):
+        self.dp = DispenserParamWindow(self)
+        self.dp.show()
 
     def openSyringePanel(self):
         self.syringePanel = SyringeWindow(self)

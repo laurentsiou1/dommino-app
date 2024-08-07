@@ -95,6 +95,11 @@ class Dispenser:
         self.update_infos()
         self.state='closed'
     
+    def update_dispenser_param(self):
+        self.syringe_A.update_syringe_param()
+        self.syringe_B.update_syringe_param()
+        self.syringe_C.update_syringe_param()
+    
     def update_infos(self):
         self.refresh_state()
         self.infos=self.syringe_A.infos+"\n"+self.syringe_B.infos+"\n"+self.syringe_C.infos
@@ -231,7 +236,15 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.use=tobool(parser.get(self.id, 'use'))
         self.reagent=parser.get(self.id, 'reagent') #string
         self.concentration=float(parser.get(self.id, 'concentration'))
-        print("syringe",id,self.use,self.reagent,self.concentration)
+        self.level_uL=round(float(parser.get(self.id, 'level')))
+        print("syringe",id,self.use,self.reagent,self.concentration, self.level_uL)
+
+    def update_syringe_param(self):
+        parser = ConfigParser()
+        parser.read(app_default_settings)
+        self.use=tobool(parser.get(self.id, 'use'))
+        self.reagent=parser.get(self.id, 'reagent') #string
+        self.concentration=float(parser.get(self.id, 'concentration'))
 
     def connect(self):
         print("connecting syringe",self.stepper,self.id,self.ch_full,self.ch_empty,self.ch_valve,\
@@ -304,7 +317,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         if self.state=='open':
             self.reference_switch.setOnStateChangeHandler(self.ReferenceStop)
             self.security_switch.setOnStateChangeHandler(self.SecurityStop)
-            self.level_uL=self.size
+            
 
     def SecurityStop(self, security_switch, state): #à modifier
         if state == False: #l'interrupteru vient de s'ouvrir : on stop puis on recharge un peu
@@ -422,8 +435,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 time.sleep(1)
                 #affichage de la position atteinte
                 position = self.stepper.getPosition()
-                delta=round((position-pos0),0)
+                delta=round(position-pos0)
                 self.level_uL-=delta
+                print("nouveau niveau", delta)
                 #print("Position atteinte après dispense: ", position)
                 #print("syringe level = ",self.level_uL)
                 if ev==1:
@@ -492,8 +506,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             #affichage de la position atteinte
             position = self.stepper.getPosition()
             #print("Position atteinte après recharge: ", position)
-            delta=round((position-pos0),0)
+            delta=round(position-pos0)
             self.level_uL-=delta #idelta est negatif
+            print("nouveau niveau",self.level_uL)
     
     def full_refill(self):
         pos0=self.stepper.getPosition()
