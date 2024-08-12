@@ -189,6 +189,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
 
         parser2 = ConfigParser()
         parser2.read(port_connections)
+        print("port connections = ", port_connections)
         
         self.stepper.setDeviceSerialNumber(683442)
         

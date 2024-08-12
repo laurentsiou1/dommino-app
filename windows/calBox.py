@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
-from ui.electrode_calibration import Ui_calibration_window
+from graphic.windows.electrode_calibration import Ui_calibration_window
 
 from subsystems.pHmeter import *
 from datetime import datetime

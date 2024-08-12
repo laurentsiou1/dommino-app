@@ -90,6 +90,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.start()
     
     def close(self):
+        self.stop()
         self.state='closed'
         print("Peristaltic pump closed")
 

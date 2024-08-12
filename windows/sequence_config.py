@@ -2,7 +2,7 @@ from configparser import ConfigParser
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
-from ui.config_sequence import Ui_sequenceConfig
+from graphic.windows.config_sequence import Ui_sequenceConfig
 
 #from IHM import IHM
 from automatic_sequences import AutomaticSequence, ClassicSequence, CustomSequence

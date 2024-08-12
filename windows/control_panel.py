@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineEdit, QPushButton
-from ui.control_panel import Ui_ControlPanel
+from graphic.windows.control_panel import Ui_ControlPanel
 from PyQt5 import QtCore, QtGui, QtWidgets
 #from PyQt5.QtGui import QPixmap
 
@@ -28,8 +28,8 @@ path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
 
-ICON_GREEN_LED="windows/green-led-on.png"
-ICON_RED_LED="windows/red-led-on.png"
+ICON_GREEN_LED="graphic/images/green-led-on.png"
+ICON_RED_LED="graphic/images/red-led-on.png"
 
 class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):

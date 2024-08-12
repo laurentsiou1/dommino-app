@@ -2,7 +2,7 @@
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog
-from ui.syringe_panel import Ui_SyringePanel
+from graphic.windows.syringe_panel import Ui_SyringePanel
 
 #import os
 #from pathlib import Path
@@ -79,18 +79,6 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
             self.unload_box_C.setDisabled(True)
             self.dispense_button_C.setDisabled(True)
             self.dispense_box_C.setDisabled(True)
-
-        #connexions pour modifs
-        #self.buttonBox.accepted.connect(self.updateDefaultParameters)
-        """self.checkbox_A.clicked.connect(self.update_syringes_config)
-        self.checkbox_B.clicked.connect(self.update_syringes_config)
-        self.checkbox_C.clicked.connect(self.update_syringes_config)
-        self.reagentA.textChanged.connect(self.update_syringes_config)
-        self.reagentB.textChanged.connect(self.update_syringes_config)
-        self.reagentC.textChanged.connect(self.update_syringes_config)
-        self.Ca.valueChanged.connect(self.update_syringes_config)
-        self.Cb.valueChanged.connect(self.update_syringes_config)
-        self.Cc.valueChanged.connect(self.update_syringes_config)"""
 
         #connexions pour moteurs
         #reference
@@ -178,24 +166,21 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         vol=self.dispense_box_A.value()
         self.syringe_A.simple_dispense(vol)
         self.refresh_volumes()
-        self.maj_volume_count()
     def dispense_B(self):
         vol=self.dispense_box_B.value()
         self.syringe_B.simple_dispense(vol)
         self.refresh_volumes()
-        self.maj_volume_count()
     def dispense_C(self):
         vol=self.dispense_box_C.value()
         self.syringe_C.simple_dispense(vol)
         self.refresh_volumes()
-        self.maj_volume_count()
 
     def reset_volume_count(self):
         self.syringe_A.added_vol_uL=0
         self.syringe_B.added_vol_uL=0
         self.syringe_C.added_vol_uL=0
         self.dispenser.vol.added_total_uL=0
-        self.maj_volume_count()
+        self.refresh_volumes()
 
     def refresh_volumes(self):
         self.levelbarA.setProperty("value", self.syringe_A.level_uL)
@@ -220,22 +205,3 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.syringe_A.concentration=self.Ca.value()     #float
         self.syringe_B.concentration=self.Cb.value()
         self.syringe_C.concentration=self.Cc.value()
-
-    """def updateDefaultParameters(self):
-        parser = ConfigParser()
-        parser.read(self.ihm.app_default_settings)
-        file = open(self.ihm.app_default_settings,'r+')
-        parser.set(self.dispenser.syringe_A.id, 'use', str(self.syringe_A.use))
-        parser.set(self.dispenser.syringe_A.id, 'reagent', str(self.syringe_A.reagent))
-        parser.set(self.dispenser.syringe_A.id, 'concentration', str(self.syringe_A.concentration))
-        parser.set(self.dispenser.syringe_A.id, 'level', str(self.syringe_A.level_uL))
-        parser.set(self.dispenser.syringe_B.id, 'use', str(self.syringe_B.use))
-        parser.set(self.dispenser.syringe_B.id, 'reagent', str(self.syringe_B.reagent))
-        parser.set(self.dispenser.syringe_B.id, 'concentration', str(self.syringe_B.concentration))
-        parser.set(self.dispenser.syringe_B.id, 'level', str(self.syringe_B.level_uL))
-        parser.set(self.dispenser.syringe_C.id, 'use', str(self.syringe_C.use))
-        parser.set(self.dispenser.syringe_C.id, 'reagent', str(self.syringe_C.reagent))
-        parser.set(self.dispenser.syringe_C.id, 'concentration', str(self.syringe_C.concentration))
-        parser.set(self.dispenser.syringe_C.id, 'level', str(self.syringe_C.level_uL))
-        parser.write(file)
-        file.close()"""

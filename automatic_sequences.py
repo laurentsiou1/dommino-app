@@ -329,7 +329,7 @@ class CustomSequence(AutomaticSequence):
         [self.experience_name,self.description,self.OM_type,self.concentration,self.oxygen,self.fibers,\
         self.flowcell,v_init_mL,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
         self.param=config
-        self.V_init=1000*v_init_mL
+        self.V_init=int(1000*v_init_mL) #volumes in microliters are integers
         
         t_start=datetime.now()
         self.start_date=str(t_start.strftime("%m/%d/%Y %H:%M:%S"))
@@ -341,7 +341,7 @@ class CustomSequence(AutomaticSequence):
         print(self.infos)   #données de séquence sur mesure
 
         #Données à compléter pendant la séquence
-        self.pH_mes = [0 for k in range(self.N_mes)]
+        self.pH_mes = [] #[0 for k in range(self.N_mes)]
         if self.spectro.state=='open':
             self.lambdas=self.spectro.wavelengths
             self.N_lambda=len(self.lambdas)
@@ -460,22 +460,31 @@ class CustomSequence(AutomaticSequence):
     def dispense(self,num,dispense_type,value):
         #num : index of syringe
         if dispense_type=='DISP_ON_PH':
-            current=self.phmeter.currentPH
             target=value    #pH value
-            print("simulated pH =", self.ALGO_TEST_PH[self.measure_index-1])
-            print("target=",target)
-            print("measure index = ",self.measure_index)
-            #vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
-            #vol=dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen) 
-            vol=int(dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-1]),target,self.oxygen)) #simulating ph values
+            
+            #simulation pH
+            """current=self.ALGO_TEST_PH[self.measure_index-1]
+            vol=int(dispense_data.get_volume_to_dispense_uL(float(self.ALGO_TEST_PH[self.measure_index-1]),target,self.oxygen))
+            self.syringe.dispense(int(vol/10))  #division par 10 pour rapidité"""
+
+            #real pH
+            current=self.phmeter.currentPH
+            vol=int(dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen))    #positive or null
+            self.syringe.dispense(vol)
+            
+            print("measure index = ",self.measure_index)  
+            print("current pH = ", current)
+            print("target=",target)          
             print("vol=",vol)
-            self.syringe.dispense(int(vol/10))  #division par 10 pour test
+            
             self.window.append_vol_in_table(self.measure_index,vol)
         elif dispense_type=='DISP_VOL_UL':
-            self.syringe.dispense(value)    #volume value
-            self.window.append_vol_in_table(self.measure_index,value)
+            vol=int(value)
+            self.syringe.dispense(vol)    #volume value
+            self.window.append_vol_in_table(self.measure_index,vol)
         
-        self.added_volumes[self.N_mes-1][num] = vol
+        self.added_volumes[self.measure_index-1][num] = vol
+        print("num=",num,"self.added_volumes=",self.added_volumes)
         self.cumulate_volume += vol
         self.cumulate_volumes.append(self.cumulate_volume)
         self.dilution_factors.append((self.cumulate_volume+self.V_init)/self.V_init)

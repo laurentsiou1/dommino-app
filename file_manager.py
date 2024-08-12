@@ -102,11 +102,6 @@ def createFullSequenceFiles(seq):
     
     #PHMETER
     if seq.phmeter.state=='open':    
-        """if seq.dispense_mode=='from file':
-            data+="\npH\t"
-            for k in range(seq.N_mes):
-                data+=str(seq.pH_mes[k])+'\t'
-        else:"""
         data+="\npH\t"
         for k in range(seq.N_mes):
             data+=str(seq.pH_mes[k])+'\t'

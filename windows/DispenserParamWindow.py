@@ -2,7 +2,7 @@
 
 from PyQt5.QtWidgets import QDialog
 
-from ui.dispenser_param import Ui_Dialog    #fenetre créée sur Qt designer
+from graphic.windows.dispenser_param import Ui_Dialog    #fenetre créée sur Qt designer
 
 """import os
 from pathlib import Path"""

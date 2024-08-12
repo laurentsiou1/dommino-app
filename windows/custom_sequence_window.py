@@ -3,7 +3,7 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from ui.custom_sequence import Ui_CustomSequenceWindow
+from graphic.windows.custom_sequence import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
 from windows.spectrumConfig import SpectrumConfigWindow
@@ -13,8 +13,8 @@ from datetime import datetime
 
 import file_manager as fm
 
-ICON_PLAY="windows/play_icon.png"
-ICON_PAUSE="windows/pause_icon.png"
+ICON_PLAY="graphic/images/play_icon.png"
+ICON_PAUSE="graphic/images/pause_icon.png"
 
 class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     
@@ -125,7 +125,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.stab_step.setProperty("value", seq.phmeter.stab_step)
         self.stab_step.valueChanged.connect(self.update_stab_step)
 
-        self.direct_pH.display(self.ihm.phmeter.currentPH) #pH instantané
+        #self.direct_pH.display(self.ihm.phmeter.currentPH) #pH instantané
 
     #DIRECT
     def refresh_screen(self):

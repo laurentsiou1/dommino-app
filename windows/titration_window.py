@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from ui.fenetre_titrage import Ui_titrationWindow
+from graphic.windows.fenetre_titrage import Ui_titrationWindow
 
 import pyqtgraph as pg
 from windows.spectrumConfig import SpectrumConfigWindow
