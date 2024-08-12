@@ -1,9 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+#bin=('C:\Program Files\Phidgets\Phidget22\x86\phidget22.dll','lib')   #.dll pour systeme 32bit, l'exe est en 32bits
+#chemin absolu marche pas 
+bin=[("lib/32bits/phidget22.dll","lib")]
+#bin=[('lib/x64/phidget22.dll','lib')]  #.dll pour systeme 64bits
+
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[('lib/Phidget22.dll','lib')],
+    binaries=bin,
     datas=[('graphic/images/green-led-on.png','images'),\
     ('graphic/images/red-led-on.png','images'),\
     ('graphic/images/pause_icon.png','images'),\
