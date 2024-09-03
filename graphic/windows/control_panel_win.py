@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_files/control_panel.ui'
+# Form implementation generated from reading ui file 'graphic/ui_files/control_panel.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -458,7 +458,7 @@ class Ui_ControlPanel(object):
         self.action_get_help.setText(_translate("ControlPanel", "get help"))
         self.action_save.setText(_translate("ControlPanel", "save"))
         self.action_change_folder.setText(_translate("ControlPanel", "edit saving folder"))
-        self.action_syringe_param.setText(_translate("ControlPanel", "Syringes parameters"))
+        self.action_syringe_param.setText(_translate("ControlPanel", "Instrument settings"))
         self.actionSaving_parameters.setText(_translate("ControlPanel", "Saving parameters"))
 
 

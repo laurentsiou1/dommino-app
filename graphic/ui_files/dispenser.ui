@@ -905,6 +905,45 @@
     <string>%p%</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="purge_A">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>330</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>purge</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="purge_C">
+   <property name="geometry">
+    <rect>
+     <x>830</x>
+     <y>330</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>purge</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="purge_B">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>330</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>purge</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

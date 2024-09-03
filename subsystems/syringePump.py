@@ -17,13 +17,13 @@ ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 port_connections = os.path.join(ROOT_DIR, "config/device_id.ini")
 
-def volumeToAdd_uL(current, target, model='fixed volumes', oxygen=True): #pH courant et cible, modèle choisi par défaut le 5/05
+"""def volumeToAdd_uL(current, target, model='fixed volumes', oxygen=True): #pH courant et cible, modèle choisi par défaut le 5/05
     if model=='5th order polynomial fit on dommino 23/01/2024':
         vol = dispense_data.get_volume_to_dispense_uL(current,target)
     elif oxygen==False:
         vol = dispense_data.get_volume_to_dispense_uL(current,target)
         #Compléter avec les données issues des mesures IPGP avec bullage N2.
-    return int(vol)
+    return int(vol)"""
 
 def getPhStep(current):
     #fonction donnant le pas de pH à viser en fonction du pH. 
@@ -95,10 +95,10 @@ class Dispenser:
         self.update_infos()
         self.state='closed'
     
-    def update_dispenser_param(self):
-        self.syringe_A.update_syringe_param()
-        self.syringe_B.update_syringe_param()
-        self.syringe_C.update_syringe_param()
+    def update_param_from_file(self):
+        self.syringe_A.update_param_from_file()
+        self.syringe_B.update_param_from_file()
+        self.syringe_C.update_param_from_file()
     
     def update_infos(self):
         self.refresh_state()
@@ -195,7 +195,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         
         self.syringe_type=syringe_type
         if syringe_type=='Trajan SGE 500uL':
-            self.size = 400 #en uL : c'est le volume utilse de la seringue. 
+            self.size = 400 #uL : useful volume on syringe
             #uL use only 400 on a 500uL syringe
             #Pour ne pas toucher le bout de la seringue
         else:
@@ -232,20 +232,18 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.state='closed'
         self.infos=self.id+" : "+self.state
 
+        self.update_param_from_file()
+        print("syringe",id,self.use,self.reagent,self.concentration, self.level_uL)
+
+    def update_param_from_file(self):
         parser = ConfigParser()
         parser.read(app_default_settings)
+        self.rescale_factor=float(parser.get(self.id, 'rescale_factor'))
+        self.offset_ref=float(parser.get(self.id, 'offset_ref'))
         self.use=tobool(parser.get(self.id, 'use'))
         self.reagent=parser.get(self.id, 'reagent') #string
         self.concentration=float(parser.get(self.id, 'concentration'))
         self.level_uL=round(float(parser.get(self.id, 'level')))
-        print("syringe",id,self.use,self.reagent,self.concentration, self.level_uL)
-
-    def update_syringe_param(self):
-        parser = ConfigParser()
-        parser.read(app_default_settings)
-        self.use=tobool(parser.get(self.id, 'use'))
-        self.reagent=parser.get(self.id, 'reagent') #string
-        self.concentration=float(parser.get(self.id, 'concentration'))
 
     def connect(self):
         print("connecting syringe",self.stepper,self.id,self.ch_full,self.ch_empty,self.ch_valve,\
@@ -261,15 +259,15 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             print("limite de vittesse stepper : ", self.stepper.getVelocityLimit())
             self.stepper.setAcceleration(5)
             print("acceleration stepper : ", self.stepper.getAcceleration())
-            if self.syringe_type=='Trajan SGE 500uL': #Trajan SGE 500uL
-                #rescale factor calculé le 25/01/2024
-                print("le syringe type est bon")
-                self.stepper.setRescaleFactor(-0.01298) #rescale factor = -0.013115 avant 25/01/2024
-                #baisse le rescale factor augmente la course
-                #450uL dispensés sur une échelle de 30500 positions avec scale factor=1
-                #soit 76,25 microsteps pour 1 uL.     
-            else:
-                self.stepper.setRescaleFactor(-0.01303) #avant 0.013115
+            
+            #rescale factor calculé le 25/01/2024
+            print("le syringe type est bon")
+            self.stepper.setRescaleFactor(self.rescale_factor) 
+            #rescale factor = -0.013115 avant 25/01/2024
+            #rescale factor = -0.01298 le 30/08/2024 pour le pas B
+            #baisser le rescale factor augmente la course
+            #450uL dispensés sur une échelle de 30500 positions avec scale factor=1
+            #soit 76,25 microsteps pour 1 uL.     
             print("rescale factor = ", self.stepper.getRescaleFactor())
         except:
             print("stepper "+self.id+": not connected")
@@ -317,11 +315,10 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
 
         if self.state=='open':
             self.reference_switch.setOnStateChangeHandler(self.ReferenceStop)
-            self.security_switch.setOnStateChangeHandler(self.SecurityStop)
-            
+            self.security_switch.setOnStateChangeHandler(self.SecurityStop)            
 
     def SecurityStop(self, security_switch, state): #à modifier
-        if state == False: #l'interrupteru vient de s'ouvrir : on stop puis on recharge un peu
+        if state == False: #l'interrupteur vient de s'ouvrir : on stop puis on recharge un peu
             #print("security stop \nself:",self,"security_switch:",security_switch,"state",state)
             self.stepper.setEngaged(False)
             print("end of pitch - motor stop")
@@ -338,7 +335,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.configForDispense(ev=0)
             #calculé pour revenir sur le trait 500 à partir de l'interrupteur
             #dépend de la seringue, des tubings, de l'ensemble
-            self.stepper.setTargetPosition(self.stepper.getPosition()+50) #valeur le 25/01 #+62 jusqu'à présent
+            self.stepper.setTargetPosition(self.stepper.getPosition()+self.offset_ref) 
+            #offset_ref = 50 sur pousse seringue B avant le 30/08
+            #valeur le 25/01 #+62 jusqu'à présent
             self.stepper.setEngaged(True)
             while(self.stepper.getIsMoving()==True):
                 pass
@@ -489,6 +488,16 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                     self.full_refill()
         print("end of dispense\n")
 
+    def standard_dispense_for_calib(self):
+        print("400uL target dispense for calibration")
+        self.dispense(400)  #visée 400uL
+    
+    def compute_rescale_factor(self,reached_uL):
+        current_factor=self.rescale_factor
+        new_factor=(reached_uL/400)*current_factor  #new rescale_factor
+        self.rescale_factor=new_factor
+        print("Syringe",self.id,":\nRescale factor has been ajusted from %f to %f \n \
+              Now you can ajust the reference offset" % (current_factor,new_factor))
 
     def simple_refill(self,vol):   
         pos0=self.stepper.getPosition()
@@ -531,6 +540,9 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         pos1=self.stepper.getPosition()
         #print("Remise à zéro. Position: ",pos1)
     
+    def purge_syringe(self):
+
+
     def close(self):
         self.stopSyringe()
         self.stepper.close()

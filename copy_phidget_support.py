@@ -1,4 +1,6 @@
-"copie de PhidgetSupport.py"
+"""copie de PhidgetSupport.py, fichier contenu dans l'environnement virtuel pytitrator_env
+On doit notament spécifier le chemin du dll relativement au répertoire d'éxecution lors du lancement 
+de l'exe. C'est pour cela que la ligne elif a été rajoutée"""
 import threading
 import sys
 import ctypes

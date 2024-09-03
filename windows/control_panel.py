@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineEdit, QPushButton
-from graphic.windows.control_panel import Ui_ControlPanel
+from graphic.windows.control_panel_win import Ui_ControlPanel
 from PyQt5 import QtCore, QtGui, QtWidgets
 #from PyQt5.QtGui import QPixmap
 
@@ -24,12 +24,19 @@ from Phidget22.Devices.Stepper import Stepper
 from lib.oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from lib.oceandirect.od_logger import od_logger
 
-path = Path(__file__)
-ROOT_DIR = path.parent.absolute()
-app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
+#path = Path(__file__)
+#print("path controlpanel",path)
+#ROOT_DIR = path.parent.parent.absolute()
+#print("ROOT_DIR controlpanel",ROOT_DIR)
+#app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+#print("default settings :",app_default_settings)
 
-ICON_GREEN_LED="graphic/images/green-led-on.png"
-ICON_RED_LED="graphic/images/red-led-on.png"
+#chemin du repertoire _internal lors du lancement de l'exe
+path_internal=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+green_led_path=os.path.join(path_internal, "graphic/images/green-led-on.png")
+red_led_path=os.path.join(path_internal, "graphic/images/red-led-on.png")
+
+
 
 class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):
@@ -39,19 +46,22 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.phmeter=ihm.phmeter
         self.spectro_unit=ihm.spectro_unit
         self.dispenser=ihm.dispenser
-        #self.syringe_pump=self.dispenser.syringe_A
         self.peristaltic_pump=ihm.peristaltic_pump
         
         #graphique
         super(ControlPanel,self).__init__(parent)
         self.setupUi(self)
         
-        self.pixmap_red=QtGui.QPixmap(ICON_RED_LED)
-        self.pixmap_green=QtGui.QPixmap(ICON_GREEN_LED)
+        if os.path.exists(green_led_path):  #lors d'un lancement avec le dossier d'executable
+            self.pixmap_green=QtGui.QPixmap(green_led_path)
+            self.pixmap_red=QtGui.QPixmap(red_led_path)
+        else:
+            self.pixmap_green=QtGui.QPixmap("graphic/images/green-led-on.png")
+            self.pixmap_red=QtGui.QPixmap("graphic/images/red-led-on.png")
         
         #Paramètres affichés
         parser = ConfigParser()
-        parser.read(app_default_settings)
+        parser.read(ihm.app_default_settings)
         #menus déroulants
         self.phmeter_selection_box.setCurrentText(str(parser.get('phmeter', 'default')))
         self.electrode_selection_box.setCurrentText(str(parser.get('electrode', 'default')))
@@ -275,20 +285,8 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.shutter.clicked.connect(self.spectro_unit.changeShutterState)
         self.label_device.setText("device : "+self.spectro_unit.model)
 
-    """def updateDefaultSettings(self):
-        #actualisation des paramètres affichés par défaut à l'ouverture de la fenetre
-        parser = ConfigParser()
-        parser.read(app_default_settings)
-        parser.set('files', 'default', str(self.phmeter.cal_data_path))
-        parser.set('phmeter', 'default', str(self.phmeter.model))
-        parser.set('electrode', 'default', str(self.phmeter.electrode))
-        file = open(app_default_settings,'w')
-        parser.write(file)
-        file.close()"""
-
     ### Méthodes pour le pousse-seringue
     def connectSyringePump(self):
-        #self.syringe_pump.connect()
         self.dispenser.connect()
         if self.dispenser.state=='open':
             self.led_disp.setPixmap(self.pixmap_green)

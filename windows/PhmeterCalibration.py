@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
-from graphic.windows.electrode_calibration import Ui_calibration_window
+from graphic.windows.phmeter_calib_win import Ui_calibration_window
 
 from subsystems.pHmeter import *
 from datetime import datetime
@@ -95,7 +95,6 @@ class CalBox(QDialog, Ui_calibration_window):
         self.label_2.setText(_translate("Dialog", "Tensions enregistrées"))
 
     def setOnDirectVoltage(self): #, ch, voltage):
-        print("setondirectvoltage")
         self.direct_voltage_mV.display(1000*self.ihm.phmeter.currentVoltage)
         """elif self.phmeter.model=='Phidget 1130':
             self.direct_voltage_mV.display(1000*self.phmeter.currentVoltage)"""

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_files/config_sequence.ui'
+# Form implementation generated from reading ui file 'graphic/ui_files/config_sequence.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -24,18 +24,6 @@ class Ui_sequenceConfig(object):
         self.exp_name.setGeometry(QtCore.QRect(20, 40, 351, 41))
         self.exp_name.setPlainText("")
         self.exp_name.setObjectName("exp_name")
-        self.flowcell = QtWidgets.QComboBox(sequenceConfig)
-        self.flowcell.setGeometry(QtCore.QRect(390, 130, 361, 41))
-        self.flowcell.setObjectName("flowcell")
-        self.flowcell.addItem("")
-        self.flowcell.addItem("")
-        self.flowcell.addItem("")
-        self.fibers = QtWidgets.QComboBox(sequenceConfig)
-        self.fibers.setGeometry(QtCore.QRect(390, 40, 361, 41))
-        self.fibers.setObjectName("fibers")
-        self.fibers.addItem("")
-        self.fibers.addItem("")
-        self.fibers.addItem("")
         self.exp_name_label = QtWidgets.QLabel(sequenceConfig)
         self.exp_name_label.setGeometry(QtCore.QRect(20, 0, 241, 41))
         self.exp_name_label.setObjectName("exp_name_label")
@@ -66,12 +54,6 @@ class Ui_sequenceConfig(object):
         self.concentration.setSingleStep(0.1)
         self.concentration.setProperty("value", 3.0)
         self.concentration.setObjectName("concentration")
-        self.fibers_label = QtWidgets.QLabel(sequenceConfig)
-        self.fibers_label.setGeometry(QtCore.QRect(390, 0, 351, 41))
-        self.fibers_label.setObjectName("fibers_label")
-        self.flowcell_label = QtWidgets.QLabel(sequenceConfig)
-        self.flowcell_label.setGeometry(QtCore.QRect(390, 90, 361, 41))
-        self.flowcell_label.setObjectName("flowcell_label")
         self.Nmes = QtWidgets.QSpinBox(sequenceConfig)
         self.Nmes.setGeometry(QtCore.QRect(580, 490, 121, 41))
         self.Nmes.setMinimum(3)
@@ -148,6 +130,7 @@ class Ui_sequenceConfig(object):
         self.agitation_delay_box.setMaximum(300)
         self.agitation_delay_box.setProperty("value", 30)
         self.agitation_delay_box.setObjectName("agitation_delay_box")
+        #self.agitation_delay_box.value()
         self.browse = QtWidgets.QToolButton(sequenceConfig)
         self.browse.setEnabled(True)
         self.browse.setGeometry(QtCore.QRect(620, 720, 131, 41))
@@ -186,12 +169,6 @@ class Ui_sequenceConfig(object):
     def retranslateUi(self, sequenceConfig):
         _translate = QtCore.QCoreApplication.translate
         sequenceConfig.setWindowTitle(_translate("sequenceConfig", "Dialog"))
-        self.flowcell.setItemText(0, _translate("sequenceConfig", "FIA Zcell 50mm"))
-        self.flowcell.setItemText(1, _translate("sequenceConfig", "CUV 50mm"))
-        self.flowcell.setItemText(2, _translate("sequenceConfig", "CUV 10mm"))
-        self.fibers.setItemText(0, _translate("sequenceConfig", "QP-600-1-SR-BX & QP600-025-SR"))
-        self.fibers.setItemText(1, _translate("sequenceConfig", "300um"))
-        self.fibers.setItemText(2, _translate("sequenceConfig", "200um"))
         self.exp_name_label.setText(_translate("sequenceConfig", "Experience name"))
         self.OM_type_label.setText(_translate("sequenceConfig", "Sample"))
         self.concentration_label.setText(_translate("sequenceConfig", "Concentration (ppmC)"))
@@ -199,8 +176,6 @@ class Ui_sequenceConfig(object):
         self.OM_type.setCurrentText(_translate("sequenceConfig", "LHA"))
         self.OM_type.setItemText(0, _translate("sequenceConfig", "LHA"))
         self.OM_type.setItemText(1, _translate("sequenceConfig", "SRNOM"))
-        self.fibers_label.setText(_translate("sequenceConfig", "fibers"))
-        self.flowcell_label.setText(_translate("sequenceConfig", "absorbance cell"))
         self.pH_init_label.setText(_translate("sequenceConfig", "initial pH"))
         self.pH_fin_label.setText(_translate("sequenceConfig", "final pH"))
         self.Nmes_label.setText(_translate("sequenceConfig", "N mesures"))
@@ -219,9 +194,8 @@ class Ui_sequenceConfig(object):
         self.browse1.setText(_translate("sequenceConfig", "Browse"))
         self.sequence_config_label.setText(_translate("sequenceConfig", "Sequence configuration file"))
         self.oxygen_label.setText(_translate("sequenceConfig", "Oxygen"))
-        self.oxygen_box.setItemText(0, _translate("sequenceConfig", "Yes"))
-        self.oxygen_box.setItemText(1, _translate("sequenceConfig", "No"))
-        #self.oxygen_box.currentText()
+        self.oxygen_box.setItemText(0, _translate("sequenceConfig", "True"))
+        self.oxygen_box.setItemText(1, _translate("sequenceConfig", "False"))
 
 
 if __name__ == "__main__":

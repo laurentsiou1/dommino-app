@@ -24,21 +24,21 @@ from subsystems.peristalticPump import PeristalticPump
 #Windows
 from windows.control_panel import ControlPanel
 from windows.sequence_config import SequenceConfig
-from windows.calBox import CalBox
+from windows.PhmeterCalibration import CalBox
 from windows.custom_sequence_window import CustomSequenceWindow
 from windows.titration_window import TitrationWindow
 from windows.spectrumConfig import SpectrumConfigWindow
 from windows.savingConfig import SavingConfig
 from windows.syringe_window import SyringeWindow
-from windows.DispenserParamWindow import DispenserParamWindow
+from windows.settings import Settings
 
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
-#app_config_path = os.path.join(ROOT_DIR, "config\\app_config.ini")
 
 class IHM:
 
     app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+    print("app_default_settings ihm : ",app_default_settings)
     #Sous sytèmes 
     #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
     system=System()
@@ -54,29 +54,26 @@ class IHM:
         if self.system.state=='connected':
             print("Instrument connected and under tension")
         else:
-            print("The instrument is rather not connected to computer or not under tension")
+            print("The instrument is either not connected to computer or not under tension")
 
         #Config for savings
         parser = ConfigParser()
         parser.read(self.app_default_settings)
-        self.saving_folder=parser.get('saving parameters', 'folder')
-        self.save_absorbance=parser.get('saving parameters', 'save_absorbance')   
-        self.save_pH=parser.get('saving parameters', 'save_pH')
-        self.save_titration_data=parser.get('saving parameters', 'save_titration_data')
-        self.create_detailed_param_file=parser.get('saving parameters', 'create_detailed_param_file')
-        self.compatible_format=parser.get('saving parameters', 'compatible_format')         
+        self.saving_folder=parser.get('saving parameters', 'folder')       
   
         #Configs for Automatic sequence
         self.experience_name=None
         self.description=None
-        self.OM_type=None #type of organic matter
-        self.concentration=None
-        self.fibers=None
-        self.flowcell=None
+        self.OM_type=parser.get('sequence', 'OM_type')   #type of organic matter
+        self.concentration=parser.get('sequence', 'concentration')
+        self.fibers=parser.get('setup', 'fibers')
+        self.flowcell=parser.get('setup', 'flowcell')
         self.N_mes=None #number of pH/spectra measures
         self.dispense_mode=parser.get('sequence', 'dispense_mode')
 
         #classic
+        self.fixed_delay_sec=int(parser.get('classic titration sequence', 'fixed_delay_sec'))
+        self.mixing_delay_sec=int(parser.get('classic titration sequence', 'mixing_delay_sec'))
         self.initial_pH=None
         self.final_pH=None
         self.added_total_uL = 0
@@ -127,7 +124,7 @@ class IHM:
         if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==1:
             #Sorties digitales pour pousse seringue
             self.dispenser.state='closed'
-            print("Pousse seringue débranché")
+            print("Syringe pump disconnected")
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
         if deviceName=='4A Stepper Phidget' and hubPort==0:
             #stepper A de pousse seringue débranché
@@ -142,7 +139,7 @@ class IHM:
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
         if deviceName=='4A DC Motor Phidget' and hubPort==2:
             self.peristaltic_pump.state='closed'
-            print("Pompe péristaltique débranchée")
+            print("Peristaltic pump disconnected")
             self.controlPanel.led_pump.setPixmap(self.controlPanel.pixmap_red)
         #digitaloutput de controle de lampe non connecte
         if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==3:
@@ -284,11 +281,11 @@ class IHM:
         self.spectroWindow.show()
 
     def openCalibWindow(self):
-        self.calib_window = CalBox(self)
+        self.calib_window = PhmeterCalibration(self)
         self.calib_window.show()
 
     def openDispenserParam(self):
-        self.dp = DispenserParamWindow(self)
+        self.dp = Settings(self)
         self.dp.show()
 
     def openSyringePanel(self):

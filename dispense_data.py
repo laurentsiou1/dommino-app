@@ -1,44 +1,54 @@
 """
-Module appelé pendant la séquence pour obtenir les bons volumes à dispenser
-
-Fit polynomial de degré 5 sur la courbe de dispense à la pipette du 23/01/2024
-Fit fait sur excel
+Module appelé pendant la séquence pour obtenir les bons volumes à dispenser ou les pH à viser.
 """
 
 import numpy as np
 import math
 
 #data du 23/01/2024
-v_23_01_2024 = np.array([0,100,200,	300,400,500,550,600,650,700,750,800,850,900,950,1050,1150,1250,1450,1850])
-pH_dommino_23_01_2024=np.array([4.01,	4.15,	4.27, 4.5, 4.82,	5.49, 5.85,	6.15,	6.5,	6.91,	7.33,	7.72,	8.18,	8.54,	8.75,	9.19,	9.4	, 9.51,	9.74,	10.03])
-pH_HI5221_23_01_2024=np.array([4.09,	4.21,	4.36,	4.56,	4.9,	5.59,	5.98,	6.34,	6.69,	7.09,	7.38,	7.75,	8.29,	8.69,	8.92,	9.32,	9.54,	9.69,	9.91,	10.19])
-
-#fit sur pH-mètre dommino le 23/01/2024
+v_23_01_2024 = np.array([0,100,200,300,400,500,550,600,650,700,750,800,850,900,950,1050,1150,1250,1450,1850])
+pH_dommino_23_01_2024=np.array([4.01, 4.15,	4.27, 4.5, 4.82, 5.49, 5.85, 6.15, 6.5,	6.91, 7.33,	7.72, 8.18,	8.54, 8.75,	9.19, 9.4, 9.51, 9.74, 10.03])
+pH_HI5221_23_01_2024=np.array([4.09, 4.21, 4.36, 4.56, 4.9,	5.59, 5.98,	6.34, 6.69,	7.09, 7.38,	7.75, 8.29,	8.69, 8.92,	9.32, 9.54,	9.69, 9.91,	10.19])
+#fit sur pH-mètre dommino le 23/01/2024, fait sur excel
 param_dommino_23_01_2024 = [3.9266, -133.37, 1792.2, -11910., 39276., -51141.] 
 
-def polynomial_5th_order(x, a5, a4, a3, a2, a1, a0):
-    #x correspond au pH
-    if type(x)!=list and type(x)!=np.ndarray:
-        v=a5*x**5+a4*x**4+a3*x**3+a2*x**2+a1*x+a0
+#données des mesures IPGP du 6/03/2024 avec lHA 2.5ppm et bullage N2 (sans oxygène)
+v_N2_6_03_2024 = np.array([0, 173, 300, 388, 447, 490, 534, 627, 840, 1459])
+pH_N2_6_03_2024 = np.array([4.041, 4.236, 4.467, 4.737, 5.061, 5.535, 6.758, 8.846, 9.527, 10.077])
+#fit réalisé sur excel avec polynôme de deg. 5.
+param_IPGP_N2_6_03_2024 = np.array([4.5281, -155.77, 2119.7, -14265., 47527., -62340.])
+
+def dispense_function_uL(pH, oxygen=True):
+    """Retourn le volume correspondant au pH. 
+    Suppose utilisation de soude NaOH concentration 10e-2 mol/L.
+    On suppose être au pH4 initialement et un volume d'échantillon de 50mL"""
+    if oxygen==True:
+        #données du 23/01/2024
+        coefs = np.polyfit(pH_dommino_23_01_2024, v_23_01_2024, 5)
+    else:   #oxygen = False
+        #données issues des mesures à l'IPGP en mars 2024 - avec bullage N2.
+        coefs = np.polyfit(pH_N2_6_03_2024, v_N2_6_03_2024, 7)
+    print(coefs)
+    P = np.poly1d(coefs)
+    #liste ou valeur simple pour le volume
+    if type(pH)!=list and type(pH)!=np.ndarray:
+        vol = P(pH)
     else:
-        v=[]
-        for ph in x:
-            v.append(a5*ph**5+a4*ph**4+a3*ph**3+a2*ph**2+a1*ph+a0)
-    return v
+        vol = [P(u) for u in pH]
+    return vol
 
-def dispense_function_uL(pH, model='polynomial 5th order', ref_data='dommino 23/01/2024', oxygen=True):
-    if model=='polynomial 5th order' and ref_data=='dommino 23/01/2024':
-        (a5, a4, a3, a2, a1, a0) = tuple(param_dommino_23_01_2024)
-        v = polynomial_5th_order(pH, a5, a4, a3, a2, a1, a0)
-    elif oxygen==False:
-        pass
-        #compléter avec des données de IPGP. bullage N2
-    return v
+def get_volume_to_dispense_uL(current_pH, target_pH, oxygen=True, C_NaOH=0.01, volume=50):
+    """C (mol/L) et V(mL) sont les conditions classiques pour lesquelles les courbes de dispense sont obtenues
+    Si on est dans des conditions différentes, on corrige"""
+    #volume en conditions standard
+    factor = (volume*0.01)/(C_NaOH*50)
+    print("correction factor from reference dispense curve =",factor)
+    vol_ref = max(0,dispense_function_uL(target_pH, oxygen=oxygen)-dispense_function_uL(current_pH, oxygen=oxygen))
+    vol=factor*vol_ref
+    return vol
 
-def get_volume_to_dispense_uL(current_pH, target_pH, oxygen=True):
-    return max(0,dispense_function_uL(target_pH, oxygen=oxygen)-dispense_function_uL(current_pH, oxygen=oxygen))
+### Fonctions pour la répartition des points de pH ###
 
-#Fonctions pour la répartition des points de pH
 def f_ratio_deprotone(x,m,lK):  #sigmoide modelise f1 f2 dans le traitement 
     return 10**(m*(x-lK))/(1+10**(m*(x-lK)))
 
@@ -51,6 +61,7 @@ def evolution_absorbance(A1,m1,lK1,A2,m2,lK2,pH):  #fonction
 
 def delta_pH(A1,m1,lK1,A2,m2,lK2,pH,pH0,max_delta):
     return max_delta*evolution_absorbance(A1,m1,lK1,A2,m2,lK2,pH0)/evolution_absorbance(A1,m1,lK1,A2,m2,lK2,pH)
+
 
 #données issues de l'optim sur les donnees du 26/01/2024
 #A1=[0.1317,0.0419],m1=0.416,lK1=3.90,A2=[0.0727,0.1392],m2=0.197,lK2=9.94,pH0=6.486
@@ -89,10 +100,6 @@ absorbance_model_26_01_2024 = [[0.1317,0.0419],0.416,3.90,[0.0727,0.1392],0.197,
 
 class ReferenceData:
     #Cette classe modélise un titrage qui peut servir de référence à plusieurs niveaux
-    
-    """def init(self,om_type,C):
-        self.om_type=om_type
-        self.concentration_ppmC=C"""
 
     def __init__(self,A1,m1,lK1,A2,m2,lK2):  #initialisation par les fonctions de référence
         self.A1=A1#maximum de la fonction A1
@@ -103,22 +110,23 @@ class ReferenceData:
         self.lK2=lK2
 
     ### Calcul d'espacement des courbes en pH
-    #donnees de reference : 26/01/2024
+    #donnees de référence : 26/01/2024
 
-    def evolution_absorbance(self,pH):   #représente la maximum d'évolution avec le pH\
+    def evolution_absorbance(self,pH):   #représente le maximum d'évolution avec le pH\
         # entre les deux absorbance A(lambda1) et A(lambda2) qui correspondent aux longueurs d'onde\
         # d'intérêt pour les COOH et PhOH
         #max(A1(lambda1)*f1',A2(lambda2)*f2')
         return max(self.A1[0]*derivee_f(pH,self.m1,self.lK1)+self.A2[0]*derivee_f(pH,self.m2,self.lK2),self.A1[1]*derivee_f(pH,self.m1,self.lK1)+self.A2[1]*derivee_f(pH,self.m2,self.lK2))
 
     def min_abs_variation(self):
+        """La fonction doit se lancer depuis un environnement virtuel contenant scipy"""
         import scipy.optimize 
         self.pH0 = scipy.optimize.fmin(lambda x: self.evolution_absorbance(x), 6)   #minimum de variation d'absorbance
         return self.pH0
 
     def delta_pH(self,pH,max_delta):
-        #renvoie l'écart en pH en fonction du pH pour satisfaire le critère d'écart maximum\
-        #entre deux valeurs de pH. 
+        """renvoie le pas de pH en fonction du pH courant pour satisfaire le critère d'écart maximum\
+        entre deux valeurs de pH.""" 
         return max_delta*self.evolution_absorbance(self.pH0)/self.evolution_absorbance(pH)
     
     def plot_functions(self,max_delta=0.5):
@@ -158,23 +166,29 @@ if __name__=="__main__":
     print(pH0)
     dataSet.plot_functions(0.8)    #max_delta"""
 
-    import matplotlib.pyplot as plt
-    #Plot dispense function
-    plt.scatter(pH_dommino_23_01_2024, v_23_01_2024, label='dommino 23/01', color='black')
+    ### Tracé des courbes de dispense volume(pH)
+    """import matplotlib.pyplot as plt
     x=np.linspace(3.5,10.5,100)
-    y=dispense_function_uL(x)
-    plt.plot(x,y,color='red')
-    plt.xlabel('Volume (mL)')
-    plt.ylabel('pH')
-    plt.title('Fit sur les données du 23/01/2024 avec les deux pH-mètres')
-    plt.legend()
-    plt.show()
-    
+    y_O2=dispense_function_uL(x)
+    y_N2=dispense_function_uL(x,oxygen=False)
+    plt.xlabel('pH')
+    plt.ylabel('volume (uL)')
+    fig, axes = plt.subplots(1,2, sharex=True, sharey=True)
+    fig.suptitle('Dispense curves\nInitial pH=4, volume : 50mL\nAddition of NaOH with concentration 0.01mol/L')
+    axes[0].scatter(pH_dommino_23_01_2024, v_23_01_2024, label='23/01 normal conditions', color='black')
+    axes[0].plot(x,y_O2,label='5th degree polynome',color='red')
+    axes[0].legend()
+    axes[0].set_title('standard conditions (with O2)')
+    axes[1].scatter(pH_N2_6_03_2024, v_N2_6_03_2024, label='6/03 IPGP with N2 bubling (no oxygen)', color='black')
+    axes[1].plot(x,y_N2,label='7th degree polynome',color='blue')
+    axes[1].legend()
+    axes[1].set_title('N2 bubling (without O2)')
+    plt.show()"""
 
-    """
+    #Test de la fonction get_volume_to_dispense_uL
     while(True):
         ph0, ph1 = input("ph courant, ph cible: ").split()
         x0=float(ph0);x1=float(ph1)
         print("current: ", ph0)
         print("target: ", ph1)
-        print("volume à ajouter : ", get_volume_to_dispense_uL(x0,x1))"""
+        print("volume à ajouter : ", get_volume_to_dispense_uL(x0,x1,C_NaOH=0.005,volume=55))

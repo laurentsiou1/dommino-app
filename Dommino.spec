@@ -6,10 +6,12 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=bin,
-    datas=[('graphic/images/green-led-on.png','images'),\
-    ('graphic/images/red-led-on.png','images'),\
-    ('graphic/images/pause_icon.png','images'),\
-    ('graphic/images/play_icon.png','images'),\
+    datas=[
+    ('graphic/images/icon-appli.ico','graphic/images'),\
+    ('graphic/images/green-led-on.png','graphic/images'),\
+    ('graphic/images/red-led-on.png','graphic/images'),\
+    ('graphic/images/pause_icon.png','graphic/images'),\
+    ('graphic/images/play_icon.png','graphic/images'),\
     ('config/app_default_settings.ini','config'),\
     ('config/CALlog.txt','config'),\
     ('config/device_id.ini','config'),\
@@ -36,6 +38,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=True,
+    icon='graphic/images/icon-appli.ico',
     disable_windowed_traceback=True,
     argv_emulation=False,
     target_arch=None,
@@ -50,4 +53,5 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='Dommino',
+    icon='graphic/images/icon-appli.ico'
 )

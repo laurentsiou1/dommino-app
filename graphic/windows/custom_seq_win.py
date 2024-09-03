@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_files/titrage_from_file.ui'
+# Form implementation generated from reading ui file 'graphic/ui_files/titrage_from_file.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -157,7 +157,7 @@ class Ui_CustomSequenceWindow(object):
         self.column_times.setObjectName("column_times")
         self.grid_mes_pH_vol.addWidget(self.column_times, 0, 2, 1, 1)
         self.pause_resume_button = QtWidgets.QCommandLinkButton(self.centralwidget)
-        self.pause_resume_button.setGeometry(QtCore.QRect(900, 260, 71, 71))
+        self.pause_resume_button.setGeometry(QtCore.QRect(950, 250, 71, 71))
         self.pause_resume_button.setText("")
         self.pause_resume_button.setObjectName("pause_resume_button")
         CustomSequenceWindow.setCentralWidget(self.centralwidget)

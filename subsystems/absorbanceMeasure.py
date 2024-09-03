@@ -18,10 +18,6 @@ from pathlib import Path
 from PyQt5 import QtCore
 
 import subsystems.processing as sp
-"""try: #dépend depuis où est lancé le programme
-    import subsystems.processing as sp 
-except:
-    pass"""
 
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator

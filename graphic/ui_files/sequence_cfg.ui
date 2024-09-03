@@ -42,56 +42,6 @@
     <string/>
    </property>
   </widget>
-  <widget class="QComboBox" name="flowcell">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>130</y>
-     <width>361</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>FIA Zcell 50mm</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>CUV 50mm</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>CUV 10mm</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QComboBox" name="fibers">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>40</y>
-     <width>361</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>QP-600-1-SR-BX &amp; QP600-025-SR</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>300um</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>200um</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QLabel" name="exp_name_label">
    <property name="geometry">
     <rect>
@@ -206,32 +156,6 @@
    </property>
    <property name="value">
     <double>3.000000000000000</double>
-   </property>
-  </widget>
-  <widget class="QLabel" name="fibers_label">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>0</y>
-     <width>351</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>fibers</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="flowcell_label">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>90</y>
-     <width>361</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>absorbance cell</string>
    </property>
   </widget>
   <widget class="QSpinBox" name="Nmes">

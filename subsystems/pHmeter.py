@@ -19,10 +19,10 @@ import re
 
 #Récupère le fichier des données de calibration par défaut
 path = Path(__file__)
-ROOT_DIR = path.parent.absolute()
-default_app_settings_file = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
-new_cal_file = os.path.join(ROOT_DIR, "../config/latest_cal.ini")
-
+ROOT_DIR = path.parent.parent.absolute()
+app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+new_cal_file = os.path.join(ROOT_DIR, "config/latest_cal.ini")
+cal_log = os.path.join(ROOT_DIR, "config/CALlog.txt")
 
 def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
 	#U=a*pH+b
@@ -45,16 +45,16 @@ class PHMeter:
 		self.stable=False
 		self.stab_level=0 #pourcentage de stabilité
 		parser = ConfigParser()
-		parser.read(default_app_settings_file)
+		parser.read(app_default_settings)
 		self.stab_time = int(parser.get('phmeter', 'delta'))
 		self.stab_step = float(parser.get('phmeter', 'epsilon'))
 		
 		#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
 		self.signals=CustomSignals()
 	
-		print("default settings file:", default_app_settings_file)
+		print("default settings file:", app_default_settings)
 		parser = ConfigParser()
-		parser.read(default_app_settings_file)
+		parser.read(app_default_settings)
 		self.cal_data_path=parser.get('files', 'default')
 		self.model=parser.get('phmeter', 'default')
 		self.electrode=parser.get('electrode', 'default')
@@ -89,10 +89,10 @@ class PHMeter:
 			
 			
 			self.state='open'
-			print("pH mètre connecté")	
+			print("pH meter connected")	
 		else:
 			self.state='closed'
-			print("pH-mètre non connecté")
+			print("pH meter disconnected")
 		self.voltagechannel=channel
 
 	def update_infos(self):
@@ -109,12 +109,10 @@ class PHMeter:
 		self.cal_data_path=path
 		#Changement dans le fichier contenant le chemin du fichier de calibration par defaut
 		parser = ConfigParser()
-		parser.read(default_app_settings_file)
-		#print(default_app_settings_file)
-		#print(self.cal_data_path)
+		parser.read(app_default_settings)
 		parser.set('files', 'default', str(self.cal_data_path))
 		#écriture du nouveau chemin de cal par défaut
-		cal_path_file = open(default_app_settings_file,'w')
+		cal_path_file = open(app_default_settings,'w')
 		parser.write(cal_path_file) 
 		cal_path_file.close()
 	
@@ -135,10 +133,9 @@ class PHMeter:
 	def doOnVoltageChange(self,ch,voltage): 
 		#les arguments de cette fonctions ne peuvent pas être changés
 		#self:PHMeter,ch:VoltageInput,voltage:float 
-		self.currentVoltage=voltage #self.voltagechannel.getVoltage()
-		#print("current voltage=",self.currentVoltage)
+		self.currentVoltage=voltage 
 		self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)  
-		print(self.currentPH)
+		#print(self.currentPH)
 	
 	def activatePHmeter(self):
 		#si le voltagechangetrigger est à zéro, l'évènement se produit périodiquement
@@ -185,7 +182,7 @@ class PHMeter:
 		file.close()
 
 		#sauvegarde de toutes les calibration
-		oldCal = open("config/CALlog.txt", "a")
+		oldCal = open(cal_log, "a")
 		oldCal.write("pH meter : "+str(self.CALmodel)+"\npH probe : "+str(self.CALelectrode)+"\n"+str(date)+"\n"+str(temperature)+"°C \nType de calibration: "+str(caltype)+"\nVoltages calib:\n"+str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
 		oldCal.close()
 
@@ -226,7 +223,6 @@ class PHMeter:
 			if self.stab_level<ts: 					#en attente
 				self.stable=False
 				self.stab_level+=1 
-				#print("2")
 			else:	#self.stab_level>=ts	#elif self.stab_level==ts: 				#stable
 				self.stab_level=ts
 				if self.stable==False:
@@ -234,24 +230,12 @@ class PHMeter:
 					self.signals.stability_reached.emit()
 				if self.stable==False or self.time_counter>=ts:
 					self.ph0=self.currentPH #on reprend une valeur de référence pour le pH
-					self.time_counter=0 #reset du compteur	
-			#elif self.stab_level>=ts:
-
-				"""if self.stable==True: 								#déjà stable à l'itération précédente
-					#print("3")
-					if self.time_counter>=ts:#stable pendant toute une période
-						#2print("time counter= stab time")						
-						#print("nouveau pH mesuré au bout du temps de stab")
-				else:#devient stable
-					self.stable=True
-					self.signals.stability_reached.emit()
-					#print("stability_reached.emit()!")"""		
-		else: 												#si ça bouge, on reset tout
+					self.time_counter=0 #reset du compteur		
+		else: 	#si ça bouge, on reset tout
 			self.ph0=self.currentPH
 			self.time_counter=0
 			self.stab_level=0
 			self.stable=False
-			#print("1")		
 		self.stab_purcent = round((self.stab_level/ts)*100,2)
 
 	def close(self):

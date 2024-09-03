@@ -3,7 +3,7 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from graphic.windows.custom_sequence import Ui_CustomSequenceWindow
+from graphic.windows.custom_seq_win import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
 from windows.spectrumConfig import SpectrumConfigWindow
@@ -12,9 +12,11 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 import file_manager as fm
+import os
 
-ICON_PLAY="graphic/images/play_icon.png"
-ICON_PAUSE="graphic/images/pause_icon.png"
+path_internal=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+play_icon_path=os.path.join(path_internal, "graphic/images/play_icon.png")
+pause_icon_path=os.path.join(path_internal, "graphic/images/pause_icon.png")
 
 class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     
@@ -53,7 +55,6 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.syringes.clicked.connect(self.ihm.openSyringePanel)
         self.pause_resume_button.clicked.connect(self.seq.pause_resume)
         #saving
-        #print(seq)
         self.actionsave.triggered.connect(lambda : fm.createFullSequenceFiles(seq)) 
         #la fonction ne s'applique pas sur le self, d'où le lambda ?
         self.pump_speed_volt.valueChanged.connect(self.update_pump_speed)
@@ -87,10 +88,8 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         cmap = plt.get_cmap('tab10')
         aa = [cmap(i) for i in np.linspace(0, 1, self.N_mes)]
         self.colors = [(int(r * 255), int(g * 255), int(b * 255)) for r, g, b, _ in aa]
-        #PNG for pause/resume button
-        self.pixmap_play=QtGui.QPixmap(ICON_PLAY)
-        self.pixmap_pause=QtGui.QPixmap(ICON_PAUSE)
-        self.pause_resume_button.setIcon(QtGui.QIcon(ICON_PAUSE))
+
+        self.pause_resume_button.setIcon(QtGui.QIcon(pause_icon_path))
         
         #Matrix for instructions
         for j in range(self.N_mes): 
@@ -204,10 +203,10 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.table_vol_pH[nb-1][2].setText(str(dt))
 
     def pause(self):
-        self.pause_resume_button.setIcon(QtGui.QIcon(ICON_PLAY))
+        self.pause_resume_button.setIcon(QtGui.QIcon(play_icon_path))
 
     def resume(self):
-        self.pause_resume_button.setIcon(QtGui.QIcon(ICON_PAUSE))
+        self.pause_resume_button.setIcon(QtGui.QIcon(pause_icon_path))
 
     def closeEvent(self, event):
         print("User has clicked the red x on the custom sequence window")

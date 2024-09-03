@@ -24,7 +24,7 @@ class AutomaticSequence:
         self.ihm=ihm
         self.spectro=ihm.spectro_unit
         self.phmeter=ihm.phmeter
-        self.syringe=ihm.syringe_pump
+        self.dispenser=ihm.dispenser
         self.pump=ihm.peristaltic_pump
     
     def update_stab_time(self):
@@ -46,15 +46,24 @@ class ClassicSequence(AutomaticSequence):
     TOLERANCE_ON_FINAL_PH = 0.2 #pH.  #if pH>final_pH-gap then sequence is finished and data is saved
 
     def __init__(self, ihm, config):
-        super(ClassicSequence,self).__init__(self,ihm)
+        #super(ClassicSequence,self).__init__(self,ihm)
+        self.ihm=ihm
+        self.spectro=ihm.spectro_unit
+        self.phmeter=ihm.phmeter
+        self.syringe_B=ihm.dispenser.syringe_B
+        self.pump=ihm.peristaltic_pump
 
+        self.pause_timer = QTimer()    #for interface refreshing
         self.measure_timer = QTimer()   #chemical equilibrum and fluid circulation
 
         #Données de config
         [self.experience_name,self.description,self.OM_type,self.concentration,self.oxygen,self.fibers,\
-        self.flowcell,self.V_init,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,\
+        self.flowcell,self.v_init_mL,self.dispense_mode,self.N_mes,self.pH_start,self.pH_end,\
         self.fixed_delay_sec,self.mixing_delay_sec,self.saving_folder]=config
-        
+
+        self.delay_mes=self.fixed_delay_sec+self.mixing_delay_sec
+        self.V_init = 1000*self.v_init_mL   #valeur en uL
+
         self.update_infos()
         print(self.infos)   #données de séquence
         
@@ -88,6 +97,7 @@ class ClassicSequence(AutomaticSequence):
         self.referenceSpectrum_end=[]
 
         #tableaux à compléter pendant la séquence. Variable locales
+        self.pH_mes=[]
         self.absorbance_spectrum1 = None
         self.added_acid_uL = 0
         self.added_base_uL = [0 for k in range(self.N_mes)]
@@ -107,11 +117,12 @@ class ClassicSequence(AutomaticSequence):
     
     def update_infos(self):
         self.infos="\nExperience name : "+self.experience_name+"\nDescription : ",self.description+"\nType of natural organic matter : "+self.OM_type\
-        +"\nConcentration : "+self.concentration+"\nPresence of oxygen : "+str(self.oxygen)+"\nFibers : "+self.fibers+"\nFlowcell : "+self.flowcell\
-        +"\nDispense mode : "+self.dispense_mode+"\nInitial volume : "+self.V_init+"uL"+"\nInitial pH : "+self.pH_start\
-        +"\nfinal pH : "+self.pH_end+"\nNUmber of mesures : "+self.N_mes+"\nFixed delay between measures : "+str(self.fixed_delay_sec//60)+"minutes, "+str(self.fixed_delay_sec%60)+"secondes\n\n"\
+        +"\nConcentration : "+str(self.concentration)+"\nPresence of oxygen : "+str(self.oxygen)+"\nFibers : "+self.fibers+"\nFlowcell : "+self.flowcell\
+        +"\nDispense mode : "+self.dispense_mode+"\nInitial volume : "+str(self.V_init)+"uL"+"\nInitial pH : "+str(self.pH_start)\
+        +"\nfinal pH : "+str(self.pH_end)+"\nNUmber of mesures : "+str(self.N_mes)+"\nFixed delay between measures : "+str(self.fixed_delay_sec//60)+"minutes, "+str(self.fixed_delay_sec%60)+"secondes\n\n"\
         +"Pump pause delay : "+str(self.mixing_delay_sec//60)+"minutes, "+str(self.mixing_delay_sec%60)+"secondes\n\n"+"\nTitration saving folder : "+self.saving_folder
-        
+        print(self.infos)
+
     def configure(self):
         #Normalement On doit régler le spectro avant la séquence auto. 
         #Le pH mètre est calibré manuellement aussi 
@@ -121,6 +132,7 @@ class ClassicSequence(AutomaticSequence):
         
         #création de la fenêtre graphique comme attribut de ihm.
         self.ihm.openSequenceWindow('classic')
+        self.window=self.ihm.sequenceWindow
 
         #actualisation sur le pH mètre
         if self.phmeter.state=='open':
@@ -129,13 +141,13 @@ class ClassicSequence(AutomaticSequence):
             self.phmeter.stab_timer.timeout.connect(self.window.refresh_stability_level)
         
         #Pousses seringue
-        if self.syringe.state=='open':
-            if (self.syringe.base_level_uL-self.syringe.size)>=10: #uL
-                self.syringe.full_refill()
+        if self.syringe_B.state=='open':
+            if (self.syringe_B.level_uL-self.syringe_B.size)>=10: #uL
+                self.syringe_B.full_refill()
             else:
                 pass
-            self.window.base_level_number.setText("%d uL" %self.syringe.base_level_uL)
-            self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
+            self.window.base_level_number.setText("%d uL" %self.syringe_B.level_uL)
+            self.window.base_level_bar.setProperty("value", self.syringe_B.level_uL)
         else:
             pass
         
@@ -199,7 +211,7 @@ class ClassicSequence(AutomaticSequence):
         self.absorbance_spectrum1=spec
         self.window.absorbance_spectrum1=spec
         self.absorbance_spectra.append(spec)
-        self.pH_mes[0]=pH
+        self.pH_mes.append(pH)
 
         #affichage pH
         self.window.append_pH_in_table(1,pH)
@@ -211,7 +223,6 @@ class ClassicSequence(AutomaticSequence):
         
         #temps d'afficher à l'écran les mesures faites
         self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.dispenseN)
-        
     
     def dispenseN(self):
         self.current_measure+=1
@@ -237,6 +248,7 @@ class ClassicSequence(AutomaticSequence):
         #mesure
         N=self.current_measure
         dt=datetime.now()
+        self.time_mes_last=dt
         self.measure_times.append(dt)
         self.measure_delays.append(dt-self.measure_times[N-2])  #N>=2
         #self.measure_times[N-1]=datetime.now()
@@ -245,7 +257,7 @@ class ClassicSequence(AutomaticSequence):
         self.stability_param.append((self.phmeter.stab_step, self.phmeter.stab_time))
         
         #ajout dans les tableaux
-        self.pH_mes[N-1]=pH
+        self.pH_mes.append(pH)
         self.absorbance_spectra.append(spec)
         delta=[spec[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
 
@@ -283,15 +295,15 @@ class ClassicSequence(AutomaticSequence):
         self.dilution_factors.append((self.total_added_volume+self.V_init)/self.V_init)
 
         #niveau de la seringue
-        self.window.base_level_bar.setProperty("value", self.syringe.base_level_uL)
-        self.window.base_level_number.setText("%d uL" % self.syringe.base_level_uL)
+        self.window.base_level_bar.setProperty("value", self.syringe_B.level_uL)
+        self.window.base_level_number.setText("%d uL" % self.syringe_B.level_uL)
 
     def dispenseFromModel(self,N):
         if self.dispense_mode=='fixed volumes':
             vol=self.target_volumes_list[N-2]
             self.window.append_vol_in_table(N,vol) #affichage sur l'ecran avant dispense
             time.sleep(1)
-            self.syringe.dispense(vol)  #lancement stepper
+            self.syringe_B.dispense(vol)  #lancement stepper
         elif self.dispense_mode=='fixed step':
             current=self.pH_mes[N-2] #lors de la mesure 1 de base, le pH est pH_mes[0]
             target=self.target_pH_list[N-1]
@@ -299,15 +311,17 @@ class ClassicSequence(AutomaticSequence):
             while target <= current and n<=self.N_mes-1:    #dans le cas où le pH monte trop vite accidentelement    
                 target=self.target_pH_list[n]   #on remonte dans le liste des pH cibles
                 n+=1
-            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
+            #vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
+            vol=int(dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen,C_NaOH=self.syringe_B.concentration,volume=self.v_init_mL))
             self.window.append_vol_in_table(N,vol) #affichage sur l'ecran avant dispense
-            self.syringe.dispense(vol) #lancement du stepper       
+            self.syringe_B.dispense(vol) #lancement du stepper       
         elif self.dispense_mode=='variable step':
             current=self.pH_mes[N-2]
             target=current+dispense_data.delta_pH(self.A1,self.m1,self.lK1,self.A2,self.m2,self.lK2,current,self.pH0,self.max_delta)
-            vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
+            #vol=volumeToAdd_uL(current, target, model='5th order polynomial fit on dommino 23/01/2024', oxygen=self.oxygen)
+            vol=int(dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen,C_NaOH=self.syringe_B.concentration,volume=self.v_init_mL))
             self.window.append_vol_in_table(N,vol)
-            self.syringe.dispense(vol) #lancement du stepper 
+            self.syringe_B.dispense(vol) #lancement du stepper 
         return vol
 
 class CustomSequence(AutomaticSequence):    
@@ -324,12 +338,13 @@ class CustomSequence(AutomaticSequence):
         self.phmeter=ihm.phmeter
         self.dispenser=ihm.dispenser
         self.pump=ihm.peristaltic_pump
+        self.syringe_B=ihm.dispenser.syringe_B
         
         #Données de config      #comme titration sequence mais avec le fichier de config
         [self.experience_name,self.description,self.OM_type,self.concentration,self.oxygen,self.fibers,\
-        self.flowcell,v_init_mL,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
+        self.flowcell,self.v_init_mL,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
         self.param=config
-        self.V_init=int(1000*v_init_mL) #volumes in microliters are integers
+        self.V_init=int(1000*self.v_init_mL) #volumes in microliters are integers
         
         t_start=datetime.now()
         self.start_date=str(t_start.strftime("%m/%d/%Y %H:%M:%S"))
@@ -429,10 +444,10 @@ class CustomSequence(AutomaticSequence):
         tm=datetime.now()
         tm=tm.replace(microsecond=0)
         self.measure_times.append(tm)
-        if N==1:
+        if N<1:
             dt=tm-tm
-        else: #N>=2
-            dt=tm-self.measure_times[N-2]
+        else: #N>=1
+            dt=tm-self.measure_times[N-1]
         self.measure_delays.append(dt)
         self.window.append_time_in_table(N,dt)  #time
         self.time_mes_last=tm
@@ -469,7 +484,7 @@ class CustomSequence(AutomaticSequence):
 
             #real pH
             current=self.phmeter.currentPH
-            vol=int(dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen))    #positive or null
+            vol=int(dispense_data.get_volume_to_dispense_uL(current,target,self.oxygen,C_NaOH=self.syringe_B.concentration,volume=self.v_init_mL))    #positive or null
             self.syringe.dispense(vol)
             
             print("measure index = ",self.measure_index)  

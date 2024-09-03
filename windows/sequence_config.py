@@ -2,7 +2,7 @@ from configparser import ConfigParser
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
-from graphic.windows.config_sequence import Ui_sequenceConfig
+from graphic.windows.sequence_cfg_win import Ui_sequenceConfig
 
 #from IHM import IHM
 from automatic_sequences import AutomaticSequence, ClassicSequence, CustomSequence
@@ -14,13 +14,19 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
         self.setupUi(self)
         self.ihm=ihm
 
+        self.parser = ConfigParser()
+        self.parser.read(ihm.app_default_settings)
+
         #graphique
         #défaut
         self.dispense_mode.setCurrentText(self.ihm.dispense_mode)
         self.sequence_config_file.setText(self.ihm.sequence_config_file)
+        self.fixed_delay_box.setValue(self.ihm.fixed_delay_sec)
+        self.agitation_delay_box.setValue(self.ihm.mixing_delay_sec)
         #mise en gris
         self.grey_out_widgets()
 
+        #connexions
         self.browse1.clicked.connect(self.browseConfigFile)
         self.saving_folder.setText(self.ihm.saving_folder)  #dossier de sauvegarde
         self.browse.clicked.connect(self.browsefolder)
@@ -30,7 +36,6 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
 
     def grey_out_widgets(self):
         if self.dispense_mode.currentText()=="from file":
-            self.V0.setDisabled(True)
             self.Nmes.setDisabled(True)
             self.pH_init.setDisabled(True)
             self.pH_fin.setDisabled(True)
@@ -38,7 +43,6 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
             self.agitation_delay_box.setDisabled(True)
             self.sequence_config_file.setDisabled(False) #chemin fichier de sequence
         else:
-            self.V0.setDisabled(False)
             self.Nmes.setDisabled(False)
             self.pH_init.setDisabled(False)
             self.pH_fin.setDisabled(False)
@@ -47,13 +51,15 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
             self.sequence_config_file.setDisabled(True) #chemin du fichier de sequence
 
     def browsefolder(self):
-        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', "H:/A Nouvelle arbo/DOCUMENTS TECHNIQUES/Projets Collaboratifs/DOMMINO/MESURES")
+        fld=self.parser.get('saving parameters', 'folder')  #affichage par défaut
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', fld)
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier
         self.ihm.saving_folder=self.saving_folder.text()
         self.ihm.updateSettings()
     
     def browseConfigFile(self):
-        filepath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', "H:/A Nouvelle arbo/DOCUMENTS TECHNIQUES/Projets Collaboratifs/DOMMINO/CONCEPTION/V1/logiciel", filter="*.csv")
+        seq_file=self.parser.get('custom sequence', 'sequence_file')  #affichage par défaut à l'ouverture
+        filepath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', seq_file, filter="*.csv")
         self.sequence_config_file.setText(filepath) #affichage du chemin de dossier
         self.ihm.sequence_config_file=filepath
     
@@ -61,8 +67,8 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
         
         if self.dispense_mode.currentText() == "from file":
             config = [self.exp_name.toPlainText(),self.description.toPlainText(),self.OM_type.currentText(),\
-            self.concentration.value(),bool(self.oxygen_box.currentText()),self.fibers.currentText(),\
-            self.flowcell.currentText(),self.V0.value(),self.dispense_mode.currentText(),\
+            self.concentration.value(),bool(self.oxygen_box.currentText()),str(self.ihm.fibers),\
+            str(self.ihm.flowcell),self.V0.value(),self.dispense_mode.currentText(),\
             self.sequence_config_file.text(),self.saving_folder.text()]#fichier de config de sequence
 
             self.ihm.seq=CustomSequence(self.ihm,config) #création de l'objet dans l'IHM
@@ -75,8 +81,8 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
             "\nType de matière organique : ",self.OM_type.currentText(),\
             "\nConcentration : ",self.concentration.value(),\
             "\nPresence of oxygen : ",self.oxygen_box.currentText(),\
-            "\nFibres : ",self.fibers.currentText(),\
-            "\nFlowcell : ",self.flowcell.currentText(),\
+            "\nFibres : ", str(self.ihm.fibers),\
+            "\nFlowcell : ",str(self.ihm.flowcell),\
             
             "\nMode de dispense : ","from file",\
             "\nFichier de configuration de séquence : ",self.sequence_config_file.text(),\
@@ -88,9 +94,9 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
             self.OM_type.currentText(),\
             self.concentration.value(),\
             bool(self.oxygen_box.currentText()),\
-            self.fibers.currentText(),\
-            self.flowcell.currentText(),\
-            1000*self.V0.value(),\
+            str(self.ihm.fibers),\
+            str(self.ihm.flowcell),\
+            self.V0.value(),\
             self.dispense_mode.currentText(),\
             self.Nmes.value(),\
             self.pH_init.value(),\
@@ -108,26 +114,28 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
             "\nType de matière organique : ",self.OM_type.currentText(),\
             "\nConcentration : ",self.concentration.value(),\
             "\nPresence of oxygen : ",self.oxygen_box.currentText(),\
-            "\nFibres : ",self.fibers.currentText(),\
-            "\nFlowcell : ",self.flowcell.currentText(),\
+            "\nFibres : ",str(self.ihm.fibers),\
+            "\nFlowcell : ",str(self.ihm.flowcell),\
             "\nMode de dispense : ",self.dispense_mode.currentText(),\
-            "\nVolume initial : ", self.V0.value(),\
+            "\nVolume initial (mL) : ", self.V0.value(),\
             "\npH initial : ",self.ihm.seq.pH_start,\
             "\npH final : ",self.ihm.seq.pH_end,\
             "\nNombre de mesures : ",self.ihm.seq.N_mes,\
-            "\nFidex delay between measures (seconds): ", self.ihm.seq.fixed_delay_sec,\
+            "\nFidex delay for pumping (seconds): ", self.ihm.seq.fixed_delay_sec,\
             "\nMixing delay for pump pausing (seconds): ", self.ihm.seq.mixing_delay_sec,\
-            "\nFichier de configuration de séquence : ",self.ihm.seq.sequence_config_file,\
             "\nDossier de sauvegarde du titrage : ",self.ihm.seq.saving_folder)
     
     def updateSettings(self):
         self.ihm.dispense_mode=self.dispense_mode.currentText()
-
+        self.ihm.fixed_delay_sec=int(self.fixed_delay_box.value())
+        self.ihm.mixing_delay_sec=int(self.agitation_delay_box.value())
         parser = ConfigParser()
         parser.read(self.ihm.app_default_settings)
         file = open(self.ihm.app_default_settings,'r+')
-        parser.set('custom sequence', 'sequence_file',self.sequence_config_file.text())
         parser.set('sequence','dispense_mode',self.dispense_mode.currentText())
+        parser.set('custom sequence', 'sequence_file',self.sequence_config_file.text())
+        parser.set('classic titration sequence', 'fixed_delay_sec', str(self.fixed_delay_box.value()))
+        parser.set('classic titration sequence', 'mixing_delay_sec', str(self.agitation_delay_box.value()))
         parser.set('saving parameters','folder',self.saving_folder.text())
         parser.write(file)
         file.close()

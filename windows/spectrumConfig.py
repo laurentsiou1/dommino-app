@@ -6,7 +6,7 @@ from subsystems.absorbanceMeasure import AbsorbanceMeasure
 import subsystems.processing as proc
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from graphic.windows.spectro_param import Ui_spectro_config
+from graphic.windows.spectrometer_win import Ui_spectro_config
 from PyQt5.QtWidgets import QDialog
 import pyqtgraph as pg
 

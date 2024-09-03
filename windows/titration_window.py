@@ -2,12 +2,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from graphic.windows.fenetre_titrage import Ui_titrationWindow
+from graphic.windows.classic_seq_win import Ui_titrationWindow
 
 import pyqtgraph as pg
 from windows.spectrumConfig import SpectrumConfigWindow
 import numpy as np
 import matplotlib.pyplot as plt
+
+import datetime
+import file_manager as fm
 
 class TitrationWindow(QMainWindow,Ui_titrationWindow):
     
@@ -17,10 +20,13 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
     timer_display = QtCore.QTimer()
     timer_display.setInterval(1000)
     
-    
     def __init__(self, ihm, parent=None):
         super(TitrationWindow,self).__init__(parent)
         self.setupUi(self)
+        self.ihm=ihm
+        self.spectro_unit=ihm.spectro_unit
+        self.phmeter=ihm.phmeter
+        self.peristaltic_pump=ihm.peristaltic_pump
 
         ## Mise en forme de base
         #ajouts
@@ -45,31 +51,29 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
         self.timer_display.start()
 
         #Affichage dépendant de la configuration
-        seq=self.ihm.seq
+        self.seq=self.ihm.seq
+        self.N_mes=self.seq.N_mes
         #Paramètres d'expérience
-        self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(seq.experience_name)\
-        +"\nDescription : "+str(seq.description)\
-        +"\nType de matière organique : "+str(seq.OM_type)\
-        +"\nConcentration : "+str(seq.concentration)\
-        +"\nFibres : "+str(seq.fibers)\
-        +"\nFlowcell : "+str(seq.flowcell)\
-        +"\nDispense mode : "+str(seq.dispense_mode)\
-        +"\nNombre de mesures : "+str(seq.N_mes)\
-        +"\npH initial : "+str(seq.pH_start)\
-        +"\npH final : "+str(seq.pH_end)\
-        +"\nFixed delay for chemical stability: "+str(seq.fixed_delay_sec//60)+"minutes, "+str(seq.fixed_delay_sec%60)+"secondes\n"\
-        "Agitation delay (pump stopped) : "+str(seq.mixing_delay_sec//60)+"minutes, "+str(seq.mixing_delay_sec%60)+"secondes\n\n")
+        self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(self.seq.experience_name)\
+        +"\nDescription : "+str(self.seq.description)\
+        +"\nType de matière organique : "+str(self.seq.OM_type)\
+        +"\nConcentration : "+str(self.seq.concentration)\
+        +"\nFibres : "+str(self.seq.fibers)\
+        +"\nFlowcell : "+str(self.seq.flowcell)\
+        +"\nDispense mode : "+str(self.seq.dispense_mode)\
+        +"\nNombre de mesures : "+str(self.seq.N_mes)\
+        +"\npH initial : "+str(self.seq.pH_start)\
+        +"\npH final : "+str(self.seq.pH_end)\
+        +"\nFixed delay for chemical stability: "+str(self.seq.fixed_delay_sec//60)+"minutes, "+str(self.seq.fixed_delay_sec%60)+"secondes\n"\
+        "Agitation delay (pump stopped) : "+str(self.seq.mixing_delay_sec//60)+"minutes, "+str(self.seq.mixing_delay_sec%60)+"secondes\n\n")
 
         #Spectro
         if ihm.spectro_unit.state=='open':
             self.lambdas=self.spectro_unit.wavelengths 
             self.N_lambda=len(self.lambdas) 
         
-        #Display current spectrum
-        self.timer_display.timeout.connect(self.refreshDirectSpectrum) #abs in direct
-
-        #display countdown
-        self.timer_display.timeout.connect(seq.refreshCountdown)
+        #refresh screen
+        self.timer_display.timeout.connect(self.refreshScreen)
         
         #graphique
         cmap = plt.get_cmap('tab10')  # You can choose a different colormap
@@ -97,22 +101,39 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
 
         #pH meter
         self.stab_time.setProperty("value", self.phmeter.stab_time)
-        self.stab_time.valueChanged.connect(seq.update_stab_time)
+        self.stab_time.valueChanged.connect(self.seq.update_stab_time)
         self.stab_step.setProperty("value", self.phmeter.stab_step)
-        self.stab_step.valueChanged.connect(seq.update_stab_step)
+        self.stab_step.valueChanged.connect(self.seq.update_stab_step)
 
         #saving
-        self.actionsave.triggered.connect(seq.createFullSequenceFiles)
+        self.actionsave.triggered.connect(lambda : fm.createFullSequenceFiles(self.seq))
 
     #DIRECT
     def refresh_stability_level(self):
         self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
         self.label_stability.setText(str(self.phmeter.stab_purcent)+"%")
 
-    def refreshDirectSpectrum(self):
-        #if self.spectro_unit.current_intensity_spectrum!=None:
+    def refreshScreen(self):
+        #Countdown
+        try:
+            tm=datetime.now()
+            tm=tm.replace(microsecond=0)
+            elapsed=tm-self.seq.time_mes_last
+            elapsed_sec = elapsed.total_seconds() #convert to seconds
+            remaining = int(max(0,self.seq.delay_mes-elapsed_sec))
+            self.countdown.setProperty("value", remaining)
+        except:
+            pass
+        #spectrometer
         if self.spectro_unit.state=='open':
             self.direct_intensity_plot.setData(self.lambdas,self.spectro_unit.current_intensity_spectrum)
+        #PhMeter
+        if self.ihm.phmeter.state=='open':
+            self.direct_pH.display(self.ihm.phmeter.currentPH)
+            self.stab_time.setProperty("value", self.ihm.phmeter.stab_time)
+            self.stab_step.setProperty("value", self.ihm.phmeter.stab_step)
+            self.stabilisation_level.setProperty("value", self.ihm.phmeter.stab_purcent)
+            self.label_stability.setText(str(self.ihm.phmeter.stab_purcent)+"%")
 
     #spectre courant sur le graphe en delta 
     def update_spectra(self): #il y a déjà un spectre enregistré

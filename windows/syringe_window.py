@@ -2,7 +2,7 @@
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog
-from graphic.windows.syringe_panel import Ui_SyringePanel
+from graphic.windows.dispenser_win import Ui_SyringePanel
 
 #import os
 #from pathlib import Path
@@ -164,15 +164,15 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.refresh_volumes()
     def dispense_A(self):
         vol=self.dispense_box_A.value()
-        self.syringe_A.simple_dispense(vol)
+        self.syringe_A.dispense(vol)
         self.refresh_volumes()
     def dispense_B(self):
         vol=self.dispense_box_B.value()
-        self.syringe_B.simple_dispense(vol)
+        self.syringe_B.dispense(vol)
         self.refresh_volumes()
     def dispense_C(self):
         vol=self.dispense_box_C.value()
-        self.syringe_C.simple_dispense(vol)
+        self.syringe_C.dispense(vol)
         self.refresh_volumes()
 
     def reset_volume_count(self):
