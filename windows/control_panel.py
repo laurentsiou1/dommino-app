@@ -24,19 +24,10 @@ from Phidget22.Devices.Stepper import Stepper
 from lib.oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from lib.oceandirect.od_logger import od_logger
 
-#path = Path(__file__)
-#print("path controlpanel",path)
-#ROOT_DIR = path.parent.parent.absolute()
-#print("ROOT_DIR controlpanel",ROOT_DIR)
-#app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-#print("default settings :",app_default_settings)
-
 #chemin du repertoire _internal lors du lancement de l'exe
 path_internal=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 green_led_path=os.path.join(path_internal, "graphic/images/green-led-on.png")
 red_led_path=os.path.join(path_internal, "graphic/images/red-led-on.png")
-
-
 
 class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):
@@ -134,16 +125,16 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.cal_button.clicked.connect(self.ihm.openCalibWindow)
         self.reglage_spectro.clicked.connect(self.OnClick_reglage_spectro)
         self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
-        self.open_syringe_panel.clicked.connect(self.ihm.openSyringePanel)
+        self.open_syringe_panel.clicked.connect(self.ihm.openDispenserWindow)
         self.connect_pump.clicked.connect(self.connectPeristalticPump)   
         self.connect_all_devices.clicked.connect(self.connectAllDevices)
         self.ihm.timer_display.timeout.connect(self.refresh_screen)
         
         self.configure_sequence.clicked.connect(self.ihm.openConfigWindow)
-        self.action_change_folder.triggered.connect(self.ihm.openSavingConfigWindow)    #choix dossier
+        self.action_change_folder.triggered.connect(self.ihm.openSettingsWindow)    #choix dossier
         self.save_button.clicked.connect(self.ihm.createDirectMeasureFile)  #deux façons de sauver les données
         self.action_save.triggered.connect(self.ihm.createDirectMeasureFile) 
-        self.action_syringe_param.triggered.connect(self.ihm.openDispenserParam) #config des seringues
+        self.action_syringe_param.triggered.connect(self.ihm.openSettingsWindow) #config des seringues
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.update_lights)

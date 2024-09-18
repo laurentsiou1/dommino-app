@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from graphic.windows.custom_seq_win import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
-from windows.spectrumConfig import SpectrumConfigWindow
+from windows.spectrometry_window import SpectrometryWindow
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime

@@ -1,20 +1,24 @@
 """classe pour dispenser_param"""
 
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog
 
 from graphic.windows.settings_win import Ui_Dialog    #fenetre créée sur Qt designer
 
 from configparser import ConfigParser
 
-class Settings(QDialog,Ui_Dialog): #(object)
+class SettingsWindow(QDialog,Ui_Dialog): #(object)
     
     def __init__(self, ihm, parent=None):
-        super(Settings,self).__init__(parent)
+        super(SettingsWindow,self).__init__(parent)
         self.setupUi(self)
         self.ihm=ihm
         self.syringe_A=ihm.dispenser.syringe_A
         self.syringe_B=ihm.dispenser.syringe_B
         self.syringe_C=ihm.dispenser.syringe_C
+
+        self.parser = ConfigParser()
+        self.parser.read(ihm.app_default_settings)
 
         #Sauvegarde de la config
         self.buttonBox.accepted.connect(self.update)
@@ -44,6 +48,9 @@ class Settings(QDialog,Ui_Dialog): #(object)
         self.Cc.setValue(self.ihm.dispenser.syringe_C.concentration)
         self.fibers.setCurrentText(self.ihm.fibers)
         self.flowcell.setCurrentText(self.ihm.flowcell)
+
+        self.saving_folder.setText(self.ihm.saving_folder)
+        self.browse.clicked.connect(self.browseSavingFolder)
     
     def dispense(self,id):
         if id=='A':
@@ -61,6 +68,13 @@ class Settings(QDialog,Ui_Dialog): #(object)
     
     def compute_rescale_factor_C(self):
         self.syringe_C.compute_rescale_factor(self.reached_C_uL.value())
+    
+    def browseSavingFolder(self):
+        fld=self.parser.get('saving parameters', 'folder')  #affichage par défaut
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', fld)
+        self.saving_folder.setText(folderpath) #affichage du chemin de dossier
+        self.ihm.saving_folder=self.saving_folder.text()
+        self.ihm.updateDefaultParam()
 
     def update(self):
         fibers = str(self.fibers.currentText())

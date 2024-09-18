@@ -5,14 +5,14 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from graphic.windows.classic_seq_win import Ui_titrationWindow
 
 import pyqtgraph as pg
-from windows.spectrumConfig import SpectrumConfigWindow
+from windows.spectrometry_window import SpectrometryWindow
 import numpy as np
 import matplotlib.pyplot as plt
 
 import datetime
 import file_manager as fm
 
-class TitrationWindow(QMainWindow,Ui_titrationWindow):
+class ClassicSequenceWindow(QMainWindow,Ui_titrationWindow):
     
     absorbance_spectrum1=None
     
@@ -21,7 +21,7 @@ class TitrationWindow(QMainWindow,Ui_titrationWindow):
     timer_display.setInterval(1000)
     
     def __init__(self, ihm, parent=None):
-        super(TitrationWindow,self).__init__(parent)
+        super(ClassicSequenceWindow,self).__init__(parent)
         self.setupUi(self)
         self.ihm=ihm
         self.spectro_unit=ihm.spectro_unit

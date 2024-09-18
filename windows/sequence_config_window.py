@@ -7,10 +7,10 @@ from graphic.windows.sequence_cfg_win import Ui_sequenceConfig
 #from IHM import IHM
 from automatic_sequences import AutomaticSequence, ClassicSequence, CustomSequence
 
-class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
+class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
     
     def __init__(self, ihm, parent=None):
-        super(SequenceConfig,self).__init__(parent)
+        super(SequenceConfigWindow,self).__init__(parent)
         self.setupUi(self)
         self.ihm=ihm
 
@@ -55,7 +55,7 @@ class SequenceConfig(QDialog,Ui_sequenceConfig): #(object)
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', fld)
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier
         self.ihm.saving_folder=self.saving_folder.text()
-        self.ihm.updateSettings()
+        self.ihm.updateDefaultParam()
     
     def browseConfigFile(self):
         seq_file=self.parser.get('custom sequence', 'sequence_file')  #affichage par défaut à l'ouverture
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     Dialog = QtWidgets.QDialog()
     ihm=IHM()
     win=WindowHandler()
-    ui = SequenceConfig(ihm,win)
+    ui = SequenceConfigWindow(ihm,win)
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())

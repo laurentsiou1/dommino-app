@@ -9,7 +9,7 @@ from spectrumConfig import SpectrumConfigWindow
 from savingConfig import SavingConfig"""
 
 from PyQt5 import QtWidgets
-from windows.syringe_window import SyringeWindow
+from windows.dispenser_window import SyringeWindow
 
 class WindowHandler():
 

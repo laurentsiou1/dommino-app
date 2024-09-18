@@ -7,11 +7,10 @@ from graphic.windows.phmeter_calib_win import Ui_calibration_window
 from subsystems.pHmeter import *
 from datetime import datetime
 
-
-class CalBox(QDialog, Ui_calibration_window):
+class PhMeterCalibWindow(QDialog, Ui_calibration_window):
     def __init__(self, ihm, parent=None):
         self.ihm=ihm
-        super(CalBox,self).__init__(parent)
+        super(PhMeterCalibWindow,self).__init__(parent)
         self.setupUi(self)
 
         self.U4=0
@@ -140,7 +139,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = CalBox()
+    ui = PhMeterCalibWindow()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
@@ -168,7 +167,7 @@ if __name__ == "__main__":
         app = QtWidgets.QApplication(sys.argv)
         Dialog = QtWidgets.QDialog()
         mwindow = ControlPannel()
-        ui = CalBox(phm, mwindow)
+        ui = PhMeterCalibWindow(phm, mwindow)
         ui.setupUi(Dialog)
     try:
         #connection de la fenêtre avec le pH-mètre
@@ -201,7 +200,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     cp = ControlPannel(ph_meter,spectro_unit)
-    ui = CalBox(ph_meter, cp)
+    ui = PhMeterCalibWindow(ph_meter, cp)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

@@ -6,7 +6,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer
 from datetime import datetime, timedelta
 
-from windows.titration_window import TitrationWindow
+from windows.classic_sequence_window import ClassicSequenceWindow
 from windows.custom_sequence_window import CustomSequenceWindow
 
 from subsystems.pHmeter import *

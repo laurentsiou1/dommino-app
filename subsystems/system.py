@@ -20,6 +20,8 @@ class System:
                         print("\nserial number : ",nb,"\nName : ", name)
                         self.state='connected'
 
+
+
 if __name__=="__main__":
         system=System()
         print(system.state)

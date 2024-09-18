@@ -1,22 +1,22 @@
 "Fenetre de controle des seringues"
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QDialog
 from graphic.windows.dispenser_win import Ui_SyringePanel
+from graphic import display
 
-#import os
-#from pathlib import Path
 from configparser import ConfigParser
+import os
 
-#path = Path(__file__)
-#ROOT_DIR = path.parent.absolute()
-#app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
+path_internal=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+play_icon_path=os.path.join(path_internal, "graphic/images/play_icon.png")
+pause_icon_path=os.path.join(path_internal, "graphic/images/pause_icon.png")
 
-class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
+class DispenserWindow(QDialog,Ui_SyringePanel): #(object)
     
     def __init__(self, ihm, parent=None):
         #graphic
-        super(SyringeWindow,self).__init__(parent)
+        super(DispenserWindow,self).__init__(parent)
         self.setupUi(self)
         
         self.ihm=ihm
@@ -36,6 +36,9 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.Cb.setText(str(self.syringe_B.concentration))
         self.Cc.setText(str(self.syringe_C.concentration))
         self.refresh_volumes()
+
+        #display
+        self.ihm.timer_display.timeout.connect(self.refresh_screen)
 
         #Mise en gris des cases non utilisées
         if self.syringe_A.use==False:
@@ -119,7 +122,26 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         self.dispense_button_B.clicked.connect(self.dispense_B)
         self.dispense_button_C.disconnect()
         self.dispense_button_C.clicked.connect(self.dispense_C)
-    
+        #purge
+        self.purge_A_button.clicked.connect(self.purge_A)
+        self.purge_B_button.clicked.connect(self.purge_B)
+        self.purge_C_button.clicked.connect(self.purge_C)   
+        #Electrovalve control for manual purge
+        self.valve_state_A.clicked.connect(self.change_valve_state_A)
+        self.valve_state_B.clicked.connect(self.change_valve_state_B)
+        self.valve_state_C.clicked.connect(self.change_valve_state_C)
+        #Put motor in reference position for manual purge
+        self.dismantle_A_button.clicked.connect(self.dismantle_A)
+        self.dismantle_B_button.clicked.connect(self.dismantle_B)
+        self.dismantle_C_button.clicked.connect(self.dismantle_C)
+
+    def refresh_screen(self):
+        self.refresh_volumes()
+        #text='ON/OFF' if state = True/False
+        self.valve_state_A.setText(display.state2Text(self.syringe_A.get_valve_state()))
+        self.valve_state_B.setText(display.state2Text(self.syringe_B.get_valve_state()))
+        self.valve_state_C.setText(display.state2Text(self.syringe_C.get_valve_state()))
+
     def ref_A(self):
         self.syringe_A.setReference()
         self.refresh_volumes()
@@ -174,6 +196,43 @@ class SyringeWindow(QDialog,Ui_SyringePanel): #(object)
         vol=self.dispense_box_C.value()
         self.syringe_C.dispense(vol)
         self.refresh_volumes()
+    def change_valve_state_A(self):
+        state=self.syringe_A.electrovalve.getState()
+        self.syringe_A.electrovalve.setState(not(state))
+    def change_valve_state_B(self):
+        state=self.syringe_B.electrovalve.getState()
+        self.syringe_B.electrovalve.setState(not(state))
+    def change_valve_state_C(self):
+        state=self.syringe_C.electrovalve.getState()
+        self.syringe_C.electrovalve.setState(not(state))
+
+    def purge_A(self):
+        if self.syringe_A.mode=='purge':    #purging currently
+            self.purge_A_button.setIcon(QtGui.QIcon(play_icon_path))
+        else:
+            self.purge_A_button.setIcon(QtGui.QIcon(pause_icon_path))
+        self.syringe_A.purge()
+
+    def purge_B(self):
+        if self.syringe_B.mode=='purge':    #purging currently
+            self.purge_B_button.setIcon(QtGui.QIcon(play_icon_path))
+        else:
+            self.purge_B_button.setIcon(QtGui.QIcon(pause_icon_path))
+        self.syringe_B.purge()
+
+    def purge_C(self):
+        if self.syringe_C.mode=='purge':    #purging currently
+            self.purge_C_button.setIcon(QtGui.QIcon(play_icon_path))
+        else:
+            self.purge_C_button.setIcon(QtGui.QIcon(pause_icon_path))
+        self.syringe_C.purge()
+    
+    def dismantle_A(self):
+        self.syringe_A.full_refill()
+    def dismantle_B(self):
+        self.syringe_B.full_refill()
+    def dismantle_C(self):
+        self.syringe_C.full_refill()
 
     def reset_volume_count(self):
         self.syringe_A.added_vol_uL=0

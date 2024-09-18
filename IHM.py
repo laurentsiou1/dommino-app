@@ -23,14 +23,13 @@ from subsystems.peristalticPump import PeristalticPump
 
 #Windows
 from windows.control_panel import ControlPanel
-from windows.sequence_config import SequenceConfig
-from windows.PhmeterCalibration import CalBox
+from windows.sequence_config_window import SequenceConfigWindow
+from windows.phmeter_calib_window import PhMeterCalibWindow
 from windows.custom_sequence_window import CustomSequenceWindow
-from windows.titration_window import TitrationWindow
-from windows.spectrumConfig import SpectrumConfigWindow
-from windows.savingConfig import SavingConfig
-from windows.syringe_window import SyringeWindow
-from windows.settings import Settings
+from windows.classic_sequence_window import ClassicSequenceWindow
+from windows.spectrometry_window import SpectrometryWindow
+from windows.dispenser_window import DispenserWindow
+from windows.settings_window import SettingsWindow
 
 path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
@@ -91,7 +90,7 @@ class IHM:
 
         #display timer
         self.timer_display = QtCore.QTimer()    #timer every 0.1s
-        self.timer_display.setInterval(100)
+        self.timer_display.setInterval(1000)
         self.timer_display.start()
 
         #Gestion des connexions/déconnexions
@@ -165,6 +164,7 @@ class IHM:
         parser = ConfigParser()
         parser.read(self.app_default_settings)
         file = open(self.app_default_settings,'r+')
+        parser.set('saving parameters','folder',str(self.saving_folder))
         if self.peristaltic_pump.state=='open':
             parser.set('pump', 'speed_volts', str(self.peristaltic_pump.mean_voltage))
         if self.phmeter.state=='open':
@@ -268,33 +268,29 @@ class IHM:
         self.controlPanel=ControlPanel(self)
         self.controlPanel.show()
 
-    def openSavingConfigWindow(self):
-        self.win1 = SavingConfig(self)
-        self.win1.show()
-
     def openConfigWindow(self):
-        self.seqConfig = SequenceConfig(self)
+        self.seqConfig = SequenceConfigWindow(self)
         self.seqConfig.show()
 
     def openSpectroWindow(self):
-        self.spectroWindow = SpectrumConfigWindow(self)
+        self.spectroWindow = SpectrometryWindow(self)
         self.spectroWindow.show()
 
+    def openDispenserWindow(self):
+        self.syringePanel = DispenserWindow(self)
+        self.syringePanel.show()
+
     def openCalibWindow(self):
-        self.calib_window = PhmeterCalibration(self)
+        self.calib_window = PhMeterCalibWindow(self)
         self.calib_window.show()
 
-    def openDispenserParam(self):
-        self.dp = Settings(self)
-        self.dp.show()
-
-    def openSyringePanel(self):
-        self.syringePanel = SyringeWindow(self)
-        self.syringePanel.show()
+    def openSettingsWindow(self):
+        self.settings_win = SettingsWindow(self)
+        self.settings_win.show()
 
     def openSequenceWindow(self,type):
         if type=="classic":
-            self.sequenceWindow = TitrationWindow(self)
+            self.sequenceWindow = ClassicSequenceWindow(self)
             self.sequenceWindow.show()
         elif type=="custom":
             self.sequenceWindow = CustomSequenceWindow(self)

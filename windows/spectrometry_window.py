@@ -20,10 +20,10 @@ path = Path(__file__)
 ROOT_DIR = path.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "../config/app_default_settings.ini")
 
-class SpectrumConfigWindow(QDialog,Ui_spectro_config):
+class SpectrometryWindow(QDialog,Ui_spectro_config):
 
     def __init__(self, ihm, parent=None):
-        super(SpectrumConfigWindow,self).__init__(parent)
+        super(SpectrometryWindow,self).__init__(parent)
         self.setupUi(self)
         self.spectro_unit=ihm.spectro_unit
         self.ihm=ihm
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = SpectrumConfigWindow(spectrometry_unit)
+    ui = SpectrometryWindow(spectrometry_unit)
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
