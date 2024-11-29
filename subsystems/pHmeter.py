@@ -68,12 +68,12 @@ class PHMeter:
 		U_pH = VoltageInput() #pH-mètre
 		if phmeter=='Phidget ADP1000':
 			#se branche sur le port 3 du VINT
-			U_pH.setDeviceSerialNumber(683442)
-			U_pH.setHubPort(3)
+			U_pH.setDeviceSerialNumber(706026)	#683442
+			U_pH.setHubPort(5)	#le port innocupé du VINT, sinon conflit
 			self.connect2(U_pH)
 		elif phmeter=='Phidget 1130':
 			#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
-			U_pH.setDeviceSerialNumber(432846)	
+			U_pH.setDeviceSerialNumber(433157)	#432846
 			U_pH.setChannel(0)
 			self.connect2(U_pH)
 			U_pH.setDataRate(3)
@@ -86,8 +86,6 @@ class PHMeter:
 			self.getCalData()
 			self.currentVoltage=channel.getVoltage()
 			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
-			
-			
 			self.state='open'
 			print("pH meter connected")	
 		else:

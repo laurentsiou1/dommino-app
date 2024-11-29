@@ -52,7 +52,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         
         #connexions
         self.spectrometry.clicked.connect(self.ihm.openSpectroWindow)
-        self.syringes.clicked.connect(self.ihm.openSyringePanel)
+        self.syringes.clicked.connect(self.ihm.openDispenserWindow)
         self.pause_resume_button.clicked.connect(self.seq.pause_resume)
         #saving
         self.actionsave.triggered.connect(lambda : fm.createFullSequenceFiles(seq)) 

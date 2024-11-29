@@ -27,14 +27,14 @@ class AbsorbanceMeasure(Spectrometer):
 
     #Contrôle de la lampe   #pin10 : GND
     pin1_deuterium = DigitalOutput()
-    pin1_deuterium.setDeviceSerialNumber(432846)
-    pin1_deuterium.setChannel(5)
+    pin1_deuterium.setDeviceSerialNumber(433157)    #432846
+    pin1_deuterium.setChannel(1)
     pin5_halogen = DigitalOutput()
-    pin5_halogen.setDeviceSerialNumber(432846)
-    pin5_halogen.setChannel(4)
+    pin5_halogen.setDeviceSerialNumber(433157)      #432846
+    pin5_halogen.setChannel(2)
     pin13_shutter = DigitalOutput()
-    pin13_shutter.setDeviceSerialNumber(432846)
-    pin13_shutter.setChannel(3)
+    pin13_shutter.setDeviceSerialNumber(433157) #432846
+    pin13_shutter.setChannel(0)
 
     def __init__(self): #ihm:IHM est un argument optionnel 
         self.state='closed'

@@ -16,7 +16,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
 
     def __init__(self):
         DCMotor.__init__(self)
-        self.setDeviceSerialNumber(683442)
+        self.setDeviceSerialNumber(706026)  #683442
         self.setChannel(0)
         self.setHubPort(3)
         self.state='closed'

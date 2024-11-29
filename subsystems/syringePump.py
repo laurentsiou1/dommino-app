@@ -191,7 +191,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         parser2.read(port_connections)
         print("port connections = ", port_connections)
         
-        self.stepper.setDeviceSerialNumber(683442)
+        self.stepper.setDeviceSerialNumber(706026)  #683442
         
         self.syringe_type=syringe_type
         if syringe_type=='Trajan SGE 500uL':
@@ -273,7 +273,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             print("stepper "+self.id+": not connected")
         
         #Interrupteurs, electrovalve
-        self.security_switch.setDeviceSerialNumber(432846)
+        self.security_switch.setDeviceSerialNumber(433157)  #452846
         self.security_switch.setChannel(self.ch_empty)
         disp="security switch : "
         try:
@@ -282,7 +282,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         except:
             disp+="off"
         print(disp)
-        self.reference_switch.setDeviceSerialNumber(432846)
+        self.reference_switch.setDeviceSerialNumber(433157)
         self.reference_switch.setChannel(self.ch_full)
         disp="reference switch : "
         try:
@@ -291,8 +291,8 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         except:
             disp+="off"
         print(disp)
-        self.electrovalve.setDeviceSerialNumber(683442)
-        self.electrovalve.setHubPort(5)
+        self.electrovalve.setDeviceSerialNumber(706026)
+        self.electrovalve.setHubPort(4)     #modifier pour mettre la valeur du fichier de cablage
         self.electrovalve.setChannel(self.ch_valve)
         disp="electrovalve : "
         try:
