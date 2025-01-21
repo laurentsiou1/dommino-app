@@ -23,6 +23,7 @@ ROOT_DIR = path.parent.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 new_cal_file = os.path.join(ROOT_DIR, "config/latest_cal.ini")
 cal_log = os.path.join(ROOT_DIR, "config/CALlog.txt")
+device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
 	#U=a*pH+b
@@ -36,6 +37,11 @@ class CustomSignals(QObject):
 	stability_reached=pyqtSignal()
 
 class PHMeter:
+
+	parser = ConfigParser()
+	parser.read(device_ids)
+	board_number = int(parser.get('main board', 'id'))
+	VINT_number = int(parser.get('VINT', 'id'))
 
 	def __init__(self):
 		self.state='closed'
@@ -68,12 +74,12 @@ class PHMeter:
 		U_pH = VoltageInput() #pH-mètre
 		if phmeter=='Phidget ADP1000':
 			#se branche sur le port 3 du VINT
-			U_pH.setDeviceSerialNumber(706026)	#683442
+			U_pH.setDeviceSerialNumber(self.VINT_number)	#683442
 			U_pH.setHubPort(5)	#le port innocupé du VINT, sinon conflit
 			self.connect2(U_pH)
 		elif phmeter=='Phidget 1130':
 			#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
-			U_pH.setDeviceSerialNumber(433157)	#432846
+			U_pH.setDeviceSerialNumber(self.board_number)	#432846
 			U_pH.setChannel(0)
 			self.connect2(U_pH)
 			U_pH.setDataRate(3)

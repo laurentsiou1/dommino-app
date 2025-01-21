@@ -37,7 +37,9 @@ ROOT_DIR = path.parent.absolute()
 class IHM:
 
     app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-    print("app_default_settings ihm : ",app_default_settings)
+    device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
+    #affiche les chemins
+    #print("app_default_settings ihm : ", app_default_settings, "\ndevice_ids : ", device_ids)
     #Sous sytèmes 
     #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
     system=System()

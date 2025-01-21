@@ -22,19 +22,30 @@ import subsystems.processing as sp
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 class AbsorbanceMeasure(Spectrometer):
+    
+    parser = ConfigParser()
+    parser.read(device_ids)
+    board_number = int(parser.get('main board', 'id'))
+    VINT_number = int(parser.get('VINT', 'id'))
+    ch_shutter=int(parser.get('lamp', 'shutter'))
+    ch_deuterium=int(parser.get('lamp', 'deuterium'))
+    ch_halogen=int(parser.get('lamp', 'halogen'))
 
-    #Contrôle de la lampe   #pin10 : GND
-    pin1_deuterium = DigitalOutput()
-    pin1_deuterium.setDeviceSerialNumber(433157)    #432846
-    pin1_deuterium.setChannel(1)
-    pin5_halogen = DigitalOutput()
-    pin5_halogen.setDeviceSerialNumber(433157)      #432846
-    pin5_halogen.setChannel(2)
+    #Contrôle de la lampe   #pin10 : GND    
     pin13_shutter = DigitalOutput()
-    pin13_shutter.setDeviceSerialNumber(433157) #432846
-    pin13_shutter.setChannel(0)
+    pin13_shutter.setDeviceSerialNumber(board_number)
+    pin13_shutter.setChannel(ch_shutter)
+    print(ch_shutter)
+    pin1_deuterium = DigitalOutput()
+    pin1_deuterium.setDeviceSerialNumber(board_number)
+    pin1_deuterium.setChannel(ch_deuterium)
+    pin5_halogen = DigitalOutput()
+    pin5_halogen.setDeviceSerialNumber(board_number)
+    pin5_halogen.setChannel(ch_halogen)
+
 
     def __init__(self): #ihm:IHM est un argument optionnel 
         self.state='closed'
@@ -61,20 +72,43 @@ class AbsorbanceMeasure(Spectrometer):
     def connect(self):
         od = OceanDirectAPI()
         device_count = od.find_usb_devices() #ne pas enlever cette ligne pour détecter le spectro
+        print(device_count)
         device_ids = od.get_device_ids()
+        print(device_ids)
         if device_ids!=[]:
             self.id=device_ids[0]
             try:
                 spectro = od.open_device(self.id) #crée une instance de la classe Spectrometer
                 adv = Spectrometer.Advanced(spectro)
-                self.pin1_deuterium.openWaitForAttachment(1000)
-                self.pin5_halogen.openWaitForAttachment(1000)
-                self.pin13_shutter.openWaitForAttachment(1000)
-                self.state='open'
-                print("Spectro connecté")
+                #print(spectro, adv)
+                det=0
+                try:
+                    self.pin13_shutter.openWaitForAttachment(1000)
+                    print("shutter output pin accessible")
+                except:
+                    print("Can't access to shutter output pin")    
+                    det+=1
+                try:
+                    self.pin1_deuterium.openWaitForAttachment(1000)
+                    print("deuterium output pin accessible")
+                except:
+                    print("Can't access to deuterium output pin")
+                    det+=1
+                try:
+                    self.pin5_halogen.openWaitForAttachment(1000)
+                    print("halogen output pin accessible")
+                except:
+                    print("Can't access to halogen output pin")
+                    det+=1
+                if det==0:
+                    self.state='open'
+                    print("Spectro connecté")
+                else:
+                    print("Ne peut pas se connecter au spectro numéro ", self.id)
+                    self.state='closed'
             except:
-                print("Ne peut pas se connecter au spectro numéro ", self.id)
-                self.state='closed'
+                pass
+                
         else:
             self.state='closed'
             print("Spectro non connecté")

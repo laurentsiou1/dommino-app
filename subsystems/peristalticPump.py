@@ -11,12 +11,19 @@ from pathlib import Path
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
+
 
 class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMotor
 
+    parser = ConfigParser()
+    parser.read(device_ids)
+    board_number = int(parser.get('main board', 'id'))
+    VINT_number = int(parser.get('VINT', 'id'))
+
     def __init__(self):
         DCMotor.__init__(self)
-        self.setDeviceSerialNumber(706026)  #683442
+        self.setDeviceSerialNumber(self.VINT_number)  #683442
         self.setChannel(0)
         self.setHubPort(3)
         self.state='closed'

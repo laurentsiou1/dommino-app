@@ -3,9 +3,24 @@
 from Phidget22.Phidget import *
 from Phidget22.Devices.DigitalOutput import *
 
+from configparser import ConfigParser
+import os
+from pathlib import Path
+
+path = Path(__file__)
+ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
+app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
+device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
+
 class System: 
+
+        parser = ConfigParser()
+        parser.read(device_ids)
+        board_number = int(parser.get('main board', 'id'))
+        VINT_number = int(parser.get('VINT', 'id'))
+
         digitalOutput_test = DigitalOutput()
-        digitalOutput_test.setDeviceSerialNumber(432846)
+        digitalOutput_test.setDeviceSerialNumber(board_number)
         def __init__(self):
                 self.state='disconnected'
                 sn=self.digitalOutput_test.getDeviceSerialNumber()

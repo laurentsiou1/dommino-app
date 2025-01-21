@@ -15,7 +15,7 @@ from pathlib import Path
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-port_connections = os.path.join(ROOT_DIR, "config/device_id.ini")
+device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 """def volumeToAdd_uL(current, target, model='fixed volumes', oxygen=True): #pH courant et cible, modèle choisi par défaut le 5/05
     if model=='5th order polynomial fit on dommino 23/01/2024':
@@ -178,6 +178,12 @@ class SyringePump(Dispenser): #Nouvelle classe SyringePump globale : classe mèr
 
 class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     
+    parser = ConfigParser()
+    parser.read(device_ids)
+    board_number = int(parser.get('main board', 'id'))
+    VINT_number = int(parser.get('VINT', 'id'))
+    print("board number : ", board_number, "VINT_number : ", VINT_number)
+
     def __init__(self,id,vol,syringe_type='Trajan SGE 500uL'): #par défaut une Trajan SGE 500uL
         
         self.vol=vol
@@ -188,10 +194,10 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.electrovalve = DigitalOutput() #contrôle électrovannes
 
         parser2 = ConfigParser()
-        parser2.read(port_connections)
-        print("port connections = ", port_connections)
+        parser2.read(device_ids)
+        #print("device_ids : ", device_ids)
         
-        self.stepper.setDeviceSerialNumber(706026)  #683442
+        self.stepper.setDeviceSerialNumber(self.VINT_number)  #683442
         
         self.syringe_type=syringe_type
         if syringe_type=='Trajan SGE 500uL':
@@ -273,7 +279,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             print("stepper "+self.id+": not connected")
         
         #Interrupteurs, electrovalve
-        self.security_switch.setDeviceSerialNumber(433157)  #452846
+        self.security_switch.setDeviceSerialNumber(self.board_number)  #452846
         self.security_switch.setChannel(self.ch_empty)
         disp="security switch : "
         try:
@@ -282,7 +288,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         except:
             disp+="off"
         print(disp)
-        self.reference_switch.setDeviceSerialNumber(433157)
+        self.reference_switch.setDeviceSerialNumber(self.board_number)
         self.reference_switch.setChannel(self.ch_full)
         disp="reference switch : "
         try:
@@ -291,7 +297,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         except:
             disp+="off"
         print(disp)
-        self.electrovalve.setDeviceSerialNumber(706026)
+        self.electrovalve.setDeviceSerialNumber(self.VINT_number)
         self.electrovalve.setHubPort(4)     #modifier pour mettre la valeur du fichier de cablage
         self.electrovalve.setChannel(self.ch_valve)
         disp="electrovalve : "
@@ -615,13 +621,13 @@ class KDS_Legato100(SyringePump):
         self.ser=serial.Serial('COM3', timeout = 2, stopbits=2)  #COM3 peut changer, à vérifier
         print(self.ser)
         self.dir = DigitalInput() #direction courante
-        self.dir.setDeviceSerialNumber(432846)
+        self.dir.setDeviceSerialNumber(self.board_number)
         self.dir.setChannel(7)
         self.movement = DigitalInput() #mouvement en cours ou pas
-        self.movement.setDeviceSerialNumber(432846)
+        self.movement.setDeviceSerialNumber(self.board_number)
         self.movement.setChannel(5)
         self.electrovalve=DigitalOutput() #contrôle electrovalve
-        self.electrovalve.setDeviceSerialNumber(432846)
+        self.electrovalve.setDeviceSerialNumber(self.board_number)
         self.electrovalve.setChannel(0)
         try:
             self.dir.openWaitForAttachment(1000)
