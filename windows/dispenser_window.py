@@ -138,9 +138,9 @@ class DispenserWindow(QDialog,Ui_SyringePanel): #(object)
     def refresh_screen(self):
         self.refresh_volumes()
         #text='ON/OFF' if state = True/False
-        self.valve_state_A.setText(display.state2Text(self.syringe_A.get_valve_state()))
-        self.valve_state_B.setText(display.state2Text(self.syringe_B.get_valve_state()))
-        self.valve_state_C.setText(display.state2Text(self.syringe_C.get_valve_state()))
+        self.valve_state_A.setText(display.state2Text(self.syringe_A.get_valve_state(),'dispenser'))
+        self.valve_state_B.setText(display.state2Text(self.syringe_B.get_valve_state(),'dispenser'))
+        self.valve_state_C.setText(display.state2Text(self.syringe_C.get_valve_state(),'dispenser'))
 
     def ref_A(self):
         self.syringe_A.setReference()

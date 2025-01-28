@@ -42,8 +42,10 @@ class PHMeter:
 	parser.read(device_ids)
 	board_number = int(parser.get('main board', 'id'))
 	VINT_number = int(parser.get('VINT', 'id'))
+	ch_phmeter = int(parser.get('ph meter', 'electrode'))
 
 	def __init__(self):
+		self.U_pH = VoltageInput() #pH-mètre
 		self.state='closed'
 
 		self.stab_timer = QtCore.QTimer()
@@ -68,36 +70,25 @@ class PHMeter:
 		self.update_infos()
 
 	def connect(self,phmeter,electrode):
-		#pHmètre
 		self.model=phmeter
 		self.electrode=electrode
-		U_pH = VoltageInput() #pH-mètre
-		if phmeter=='Phidget ADP1000':
-			#se branche sur le port 3 du VINT
-			U_pH.setDeviceSerialNumber(self.VINT_number)	#683442
-			U_pH.setHubPort(5)	#le port innocupé du VINT, sinon conflit
-			self.connect2(U_pH)
-		elif phmeter=='Phidget 1130':
-			#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
-			U_pH.setDeviceSerialNumber(self.board_number)	#432846
-			U_pH.setChannel(0)
-			self.connect2(U_pH)
-			U_pH.setDataRate(3)
-			U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
-		self.update_infos()
-
-	def connect2(self,channel):
-		channel.openWaitForAttachment(3000)
-		if channel.getIsOpen():
+		
+		#Ph mètre Phidget 1130_0 plugged in Voltage Input of main board
+		self.U_pH.setDeviceSerialNumber(self.board_number)
+		self.U_pH.setChannel(self.ch_phmeter)
+		try:
+			self.U_pH.openWaitForAttachment(3000)	#beug lors de l'ouverture si pas sous tension
+			self.U_pH.setDataRate(3)
+			self.U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
 			self.getCalData()
-			self.currentVoltage=channel.getVoltage()
+			self.currentVoltage=self.U_pH.getVoltage()
 			self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
 			self.state='open'
 			print("pH meter connected")	
-		else:
+		except:
 			self.state='closed'
 			print("pH meter disconnected")
-		self.voltagechannel=channel
+		self.update_infos()
 
 	def update_infos(self):
 		if self.state=='open':
@@ -143,7 +134,7 @@ class PHMeter:
 	
 	def activatePHmeter(self):
 		#si le voltagechangetrigger est à zéro, l'évènement se produit périodiquement
-		self.voltagechannel.setOnVoltageChangeHandler(self.doOnVoltageChange)
+		self.U_pH.setOnVoltageChangeHandler(self.doOnVoltageChange)
 	
 	def onCalibrationChange(self):
 		parser = ConfigParser()
@@ -243,7 +234,7 @@ class PHMeter:
 		self.stab_purcent = round((self.stab_level/ts)*100,2)
 
 	def close(self):
-		self.voltagechannel.close()
+		self.U_pH.close()
 		self.stab_timer.disconnect()
 		self.stab_timer.stop()
 		self.state='closed'

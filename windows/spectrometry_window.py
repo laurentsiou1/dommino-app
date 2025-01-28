@@ -32,7 +32,7 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
 
         #spectro connecté
         if self.spectro_unit.state=='open':
-            self.shutter.setChecked(self.spectro_unit.pin13_shutter.getState())  
+            self.shutter.setChecked(self.spectro_unit.shutter.getState())  
             self.NLcorr_box.setChecked(self.spectro_unit.device.get_nonlinearity_correction_usage())
             if self.spectro_unit.model=='OceanST' or self.spectro_unit.model=='OceanSR6':
                 self.EDcorr_box.setDisabled(True)
@@ -100,12 +100,15 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
         self.averaging_delay_display.setText("averaging delay : %f seconds" %self.spectro_unit.avg_delay)          
         self.refresh_rate_display.setText(_translate("Dialog", "période de rafraîchissement : %0.2f seconds"% float(self.spectro_unit.refresh_rate/1000) ))   
 
+        #shutter
+        self.refreshShutterState()
+
     def changeShutterState(self):
         self.spectro_unit.changeShutterState()
         self.refreshShutterState()
 
     def refreshShutterState(self):
-        self.shutter.setChecked(self.spectro_unit.pin13_shutter.getState())
+        self.shutter.setChecked(not(self.spectro_unit.get_shutter_state()))
         
     def change_NLcorr_state(self):
         state=not(self.spectro_unit.device.get_nonlinearity_correction_usage())

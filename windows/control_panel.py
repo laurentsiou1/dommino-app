@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineE
 from graphic.windows.control_panel_win import Ui_ControlPanel
 from PyQt5 import QtCore, QtGui, QtWidgets
 #from PyQt5.QtGui import QPixmap
+from graphic import display
 
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -38,6 +39,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.spectro_unit=ihm.spectro_unit
         self.dispenser=ihm.dispenser
         self.peristaltic_pump=ihm.peristaltic_pump
+        self.circuit=ihm.circuit
         
         #graphique
         super(ControlPanel,self).__init__(parent)
@@ -51,6 +53,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.pixmap_red=QtGui.QPixmap("graphic/images/red-led-on.png")
         
         #Paramètres affichés
+        self.label_instrument_SN.setText("instrument S/N : "+self.ihm.instrument_id)
         parser = ConfigParser()
         parser.read(ihm.app_default_settings)
         #menus déroulants
@@ -59,10 +62,11 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.stab_step.setValue(float(parser.get('phmeter', 'epsilon')))
         self.stab_time.setValue(int(parser.get('phmeter', 'delta')))
         #Spectromètre
-        self.label_device.setText("device : "+self.spectro_unit.model)
-        #self.shutter.setChecked(not(self.spectro_unit.adv.get_enable_lamp()))
+        self.shutter.setChecked(True)   #shutter is closed before connecting spectrometer
         #Peristaltic pump
-        self.pump_speed_volt.setValue(float(parser.get('pump', 'speed_volts')))
+        self.connect_disconnect_circuit.setText("Connect")
+        self.start_stop_pump_button.setText("Start")
+        self.pump_speed.setTickPosition(int(parser.get('pump', 'speed_scale')))
         
         #Pousse seringues
         self.reagentA.setText(self.dispenser.syringe_A.reagent)   #string
@@ -105,6 +109,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.led_phmeter.setScaledContents(True)
         self.led_disp.setScaledContents(True)
         self.led_pump.setScaledContents(True)
+        self.led_ev_circuit.setScaledContents(True)
 
         #self.led_spectro.resize(pixmap.width(),pixmap.height())
         #self.setCentralWidget(self.led_spectro)
@@ -123,10 +128,20 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         """self.phmeter_selection_box.currentIndexChanged.connect(self.updateDefaultSettings)
         self.electrode_selection_box.currentIndexChanged.connect(self.updateDefaultSettings)"""
         self.cal_button.clicked.connect(self.ihm.openCalibWindow)
-        self.reglage_spectro.clicked.connect(self.OnClick_reglage_spectro)
+
+        self.connect_disconnect_spectro_button.clicked.connect(self.connect_disconnect_spectrometer)
+        self.spectro_settings.clicked.connect(self.OnClick_spectro_settings)
+        
         self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
         self.open_syringe_panel.clicked.connect(self.ihm.openDispenserWindow)
-        self.connect_pump.clicked.connect(self.connectPeristalticPump)   
+        
+        self.connect_disconnect_circuit.clicked.connect(self.connexionChange_circuit)
+        self.pump_speed.valueChanged.connect(self.update_pump_speed)
+        self.ev0_state.clicked.connect(self.ev0_changeState)
+        self.ev1_state.clicked.connect(self.ev1_changeState)
+        #self.fill_water.clicked.connect(self.fillWater)
+        #self.clean_empty.clicked.connect(self.cleanAndEmpty)
+        
         self.connect_all_devices.clicked.connect(self.connectAllDevices)
         self.ihm.timer_display.timeout.connect(self.refresh_screen)
         
@@ -156,17 +171,21 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.led_phmeter.setPixmap(self.select_pixmap(self.ihm.phmeter.state))
         self.led_disp.setPixmap(self.select_pixmap(self.ihm.dispenser.state))
         self.led_pump.setPixmap(self.select_pixmap(self.ihm.peristaltic_pump.state))
+        self.led_ev_circuit.setPixmap(self.select_pixmap(self.ihm.circuit.ev0.channel_state))
 
     def refresh_screen(self):
         if self.ihm.phmeter.state=='open':
             self.stab_time.setProperty("value", self.ihm.phmeter.stab_time)
             self.stab_step.setProperty("value", self.ihm.phmeter.stab_step)
-        if self.ihm.peristaltic_pump.state=='open':
-            self.pump_speed_volt.setProperty("value", self.ihm.peristaltic_pump.mean_voltage)
+        if self.ihm.spectro_unit.state=='open':
+            self.refreshShutterState()
+        #if self.ihm.peristaltic_pump.state=='open':
+            #self.pump_speed.setProperty("value", self.ihm.peristaltic_pump.mean_voltage)
+            #self.pump_speed.setValue()
 
     ##Méthodes multi instruments
     def connectAllDevices(self):
-        self.connectPeristalticPump()
+        self.connectCircuit()
         self.link_pHmeter2IHM()
         self.connectSyringePump()
         self.spectro_unit.connect()
@@ -188,7 +207,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.led_phmeter.setPixmap(self.pixmap_green)
             #pH en direct
             self.direct_pH.display(self.phmeter.currentPH) #pH instantané
-            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
+            self.phmeter.U_pH.setOnVoltageChangeHandler(self.displayDirectPH) #à chaque changement
             self.phmeter.activateStabilityLevel()
             self.phmeter.stab_timer.timeout.connect(self.refresh_stability_level)
             self.update_stab_time()
@@ -215,7 +234,6 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         pH = volt2pH(self.phmeter.a,self.phmeter.b,voltage)
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
         self.direct_pH.display(pH)
-        #print("voltage change")
     
     def refresh_stability_level(self):
         self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
@@ -233,19 +251,41 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.calib_text_box.clear()
         self.calib_text_box.appendPlainText(self.calib_text)
 
-    ### Méthodes pour le spectromètre
-    def OnClick_reglage_spectro(self):
-        #self.spectro_unit=self.ihm.spectro_unit
+
+                                        ### Methods for Spectrometer
+    def connect_disconnect_spectrometer(self):
         if self.spectro_unit.state=='closed':
             self.spectro_unit.connect()
-        if self.spectro_unit.state=='open':
+        elif self.spectro_unit.state=='open':
+            self.spectro_unit.close(self.spectro_unit.id)
+        self.update_connexion_state()
+        
+    def update_connexion_state(self):
+        """Updates light indicator and Connexion button"""
+        if self.spectro_unit.state=='closed':
+            self.led_spectro.setPixmap(self.pixmap_red)
+            self.connect_disconnect_spectro_button.setText("Connect")
+        elif self.spectro_unit.state=='open':
             self.led_spectro.setPixmap(self.pixmap_green)
-            self.link_spectro2IHM()
+            self.connect_disconnect_spectro_button.setText("Disconnect")
+
+    def OnClick_spectro_settings(self):
+        if self.spectro_unit.state=='closed':
+            self.connect_spectrometer()
         self.ihm.openSpectroWindow()
+
+    def connect_spectrometer(self):
+        self.spectro_unit.connect()
+        if self.spectro_unit.state=='open':
+            self.link_spectro2IHM()
+        self.update_connexion_state()
     
     def changeShutterState(self):
         self.spectro_unit.changeShutterState()
-        self.shutter.setChecked(not(self.spectro_unit.pin13_shutter.getState()))
+        self.refreshShutterState()
+    
+    def refreshShutterState(self):
+        self.shutter.setChecked(not(self.spectro_unit.get_shutter_state()))
 
     def updateSpectrum(self):
         if self.spectro_unit.state == 'open' and self.spectro_unit.current_intensity_spectrum!=None:   #intensité direct
@@ -265,6 +305,9 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.reference_abs_plot.setData(self.lambdas,self.spectro_unit.reference_absorbance)  
 
     def link_spectro2IHM(self):
+        #informations
+        self.label_model.setText("model : "+self.spectro_unit.model)
+        self.label_spectro_SN.setText("S/N : "+self.spectro_unit.serial_number)
         #config de l'affichage du spectre courant
         self.lambdas=self.spectro_unit.wavelengths      
         self.abs_direct_plot=self.Abs_direct.plot([0],[0])
@@ -272,11 +315,11 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         #mise sur timer
         self.spectro_unit.timer.timeout.connect(self.updateSpectrum)            
         #état réel du shutter
-        self.shutter.setChecked(not(self.spectro_unit.pin13_shutter.getState()))
+        self.shutter.setChecked(not(self.spectro_unit.shutter.getState()))
         self.shutter.clicked.connect(self.spectro_unit.changeShutterState)
-        self.label_device.setText("device : "+self.spectro_unit.model)
 
-    ### Méthodes pour le pousse-seringue
+
+                                    ### Methods for Syringe pumps
     def connectSyringePump(self):
         self.dispenser.connect()
         if self.dispenser.state=='open':
@@ -305,38 +348,60 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.added_base.setText("0")
         self.added_total.setText("0" )
 
-    def actualize_counts_on_acid_value_change(self):
-        #modification de acid et total dans la classe syringe_pump
-        self.syringe_pump.added_acid_uL=self.added_acid.value()
-        self.syringe_pump.added_total_uL=self.syringe_pump.added_acid_uL+self.syringe_pump.added_base_uL
-        #modif de l'affichage total count
-        self.added_total.setText("%d" %self.syringe_pump.added_total_uL)
-        self.syringe_pump.acid_dispense_log = self.syringe_pump.added_acid_uL
 
-    ### Méthodes pour la pompe péristaltique
-    def connectPeristalticPump(self):
-        self.peristaltic_pump.connect()
+    ### Peristaltic pump and circuit
+    def connexionChange_circuit(self):
+        if self.circuit.state=='closed':
+            self.connectCircuit()
+        elif self.circuit.state=='open':
+            self.disconnectCircuit()
+
+    def connectCircuit(self):
+        self.circuit.connect()
         if self.peristaltic_pump.state=='open':
             self.led_pump.setPixmap(self.pixmap_green)
-            self.pump_speed_volt.setValue(self.peristaltic_pump.mean_voltage)
+            self.pump_speed.setValue(self.peristaltic_pump.mean_voltage)
             self.link_pump2IHM()
+        if self.circuit.state=='open':
+            self.led_ev_circuit.setPixmap(self.pixmap_green)
+            self.connect_disconnect_circuit.setText("Disconnect")
+    
+    def disconnectCircuit(self):
+        self.circuit.close()
+        self.led_pump.setPixmap(self.pixmap_red)
+        self.led_ev_circuit.setPixmap(self.pixmap_red)
+        self.connect_disconnect_circuit.setText("Connect")
     
     def link_pump2IHM(self):
-        #print("pompe péristaltique reliée au panneau de controle")
-        self.start_pump.clicked.connect(self.peristaltic_pump.start)
-        self.stop_pump.clicked.connect(self.peristaltic_pump.stop)
+        #print("fonction link pump execute")
+        self.start_stop_pump_button.clicked.connect(self.start_stop_pump)
         self.change_dir.clicked.connect(self.peristaltic_pump.change_direction)
-        self.pump_speed_volt.valueChanged.connect(self.update_pump_speed)
+        self.pump_speed.valueChanged.connect(self.update_pump_speed)
+
+    def start_stop_pump(self):
+        """Start or stop Peristaltic pump and displays on button"""
+        self.peristaltic_pump.start_stop()
+        self.start_stop_pump_button.setText(self.peristaltic_pump.text())
 
     def update_pump_speed(self):
-        self.peristaltic_pump.setSpeed_voltage(self.pump_speed_volt.value())
+        self.peristaltic_pump.setSpeed_voltage(self.peristaltic_pump.scale2volts(self.pump_speed.value()))
+
+    def ev0_changeState(self):
+        """Changes state display on entrance valve"""
+        self.circuit.ev0.changeState()
+        self.ev0_state.setText(self.circuit.ev0.state2Text(self.circuit.ev0.getState()))
+    
+    def ev1_changeState(self):
+        """Changes state dispaly on exit valve"""
+        self.circuit.ev1.changeState()
+        self.ev1_state.setText(self.circuit.ev1.state2Text(self.circuit.ev1.getState()))
 
     def closeEvent(self, event):
         print("Closing main window")
         self.ihm.updateDefaultParam()
         """parser = ConfigParser()
         parser.read(app_default_settings)
-        parser.set('pump', 'speed_volts', str(self.pump_speed_volt.value()))
+        parser.set('pump', 'speed_volts', str(self.pump_speed.value()))
         parser.set('phmeter', 'epsilon', str(self.stab_step.value()))
         parser.set('phmeter', 'delta', str(self.stab_time.value()))
         file = open(app_default_settings,'w')

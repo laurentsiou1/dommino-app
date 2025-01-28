@@ -20,6 +20,7 @@ from subsystems.pHmeter import PHMeter
 from subsystems.absorbanceMeasure import AbsorbanceMeasure
 from subsystems.syringePump import Dispenser, PhidgetStepperPump
 from subsystems.peristalticPump import PeristalticPump
+from subsystems.circuit import Circuit
 
 #Windows
 from windows.control_panel import ControlPanel
@@ -38,6 +39,12 @@ class IHM:
 
     app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
     device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
+
+    parser = ConfigParser()
+    parser.read(device_ids)
+    id01 = int(parser.get('main board id', 'dommino01'))
+    id02 = int(parser.get('main board id', 'dommino02'))
+
     #affiche les chemins
     #print("app_default_settings ihm : ", app_default_settings, "\ndevice_ids : ", device_ids)
     #Sous sytèmes 
@@ -47,16 +54,14 @@ class IHM:
     phmeter=PHMeter()
     dispenser=Dispenser()
     peristaltic_pump=PeristalticPump()
+    circuit=Circuit(peristaltic_pump)
 
     manager=Manager()
 
+    instrument_id=''    #SN unknown at opening
+
     def __init__(self):
-
-        if self.system.state=='connected':
-            print("Instrument connected and under tension")
-        else:
-            print("The instrument is either not connected to computer or not under tension")
-
+        
         #Config for savings
         parser = ConfigParser()
         parser.read(self.app_default_settings)
@@ -85,14 +90,9 @@ class IHM:
         #custom
         self.sequence_config_file=parser.get('custom sequence', 'sequence_file') 
 
-        #création d'un timer pour le renouvellement du pH sur calBox 
-        self.timer1s = QtCore.QTimer()
-        self.timer1s.setInterval(1000)
-        self.timer1s.start() 
-
         #display timer
-        self.timer_display = QtCore.QTimer()    #timer every 0.1s
-        self.timer_display.setInterval(1000)
+        self.timer_display = QtCore.QTimer()
+        self.timer_display.setInterval(1000)    #timeout every 1s
         self.timer_display.start()
 
         #Gestion des connexions/déconnexions
@@ -107,7 +107,48 @@ class IHM:
         ch_num=channel.getChannel()
         hubPort=channel.getHubPort()
         isChannel=channel.getIsChannel()
-        print("Connected : ",serialNumber,deviceName,"port : ",hubPort,isChannel,channelName,"channel : ",ch_num)
+        #print("Connected : ",serialNumber,deviceName,"port : ",hubPort,isChannel,channelName,"channel : ",ch_num)
+
+        #execution du code ci dessous une seule fois lors du branchement de la carte
+        if deviceName=='6-Port USB VINT Hub Phidget':
+            self.loadBoardsSerialNumbers('VINT',serialNumber)
+        elif deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==7:
+            self.loadBoardsSerialNumbers('interface board',serialNumber)
+
+    def loadBoardsSerialNumbers(self, board, nb):
+        parser = ConfigParser()
+        parser.read(self.device_ids)
+        if board=='VINT':
+            self.VINT_number = nb   #S/N as attribute of IHM
+            print("VINT S/N = ", nb)
+            parser.set('VINT', 'id', str(nb))   #S/N written in file device_id
+            file = open(self.device_ids,'w')
+            parser.write(file)
+            file.close()
+        elif board=='interface board':
+            self.board_number = nb
+            print('Interfacing board S/N = ', nb)
+            parser.set('main board', 'id', str(nb))
+            file = open(self.device_ids,'w')
+            parser.write(file)
+            file.close()
+            self.getInstrumentSerialNumber()
+
+    def getInstrumentSerialNumber(self):
+        parser = ConfigParser()
+        parser.read(self.device_ids)
+        if self.board_number == self.id01:
+            self.instrument_id='DOMMINO01'
+        elif self.board_number == self.id02:
+            self.instrument_id='DOMMINO02'
+        else:
+            self.instrument_id='unknown'
+        print("instrument S/N =", self.instrument_id)
+        try:
+            self.controlPanel.label_instrument_SN.setText("instrument S/N : "+self.instrument_id)
+        except:
+            #no attribute control Panel yet
+            pass
 
     def DetachHandler(self, man, channel):
         serialNumber = channel.getDeviceSerialNumber()
@@ -118,39 +159,49 @@ class IHM:
         isChannel=channel.getIsChannel()
         #print("Disconnected : ",serialNumber,"--",deviceName,"--","port : ",hubPort,isChannel,"--",channelName,"--","channel : ",ch_num)
 
+        #pH meter
         if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Voltage Input' and ch_num==0:
             self.phmeter.state='closed'
             print("pH meter disconnected")
             self.controlPanel.led_phmeter.setPixmap(self.controlPanel.pixmap_red)
-        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==1:
-            #Sorties digitales pour pousse seringue
+        #Lamp control
+
+        #Dispenser
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Input' and ch_num==0:
             self.dispenser.state='closed'
-            print("Syringe pump disconnected")
+            print("Syringe pump disconnected due to switchs unaccessible")
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
         if deviceName=='4A Stepper Phidget' and hubPort==0:
             #stepper A de pousse seringue débranché
             self.dispenser.syringe_A.state='closed'
-            print("Stepperpump A disconnected")
+            print("Stepper A disconnected")
         if deviceName=='4A Stepper Phidget' and hubPort==1:
             #stepper B de pousse seringue débranché
             self.dispenser.syringe_B.state='closed'
-            print("Stepperpump B disconnected")
+            print("Stepper B disconnected")
+        if deviceName=='4A Stepper Phidget' and hubPort==2:
+            #stepper C de pousse seringue débranché
+            self.dispenser.syringe_C.state='closed'
+            print("Stepper C disconnected")
+        
         self.dispenser.refresh_state()
+        
         if self.dispenser.state=='closed':
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
-        if deviceName=='4A DC Motor Phidget' and hubPort==2:
+        
+        if deviceName=='4A DC Motor Phidget' and hubPort==3:
             self.peristaltic_pump.state='closed'
             print("Peristaltic pump disconnected")
             self.controlPanel.led_pump.setPixmap(self.controlPanel.pixmap_red)
-        #digitaloutput de controle de lampe non connecte
-        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==3:
+        
+        #Lamp control unaccessible
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==5:
             self.spectro_unit.state='closed'
-            print("Lamp not connected with card")
+            print("Unable to control lamp")
             self.controlPanel.led_spectro.setPixmap(self.controlPanel.pixmap_red)
 
     def close_all_devices(self):
         print("Closing all device")
-        self.timer1s.stop()
         self.updateDefaultParam()
         if self.spectro_unit.state=='open':
             self.spectro_unit.close(self.spectro_unit.id)
@@ -160,6 +211,7 @@ class IHM:
             self.dispenser.close()
         if self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
+        self.circuit.close()
               
     def updateDefaultParam(self):
         #Updates current parameters as default in file
@@ -184,76 +236,73 @@ class IHM:
         print("updates current parameters in default file")
 
     def createDirectMeasureFile(self):
-        set = {}
         dt = datetime.now()
         date_text=dt.strftime("%m/%d/%Y %H:%M:%S")
         date_time=dt.strftime("%m-%d-%Y_%Hh%Mmin%Ss")
         name = "mes_"
-        header = "Mesure sur Pytitrator\n"+"date et heure : "+str(date_text)+"\n\n"
+        header = "Instant measure on Dommino titrator\n"+"date and time : "+str(date_text)+"\n"+"Device : "+self.instrument_id+"\n\n"
         data = ""
         print("saving instant measure - ")
-        if self.save_pH: #saving pH measure
-            if self.phmeter.state=='open':
-                name+="pH-"
-                header+=("Données de la calibration courante\n"+"date et heure: "+self.phmeter.CALdate+"\n"+
-                "température: "+str(self.phmeter.CALtemperature)+"\n"+"nombre de points: "+str(self.phmeter.CALtype)+"\n"+
-                "Tensions mesurées: U4="+str(self.phmeter.U1)+"V; U7="+str(self.phmeter.U2)+"V; U10="+str(self.phmeter.U3)+"V\n"+
-                "coefficents de calibration actuels: a="+str(self.phmeter.a)+ "; b="+str(self.phmeter.b)+"\n\n"
-                )
-                pH = self.phmeter.currentPH
-                V = self.phmeter.currentVoltage
-                data+="pH = "+str(pH)+"; U = "+str(V)+"V\n\n"
-            else:
-                header+="pH meter not connected\n\n"
+        #saving pH measure
+        if self.phmeter.state=='open':
+            name+="pH-"
+            header+=("current calibration data\n"+"date and time: "+self.phmeter.CALdate+"\n"+
+            "temperature: "+str(self.phmeter.CALtemperature)+"\n"+"number of points: "+str(self.phmeter.CALtype)+"\n"+
+            "recorded voltages : U4 = "+str(self.phmeter.U1)+"V; U7="+str(self.phmeter.U2)+"V; U10="+str(self.phmeter.U3)+"V\n"+
+            "calibration coefficients : a="+str(self.phmeter.a)+ "; b="+str(self.phmeter.b)+"\n\n"
+            )
+            pH = self.phmeter.currentPH
+            V = self.phmeter.currentVoltage
+            data+="pH = "+str(pH)+"; U = "+str(V)+"V\n\n"
+        else:
+            header+="pH meter not connected\n\n"
 
-        if self.save_titration_data: #saving dispensed volumes
-            if self.syringe_pump.state=='open':
-                name+="titr-"
-                header+=("Syringe Pump : "+str(self.syringe_pump.model)+"\n"
-                +"Syringe : "+str("500uL Trajan gas tight syringe\n"))
-                data+=("Fluid dispense log \n"
-                       +"acid : "+str(self.syringe_pump.acid_dispense_log)+"uL\n"
-                       +"base : "+str(self.syringe_pump.base_dispense_log)+"uL\n"
-                +"Added acid : "+str(self.syringe_pump.added_acid_uL)+"uL\n"
-                +"added base : "+str(self.syringe_pump.added_base_uL)+"uL\n"
-                +"total added : "+str(self.syringe_pump.added_total_uL)+"uL\n")
-            else:
-                header+="Syringe pump not connected\n\n"
+        #saving dispensed volumes
+        if self.dispenser.state=='open':
+            name+="titr-"
+            header+=("Syringe Pump : \n"+str("500uL Trajan gas tight syringe\n")
+            +str(self.dispenser.infos)+"\n\n")
+            data+=("added syringe A : "+str(self.dispenser.syringe_A.added_vol_uL)+"uL\n"
+            +"added syringe B : "+str(self.dispenser.syringe_B.added_vol_uL)+"uL\n"
+            +"added syringe C : "+str(self.dispenser.syringe_C.added_vol_uL)+"uL\n"
+            +"total added : "+str(self.dispenser.vol.added_total_uL)+"uL\n\n")
+        else:
+            header+="Syringe pump not connected\n\n"
 
-        if self.save_absorbance: #saving absorbance
-            if self.spectro_unit.state=='open':
-                name+="Abs_"
-                header+=("Spectrometer : "+str(self.spectro_unit.model)+"\n"
-                +"Integration time (ms) : "+str(self.spectro_unit.t_int/1000)+"\n"
-                +"Averaging : "+str(self.spectro_unit.averaging)+"\n"
-                +"Boxcar : "+str(self.spectro_unit.boxcar)+"\n"
-                +"Nonlinearity correction usage : "+str(self.spectro_unit.device.get_nonlinearity_correction_usage())+"\n")
-                if self.spectro_unit.model!='OceanST':
-                    header+=("Electric dark correction usage : "+str(self.spectro_unit.device.get_electric_dark_correction_usage())+"\n")
-                else:
-                    header+=("Electric dark correction usage : not supported by device\n")
-                header+="Absorbance formula : A = log10[(reference-background)/(sample-background)]\n"    
-
-                background = self.spectro_unit.active_background_spectrum
-                ref = self.spectro_unit.active_ref_spectrum
-                sample = self.spectro_unit.current_intensity_spectrum
-                absorbance = self.spectro_unit.current_absorbance_spectrum
-                wl = self.spectro_unit.wavelengths
-                spectra=[wl,background,ref,sample,absorbance]
-                Nc=len(spectra)-1
-                if background==None or ref==None: #pas de calcul d'absorbance possible
-                    data+="lambda(nm)\tsample (unit count)\n"
-                    for l in range(self.spectro_unit.N_lambda):
-                        data+=str(spectra[0][l])+'\t'
-                        data+=str(spectra[3][l])+'\n'
-                else:
-                    data+="lambda(nm)\tbackground (unit count)\treference ('')\tsample ('')\tabsorbance (abs unit)\n"
-                    for l in range(self.spectro_unit.N_lambda):
-                        for c in range(Nc):
-                            data+=str(spectra[c][l])+'\t'
-                        data+=str(spectra[Nc][l])+'\n'
+        if self.spectro_unit.state=='open':
+            name+="Abs_"
+            header+=("\nSpectrometer : "+str(self.spectro_unit.model)+"\n"
+            +"Serial number : "+str(self.spectro_unit.serial_number)+"\n"
+            +"Integration time (ms) : "+str(self.spectro_unit.t_int/1000)+"\n"
+            +"Averaging : "+str(self.spectro_unit.averaging)+"\n"
+            +"Boxcar : "+str(self.spectro_unit.boxcar)+"\n"
+            +"Nonlinearity correction usage : "+str(self.spectro_unit.device.get_nonlinearity_correction_usage())+"\n")
+            if self.spectro_unit.model!='OceanST':
+                header+=("Electric dark correction usage : "+str(self.spectro_unit.device.get_electric_dark_correction_usage())+"\n")
             else:
-                header+="Spectrometer closed\n"
+                header+=("Electric dark correction usage : not supported by device\n")
+            header+="Absorbance formula : A = log10[(reference-background)/(sample-background)]\n"    
+
+            background = self.spectro_unit.active_background_spectrum
+            ref = self.spectro_unit.active_ref_spectrum
+            sample = self.spectro_unit.current_intensity_spectrum
+            absorbance = self.spectro_unit.current_absorbance_spectrum
+            wl = self.spectro_unit.wavelengths
+            spectra=[wl,background,ref,sample,absorbance]
+            Nc=len(spectra)-1
+            if background==None or ref==None: #pas de calcul d'absorbance possible
+                data+="lambda(nm)\tsample (unit count)\n"
+                for l in range(self.spectro_unit.N_lambda):
+                    data+=str(spectra[0][l])+'\t'
+                    data+=str(spectra[3][l])+'\n'
+            else:
+                data+="lambda(nm)\tbackground (unit count)\treference ('')\tsample ('')\tabsorbance (abs unit)\n"
+                for l in range(self.spectro_unit.N_lambda):
+                    for c in range(Nc):
+                        data+=str(spectra[c][l])+'\t'
+                    data+=str(spectra[Nc][l])+'\n'
+        else:
+            header+="Spectrometer closed\n"
 
         name+=str(date_time)
         output=header+"\n\n"+data

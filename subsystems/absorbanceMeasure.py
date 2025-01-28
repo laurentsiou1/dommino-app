@@ -34,18 +34,16 @@ class AbsorbanceMeasure(Spectrometer):
     ch_deuterium=int(parser.get('lamp', 'deuterium'))
     ch_halogen=int(parser.get('lamp', 'halogen'))
 
-    #Contrôle de la lampe   #pin10 : GND    
-    pin13_shutter = DigitalOutput()
-    pin13_shutter.setDeviceSerialNumber(board_number)
-    pin13_shutter.setChannel(ch_shutter)
-    print(ch_shutter)
-    pin1_deuterium = DigitalOutput()
-    pin1_deuterium.setDeviceSerialNumber(board_number)
-    pin1_deuterium.setChannel(ch_deuterium)
-    pin5_halogen = DigitalOutput()
-    pin5_halogen.setDeviceSerialNumber(board_number)
-    pin5_halogen.setChannel(ch_halogen)
-
+    #Lamp control 
+    shutter = DigitalOutput()
+    shutter.setDeviceSerialNumber(board_number)
+    shutter.setChannel(ch_shutter)
+    deuterium = DigitalOutput()
+    deuterium.setDeviceSerialNumber(board_number)
+    deuterium.setChannel(ch_deuterium)
+    halogen = DigitalOutput()
+    halogen.setDeviceSerialNumber(board_number)
+    halogen.setChannel(ch_halogen)
 
     def __init__(self): #ihm:IHM est un argument optionnel 
         self.state='closed'
@@ -61,7 +59,8 @@ class AbsorbanceMeasure(Spectrometer):
         self.current_absorbance_spectrum=None   #Absorbance
         self.absorbance_spectrum1=None
         self.wavelengths=None
-        self.model=""
+        self.model=''
+        self.serial_number=''
         
         #timer pour acquisition des spectres
         self.timer = QtCore.QTimer()
@@ -72,51 +71,47 @@ class AbsorbanceMeasure(Spectrometer):
     def connect(self):
         od = OceanDirectAPI()
         device_count = od.find_usb_devices() #ne pas enlever cette ligne pour détecter le spectro
-        print(device_count)
+        #print(device_count)
         device_ids = od.get_device_ids()
-        print(device_ids)
+        #print(device_ids)
         if device_ids!=[]:
             self.id=device_ids[0]
             try:
                 spectro = od.open_device(self.id) #crée une instance de la classe Spectrometer
                 adv = Spectrometer.Advanced(spectro)
-                #print(spectro, adv)
                 det=0
                 try:
-                    self.pin13_shutter.openWaitForAttachment(1000)
-                    print("shutter output pin accessible")
+                    self.shutter.openWaitForAttachment(1000)
+                    self.shutter_connected=True
                 except:
-                    print("Can't access to shutter output pin")    
+                    self.shutter_connected=False
                     det+=1
                 try:
-                    self.pin1_deuterium.openWaitForAttachment(1000)
-                    print("deuterium output pin accessible")
+                    self.deuterium.openWaitForAttachment(1000)
+                    self.deuterium_connected=True
                 except:
-                    print("Can't access to deuterium output pin")
+                    self.deuterium_connected=False
                     det+=1
                 try:
-                    self.pin5_halogen.openWaitForAttachment(1000)
-                    print("halogen output pin accessible")
+                    self.halogen.openWaitForAttachment(1000)
+                    self.halogen_connected=True
                 except:
-                    print("Can't access to halogen output pin")
+                    self.halogen_connected=False
                     det+=1
                 if det==0:
                     self.state='open'
-                    print("Spectro connecté")
                 else:
-                    print("Ne peut pas se connecter au spectro numéro ", self.id)
                     self.state='closed'
             except:
-                pass
-                
+                print("Can not connect to spectrometer identified : ",self.id)
         else:
             self.state='closed'
-            print("Spectro non connecté")
         
         if self.state=='open':
             self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
             self.N_lambda = len(self.wavelengths)
             self.model=spectro.get_model()
+            self.serial_number=spectro.get_serial_number()
             self.ocean_manager=od #instance de la classe OceanDirectAPI
             self.device=spectro
             self.adv=Spectrometer.Advanced(spectro) 
@@ -139,18 +134,14 @@ class AbsorbanceMeasure(Spectrometer):
             
             if self.model=='OceanSR2':  #2k pix pour 700nm
                 self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)    
-                print("spectro SR2 reconnu")
             elif self.model=='OceanSR6':    #2k pix pour 700nm à vérifier pour le SR6
                 self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
-                print("spectro SR6 reconnu")
             elif self.model=='OceanST': #2k pix pour 400nm
                 self.device.set_boxcar_width(2) #moyennage sur 5 points (2n+1) 
-                print("spectro ST reconnu")
             elif self.model=='HR2000+':
                 self.device.set_boxcar_width(4) #moyenne sur 9 points (2k pixels sur 200nm soit 10 valeurs /nm)
-                print("spectro HR2000+ reconnu")
             else:
-                print("type de spectro non reconnu")
+                print("Spectrometer model not recognized")
             
             if self.model!='OceanST' or self.model!='OceanSR6':
                 self.device.set_electric_dark_correction_usage(False)   #non pris en charge par le ST
@@ -170,38 +161,50 @@ class AbsorbanceMeasure(Spectrometer):
             self.timer.timeout.connect(self.updateSpectra)
         
         self.update_infos()
+        print(self.infos)
     
     def update_infos(self):
         if self.state=='open':
-            self.infos="Spectrometer : connected"\
+            self.infos="\nSpectrometer : connected"\
             +"\nModel : "+self.model\
             +"\nIntegration time (ms) : "+str(self.t_int/1000)\
             +"\nAveraging : "+str(self.averaging)\
-            +"\nBoxcar : "+str(self.boxcar)+"\n"\
+            +"\nBoxcar : "+str(self.boxcar)\
             +"\nNonlinearity correction usage : "+str(self.device.get_nonlinearity_correction_usage())\
             +"\nElectric dark correction usage : "+str(self.electric_dark)\
-            +"\nAbsorbance formula : A = log10[(reference-background)/(sample-background)]\n" 
+            +"\nAbsorbance formula : A = log10[(reference-background)/(sample-background)]"\
+            +"\nOutput pins :"\
+            +"\nShutter pin : "+str(self.shutter_connected)\
+            +"\nDeuterium pin : "+str(self.deuterium_connected)\
+            +"\nHalogen pin : "+str(self.halogen_connected)
         else:
-            self.infos="Spectrometer not connected"
+            self.infos="\nCannot connect to spectrometer"
 
     def close(self,id): #fermeture de l'objet absorbanceMeasure
         self.timer.stop()
-        self.pin13_shutter.setState(False)
-        print("shutter fermé\n")
+        self.shutter.setState(False)
+        print("shutter closed\n")
         self.device.close_device()
         self.ocean_manager.close_device(id) #close_device(id)
-        print("Spectromètre déconnecté \n")
+        print("Spectrometer disconnected\n")
         self.state='closed'
 
+    def get_shutter_state(self):
+        if self.state=='open':
+            self.shutter_state=self.shutter.getState()
+        else:
+            self.shutter_state=False
+        return self.shutter_state
+
     def open_shutter(self):
-        self.pin13_shutter.setState(True)
+        self.shutter.setState(True)
 
     def close_shutter(self):
-        self.pin13_shutter.setState(False)
+        self.shutter.setState(False)
 
     def changeShutterState(self):
-        state=self.pin13_shutter.getState()
-        self.pin13_shutter.setState(not(state))
+        state=self.shutter.getState()
+        self.shutter.setState(not(state))
     
     def update_acquisition_delay(self):
         self.acquisition_delay=self.t_int*self.averaging #ms
@@ -233,13 +236,13 @@ class AbsorbanceMeasure(Spectrometer):
         return avg
 
     def acquire_background_spectrum(self):
-        self.pin13_shutter.setState(False)
+        self.shutter.setState(False)
         time.sleep(2)
         bgd=self.get_averaged_spectrum()
         self.active_background_spectrum=bgd
 
     def acquire_ref_spectrum(self):
-        self.pin13_shutter.setState(True)
+        self.shutter.setState(True)
         time.sleep(2)
         ref=self.get_averaged_spectrum()
         ref2=self.get_averaged_spectrum()

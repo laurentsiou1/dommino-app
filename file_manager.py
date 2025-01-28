@@ -36,6 +36,9 @@ def readSequenceInstructions(file):  #file: sequence config file #chaine de cara
         
     return syringes_to_use, instruction_table
 
+def createDirectMeasureFile(ihm):
+    pass
+
 def createFullSequenceFiles(seq):
     #cette fonction s'adapte à une séquence terminée ou en cours (cas d'interruption de séquence)
     #création d'un fichier compatible avec le traitement de données

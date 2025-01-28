@@ -182,11 +182,14 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
     parser.read(device_ids)
     board_number = int(parser.get('main board', 'id'))
     VINT_number = int(parser.get('VINT', 'id'))
-    print("board number : ", board_number, "VINT_number : ", VINT_number)
+    port_a = int(parser.get('VINT', 'stepper_a'))
+    port_b = int(parser.get('VINT', 'stepper_b'))
+    port_c = int(parser.get('VINT', 'stepper_c'))
 
     def __init__(self,id,vol,syringe_type='Trajan SGE 500uL'): #par défaut une Trajan SGE 500uL
         
         self.vol=vol
+        self.added_vol_uL=0
 
         self.stepper = Stepper() #contrôle du stepper
         self.security_switch = DigitalInput() #interrupteur bout de course seringue   
@@ -211,7 +214,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         self.id=id
         
         if id=='A':
-            self.stepper.setHubPort(0)
+            self.stepper.setHubPort(self.port_a)
             self.stepper.setChannel(0)
             self.ch_full=int(parser2.get('switchs','full_A'))
             self.ch_empty=int(parser2.get('switchs','empty_A'))
@@ -219,7 +222,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.id='Syringe A'
             #print(id,'interrupteurs sur DigitalInputs ',self.ch_full,self.ch_empty,'electrovalve sur sortie relai ',self.ch_valve)
         elif id=='B':
-            self.stepper.setHubPort(1)
+            self.stepper.setHubPort(self.port_b)
             self.stepper.setChannel(0)
             self.ch_full=int(parser2.get('switchs','full_B'))
             self.ch_empty=int(parser2.get('switchs','empty_B'))
@@ -227,19 +230,19 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
             self.id='Syringe B'
             #print(id,self.ch_full,self.ch_empty,self.ch_valve)
         elif id=='C':
-            self.stepper.setHubPort(2)
+            self.stepper.setHubPort(self.port_c)
             self.stepper.setChannel(0)
             self.ch_full=int(parser2.get('switchs','full_C'))
             self.ch_empty=int(parser2.get('switchs','empty_C'))
             self.ch_valve=int(parser2.get('relay','valve_C'))
             self.id='Syringe C'
             #print(id,self.ch_full,self.ch_empty,self.ch_valve)
-        print(id,'interrupteurs sur DigitalInputs ',self.ch_full,self.ch_empty,'electrovalve sur sortie relai ',self.ch_valve)
+        #print("Syringe", id,': switchs full/empty on DigitalInputs ',self.ch_full,"/",self.ch_empty,'\nelectrovalve on relay pin',self.ch_valve)
         self.state='closed'
         self.infos=self.id+" : "+self.state
 
         self.update_param_from_file()
-        print("syringe",id,self.use,self.reagent,self.concentration, self.level_uL)
+        #print("syringe",id,self.use,self.reagent,self.concentration, self.level_uL)
 
     def update_param_from_file(self):
         parser = ConfigParser()
@@ -526,6 +529,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 for i in range(q):
                     self.simple_dispense(capacity)
                     self.full_refill()
+        #self.vol.add(vol)   #update in volume tracking
         print("end of dispense\n")
 
     def standard_dispense_for_calib(self):

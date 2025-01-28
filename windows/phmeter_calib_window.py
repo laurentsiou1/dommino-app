@@ -73,15 +73,15 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
         
         if self.ihm.phmeter.state=='open':
             #activation de l'actualisation de la tension
-            #self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.setOnDirectVoltage)
+            #self.phmeter.U_pH.setOnVoltageChangeHandler(self.setOnDirectVoltage)
             #mise sur timer
-            self.ihm.timer1s.timeout.connect(self.setOnDirectVoltage)  
+            self.ihm.timer_display.timeout.connect(self.setOnDirectVoltage)  #remettre timer1s sinon
         
         #rajouter une fonction à la fermeture de la fenetre pour desactiver les actions sur le timer
 
         #affichage de la tension déjà affichée sur le panneau de contrôle
         #if self.phmeter.getIsOpen():
-            #U=self.phmeter.voltagechannel.getVoltage()  #valeur actuelle de tension
+            #U=self.phmeter.U_pH.getVoltage()  #valeur actuelle de tension
             #self.direct_voltage_mV.display(U)
     
     def retranslateUi(self, Dialog):
@@ -171,7 +171,7 @@ if __name__ == "__main__":
         ui.setupUi(Dialog)
     try:
         #connection de la fenêtre avec le pH-mètre
-        ui.phmeter.voltagechannel.setOnVoltageChangeHandler(ui.setOnDirectPH)
+        ui.phmeter.U_pH.setOnVoltageChangeHandler(ui.setOnDirectPH)
     except:
         pass
     finally:

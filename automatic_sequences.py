@@ -136,7 +136,7 @@ class ClassicSequence(AutomaticSequence):
 
         #actualisation sur le pH mètre
         if self.phmeter.state=='open':
-            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.refresh_pH)
+            self.phmeter.U_pH.setOnVoltageChangeHandler(self.refresh_pH)
             self.phmeter.activateStabilityLevel()
             self.phmeter.stab_timer.timeout.connect(self.window.refresh_stability_level)
         
@@ -387,7 +387,7 @@ class CustomSequence(AutomaticSequence):
 
         """#live pH
         if self.phmeter.state=='open':
-            self.phmeter.voltagechannel.setOnVoltageChangeHandler(self.refresh_pH)
+            self.phmeter.U_pH.setOnVoltageChangeHandler(self.refresh_pH)
             self.phmeter.activateStabilityLevel()
             self.phmeter.stab_timer.timeout.connect(self.window.refresh_phmeter)"""
         
