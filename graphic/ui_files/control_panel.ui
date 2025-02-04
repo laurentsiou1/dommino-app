@@ -278,37 +278,17 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab1">
      <attribute name="title">
       <string>Absorbance</string>
      </attribute>
-     <widget class="QGraphicsView" name="Abs_direct">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>411</width>
-        <height>301</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Intensity</string>
      </attribute>
-     <widget class="QGraphicsView" name="Spectrum_direct">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>10</y>
-        <width>421</width>
-        <height>281</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
    </widget>
    <widget class="QSpinBox" name="stab_time">

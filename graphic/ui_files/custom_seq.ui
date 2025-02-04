@@ -14,7 +14,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Custom Sequence Window</string>
+   <string>Custom Sequence of Instructions</string>
   </property>
   <property name="iconSize">
    <size>
@@ -129,67 +129,15 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>471</width>
-      <height>881</height>
+      <width>551</width>
+      <height>871</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="grid_instructions" columnstretch="2,1,3,1,2,2">
+    <layout class="QGridLayout" name="grid_instructions" columnstretch="2,1,3,1,2,2,1">
      <item row="1" column="0">
       <widget class="QLabel" name="number1">
        <property name="text">
         <string>1</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="column_syringe">
-       <property name="text">
-        <string>syringe</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="number2">
-       <property name="text">
-        <string>2</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="column_number">
-       <property name="text">
-        <string>instruction
-N°</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="column_delay_stop">
-       <property name="text">
-        <string>delay stop
-(seconds)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="column_dispense_type">
-       <property name="text">
-        <string>type</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -211,6 +159,72 @@ N°</string>
        <property name="text">
         <string>delay mes
 (seconds)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="column_dispense_type">
+       <property name="text">
+        <string>type</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="column_delay_stop">
+       <property name="text">
+        <string>delay stop
+(seconds)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="column_syringe">
+       <property name="text">
+        <string>syringe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="column_number">
+       <property name="text">
+        <string>instruction
+N°</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="number2">
+       <property name="text">
+        <string>2</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QLabel" name="column_speed">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>pump speed
+1 to 5</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -287,12 +301,12 @@ Parameters ...</string>
      <rect>
       <x>910</x>
       <y>440</y>
-      <width>831</width>
-      <height>451</height>
+      <width>821</width>
+      <height>441</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab1">
      <attribute name="title">
@@ -351,9 +365,9 @@ Parameters ...</string>
    <widget class="QLCDNumber" name="countdown">
     <property name="geometry">
      <rect>
-      <x>1140</x>
+      <x>1120</x>
       <y>210</y>
-      <width>91</width>
+      <width>111</width>
       <height>41</height>
      </rect>
     </property>
@@ -383,10 +397,10 @@ Parameters ...</string>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>600</x>
       <y>10</y>
-      <width>291</width>
-      <height>881</height>
+      <width>271</width>
+      <height>871</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="grid_mes_pH_vol">
@@ -425,14 +439,44 @@ Parameters ...</string>
    <widget class="QCommandLinkButton" name="pause_resume_button">
     <property name="geometry">
      <rect>
-      <x>950</x>
-      <y>250</y>
+      <x>960</x>
+      <y>100</y>
       <width>71</width>
       <height>71</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_pause_resume">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>50</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Finish 
+current instruction</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stop_all_button">
+    <property name="geometry">
+     <rect>
+      <x>950</x>
+      <y>260</y>
+      <width>101</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>STOP ALL</string>
     </property>
    </widget>
   </widget>

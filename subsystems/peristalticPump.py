@@ -13,6 +13,17 @@ ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
+"""def require_open(self, method):
+        if self.state=='open':
+            return method # Return the function unchanged, not decorated.
+        return require_open(method)"""
+
+def require_open(func):
+    def wrapper(self, *args, **kwargs):
+        if self.state=='open':
+            return func(self, *args, **kwargs)
+    return wrapper
+
 class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMotor
 
     parser = ConfigParser()
@@ -28,6 +39,8 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.setHubPort(self.port_motor)
         self.state='closed'
         self.duty_cycle=0
+        self.current_speed=0
+        self.direction=1 # +1 or -1 according to the direction
         self.circuit_delay_sec=30
         self.update_infos()
 
@@ -36,7 +49,6 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             self.openWaitForAttachment(4000)
             self.setCurrentLimit(1) #1A #security
             self.setAcceleration(0.5) #param
-            self.direction=1 # +1 or -1 according to the direction
             parser = ConfigParser()
             parser.read(app_default_settings)
             voltage=parser.get('pump', 'speed_volts')
@@ -69,23 +81,25 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         else:
             self.current_speed=0
 
-    #@require_attribute('state', 'open')
     def setSpeed_voltage(self,v):
         self.mean_voltage=v
         self.duty_cycle=v/12
         self.target_speed=self.duty_cycle*self.direction
-        self.current_speed=self.getTargetVelocity()
+        if self.state=='open':
+            self.current_speed=self.getTargetVelocity()
         if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
             self.setTargetVelocity(self.target_speed)
             print("speed set to ", self.target_speed)
         self.update_infos()
+
+    def set_speed_scale(self,v):
+        self.setSpeed_voltage(self.scale2volts(v))
 
     def scale2volts(self, speed_scale):   #speed scale = 1, 2, 3, 4, 5
         speed_volts = 2+2*speed_scale
         #print("speed volts = ", speed_volts)
         return speed_volts
 
-    #@require_attribute('state', 'open')
     def start_stop(self):
         self.get_current_speed()
         if self.state=='open':
@@ -94,10 +108,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             else:
                 self.setTargetVelocity(0) 
 
-    #@require_attribute('state', 'open')
+    @require_open
     def start(self):
-        if self.state=='open':
-            self.setTargetVelocity(self.target_speed)
+        self.setTargetVelocity(self.target_speed)    
+            #if self.state=='open':
 
     #@require_attribute('state', 'open')
     def stop(self):
@@ -109,7 +123,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.stop()
         time.sleep(1)
         self.direction*=-1
-        self.start()
+        #self.start()
 
     def text(self):
         self.get_current_speed()
@@ -121,7 +135,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
     
     def close_pump(self):
         self.stop()
-        self.close()
+        #self.close()
         self.state='closed'
         print("Peristaltic pump closed")
 

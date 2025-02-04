@@ -47,6 +47,7 @@ class IHM:
 
     #affiche les chemins
     #print("app_default_settings ihm : ", app_default_settings, "\ndevice_ids : ", device_ids)
+    
     #Sous sytèmes 
     #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
     system=System()
@@ -70,8 +71,6 @@ class IHM:
         #Configs for Automatic sequence
         self.experience_name=None
         self.description=None
-        self.OM_type=parser.get('sequence', 'OM_type')   #type of organic matter
-        self.concentration=parser.get('sequence', 'concentration')
         self.fibers=parser.get('setup', 'fibers')
         self.flowcell=parser.get('setup', 'flowcell')
         self.N_mes=None #number of pH/spectra measures
@@ -219,6 +218,7 @@ class IHM:
         parser.read(self.app_default_settings)
         file = open(self.app_default_settings,'r+')
         parser.set('saving parameters','folder',str(self.saving_folder))
+        parser.set('custom sequence', 'sequence_file', self.sequence_config_file)
         if self.peristaltic_pump.state=='open':
             parser.set('pump', 'speed_volts', str(self.peristaltic_pump.mean_voltage))
         if self.phmeter.state=='open':
@@ -261,13 +261,13 @@ class IHM:
         if self.dispenser.state=='open':
             name+="titr-"
             header+=("Syringe Pump : \n"+str("500uL Trajan gas tight syringe\n")
-            +str(self.dispenser.infos)+"\n\n")
+            +str(self.dispenser.infos)+"\n")
             data+=("added syringe A : "+str(self.dispenser.syringe_A.added_vol_uL)+"uL\n"
             +"added syringe B : "+str(self.dispenser.syringe_B.added_vol_uL)+"uL\n"
             +"added syringe C : "+str(self.dispenser.syringe_C.added_vol_uL)+"uL\n"
             +"total added : "+str(self.dispenser.vol.added_total_uL)+"uL\n\n")
         else:
-            header+="Syringe pump not connected\n\n"
+            header+="Syringe pump not connected\n"
 
         if self.spectro_unit.state=='open':
             name+="Abs_"

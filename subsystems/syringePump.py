@@ -17,10 +17,10 @@ ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
-"""def volumeToAdd_uL(current, target, model='fixed volumes', oxygen=True): #pH courant et cible, modèle choisi par défaut le 5/05
+"""def volumeToAdd_uL(current, target, model='fixed volumes', atmosphere=True): #pH courant et cible, modèle choisi par défaut le 5/05
     if model=='5th order polynomial fit on dommino 23/01/2024':
         vol = dispense_data.get_volume_to_dispense_uL(current,target)
-    elif oxygen==False:
+    elif atmosphere==False:
         vol = dispense_data.get_volume_to_dispense_uL(current,target)
         #Compléter avec les données issues des mesures IPGP avec bullage N2.
     return int(vol)"""
@@ -389,7 +389,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         time.sleep(1)   #time for reading on switches
         state0=self.reference_switch.getState()
         state1=self.security_switch.getState()
-        print("state1, state0 :", state1, ",", state0)
+        #print("state1, state0 :", state1, ",", state0)
         #cas général : aucun interrupteur enfoncé, tout mouvement est possible
         if state1==True and state0==True: #les sécurités sont fonctionnelles
             #print("motor in the middle at start")
@@ -419,7 +419,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         else:
             code=3
             valid=False
-            print("problem on switches : At least one not plugged")   
+            print("Switches not connected - No dispense")   
         return code, valid
     
     def configForDispense(self,ev=1): #ev=1 electrovalve en position de dispense

@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Sequence configuration</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
   </property>
   <widget class="QDialogButtonBox" name="dialogbox">
    <property name="geometry">
@@ -55,32 +58,6 @@
     <string>Experience name</string>
    </property>
   </widget>
-  <widget class="QLabel" name="OM_type_label">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>170</y>
-     <width>151</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Sample</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="concentration_label">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>170</y>
-     <width>151</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Concentration (ppmC)</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="description_label">
    <property name="geometry">
     <rect>
@@ -105,57 +82,6 @@
    </property>
    <property name="plainText">
     <string/>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="OM_type">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>210</y>
-     <width>151</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="editable">
-    <bool>true</bool>
-   </property>
-   <property name="currentText">
-    <string>LHA</string>
-   </property>
-   <property name="maxVisibleItems">
-    <number>10</number>
-   </property>
-   <item>
-    <property name="text">
-     <string>LHA</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>SRNOM</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QDoubleSpinBox" name="concentration">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>210</y>
-     <width>151</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="decimals">
-    <number>1</number>
-   </property>
-   <property name="minimum">
-    <double>0.100000000000000</double>
-   </property>
-   <property name="singleStep">
-    <double>0.100000000000000</double>
-   </property>
-   <property name="value">
-    <double>3.000000000000000</double>
    </property>
   </widget>
   <widget class="QSpinBox" name="Nmes">
@@ -336,55 +262,64 @@
     <string>Saving folder</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="V0">
+  <widget class="QDoubleSpinBox" name="V_init">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>300</y>
+     <x>500</x>
+     <y>230</y>
      <width>121</width>
      <height>41</height>
     </rect>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="decimals">
-    <number>1</number>
+    <number>2</number>
    </property>
    <property name="minimum">
-    <double>10.000000000000000</double>
+    <double>1.000000000000000</double>
    </property>
    <property name="maximum">
-    <double>200.000000000000000</double>
+    <double>2000.000000000000000</double>
    </property>
    <property name="singleStep">
-    <double>0.100000000000000</double>
+    <double>0.010000000000000</double>
    </property>
    <property name="value">
     <double>50.000000000000000</double>
    </property>
   </widget>
-  <widget class="QLabel" name="V0_label">
+  <widget class="QLabel" name="Vinit_label">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>260</y>
-     <width>121</width>
+     <x>430</x>
+     <y>190</y>
+     <width>261</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>initial volume (mL)</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
-  <widget class="QLabel" name="fixed_delay_label">
+  <widget class="QLabel" name="flow_delay_label">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>400</y>
+     <x>50</x>
+     <y>500</y>
      <width>291</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Fixed delay for stabilization (seconds)</string>
+    <string>flow delay (seconds)</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -393,8 +328,8 @@
   <widget class="QSpinBox" name="fixed_delay_box">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>440</y>
+     <x>150</x>
+     <y>540</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -409,14 +344,14 @@
   <widget class="QLabel" name="mixing_delay_label">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>500</y>
+     <x>110</x>
+     <y>390</y>
      <width>171</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Mixing delay</string>
+    <string>Mixing delay (seconds)</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -425,8 +360,8 @@
   <widget class="QSpinBox" name="agitation_delay_box">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>540</y>
+     <x>150</x>
+     <y>430</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -515,25 +450,28 @@
     <string>Sequence configuration file</string>
    </property>
   </widget>
-  <widget class="QLabel" name="oxygen_label">
+  <widget class="QLabel" name="atmosphere_label">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>260</y>
-     <width>111</width>
+     <x>430</x>
+     <y>30</y>
+     <width>261</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Oxygen</string>
+    <string>Ambiant atmosphere</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QComboBox" name="oxygen_box">
+  <widget class="QComboBox" name="atmosphere_box">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>300</y>
-     <width>111</width>
+     <x>500</x>
+     <y>70</y>
+     <width>121</width>
      <height>41</height>
     </rect>
    </property>

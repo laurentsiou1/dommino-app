@@ -11,6 +11,7 @@ def average_spectra(spectra):
     sp = np.array(spectra)
     a=np.mean(sp,0)
     avg_spectra=a.tolist()
+    #print(avg_spectra)
     return avg_spectra
 
 #intensité maximale de plusieurs spectres
@@ -32,27 +33,36 @@ def get_optimal_integration_time(spectra,int_time_us):
     return optimal_int_time_us
 
 #Les spectres entrés sont supposés corrigés du bruit d'obscurité et de la non linéarité du capteur
-def intensity2absorbance(spectrum, blanc_ref, dark=None):
+def intensity2absorbance(spectrum, ref_spec, dark=None):
     t0=time.time()
     N=len(spectrum)
     abs_spectrum=[0 for k in range(N)]
     for k in range(N):#pour éviter une division par zéro ou un log(0)
         if dark!=None:
-            if blanc_ref[k]-dark[k]!=0 and spectrum[k]-dark[k]!=0:
-                abs_spectrum[k] = math.log10(abs((blanc_ref[k]-dark[k])/(spectrum[k]-dark[k])))
+            if ref_spec[k]-dark[k]!=0 and spectrum[k]-dark[k]!=0:
+                abs_spectrum[k] = math.log10(abs((ref_spec[k]-dark[k])/(spectrum[k]-dark[k])))
         else:
-            if blanc_ref[k]!=0 and spectrum[k]!=0:
-                abs_spectrum[k] = math.log10(abs(blanc_ref[k]/spectrum[k]))
+            if ref_spec[k]!=0 and spectrum[k]!=0:
+                abs_spectrum[k] = math.log10(abs(ref_spec[k]/spectrum[k]))
     abs_spectrum_round = [round(a,5) for a in abs_spectrum]
     t1=time.time()
     dt=t1-t0
     return abs_spectrum_round, dt
+
+def correct_spectrum_from_dilution(spec,dil):
+    """spec is a spectrum : list of float, dil is a float
+    returns a list of float"""
+    #N=len(spec)
+    #cs=[spec[k]*dil for k in range(N)]
+    cs=[s*dil for s in spec]
+    return cs
 
 def correct_spectra_from_dilution(spec,dil):
     #spec[list] spectres d'absorbance
     #dil[list float] facteurs de dilution
     #print(spec,dil)
     N=len(spec)
+    print(N,dil)
     if N!=len(dil):
         raise IndexError
     elif N>=1:

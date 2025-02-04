@@ -56,6 +56,7 @@ class PHMeter:
 		parser.read(app_default_settings)
 		self.stab_time = int(parser.get('phmeter', 'delta'))
 		self.stab_step = float(parser.get('phmeter', 'epsilon'))
+		self.stab_purcent = 0
 		
 		#Création d'un signal PyQt pour informer une fois lorsque l'electrode devient stable
 		self.signals=CustomSignals()
@@ -94,9 +95,9 @@ class PHMeter:
 		if self.state=='open':
 			self.infos="Ph meter : "+self.state+"\nModel : "+self.model+"\nElectrode : "\
 			+self.electrode+"\nCurrent calibration data"+"\ndate et heure: "+self.CALdate\
-			+"\ntempérature: "+str(self.CALtemperature)+"\nNombre de points: "+str(self.CALtype)\
+			+"\ntempérature: "+str(self.CALtemperature)+"°C\nNombre de points: "+str(self.CALtype)\
 			+"\nTensions mesurées: U4="+str(self.U1)+"V; U7="+str(self.U2)+"V; U10="+str(self.U3)+"V"\
-			+"\nCurrent calibration coefficients: a="+str(self.a)+ "; b="+str(self.b)
+			+"\nCurrent calibration coefficients: a="+str(self.a)+ "V; b="+str(self.b)+"V"
 		else:
 			self.infos="Ph meter : closed"
 

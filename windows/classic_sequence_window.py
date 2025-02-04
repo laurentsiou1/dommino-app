@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import datetime
-import file_manager as fm
+from file_manager import Data
 
 class ClassicSequenceWindow(QMainWindow,Ui_titrationWindow):
     
@@ -56,8 +56,6 @@ class ClassicSequenceWindow(QMainWindow,Ui_titrationWindow):
         #Paramètres d'expérience
         self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(self.seq.experience_name)\
         +"\nDescription : "+str(self.seq.description)\
-        +"\nType de matière organique : "+str(self.seq.OM_type)\
-        +"\nConcentration : "+str(self.seq.concentration)\
         +"\nFibres : "+str(self.seq.fibers)\
         +"\nFlowcell : "+str(self.seq.flowcell)\
         +"\nDispense mode : "+str(self.seq.dispense_mode)\
@@ -106,7 +104,7 @@ class ClassicSequenceWindow(QMainWindow,Ui_titrationWindow):
         self.stab_step.valueChanged.connect(self.seq.update_stab_step)
 
         #saving
-        self.actionsave.triggered.connect(lambda : fm.createFullSequenceFiles(self.seq))
+        self.actionsave.triggered.connect(lambda : self.ihm.seq_data.createSequenceFiles(self.seq))
 
     #DIRECT
     def refresh_stability_level(self):

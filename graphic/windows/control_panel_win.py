@@ -85,15 +85,9 @@ class Ui_ControlPanel(object):
         self.graphic_tabs.setObjectName("graphic_tabs")
         self.tab1 = QtWidgets.QWidget()
         self.tab1.setObjectName("tab1")
-        self.Abs_direct = QtWidgets.QGraphicsView(self.tab1)
-        self.Abs_direct.setGeometry(QtCore.QRect(10, 20, 411, 301))
-        self.Abs_direct.setObjectName("Abs_direct")
         self.graphic_tabs.addTab(self.tab1, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
-        self.Spectrum_direct = QtWidgets.QGraphicsView(self.tab_2)
-        self.Spectrum_direct.setGeometry(QtCore.QRect(50, 10, 421, 281))
-        self.Spectrum_direct.setObjectName("Spectrum_direct")
         self.graphic_tabs.addTab(self.tab_2, "")
         self.stab_time = QtWidgets.QSpinBox(self.centralwidget)
         self.stab_time.setGeometry(QtCore.QRect(710, 120, 51, 31))
@@ -434,7 +428,7 @@ class Ui_ControlPanel(object):
         self.menubar.addAction(self.menu_help.menuAction())
 
         self.retranslateUi(ControlPanel)
-        self.graphic_tabs.setCurrentIndex(0)
+        self.graphic_tabs.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(ControlPanel)
 
     def retranslateUi(self, ControlPanel):

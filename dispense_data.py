@@ -18,14 +18,14 @@ pH_N2_6_03_2024 = np.array([4.041, 4.236, 4.467, 4.737, 5.061, 5.535, 6.758, 8.8
 #fit réalisé sur excel avec polynôme de deg. 5.
 param_IPGP_N2_6_03_2024 = np.array([4.5281, -155.77, 2119.7, -14265., 47527., -62340.])
 
-def dispense_function_uL(pH, oxygen=True):
+def dispense_function_uL(pH, atmosphere=True):
     """Retourn le volume correspondant au pH. 
     Suppose utilisation de soude NaOH concentration 10e-2 mol/L.
     On suppose être au pH4 initialement et un volume d'échantillon de 50mL"""
-    if oxygen==True:
+    if atmosphere==True:
         #données du 23/01/2024
         coefs = np.polyfit(pH_dommino_23_01_2024, v_23_01_2024, 5)
-    else:   #oxygen = False
+    else:   #atmosphere = False
         #données issues des mesures à l'IPGP en mars 2024 - avec bullage N2.
         coefs = np.polyfit(pH_N2_6_03_2024, v_N2_6_03_2024, 7)
     print(coefs)
@@ -37,13 +37,13 @@ def dispense_function_uL(pH, oxygen=True):
         vol = [P(u) for u in pH]
     return vol
 
-def get_volume_to_dispense_uL(current_pH, target_pH, oxygen=True, C_NaOH=0.01, volume=50):
+def get_volume_to_dispense_uL(current_pH, target_pH, atmosphere=True, C_NaOH=0.01, volume=50):
     """C (mol/L) et V(mL) sont les conditions classiques pour lesquelles les courbes de dispense sont obtenues
     Si on est dans des conditions différentes, on corrige"""
     #volume en conditions standard
     factor = (volume*0.01)/(C_NaOH*50)
     print("correction factor from reference dispense curve =",factor)
-    vol_ref = max(0,dispense_function_uL(target_pH, oxygen=oxygen)-dispense_function_uL(current_pH, oxygen=oxygen))
+    vol_ref = max(0,dispense_function_uL(target_pH, atmosphere=atmosphere)-dispense_function_uL(current_pH, atmosphere=atmosphere))
     vol=factor*vol_ref
     return vol
 
@@ -170,7 +170,7 @@ if __name__=="__main__":
     """import matplotlib.pyplot as plt
     x=np.linspace(3.5,10.5,100)
     y_O2=dispense_function_uL(x)
-    y_N2=dispense_function_uL(x,oxygen=False)
+    y_N2=dispense_function_uL(x,atmosphere=False)
     plt.xlabel('pH')
     plt.ylabel('volume (uL)')
     fig, axes = plt.subplots(1,2, sharex=True, sharey=True)
@@ -179,7 +179,7 @@ if __name__=="__main__":
     axes[0].plot(x,y_O2,label='5th degree polynome',color='red')
     axes[0].legend()
     axes[0].set_title('standard conditions (with O2)')
-    axes[1].scatter(pH_N2_6_03_2024, v_N2_6_03_2024, label='6/03 IPGP with N2 bubling (no oxygen)', color='black')
+    axes[1].scatter(pH_N2_6_03_2024, v_N2_6_03_2024, label='6/03 IPGP with N2 bubling (no atmosphere)', color='black')
     axes[1].plot(x,y_N2,label='7th degree polynome',color='blue')
     axes[1].legend()
     axes[1].set_title('N2 bubling (without O2)')

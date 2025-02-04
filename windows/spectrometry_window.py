@@ -51,7 +51,6 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
             if self.spectro_unit.model=='OceanST':
                 self.Tint.setMinimum(self.spectro_unit.device.get_minimum_integration_time()//1000+1) #milliseconds
                 self.Tint.setMaximum(self.spectro_unit.device.get_maximum_integration_time()//1000)
-                print(self.spectro_unit.device.get_minimum_integration_time()//1000,self.spectro_unit.device.get_maximum_integration_time()//1000)
             self.Tint.setProperty("value", self.spectro_unit.t_int)  
             self.avg.setProperty("value", self.spectro_unit.averaging)
             self.acquisition_delay_display.setText(_translate("Dialog", "acquisition delay : %0.2f seconds"% float(self.spectro_unit.acquisition_delay/1000) ))
@@ -134,7 +133,7 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
     def updateDefaultParameters(self):
         parser = ConfigParser()
         parser.read(self.ihm.app_default_settings)
-        file = open(self.ihm.app_default_settings,'r+')
+        file = open(self.ihm.app_default_settings,'w')
         parser.set('spectrometry', 'model', str(self.spectro_unit.model))
         parser.set('spectrometry', 'tint', str(self.spectro_unit.t_int))
         parser.set('spectrometry', 'avg', str(self.spectro_unit.averaging))

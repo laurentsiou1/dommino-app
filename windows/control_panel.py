@@ -7,6 +7,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineEdit, QPushButton
 from graphic.windows.control_panel_win import Ui_ControlPanel
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QRect, QPoint
 #from PyQt5.QtGui import QPixmap
 from graphic import display
 
@@ -116,11 +117,13 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         #self.resize(pixmap.width(), pixmap.height())
 
         #ajout
+        (w,h)=(self.graphic_tabs.geometry().width(),self.graphic_tabs.geometry().height())
+        rect=QRect(0,0,w-5,h-32)
         self.Abs_direct = pg.PlotWidget(self.tab1)
-        self.Abs_direct.setGeometry(QtCore.QRect(0, 0, 511, 371))
+        self.Abs_direct.setGeometry(rect)
         self.Abs_direct.setObjectName("Abs_direct")
         self.Spectrum_direct = pg.PlotWidget(self.tab_2)
-        self.Spectrum_direct.setGeometry(QtCore.QRect(0, 0, 511, 371))
+        self.Spectrum_direct.setGeometry(rect)
         self.Spectrum_direct.setObjectName("Spectrum_direct")
 
         #connexions
@@ -390,7 +393,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         """Changes state display on entrance valve"""
         self.circuit.ev0.changeState()
         self.ev0_state.setText(self.circuit.ev0.state2Text(self.circuit.ev0.getState()))
-    
+
     def ev1_changeState(self):
         """Changes state dispaly on exit valve"""
         self.circuit.ev1.changeState()

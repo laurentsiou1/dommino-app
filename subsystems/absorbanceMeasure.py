@@ -178,7 +178,7 @@ class AbsorbanceMeasure(Spectrometer):
             +"\nDeuterium pin : "+str(self.deuterium_connected)\
             +"\nHalogen pin : "+str(self.halogen_connected)
         else:
-            self.infos="\nCannot connect to spectrometer"
+            self.infos="\nCan not connect to spectrometer"
 
     def close(self,id): #fermeture de l'objet absorbanceMeasure
         self.timer.stop()
@@ -197,10 +197,13 @@ class AbsorbanceMeasure(Spectrometer):
         return self.shutter_state
 
     def open_shutter(self):
-        self.shutter.setState(True)
+        if self.state=='open':
+            self.shutter.setState(True)
 
+    #@necessite self.state=='open'
     def close_shutter(self):
-        self.shutter.setState(False)
+        if self.state=='open':
+            self.shutter.setState(False)
 
     def changeShutterState(self):
         state=self.shutter.getState()
@@ -223,9 +226,11 @@ class AbsorbanceMeasure(Spectrometer):
             self.device.set_scans_to_average(N)
         except OceanDirectError as e:
             logger.error(e.get_error_details())  
+        #☺print("spectra",spectra)
         return spectra
     
     def get_averaged_spectrum(self):
+        """Returns a list of float"""
         t0=time.time()
         spectra=self.get_N_spectra()
         t1=time.time()
@@ -233,6 +238,7 @@ class AbsorbanceMeasure(Spectrometer):
         t2=time.time()
         self.Irec_time=t1-t0
         self.avg_delay=t2-t1
+        self.update_refresh_rate()
         return avg
 
     def acquire_background_spectrum(self):
@@ -257,13 +263,20 @@ class AbsorbanceMeasure(Spectrometer):
     def update_absorbance_spectrum(self):
         self.current_absorbance_spectrum, self.Aproc_delay = sp.intensity2absorbance(self.current_intensity_spectrum,self.active_ref_spectrum,self.active_background_spectrum)
 
-    def updateSpectra(self):
+    def dark_and_ref_stored(self):
+        """Returns True if a background and a reference spectrum have been stored"""
+        open=(self.state=='open')
         bgd=(self.active_background_spectrum!=None)
         ref=(self.active_ref_spectrum!=None)
+        return open*bgd*ref
+
+    def updateSpectra(self):
         self.update_intensity_spectrum()
-        if bgd*ref: #background and ref recorded
+        if self.dark_and_ref_stored(): #background and ref recorded
             self.update_absorbance_spectrum()
-        #update refresh rate
+
+    #@Necessary that background and ref are stored
+    def update_refresh_rate(self):   
         self.refresh_rate=self.Irec_time*1000+500   #ms
         self.timer.setInterval(self.refresh_rate)
 
