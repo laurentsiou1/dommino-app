@@ -1,4 +1,4 @@
-"Programme principal de l'application"
+"Program to execute for launching application"
 
 from PyQt5 import QtWidgets
 from IHM import IHM

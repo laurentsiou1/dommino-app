@@ -114,14 +114,17 @@
    <widget class="QLabel" name="label_delta_abs">
     <property name="geometry">
      <rect>
-      <x>930</x>
-      <y>390</y>
-      <width>371</width>
+      <x>1030</x>
+      <y>410</y>
+      <width>681</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
      <string>Absorbance (Raw and Delta)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_2">

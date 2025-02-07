@@ -3,3 +3,6 @@
 # ignore folders in link with the pyinstaller process
 /dist/
 /build/
+/doc/
+/dommino_env/
+/Dommino.spec/
