@@ -351,7 +351,6 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.added_base.setText("0")
         self.added_total.setText("0" )
 
-
     ### Peristaltic pump and circuit
     def connexionChange_circuit(self):
         if self.circuit.state=='closed':
@@ -363,7 +362,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.circuit.connect()
         if self.peristaltic_pump.state=='open':
             self.led_pump.setPixmap(self.pixmap_green)
-            self.pump_speed.setValue(self.peristaltic_pump.mean_voltage)
+            self.pump_speed.setValue(self.peristaltic_pump.volts2scale(self.peristaltic_pump.mean_voltage))
             self.link_pump2IHM()
         if self.circuit.state=='open':
             self.led_ev_circuit.setPixmap(self.pixmap_green)
@@ -402,11 +401,3 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def closeEvent(self, event):
         print("Closing main window")
         self.ihm.updateDefaultParam()
-        """parser = ConfigParser()
-        parser.read(app_default_settings)
-        parser.set('pump', 'speed_volts', str(self.pump_speed.value()))
-        parser.set('phmeter', 'epsilon', str(self.stab_step.value()))
-        parser.set('phmeter', 'delta', str(self.stab_time.value()))
-        file = open(app_default_settings,'w')
-        parser.write(file)
-        file.close()"""

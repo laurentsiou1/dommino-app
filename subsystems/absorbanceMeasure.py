@@ -277,7 +277,7 @@ class AbsorbanceMeasure(Spectrometer):
 
     #@Necessary that background and ref are stored
     def update_refresh_rate(self):   
-        self.refresh_rate=self.Irec_time*1000+500   #ms
+        self.refresh_rate=int(self.Irec_time*1000+500)   #ms
         self.timer.setInterval(self.refresh_rate)
 
 class Advanced(AbsorbanceMeasure):  ### Fonctions optionelles ###    

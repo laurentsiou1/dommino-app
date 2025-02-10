@@ -70,7 +70,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             +"\nAcceleration : "+str(self.getAcceleration())
             +"\nCircuit delay : "+str(self.circuit_delay_sec)+" seconds"
             +"\nCurrent speed (Volts) : "+str(self.mean_voltage)
-            +"\nCurrent speed (1 to 5 scale) : "+str(volts2scale(self.mean_voltage))
+            +"\nCurrent speed (1 to 5 scale) : "+str(self.volts2scale(self.mean_voltage))
             +"\nDirection : "+str(self.direction))
         else:
             self.infos="Peristaltic pump not connected"
@@ -87,9 +87,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.target_speed=self.duty_cycle*self.direction
         if self.state=='open':
             self.current_speed=self.getTargetVelocity()
-        if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
-            self.setTargetVelocity(self.target_speed)
-            print("speed set to ", self.target_speed)
+            #indentation rajoutée
+            if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
+                self.setTargetVelocity(self.target_speed)
+                print("speed set to ", self.target_speed)
         self.update_infos()
 
     def set_speed_scale(self,v):
@@ -99,6 +100,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         speed_volts = 2+2*speed_scale
         #print("speed volts = ", speed_volts)
         return speed_volts
+
+    def volts2scale(self, speed_volts):   #speed volts = 4V, 6V, 8V, 10V, 12V
+        speed_scale=int(0.5*(speed_volts-2))
+        return speed_scale
 
     def start_stop(self):
         self.get_current_speed()
@@ -133,19 +138,19 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             text='Stop'
         return text   
     
+    def update_in_file(self):
+        parser = ConfigParser()
+        parser.read(app_default_settings)
+        parser.set('pump','speed_volts', str(self.mean_voltage))
+        file = open(app_default_settings,'w')
+        parser.write(file)
+        file.close()
+    
     def close_pump(self):
         self.stop()
-        #self.close()
+        self.update_in_file()
         self.state='closed'
         print("Peristaltic pump closed")
-
-
-
-def volts2scale(speed_volts):   #speed volts = 4V, 6V, 8V, 10V, 12V
-    speed_scale=int(0.5*(speed_volts-2))
-    return speed_scale
-
-
 
 if __name__=="__main__":
     pump = PeristalticPump()
