@@ -212,13 +212,6 @@ class IHM:
             self.circuit.close()
         elif self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
-<<<<<<< HEAD
-=======
-        if self.circuit.state=='open':
-            self.circuit.close
-        elif self.peristaltic_pump.state=='open':
-            self.peristaltic_pump.close()
->>>>>>> 0ffe742c3a713aa5f1120cac0b53741244cf0a9f
               
     def updateDefaultParam(self):
         """Updates current parameters as default in file 'config/app_default_settings'"""
