@@ -235,7 +235,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.ihm.dispenser.stop()
         self.ihm.updateDefaultParam()
         self.close()
-        self.__del__()
+        #self.__del__()
     
-    def __del__(self):
-        pass
+    """def __del__(self):
+        pass"""

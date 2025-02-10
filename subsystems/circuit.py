@@ -23,9 +23,9 @@ def require_pump_and_valves_connected(func):
         return func(self, *args, **kwargs)
     return wrapper
 
-class Circuit(PeristalticPump): #la classe hérite des méthodes de la pompe
+class Circuit(): #la classe hérite des méthodes de la pompe
 
-    def __init__(self, pump):   #pump est un objet de la classe pump, passé en argument
+    def __init__(self, pump : PeristalticPump):   #pump est un objet de la classe pump, passé en argument
         
         self.pump=pump
         self.ev0 = Electrovalve('circuit entrance')
@@ -57,7 +57,8 @@ class Circuit(PeristalticPump): #la classe hérite des méthodes de la pompe
             self.infos+="\nElectrovalves not connected"
     
     def close(self):
-        self.pump.close_pump()
+        if self.pump.state=='open':
+            self.pump.close_pump()
         self.ev0.close()
         self.ev1.close()
         self.state='closed'

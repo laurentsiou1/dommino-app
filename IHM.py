@@ -208,15 +208,15 @@ class IHM:
             self.phmeter.close()
         if self.dispenser.state=='open':
             self.dispenser.close()
-        if self.peristaltic_pump.state=='open':
+        if self.circuit.state=='open':
+            self.circuit.close()
+        elif self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
-        self.circuit.close()
               
     def updateDefaultParam(self):
-        #Updates current parameters as default in file
+        """Updates current parameters as default in file 'config/app_default_settings'"""
         parser = ConfigParser()
         parser.read(self.app_default_settings)
-        file = open(self.app_default_settings,'r+')
         parser.set('saving parameters','folder',str(self.saving_folder))
         parser.set('custom sequence', 'sequence_file', self.sequence_config_file)
         if self.peristaltic_pump.state=='open':
@@ -231,6 +231,7 @@ class IHM:
             parser.set(self.dispenser.syringe_A.id, 'level', str(self.dispenser.syringe_A.level_uL))
             parser.set(self.dispenser.syringe_B.id, 'level', str(self.dispenser.syringe_B.level_uL))
             parser.set(self.dispenser.syringe_C.id, 'level', str(self.dispenser.syringe_C.level_uL))
+        file = open(self.app_default_settings,'r+')
         parser.write(file) 
         file.close()
         print("updates current parameters in default file")
