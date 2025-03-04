@@ -72,7 +72,7 @@ class SettingsWindow(QDialog,Ui_Dialog): #(object)
     def browseSavingFolder(self):
         parser = ConfigParser()
         parser.read(self.ihm.app_default_settings)
-        fld=self.parser.get('saving parameters', 'folder')  #affichage par défaut
+        fld=parser.get('saving parameters', 'folder')  #affichage par défaut
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', fld)
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier
         self.ihm.saving_folder=self.saving_folder.text()
