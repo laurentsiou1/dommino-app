@@ -10,7 +10,7 @@ from windows.classic_sequence_window import ClassicSequenceWindow
 from windows.custom_sequence_window import CustomSequenceWindow
 
 from subsystems.pHmeter import *
-from subsystems.syringePump import *
+from subsystems.dispenser import *
 import subsystems.processing as proc
 
 import file_manager as fm
@@ -319,7 +319,7 @@ class ClassicSequence(AutomaticSequence):
         self.total_added_volume+=vol
         self.cumulate_base_uL.append(self.total_added_base_uL)
         self.cumulate_volumes.append(self.total_added_volume)
-        self.dilution_factor*=((self.total_added_volume+self.V_init)/self.V_init)
+        self.dilution_factor=((self.total_added_volume+self.V_init)/self.V_init)
         self.dilution_factors.append(self.dilution_factor)
 
         #niveau de la seringue
@@ -544,7 +544,7 @@ class CustomSequence(AutomaticSequence):
         else:
             self.cumulate_volume += 0
         self.cumulate_volumes.append(self.cumulate_volume)
-        self.dilution_factor*=((self.cumulate_volume+self.V_init)/self.V_init)
+        self.dilution_factor=((self.cumulate_volume+self.V_init)/self.V_init)
         self.dilution_factors.append(self.dilution_factor)
         #print(self.dilution_factor, self.cumulate_volume, self.V_init)
         #print("len dilution factors",len(self.dilution_factors))
@@ -566,12 +566,14 @@ class CustomSequence(AutomaticSequence):
         self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
         print("running again")
 
-    def close_sequence(self):
-        self.pause()
+    def stop(self):
+        self.is_running=False
+        self.measure_timer.stop()
+        self.pause_timer.stop()
         self.spectro.close_shutter()
         self.pump.stop()
-        self.syringe.stop()
-        del self    #Suppression de l'objet"""
+        self.dispenser.stop()
+        del self
 
 """class Data(AutomaticSequence):
 

@@ -16,9 +16,6 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
         self.setupUi(self)
         self.ihm=ihm
 
-        self.parser = ConfigParser()
-        self.parser.read(ihm.app_default_settings)
-
         #graphique
         #défaut
         self.V_init.setSpecialValueText("")
@@ -87,12 +84,11 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', fld)
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier
         self.ihm.saving_folder=self.saving_folder.text()
-        #self.ihm.updateDefaultParam()
     
     def browseConfigFile(self):
         parser = ConfigParser()
         parser.read(self.ihm.app_default_settings)
-        seq_file=self.parser.get('custom sequence', 'sequence_file')  #affichage par défaut à l'ouverture
+        seq_file=parser.get('custom sequence', 'sequence_file')  #affichage par défaut à l'ouverture
         filepath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', seq_file, filter="*.csv")
         self.sequence_config_file.setText(filepath) #affichage du chemin de dossier
         self.ihm.sequence_config_file=filepath

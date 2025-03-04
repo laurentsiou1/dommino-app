@@ -248,7 +248,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         parser = ConfigParser()
         parser.read(app_default_settings)
         self.rescale_factor=float(parser.get(self.id, 'rescale_factor'))
-        self.offset_ref=float(parser.get(self.id, 'offset_ref'))
+        self.offset_ref=int(parser.get(self.id, 'offset_ref'))
         self.use=tobool(parser.get(self.id, 'use'))
         self.reagent=parser.get(self.id, 'reagent') #string
         self.concentration=float(parser.get(self.id, 'concentration'))

@@ -15,10 +15,9 @@ from lib.oceandirect.OceanDirectAPI import Spectrometer as Sp, OceanDirectAPI
 from lib.oceandirect.od_logger import od_logger
 
 #Instruments
-from subsystems.system import System
 from subsystems.pHmeter import PHMeter
 from subsystems.absorbanceMeasure import AbsorbanceMeasure
-from subsystems.syringePump import Dispenser, PhidgetStepperPump
+from subsystems.dispenser import Dispenser, PhidgetStepperPump
 from subsystems.peristalticPump import PeristalticPump
 from subsystems.circuit import Circuit
 
@@ -39,6 +38,7 @@ class IHM:
 
     app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
     device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
+    #calibration_file = os.path.join(ROOT_DIR, "config/latest_cal.ini")
 
     parser = ConfigParser()
     parser.read(device_ids)
@@ -50,7 +50,6 @@ class IHM:
     
     #Sous sytèmes 
     #On créée les instances de chaque sous système ici. L'état est 'closed' par défaut
-    system=System()
     spectro_unit=AbsorbanceMeasure()
     phmeter=PHMeter()
     dispenser=Dispenser()
@@ -224,14 +223,14 @@ class IHM:
         if self.phmeter.state=='open':
             parser.set('phmeter', 'epsilon', str(self.phmeter.stab_step))
             parser.set('phmeter', 'delta', str(self.phmeter.stab_time))
-            parser.set('files', 'default', str(self.phmeter.cal_data_path))
+            parser.set('calibration', 'file', str(self.phmeter.relative_calib_path))
             parser.set('phmeter', 'default', str(self.phmeter.model))
             parser.set('electrode', 'default', str(self.phmeter.electrode))
         if self.dispenser.state=='open':
             parser.set(self.dispenser.syringe_A.id, 'level', str(self.dispenser.syringe_A.level_uL))
             parser.set(self.dispenser.syringe_B.id, 'level', str(self.dispenser.syringe_B.level_uL))
             parser.set(self.dispenser.syringe_C.id, 'level', str(self.dispenser.syringe_C.level_uL))
-        file = open(self.app_default_settings,'r+')
+        file = open(self.app_default_settings,'w')
         parser.write(file) 
         file.close()
         print("updates current parameters in default file")
@@ -247,8 +246,7 @@ class IHM:
         #saving pH measure
         if self.phmeter.state=='open':
             name+="pH-"
-            header+=("current calibration data\n"+"date and time: "+self.phmeter.CALdate+"\n"+
-            "temperature: "+str(self.phmeter.CALtemperature)+"\n"+"number of points: "+str(self.phmeter.CALtype)+"\n"+
+            header+=("current calibration data\n"+"date and time: "+self.phmeter.CALdate+"\nnumber of points: "+str(self.phmeter.CALtype)+"\n"+
             "recorded voltages : U4 = "+str(self.phmeter.U1)+"V; U7="+str(self.phmeter.U2)+"V; U10="+str(self.phmeter.U3)+"V\n"+
             "calibration coefficients : a="+str(self.phmeter.a)+ "; b="+str(self.phmeter.b)+"\n\n"
             )
@@ -272,17 +270,14 @@ class IHM:
 
         if self.spectro_unit.state=='open':
             name+="Abs_"
-            header+=("\nSpectrometer : "+str(self.spectro_unit.model)+"\n"
-            +"Serial number : "+str(self.spectro_unit.serial_number)+"\n"
-            +"Integration time (ms) : "+str(self.spectro_unit.t_int/1000)+"\n"
-            +"Averaging : "+str(self.spectro_unit.averaging)+"\n"
-            +"Boxcar : "+str(self.spectro_unit.boxcar)+"\n"
-            +"Nonlinearity correction usage : "+str(self.spectro_unit.device.get_nonlinearity_correction_usage())+"\n")
-            if self.spectro_unit.model!='OceanST':
-                header+=("Electric dark correction usage : "+str(self.spectro_unit.device.get_electric_dark_correction_usage())+"\n")
-            else:
-                header+=("Electric dark correction usage : not supported by device\n")
-            header+="Absorbance formula : A = log10[(reference-background)/(sample-background)]\n"    
+            header+=("\nSpectrometer : "+str(self.spectro_unit.model)
+            +"\nSerial number : "+str(self.spectro_unit.serial_number)
+            +"\nIntegration time (ms) : "+str(self.spectro_unit.t_int/1000)
+            +"\nAveraging : "+str(self.spectro_unit.averaging)
+            +"\nBoxcar : "+str(self.spectro_unit.boxcar)
+            +"\nNonlinearity correction usage : "+str(self.spectro_unit.device.get_nonlinearity_correction_usage())
+            +"\nElectric dark correction usage : "+str(self.spectro_unit.electric_dark)
+            +"\nAbsorbance formula : A = log10[(reference-background)/(sample-background)]\n")
 
             background = self.spectro_unit.active_background_spectrum
             ref = self.spectro_unit.active_ref_spectrum

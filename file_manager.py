@@ -188,13 +188,13 @@ class Data():
         #SPECTROMETER
         if seq.spectro.state=='open':           
             #absorbance measured
-            data+="Wavelengths (nm)\tAbsorbance\n" 
+            data+="Wavelengths (nm)\tAbsorbance (not corrected from dilution)\n" 
             table = [seq.spectro.wavelengths]+seq.absorbance_spectra
             for l in range(seq.spectro.N_lambda):  #spectres
-                for c in range(len(seq.absorbance_spectra_cd)):
+                for c in range(len(seq.absorbance_spectra)):
                     #print(l,c)
                     data+=str(table[c][l])+'\t'
-                data+=str(table[len(seq.absorbance_spectra_cd)][l])+'\n'
+                data+=str(table[len(seq.absorbance_spectra)][l])+'\n'
 
             table_formatted = [seq.spectro.wavelengths]+seq.absorbance_spectra_cd
             for l in range(seq.spectro.N_lambda):  #spectres

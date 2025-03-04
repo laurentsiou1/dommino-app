@@ -95,8 +95,6 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
 
     def setOnDirectVoltage(self): #, ch, voltage):
         self.direct_voltage_mV.display(1000*self.ihm.phmeter.currentVoltage)
-        """elif self.phmeter.model=='Phidget 1130':
-            self.direct_voltage_mV.display(1000*self.phmeter.currentVoltage)"""
 
     def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
         U=self.ihm.phmeter.currentVoltage
@@ -118,7 +116,6 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
         self.used_pH_buffers = pH_buffers
         #print("pH buffers : ",type(pH_buffers),pH_buffers)
         dt = datetime.now()
-        T = 22 #22°C pour l'instant non modifiable
         if pH_buffers == [4]:
             u_cal = [self.U4]
         elif pH_buffers == [7]:
@@ -132,7 +129,7 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
         else:
             print("This type of calibration is not suppported")
         (a,b)=PHMeter.computeCalCoefs(self.ihm.phmeter,u_cal,pH_buffers) #calcul des coefficients de calib
-        PHMeter.saveCalData(self.ihm.phmeter, dt, 22, pH_buffers, u_cal, (a,b)) #enregistrer dans le fichier
+        PHMeter.saveCalData(self.ihm.phmeter, dt.strftime("%m/%d/%Y %H:%M:%S"), pH_buffers, u_cal, (a,b)) #enregistrer dans le fichier
 
 """
 if __name__ == "__main__":

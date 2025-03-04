@@ -34,12 +34,13 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
         if self.spectro_unit.state=='open':
             self.shutter.setChecked(self.spectro_unit.shutter.getState())  
             self.NLcorr_box.setChecked(self.spectro_unit.device.get_nonlinearity_correction_usage())
-            if self.spectro_unit.model=='OceanST' or self.spectro_unit.model=='OceanSR6':
-                self.EDcorr_box.setDisabled(True)
-            else:
+            self.NLcorr_box.clicked.connect(self.change_NLcorr_state)
+            try:
+                ed=self.spectro_unit.device.get_electric_dark_correction_usage()
                 self.EDcorr_box.setChecked(self.spectro_unit.device.get_electric_dark_correction_usage())
                 self.EDcorr_box.clicked.connect(self.change_EDcorr_state)
-            
+            except: #feature not available for OceanST or OceanSR spectrometers
+                self.EDcorr_box.setDisabled(True)   
             self.lambdas=self.spectro_unit.wavelengths
 
             #Affichage des paramètres selon valeurs actuelles du spectro
@@ -133,10 +134,10 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
     def updateDefaultParameters(self):
         parser = ConfigParser()
         parser.read(self.ihm.app_default_settings)
-        file = open(self.ihm.app_default_settings,'w')
         parser.set('spectrometry', 'model', str(self.spectro_unit.model))
         parser.set('spectrometry', 'tint', str(self.spectro_unit.t_int))
         parser.set('spectrometry', 'avg', str(self.spectro_unit.averaging))
+        file = open(self.ihm.app_default_settings,'w')
         parser.write(file)
         file.close()
 

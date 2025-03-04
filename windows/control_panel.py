@@ -16,7 +16,7 @@ import pyqtgraph as pg
 
 from subsystems.pHmeter import *
 from subsystems.absorbanceMeasure import AbsorbanceMeasure
-from subsystems.syringePump import *
+from subsystems.dispenser import *
 from subsystems.peristalticPump import *
 
 from Phidget22.Devices.VoltageInput import VoltageInput
@@ -58,8 +58,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         parser = ConfigParser()
         parser.read(ihm.app_default_settings)
         #menus déroulants
-        self.phmeter_selection_box.setCurrentText(str(parser.get('phmeter', 'default')))
-        self.electrode_selection_box.setCurrentText(str(parser.get('electrode', 'default')))
+        self.electrode_box.appendPlainText(str(parser.get('electrode', 'default')))
         self.stab_step.setValue(float(parser.get('phmeter', 'epsilon')))
         self.stab_time.setValue(int(parser.get('phmeter', 'delta')))
         #Spectromètre
@@ -127,9 +126,8 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.Spectrum_direct.setObjectName("Spectrum_direct")
 
         #connexions
+        self.electrode_box.textChanged.connect(self.update_electrode_model)
         self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM)
-        """self.phmeter_selection_box.currentIndexChanged.connect(self.updateDefaultSettings)
-        self.electrode_selection_box.currentIndexChanged.connect(self.updateDefaultSettings)"""
         self.cal_button.clicked.connect(self.ihm.openCalibWindow)
 
         self.connect_disconnect_spectro_button.clicked.connect(self.connect_disconnect_spectrometer)
@@ -149,10 +147,10 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.ihm.timer_display.timeout.connect(self.refresh_screen)
         
         self.configure_sequence.clicked.connect(self.ihm.openConfigWindow)
-        self.action_change_folder.triggered.connect(self.ihm.openSettingsWindow)    #choix dossier
+        self.action_edit_folder.triggered.connect(self.ihm.openSettingsWindow)    #choix dossier
         self.save_button.clicked.connect(self.ihm.createDirectMeasureFile)  #deux façons de sauver les données
         self.action_save.triggered.connect(self.ihm.createDirectMeasureFile) 
-        self.action_syringe_param.triggered.connect(self.ihm.openSettingsWindow) #config des seringues
+        self.action_open_settings.triggered.connect(self.ihm.openSettingsWindow) #config des seringues
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.update_lights)
@@ -198,12 +196,12 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.spectro_unit.acquire_background_spectrum()
             self.spectro_unit.acquire_ref_spectrum()
 
-    ### Méthodes pour le pH mètre
+                                
+                                ### Méthodes pour le pH mètre
+    
     def link_pHmeter2IHM(self):
-        phmeter_model=self.phmeter_selection_box.currentText()
-        electrode=self.electrode_selection_box.currentText()
         if self.phmeter.state=='closed':
-            self.phmeter.connect(phmeter_model,electrode)
+            self.phmeter.connect()
         if self.phmeter.state=='open':
             #affichage des données de calibration
             self.refreshCalibrationText()
@@ -217,8 +215,11 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.stab_time.valueChanged.connect(self.update_stab_time)
             self.update_stab_step()
             self.stab_step.valueChanged.connect(self.update_stab_step)
-            self.load_calibration_button.clicked.connect(self.load_calibration)
+            #self.load_calibration_button.clicked.connect(self.load_calibration)
     
+    def update_electrode_model(self):
+        self.phmeter.electrode=self.electrode_box.toPlainText()
+
     def update_stab_time(self):
         self.phmeter.stab_time=self.stab_time.value()
     
@@ -242,15 +243,19 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.stabilisation_level.setProperty("value", self.phmeter.stab_purcent)
         self.stability_label.setText(str(self.phmeter.stab_purcent)+"%")
 
-    def load_calibration(self):
+    """def load_calibration(self):
         filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', "config")
         #print(filepath)
         self.phmeter.load_calibration(filepath)
         self.phmeter.getCalData()
-        self.refreshCalibrationText()
+        self.refreshCalibrationText()"""
     
     def refreshCalibrationText(self):
-        self.calib_text = "Current calibration data:\npH meter : "+str(self.phmeter.CALmodel)+"\nelectrode : "+str(self.phmeter.CALelectrode)+"\ndate: "+str(self.phmeter.CALdate)+"\n"+"temperature: "+str(self.phmeter.CALtemperature)+"°C\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)+"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="+str(self.phmeter.a)+"\nb="+str(self.phmeter.b)
+        self.calib_text = ("Current calibration data:\npH meter : "+str(self.phmeter.CALmodel)
+        +"\nelectrode : "+str(self.phmeter.CALelectrode)+"\ndate: "+str(self.phmeter.CALdate)
+        +"\npH buffers: "+str(self.phmeter.CALtype)+"\nRecorded voltages:\nU4="+str(self.phmeter.U1)
+        +"V\nU7="+str(self.phmeter.U2)+"V\nU10="+str(self.phmeter.U3)+"V\ncoefficients U=a*pH+b\na="
+        +str(self.phmeter.a)+"\nb="+str(self.phmeter.b))
         self.calib_text_box.clear()
         self.calib_text_box.appendPlainText(self.calib_text)
 

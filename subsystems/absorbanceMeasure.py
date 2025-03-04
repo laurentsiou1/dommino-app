@@ -138,17 +138,14 @@ class AbsorbanceMeasure(Spectrometer):
                 self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
             elif self.model=='OceanST': #2k pix pour 400nm
                 self.device.set_boxcar_width(2) #moyennage sur 5 points (2n+1) 
-            elif self.model=='HR2000+':
-                self.device.set_boxcar_width(4) #moyenne sur 9 points (2k pixels sur 200nm soit 10 valeurs /nm)
             else:
                 print("Spectrometer model not recognized")
             
-            if self.model!='OceanST' or self.model!='OceanSR6':
-                self.device.set_electric_dark_correction_usage(False)   #non pris en charge par le ST
-                self.electric_dark=False
-            else:
-                self.device.set_electric_dark_correction_usage(True) 
-                self.electric_dark=True
+            try:
+                ed=self.device.get_electric_dark_correction_usage()
+                self.electric_dark=ed
+            except: #feature not available for OceanST or OceanSR spectrometers
+                self.electric_dark = False
 
             #time attributes in milliseconds. SDK methods outputs are in microseconds (us)
             self.t_int=self.device.get_integration_time()//1000 

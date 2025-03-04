@@ -378,95 +378,6 @@
      <double>0.010000000000000</double>
     </property>
    </widget>
-   <widget class="QComboBox" name="phmeter_selection_box">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>20</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="editable">
-     <bool>true</bool>
-    </property>
-    <property name="currentText">
-     <string>Phidget ADP1000</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>Phidget ADP1000</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Phidget 1130</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>HI5221</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Metrohm titrando</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>other</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QComboBox" name="electrode_selection_box">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>70</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Oakton epoxy</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>VWR 662-1793</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>metrohm 6.0232.100</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>metrohm 6.0259.100</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>other</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QPushButton" name="load_calibration_button">
-    <property name="geometry">
-     <rect>
-      <x>780</x>
-      <y>20</y>
-      <width>331</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Select an existing calibration</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_model">
     <property name="geometry">
      <rect>
@@ -1365,6 +1276,32 @@
      <string>Connect</string>
     </property>
    </widget>
+   <widget class="QLabel" name="electrode_label">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>20</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Electrode model</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="electrode_box">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>20</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1380,7 +1317,7 @@
      <string>file</string>
     </property>
     <addaction name="action_save"/>
-    <addaction name="action_change_folder"/>
+    <addaction name="action_edit_folder"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -1392,7 +1329,7 @@
     <property name="title">
      <string>settings</string>
     </property>
-    <addaction name="action_syringe_param"/>
+    <addaction name="action_open_settings"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_settings"/>
@@ -1409,12 +1346,12 @@
     <string>save</string>
    </property>
   </action>
-  <action name="action_change_folder">
+  <action name="action_edit_folder">
    <property name="text">
     <string>edit saving folder</string>
    </property>
   </action>
-  <action name="action_syringe_param">
+  <action name="action_open_settings">
    <property name="text">
     <string>Instrument settings</string>
    </property>

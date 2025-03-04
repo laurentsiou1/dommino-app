@@ -1056,3 +1056,63 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(0.27071666666666666, 0.6212500000000014)
 
+pH meter : Phidget 1130
+pH probe : Oakton epoxy
+2025-02-19 15:30:59.851346
+22°C 
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[1.696, 2.5372, 3.3298]
+Coefficients U=a*pH+b
+(a,b)=(0.27230000000000004, 0.6148999999999999)
+
+pH meter : Phidget 1130
+pH probe : Oakton epoxy
+2025-02-28 10:55:50.103249
+22°C 
+Type de calibration: [4, 7]
+Voltages calib:
+[2.0488, 2.0488]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 2.0488)
+
+pH meter : Phidget 1130
+pH probe : Oakton epoxy
+2025-02-28 14:02:41.966645
+22°C 
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[2.0488, 2.0488, 2.0488]
+Coefficients U=a*pH+b
+(a,b)=(-6.281172565767208e-17, 2.0488000000000004)
+
+pH meter : Phidget 1130
+pH probe : Oakton epoxy
+2025-03-03 15:18:21.481097
+
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[0.0, 0.0, 0.0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+
+pH meter : Phidget 1130
+pH probe : oakton epoxy test
+2025-03-03 15:21:27.506049
+
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[0.0, 0.0, 0.0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+
+pH meter : Phidget 1130
+pH probe : oakton epoxy test
+03/03/2025 15:27:08
+
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[0.0, 0.0, 0.0]
+Coefficients U=a*pH+b
+(a,b)=(0.0, 0.0)
+

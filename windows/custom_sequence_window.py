@@ -232,7 +232,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         print("User has clicked the red x on the custom sequence window")
         #test : ça ne permet pas de supprimer l'objet 
         event.accept()
-        self.ihm.dispenser.stop()
+        self.seq.stop()
         self.ihm.updateDefaultParam()
         self.close()
         #self.__del__()

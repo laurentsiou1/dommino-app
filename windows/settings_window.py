@@ -17,8 +17,8 @@ class SettingsWindow(QDialog,Ui_Dialog): #(object)
         self.syringe_B=ihm.dispenser.syringe_B
         self.syringe_C=ihm.dispenser.syringe_C
 
-        self.parser = ConfigParser()
-        self.parser.read(ihm.app_default_settings)
+        parser = ConfigParser()
+        parser.read(ihm.app_default_settings)
 
         #Sauvegarde de la config
         self.buttonBox.accepted.connect(self.update)
@@ -70,6 +70,8 @@ class SettingsWindow(QDialog,Ui_Dialog): #(object)
         self.syringe_C.compute_rescale_factor(self.reached_C_uL.value())
     
     def browseSavingFolder(self):
+        parser = ConfigParser()
+        parser.read(self.ihm.app_default_settings)
         fld=self.parser.get('saving parameters', 'folder')  #affichage par défaut
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder', fld)
         self.saving_folder.setText(folderpath) #affichage du chemin de dossier

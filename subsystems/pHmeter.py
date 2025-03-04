@@ -21,7 +21,7 @@ import re
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-new_cal_file = os.path.join(ROOT_DIR, "config/latest_cal.ini")
+#latest_cal = "config/latest_cal.ini"
 cal_log = os.path.join(ROOT_DIR, "config/CALlog.txt")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
@@ -64,15 +64,13 @@ class PHMeter:
 		print("default settings file:", app_default_settings)
 		parser = ConfigParser()
 		parser.read(app_default_settings)
-		self.cal_data_path=parser.get('files', 'default')
+		self.relative_calib_path=parser.get('calibration', 'file')
 		self.model=parser.get('phmeter', 'default')
 		self.electrode=parser.get('electrode', 'default')
 
 		self.update_infos()
 
-	def connect(self,phmeter,electrode):
-		self.model=phmeter
-		self.electrode=electrode
+	def connect(self):
 		
 		#Ph mètre Phidget 1130_0 plugged in Voltage Input of main board
 		self.U_pH.setDeviceSerialNumber(self.board_number)
@@ -93,32 +91,32 @@ class PHMeter:
 
 	def update_infos(self):
 		if self.state=='open':
-			self.infos="Ph meter : "+self.state+"\nModel : "+self.model+"\nElectrode : "\
-			+self.electrode+"\nCurrent calibration data"+"\ndate et heure: "+self.CALdate\
-			+"\ntempérature: "+str(self.CALtemperature)+"°C\nNombre de points: "+str(self.CALtype)\
-			+"\nTensions mesurées: U4="+str(self.U1)+"V; U7="+str(self.U2)+"V; U10="+str(self.U3)+"V"\
-			+"\nCurrent calibration coefficients: a="+str(self.a)+ "V; b="+str(self.b)+"V"
+			self.infos=("Ph meter : "+self.state+"\nModel : phidget 1130"+"\nElectrode : "
+			+self.electrode+"\nCurrent calibration data\ndate and time: "+self.CALdate
+			+"\nNumber of points: "+str(self.CALtype)+"\nRecorded voltages: U4="+str(self.U1)
+			+"V; U7="+str(self.U2)+"V; U10="+str(self.U3)+"V\nCurrent calibration coefficients: a="
+			+str(self.a)+ "V; b="+str(self.b)+"V")
 		else:
 			self.infos="Ph meter : closed"
 
-	def load_calibration(self,path):
-		self.cal_data_path=path
+	"""def load_calibration(self,path):
+		self.relative_calib_path=os.path.relpath(path, ROOT_DIR)
+		#a faire récupérer le chemin relatif du fichier de calib
 		#Changement dans le fichier contenant le chemin du fichier de calibration par defaut
 		parser = ConfigParser()
 		parser.read(app_default_settings)
-		parser.set('files', 'default', str(self.cal_data_path))
+		parser.set('calibration', 'file', str(self.relative_calib_path))
 		#écriture du nouveau chemin de cal par défaut
 		cal_path_file = open(app_default_settings,'w')
 		parser.write(cal_path_file) 
-		cal_path_file.close()
+		cal_path_file.close()"""
 	
 	def getCalData(self):
 		parser = ConfigParser()
-		parser.read(self.cal_data_path)
+		parser.read(self.relative_calib_path)
 		self.CALmodel=parser.get('data', 'phmeter')
 		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
-		self.CALtemperature=float(parser.get('data', 'temperature'))
 		self.CALtype=parser.get('data', 'calib_type')
 		self.U1=float(parser.get('data', 'U1'))
 		self.U2=float(parser.get('data', 'U2'))
@@ -139,15 +137,14 @@ class PHMeter:
 	
 	def onCalibrationChange(self):
 		parser = ConfigParser()
-		parser.read(new_cal_file)
+		parser.read("config/latest_cal.ini")
 		self.CALmodel=parser.get('data', 'phmeter')
 		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
-		self.CALtemperature=float(parser.get('data', 'temperature'))
 		#c'est un string : à convertir en set puis à ordonner
-		l=re.findall('\d+',parser.get('data', 'calib_type'))
+		l=re.findall(r'\d+',parser.get('data', 'calib_type'))
 		ll=[int(x) for x in l]
-		self.CALtype=sorted(ll) 
+		self.CALtype=sorted(ll)
 		self.U1=float(parser.get('data', 'U1'))
 		self.U2=float(parser.get('data', 'U2'))
 		self.U3=float(parser.get('data', 'U3'))
@@ -156,13 +153,12 @@ class PHMeter:
 		print(self.CALdate, "calibration change on ph meter")
 		self.update_infos()
 	
-	def saveCalData(self,date,temperature,caltype,u_cal,coeffs):
+	def saveCalData(self,date,caltype,u_cal,coeffs):
 		parser = ConfigParser()
-		parser.read(new_cal_file)
+		parser.read("config/latest_cal.ini")
 		parser.set('data', 'phmeter', str(self.model))
 		parser.set('data', 'electrode', str(self.electrode))
 		parser.set('data', 'date', str(date)) 
-		parser.set('data', 'temperature', str(temperature))
 		parser.set('data', 'calib_type', str(caltype))
 		try:
 			parser.set('data', 'U1', str(float(u_cal[0])))
@@ -173,13 +169,15 @@ class PHMeter:
 		parser.set('data', 'a', str(float(coeffs[0])))
 		parser.set('data', 'b', str(float(coeffs[1])))
 		
-		file = open(new_cal_file,'w')	#qu'est-ce qu'apporte r+ ou lieu de w
+		file = open("config/latest_cal.ini",'w')	#qu'est-ce qu'apporte r+ ou lieu de w
 		parser.write(file) 
 		file.close()
 
 		#sauvegarde de toutes les calibration
 		oldCal = open(cal_log, "a")
-		oldCal.write("pH meter : "+str(self.CALmodel)+"\npH probe : "+str(self.CALelectrode)+"\n"+str(date)+"\n"+str(temperature)+"°C \nType de calibration: "+str(caltype)+"\nVoltages calib:\n"+str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
+		oldCal.write("pH meter : "+str(self.CALmodel)+"\npH probe : "+str(self.CALelectrode)+"\n"
+			   +str(date)+"\n"+"\nType de calibration: "+str(caltype)+"\nVoltages calib:\n"
+			   +str(u_cal)+"\nCoefficients U=a*pH+b\n(a,b)="+str(coeffs)+"\n\n")
 		oldCal.close()
 
 	def computeCalCoefs(self,u_cal,pH_buffers):
