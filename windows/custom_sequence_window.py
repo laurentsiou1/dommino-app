@@ -18,6 +18,8 @@ import os
 path_internal=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 play_icon_path=os.path.join(path_internal, "graphic/images/play_icon.png")
 pause_icon_path=os.path.join(path_internal, "graphic/images/pause_icon.png")
+logo_idil_path=os.path.join(path_internal, "graphic/images/logo idil.png")
+logo_cnrs_path=os.path.join(path_internal, "graphic/images/logo cnrs.png")
 
 class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     
@@ -62,7 +64,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         #saving
         self.actionsave.triggered.connect(lambda : self.ihm.seq_data.createSequenceFiles(seq)) 
         #la fonction ne s'applique pas sur le self, d'où le lambda ?
-        self.pump_speed_volt.valueChanged.connect(self.update_pump_speed)
+        self.pump_speed.valueChanged.connect(self.update_pump_speed)
         
         ##Initialisation en fonction de la config 
         self.N_mes=seq.N_mes
@@ -118,7 +120,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
 
         #peristaltic pump
         if seq.pump.state=='open':
-            self.pump_speed_volt.setProperty("value", seq.pump.mean_voltage)           
+            self.pump_speed.setProperty("value", seq.pump.volt2scale(seq.pump.mean_voltage))           
 
         #pH meter
         self.stab_time.setProperty("value", seq.phmeter.stab_time)
@@ -127,6 +129,18 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.stab_step.valueChanged.connect(self.update_stab_step)
 
         #self.direct_pH.display(self.ihm.phmeter.currentPH) #pH instantané
+
+        #Images
+        if os.path.exists(logo_idil_path):  #lors d'un lancement avec le dossier d'executable
+            self.pixmap_idil=QtGui.QPixmap(logo_idil_path)
+            self.pixmap_cnrs=QtGui.QPixmap(logo_cnrs_path)
+        else:
+            self.pixmap_idil=QtGui.QPixmap("graphic/images/logo idil.png")
+            self.pixmap_cnrs=QtGui.QPixmap("graphic/images/logo cnrs.png")
+        self.logo_idil.setPixmap(self.pixmap_idil)
+        self.logo_cnrs.setPixmap(self.pixmap_cnrs)
+        self.logo_idil.setScaledContents(True)
+        self.logo_cnrs.setScaledContents(True)
 
     #DIRECT
     def refresh_screen(self):
@@ -150,7 +164,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
             self.label_stability.setText(str(self.ihm.phmeter.stab_purcent)+"%")
         #Peristaltic pump
         if self.ihm.peristaltic_pump.state=='open':
-            self.pump_speed_volt.setProperty("value", self.ihm.peristaltic_pump.mean_voltage)
+            self.pump_speed.setProperty("value", self.ihm.peristaltic_pump.volt2scale(self.ihm.peristaltic_pump.mean_voltage))
 
     #Displaying current spectra
     def refresh_direct_spectra(self):
@@ -179,7 +193,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
 
     #MODIF SUR LES INSTRUMENTS
     def update_pump_speed(self):
-        self.ihm.peristaltic_pump.setSpeed_voltage(self.pump_speed_volt.value())
+        self.ihm.peristaltic_pump.set_speed_scale(self.pump_speed.value())
     def update_stab_time(self):
         self.ihm.phmeter.stab_time=self.stab_time.value()
     def update_stab_step(self):
@@ -233,9 +247,8 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         #test : ça ne permet pas de supprimer l'objet 
         event.accept()
         self.seq.stop()
-        self.ihm.updateDefaultParam()
+        #self.ihm.updateDefaultParam() #cause du probleme sur app_default_settings
         self.close()
-        #self.__del__()
     
     """def __del__(self):
         pass"""

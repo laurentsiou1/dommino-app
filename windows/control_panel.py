@@ -30,11 +30,15 @@ from lib.oceandirect.od_logger import od_logger
 path_internal=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 green_led_path=os.path.join(path_internal, "graphic/images/green-led-on.png")
 red_led_path=os.path.join(path_internal, "graphic/images/red-led-on.png")
+logo_idil_path=os.path.join(path_internal, "graphic/images/logo idil.png")
+logo_cnrs_path=os.path.join(path_internal, "graphic/images/logo cnrs.png")
 
 class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):
-        
-        #appareils
+        super(ControlPanel,self).__init__(parent)
+        self.setupUi(self)
+
+        #Sous systèmes
         self.ihm=ihm
         self.phmeter=ihm.phmeter
         self.spectro_unit=ihm.spectro_unit
@@ -43,15 +47,19 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.circuit=ihm.circuit
         
         #graphique
-        super(ControlPanel,self).__init__(parent)
-        self.setupUi(self)
-        
+        #Images
         if os.path.exists(green_led_path):  #lors d'un lancement avec le dossier d'executable
             self.pixmap_green=QtGui.QPixmap(green_led_path)
             self.pixmap_red=QtGui.QPixmap(red_led_path)
+            self.pixmap_idil=QtGui.QPixmap(logo_idil_path)
+            self.pixmap_cnrs=QtGui.QPixmap(logo_cnrs_path)
         else:
             self.pixmap_green=QtGui.QPixmap("graphic/images/green-led-on.png")
             self.pixmap_red=QtGui.QPixmap("graphic/images/red-led-on.png")
+            self.pixmap_idil=QtGui.QPixmap("graphic/images/logo idil.png")
+            self.pixmap_cnrs=QtGui.QPixmap("graphic/images/logo cnrs.png")
+        self.logo_idil.setPixmap(self.pixmap_idil)
+        self.logo_cnrs.setPixmap(self.pixmap_cnrs)
         
         #Paramètres affichés
         self.label_instrument_SN.setText("instrument S/N : "+self.ihm.instrument_id)
@@ -110,6 +118,9 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.led_disp.setScaledContents(True)
         self.led_pump.setScaledContents(True)
         self.led_ev_circuit.setScaledContents(True)
+        self.logo_idil.setScaledContents(True)
+        self.logo_cnrs.setScaledContents(True)
+
 
         #self.led_spectro.resize(pixmap.width(),pixmap.height())
         #self.setCentralWidget(self.led_spectro)
@@ -140,8 +151,10 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.pump_speed.valueChanged.connect(self.update_pump_speed)
         self.ev0_state.clicked.connect(self.ev0_changeState)
         self.ev1_state.clicked.connect(self.ev1_changeState)
-        #self.fill_water.clicked.connect(self.fillWater)
-        #self.clean_empty.clicked.connect(self.cleanAndEmpty)
+        self.run_water.clicked.connect(self.circuit.runWater)
+        self.empty.clicked.connect(self.circuit.empty_circuit_button)
+        self.fill_water.clicked.connect(self.circuit.fill_all)
+        self.clean_empty.clicked.connect(self.circuit.clean_and_empty)
         
         self.connect_all_devices.clicked.connect(self.connectAllDevices)
         self.ihm.timer_display.timeout.connect(self.refresh_screen)
@@ -180,9 +193,8 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.stab_step.setProperty("value", self.ihm.phmeter.stab_step)
         if self.ihm.spectro_unit.state=='open':
             self.refreshShutterState()
-        #if self.ihm.peristaltic_pump.state=='open':
-            #self.pump_speed.setProperty("value", self.ihm.peristaltic_pump.mean_voltage)
-            #self.pump_speed.setValue()
+        if self.ihm.circuit.state=='open':
+            self.refresh_circuit_display()
 
     ##Méthodes multi instruments
     def connectAllDevices(self):
@@ -356,7 +368,8 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.added_base.setText("0")
         self.added_total.setText("0" )
 
-    ### Peristaltic pump and circuit
+                                    
+                                    ### Peristaltic pump and circuit
     def connexionChange_circuit(self):
         if self.circuit.state=='closed':
             self.connectCircuit()
@@ -401,6 +414,13 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def ev1_changeState(self):
         """Changes state dispaly on exit valve"""
         self.circuit.ev1.changeState()
+        self.ev1_state.setText(self.circuit.ev1.state2Text(self.circuit.ev1.getState()))
+    
+    def refresh_circuit_display(self):
+        """Refreshes the display of current states on circuit. Speed, valve state, pump ON/OFF"""
+        self.start_stop_pump_button.setText(self.peristaltic_pump.text())
+        self.pump_speed.setSliderPosition(self.peristaltic_pump.volts2scale(self.peristaltic_pump.mean_voltage))
+        self.ev0_state.setText(self.circuit.ev0.state2Text(self.circuit.ev0.getState()))
         self.ev1_state.setText(self.circuit.ev1.state2Text(self.circuit.ev1.getState()))
 
     def closeEvent(self, event):

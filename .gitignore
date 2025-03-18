@@ -15,8 +15,9 @@
 /phidgetlog.log/
 
 #compiled python files
-/__pycache__/
-/windows/__pycache__/
-/subsystems/__pycache__/
-/graphic/__pycache__/
-/subsystems/windows/__pycache__/
+__pycache__/
+windows/__pycache__/
+subsystems/__pycache__/
+graphic/__pycache__/
+graphic/windows/__pycache__/
+subsystems/windows/__pycache__/

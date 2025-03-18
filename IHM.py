@@ -318,6 +318,9 @@ class IHM:
     def openConfigWindow(self):
         self.seqConfig = SequenceConfigWindow(self)
         self.seqConfig.show()
+        for button in self.seqConfig.dialogbox.buttons():   #Disconnexion of Keyboard Enter event
+            button.setAutoDefault(False)  # Prevent auto-triggering on Enter
+            button.setDefault(False)  # Remove default button behavior
 
     def openSpectroWindow(self):
         self.spectroWindow = SpectrometryWindow(self)
@@ -334,6 +337,9 @@ class IHM:
     def openSettingsWindow(self):
         self.settings_win = SettingsWindow(self)
         self.settings_win.show()
+        for button in self.seqConfig.dialogbox.buttons():   #Disconnexion of Keyboard Enter event
+            button.setAutoDefault(False)  
+            button.setDefault(False)  
 
     def openSequenceWindow(self,type):
         if type=="classic":

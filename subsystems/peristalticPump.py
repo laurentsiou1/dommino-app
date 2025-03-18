@@ -7,6 +7,7 @@ import time
 from configparser import ConfigParser
 import os
 from pathlib import Path
+from PyQt5.QtCore import QTimer
 
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
@@ -31,6 +32,8 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
     #board_number = int(parser.get('main board', 'id'))
     VINT_number = int(parser.get('VINT', 'id'))
     port_motor = int(parser.get('VINT', 'dc_motor'))
+
+    timer = QTimer()
 
     def __init__(self):
         DCMotor.__init__(self)
@@ -81,6 +84,12 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         else:
             self.current_speed=0
 
+    def set_direction(self,dir):
+        if dir==1:
+            self.direction=1
+        elif dir==-1:
+            self.direction=-1
+
     def setSpeed_voltage(self,v):
         self.mean_voltage=v
         self.duty_cycle=v/12
@@ -94,6 +103,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.update_infos()
 
     def set_speed_scale(self,v):
+        """Sets pump speed given the target speed in 1 to 5 scale"""
         self.setSpeed_voltage(self.scale2volts(v))
 
     def scale2volts(self, speed_scale):   #speed scale = 1, 2, 3, 4, 5
@@ -113,21 +123,27 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             else:
                 self.setTargetVelocity(0) 
 
-    @require_open
     def start(self):
-        self.setTargetVelocity(self.target_speed)    
-            #if self.state=='open':
+        if self.state=='open':
+            self.setTargetVelocity(self.target_speed)
 
     #@require_attribute('state', 'open')
     def stop(self):
         if self.state=='open':
             self.setTargetVelocity(0)
+        self.wait=False
+    
+    def run_during_delay_sec(self,delay):
+        self.start()
+        self.wait=True  
+        self.timer.singleShot(1000*delay,self.stop)
 
     #@require_attribute('state', 'open')
     def change_direction(self):
         self.stop()
         time.sleep(1)
         self.direction*=-1
+        self.target_speed=self.duty_cycle*self.direction
         #self.start()
 
     def text(self):

@@ -9,9 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 
 class Ui_sequenceConfig(object):
+    def __init__(self):
+        super().__init__()
+
     def setupUi(self, sequenceConfig):
         sequenceConfig.setObjectName("sequenceConfig")
         sequenceConfig.resize(771, 832)
@@ -120,6 +124,7 @@ class Ui_sequenceConfig(object):
         self.browse.setCheckable(False)
         self.browse.setAutoRaise(False)
         self.browse.setObjectName("browse")
+        #self.browse.setAutoDefault(False)
         self.saving_folder = QtWidgets.QLineEdit(sequenceConfig)
         self.saving_folder.setGeometry(QtCore.QRect(20, 720, 561, 41))
         self.saving_folder.setObjectName("saving_folder")
@@ -176,6 +181,11 @@ class Ui_sequenceConfig(object):
         self.atmosphere_box.setItemText(0, _translate("sequenceConfig", "True"))
         self.atmosphere_box.setItemText(1, _translate("sequenceConfig", "False"))
 
+    """def keyPressEvent(self, event):
+        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+            print("Enter key ignored!")
+            return  # Ignore the key press event
+        super().keyPressEvent(event)  # Process other keys normally"""
 
 if __name__ == "__main__":
     import sys
