@@ -6,6 +6,7 @@ from subsystems.peristalticPump import PeristalticPump
 from subsystems.electrovalve import Electrovalve
 from PyQt5.QtCore import QTimer
 import threading
+import time
 
 from configparser import ConfigParser
 import os
@@ -55,6 +56,13 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         else:
             self.state='closed'
     
+    def state2Text(self, state):
+        if state=='open':
+            text="Disconnect"
+        else:
+            text="Connect"
+        return text
+    
     def update_infos(self):
         self.pump.update_infos()
         self.infos=self.pump.infos
@@ -89,33 +97,50 @@ class Circuit(): #la classe hérite des méthodes de la pompe
     #button water --> flush_water() #flushes indefinitely
     #button fill all --> fill_all()
 
-    def empty(self):
+    def empty_measure_circuit(self):
         """Empties circuit by running pump from OUT to IN back in the sample beaker"""
         self.pump.stop()
         self.ev0.setState(False)
         self.ev1.setState(False)    #valves are set IN OUT
+        self.empty()
+    
+    def empty_water(self):
+        """Used during sequence when taking a reference
+        Releases clean water back in the water beaker"""
+        self.pump.stop()
+        self.ev0.setState(True)
+        self.ev1.setState(True)    #valves are set IN OUT
+        self.empty()
+    
+    def empty(self):
         self.pump.set_direction(-1)
         self.pump.set_speed_scale(5)
         self.pump.start()
     
-    def runWater(self,delay=None):
+    def run_measure_circuit(self):
+        """Function executed during sequence for circulating sample into the flowcell"""
+        self.pump.set_direction(1)
+        self.ev0.setState(False)
+        self.ev1.setState(False)    #valves are set IN OUT
+        self.pump.start()
+    
+    def run_water(self,speed=5,delay=None):
         """Flush water from WATER to BIN
         delay : integer in seconds
         Executed function when pressing button Water
         Circuit needs to be empty when using this function, not to contaminate water"""
         # #Not to contaminate water when switching valve 
-        #self.empty()
+        self.pump.stop()
         self.ev0.setState(True)
         self.ev1.setState(True)    #valves are set IN OUT
         self.pump.set_direction(1)
-        self.pump.set_speed_scale(5)
+        self.pump.set_speed_scale(speed)
         self.pump.start()
-
         
         ###fill_all
     def fill_all(self):
         """Fills BIN and OUT with water. Then fills IN, and refills BIN"""
-        self.runWater()
+        self.run_water()
         timer = threading.Timer(10, self.fill_all_2)    #circuit in considered clean we just fill
         timer.start()
     
@@ -153,14 +178,14 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         ###Clean and empty
     def clean_and_empty(self):
         """Empty measure circuit"""
-        self.empty()
+        self.empty_measure_circuit()
         timer = threading.Timer(12, self.clean_and_empty_2)
         timer.start() 
 
     def clean_and_empty_2(self):
         """Clean circuit from water to bin"""
         self.pump.stop()
-        self.runWater()
+        self.run_water()
         timer = threading.Timer(24, self.clean_and_empty_3)    #2times the circuit delay for cleaning
         timer.start()
 
@@ -174,7 +199,6 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         """Empties the measure circuit"""
         print("clean empty 4")
         self.pump.stop()
-        #time.sleep(1)
         self.pump.change_direction()
         self.ev0.setState(False)
         self.ev1.setState(False)     #water gets out of BIN
@@ -185,10 +209,9 @@ class Circuit(): #la classe hérite des méthodes de la pompe
     def clean_and_empty_end(self):
         self.pump.stop()
         self.pump.set_direction(1)
-        #self.updateState
 
     def empty_circuit_button(self):
         """Executed function when pressing button Empty"""
-        self.empty()
+        self.empty_measure_circuit()
         timer = threading.Timer(12, self.pump.stop)
         timer.start()    

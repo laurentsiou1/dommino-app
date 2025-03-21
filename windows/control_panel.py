@@ -151,7 +151,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.pump_speed.valueChanged.connect(self.update_pump_speed)
         self.ev0_state.clicked.connect(self.ev0_changeState)
         self.ev1_state.clicked.connect(self.ev1_changeState)
-        self.run_water.clicked.connect(self.circuit.runWater)
+        self.run_water.clicked.connect(self.circuit.run_water)
         self.empty.clicked.connect(self.circuit.empty_circuit_button)
         self.fill_water.clicked.connect(self.circuit.fill_all)
         self.clean_empty.clicked.connect(self.circuit.clean_and_empty)
@@ -188,13 +188,14 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         self.led_ev_circuit.setPixmap(self.select_pixmap(self.ihm.circuit.ev0.channel_state))
 
     def refresh_screen(self):
+        #print("refreshing screen")
         if self.ihm.phmeter.state=='open':
             self.stab_time.setProperty("value", self.ihm.phmeter.stab_time)
             self.stab_step.setProperty("value", self.ihm.phmeter.stab_step)
         if self.ihm.spectro_unit.state=='open':
             self.refreshShutterState()
-        if self.ihm.circuit.state=='open':
-            self.refresh_circuit_display()
+        #circuit
+        self.refresh_circuit_display()
 
     ##Méthodes multi instruments
     def connectAllDevices(self):
@@ -418,10 +419,12 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     
     def refresh_circuit_display(self):
         """Refreshes the display of current states on circuit. Speed, valve state, pump ON/OFF"""
-        self.start_stop_pump_button.setText(self.peristaltic_pump.text())
-        self.pump_speed.setSliderPosition(self.peristaltic_pump.volts2scale(self.peristaltic_pump.mean_voltage))
         self.ev0_state.setText(self.circuit.ev0.state2Text(self.circuit.ev0.getState()))
         self.ev1_state.setText(self.circuit.ev1.state2Text(self.circuit.ev1.getState()))
+        self.start_stop_pump_button.setText(self.peristaltic_pump.text())
+        self.connect_disconnect_circuit.setText(self.circuit.state2Text(self.circuit.state))
+        if self.circuit.state=='open':
+            self.pump_speed.setSliderPosition(self.peristaltic_pump.volts2scale(self.peristaltic_pump.mean_voltage))
 
     def closeEvent(self, event):
         print("Closing main window")

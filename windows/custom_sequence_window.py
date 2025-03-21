@@ -101,7 +101,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
             self.tab_jk.setAlignment(QtCore.Qt.AlignCenter)
             self.grid_instructions.addWidget(self.tab_jk, j+1, 0, 1, 1)
             self.tab_jk.setText(str(j+1))
-            for k in range(6):
+            for k in range(7):
                 self.tab_jk = QtWidgets.QLabel(self.gridLayoutWidget_2)
                 self.tab_jk.setAlignment(QtCore.Qt.AlignCenter)
                 self.grid_instructions.addWidget(self.tab_jk, j+1, k+1, 1, 1)
@@ -120,7 +120,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
 
         #peristaltic pump
         if seq.pump.state=='open':
-            self.pump_speed.setProperty("value", seq.pump.volt2scale(seq.pump.mean_voltage))           
+            self.pump_speed.setProperty("value", seq.pump.volts2scale(seq.pump.mean_voltage))           
 
         #pH meter
         self.stab_time.setProperty("value", seq.phmeter.stab_time)
@@ -164,7 +164,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
             self.label_stability.setText(str(self.ihm.phmeter.stab_purcent)+"%")
         #Peristaltic pump
         if self.ihm.peristaltic_pump.state=='open':
-            self.pump_speed.setProperty("value", self.ihm.peristaltic_pump.volt2scale(self.ihm.peristaltic_pump.mean_voltage))
+            self.pump_speed.setProperty("value", self.ihm.peristaltic_pump.volts2scale(self.ihm.peristaltic_pump.mean_voltage))
 
     #Displaying current spectra
     def refresh_direct_spectra(self):
@@ -230,11 +230,12 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.table_vol_pH[nb-1][1].setText(pH)
 
     def append_time_in_table(self,nb,dt):
+        eq_time=str(dt.seconds//60)+":"+str(dt.seconds%60)
         self.table_vol_pH[nb-1][2].setObjectName("dt"+str(nb))
         self.table_vol_pH[nb-1][2].setAlignment(QtCore.Qt.AlignCenter)
         self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][2], nb, 2, 1, 1)
         self.table_vol_pH[nb-1][2].clear()
-        self.table_vol_pH[nb-1][2].setText(str(dt))
+        self.table_vol_pH[nb-1][2].setText(eq_time)
 
     def pause(self):
         self.pause_resume_button.setIcon(QtGui.QIcon(play_icon_path))

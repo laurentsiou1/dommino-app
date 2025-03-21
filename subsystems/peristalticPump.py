@@ -99,7 +99,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             #indentation rajoutée
             if self.current_speed!=0:   #pour pouvoir changer la vitesse sans reappuyer sur start
                 self.setTargetVelocity(self.target_speed)
-                print("speed set to ", self.target_speed)
+                #print("speed set to ", self.target_speed, "Volts")
         self.update_infos()
 
     def set_speed_scale(self,v):
@@ -131,6 +131,7 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
     def stop(self):
         if self.state=='open':
             self.setTargetVelocity(0)
+            time.sleep(3)
         self.wait=False
     
     def run_during_delay_sec(self,delay):
@@ -140,16 +141,22 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
 
     #@require_attribute('state', 'open')
     def change_direction(self):
+        """Changes direction of pump. 
+        If pump is running, it stops and start again in the opposite direction"""
         self.stop()
-        time.sleep(1)
         self.direction*=-1
         self.target_speed=self.duty_cycle*self.direction
-        #self.start()
+        current_speed=self.get_current_speed()
+        if current_speed!=0:
+            self.start()
 
     def text(self):
-        self.get_current_speed()
-        if self.current_speed==0:
-            text='Start'
+        if self.state=='open':
+            self.get_current_speed()
+            if self.current_speed==0:
+                text='Start'
+            else:
+                text='Stop'
         else:
             text='Stop'
         return text   

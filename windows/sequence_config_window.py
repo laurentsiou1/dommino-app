@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QDialog
 from graphic.windows.sequence_cfg_win import Ui_sequenceConfig
 
 #from IHM import IHM
-from automatic_sequences import AutomaticSequence, ClassicSequence, CustomSequence
+from automatic_sequences import AutomaticSequence, CustomSequence
 
 from file_manager import Data
 

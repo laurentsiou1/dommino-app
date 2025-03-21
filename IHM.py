@@ -209,8 +209,10 @@ class IHM:
             self.dispenser.close()
         if self.circuit.state=='open':
             self.circuit.close()
+            #self.controlPanel.
         elif self.peristaltic_pump.state=='open':
             self.peristaltic_pump.close()
+
               
     def updateDefaultParam(self):
         """Updates current parameters as default in file 'config/app_default_settings'"""

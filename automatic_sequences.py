@@ -5,6 +5,7 @@ Elles gèrent toutes les actions propres aux séquences
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer
 from datetime import datetime, timedelta
+import threading
 
 from windows.classic_sequence_window import ClassicSequenceWindow
 from windows.custom_sequence_window import CustomSequenceWindow
@@ -41,7 +42,7 @@ class AutomaticSequence:
         self.phmeter.currentPH=pH #actualisation de l'attribut de la classe pHmeter
         self.window.direct_pH.display(pH)
 
-class ClassicSequence(AutomaticSequence):
+"""class ClassicSequence(AutomaticSequence):
 
     MAXIMUM_DELTA_PH = 0.8  #for dispense mode 'varibale step'
     TOLERANCE_ON_FINAL_PH = 0.2 #pH.  #if pH>final_pH-gap then sequence is finished and data is saved
@@ -350,7 +351,7 @@ class ClassicSequence(AutomaticSequence):
             vol=int(dispense_data.get_volume_to_dispense_uL(current,target,self.atmosphere,C_NaOH=self.syringe_B.concentration,volume=self.v_init_mL))
             self.window.append_vol_in_table(N,vol)
             self.syringe_B.dispense(vol) #lancement du stepper 
-        return vol
+        return vol"""
 
 class CustomSequence(AutomaticSequence):    
 
@@ -359,6 +360,7 @@ class CustomSequence(AutomaticSequence):
         # Create a QTimer object
         self.pause_timer = QTimer()    #for interface refreshing
         self.measure_timer = QTimer()   #chemical equilibrum and fluid circulation
+        self.timer = QTimer()       #timer for reference recording sequence
         self.is_running=True    #flag indicating the running/pause state of sequence
 
         self.ihm=ihm
@@ -366,11 +368,13 @@ class CustomSequence(AutomaticSequence):
         self.phmeter=ihm.phmeter
         self.dispenser=ihm.dispenser
         self.pump=ihm.peristaltic_pump
-        self.syringe_B=ihm.dispenser.syringe_B
+        self.circuit=ihm.circuit
+        self.syringe_B=ihm.dispenser.syringe_B  
         
         #Données de config      #comme titration sequence mais avec le fichier de config
         [self.experience_name,self.description,self.atmosphere,self.fibers,\
-        self.flowcell,self.v_init_mL,self.dispense_mode,self.sequence_config_file,self.saving_folder]=config
+        self.flowcell,self.v_init_mL,self.dispense_mode,\
+            self.sequence_config_file,self.saving_folder]=config
         self.param=config
         self.V_init=int(1000*self.v_init_mL) #volumes in microliters are integers
         
@@ -380,16 +384,37 @@ class CustomSequence(AutomaticSequence):
         #Getting data from sequence instruction file
         self.syringes_to_use, self.instruction_table = fm.readSequenceInstructions(self.sequence_config_file)
         self.N_mes=len(self.instruction_table)
-        self.remaining_time_seconds = sum([self.instruction_table[k][4] for k in range(self.N_mes)])
+        self.remaining_time_seconds = sum([int(self.instruction_table[k][3])+int(self.instruction_table[k][4]) for k in range(self.N_mes)])
+        self.pump_speeds_volt = [self.instruction_table[k][5] for k in range(self.N_mes)]
+        self.reference_orders = [self.instruction_table[k][6] for k in range(self.N_mes)]
+        print("reference orders",self.reference_orders)
+        self.reference_indexes = []
+        for k in range(self.N_mes):
+            if self.reference_orders[k]==1:
+                self.reference_indexes.append(k+1)      #List of indexes where reference is taken
+        self.N_ref = len(self.reference_indexes)    #Number of reference measures
+        print("reference indexes",self.reference_indexes)
 
         self.update_infos() 
-        print(self.infos)   #données de séquence sur mesure
+        #print(self.infos)   #données de séquence sur mesure
 
-        #Données à compléter pendant la séquence
+        #Data to fill during sequence
         self.pH_mes = ['' for k in range(self.N_mes)]   #list of string, 
+        self.initial_background = False #indicates if a reference has been recorded before launching sequence
+        self.initial_reference = False
+        self.backgrounds = []
+        self.references = []
+        self.reference_times = []
         if self.spectro.state=='open':
             self.lambdas=self.spectro.wavelengths
             self.N_lambda=len(self.lambdas)
+            if self.spectro.dark_and_ref_stored():
+                self.backgrounds = [self.spectro.active_background_spectrum]       # [ [bgd1], bgd2], ... , [bgdN] ]
+                self.references = [self.spectro.active_ref_spectrum]       # [[ref1], [ref2], ... , [refN]]
+                self.initial_background=True
+                self.initial_reference=True
+                self.reference_times = [self.spectro.active_ref_time]
+        self.intensity_spectra = []
         self.absorbance_spectra = []
         self.absorbance_spectra_cd = [] #corrected from dilution
         self.absorbance_spectrum1 = None #première mesure de spectre
@@ -399,7 +424,7 @@ class CustomSequence(AutomaticSequence):
         self.dilution_factor = 1
         self.dilution_factors = []
         self.measure_times=[]     #[dt for k in range(self.N_mes)]
-        self.measure_delays=[]
+        self.equilibration_times=[]
         self.stability_param=[] 
 
     def update_infos(self):
@@ -429,6 +454,7 @@ class CustomSequence(AutomaticSequence):
         #Mais il faut savoir si un instrument nécessaire à l'éxecution n'est pas connecté.
     
     def run_sequence(self):
+        """Executed when user clicks on Ok in Configure sequence window"""
         self.measure_index=0
         self.pause_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
 
@@ -441,85 +467,103 @@ class CustomSequence(AutomaticSequence):
     
     def execute_instruction(self, line):
         print("executing instruction ", self.measure_index, ":", line)
-        syringe_id=line[0]  #'A' or 'B'
-        dispense_type=line[1]   #'DISP_ON_PH' or 'DISP_VOL_UL'
-        value=line[2]   #50uL or pH4.5 ...
+        self.syringe_id=line[0]  #'A' or 'B'
+        self.dispense_type=line[1]   #'DISP_ON_PH' or 'DISP_VOL_UL'
+        self.value=line[2]   #50uL or pH4.5 ...
         self.delay_mixing=line[3]  #delay mixing : pump is stopped
         self.delay_flow=line[4]  #delay measure : pump is running
         self.pump_speed=line[5] #from 1 to 5. 0 means pump is stopped
+        self.take_ref = line[6] #0 : no ref ; 1 : take a ref
         self.delay_mes=self.delay_mixing+self.delay_flow  #delay between dispense and measure
         
-        #print("durée de pompage", self.delay_flow,"seconds")
-        #print("delay stop =",self.delay_mixing,"seconds")
-        
+        #1st step :
         self.pump.stop()    #Pump is stopped at the beginning
         self.spectro.close_shutter()    #shutter is closed as well
+
+        #2nd step : Take reference if needed
+        if self.take_ref==1 and self.spectro.state=='open' and self.circuit.state=='open':
+            self.take_reference_spectra()
+        else:
+            self.execute_instruction_2()
+    
+    def execute_instruction_2(self):
         
-        #Ast step : dispense
-        num=identifier(syringe_id)
+        #3rd step : dispense
+        num=identifier(self.syringe_id)
         self.syringe=self.dispenser.syringes[num]
-        self.dispense(num,dispense_type,value)
+        self.dispense(num,self.dispense_type,self.value)
         
+        #4th step : measure
         self.pause_timer.singleShot(1000*self.delay_mixing,self.waitForMeasure) #mise en attente avant mesure
 
     def waitForMeasure(self):
-        self.pump.set_speed_scale(self.pump_speed)
-        self.pump.start()
+        if self.pump_speed in [1,2,3,4,5]:
+            self.pump.set_speed_scale(self.pump_speed)
+        self.circuit.run_measure_circuit()
         self.measure_timer.singleShot(1000*(self.delay_flow),self.measure)
+
+    def take_reference_spectra(self):
+        #empty measure circuit
+        self.circuit.empty_measure_circuit()
+        self.timer.singleShot(1000*15,self.take_reference_spectra_2)
     
-    def measure(self):
-        print("taking measure\n")
-        
-        ## Opening shutter before recording spectrum
-        if self.spectro.dark_and_ref_stored():
-            self.spectro.open_shutter()
-            time.sleep(1)
-        
-        N=self.measure_index
-        tm=datetime.now()
-        tm=tm.replace(microsecond=0)
-        self.measure_times.append(tm)
-        if N==1: #1st measure
-            dt=tm-tm
-        else: #N>1  #2nd measure and after
-            dt=tm-self.measure_times[N-2]
-        self.measure_delays.append(dt)
-        self.window.append_time_in_table(N,dt)  #time
-        self.time_mes_last=tm
+    def take_reference_spectra_2(self):
+        """Cleans WATER - BIN circuit"""
+        self.circuit.run_water()  #speed 5 for cleaning
+        delay = 20  #delay to clean
+        self.timer.singleShot(1000*delay,self.take_reference_spectra_3)
+    
+    def take_reference_spectra_3(self):
+        """Empties water - bin circuit"""
+        self.pump.change_direction()    #respills in WATER beaker
+        self.timer.singleShot(1000*25,self.take_reference_spectra_4)  #empty circuit properly
 
-        if self.phmeter.state=='open':
-            pH=self.phmeter.currentPH
-            self.pH_mes[N-1]=str(pH)  #ajout dans les tableaux
-            self.stability_param.append((self.phmeter.stab_step, self.phmeter.stab_time))
-            self.window.append_pH_in_table(N,str(pH))    #affichage
-        else:
-            self.pH_mes[N-1]='/'
+    def take_reference_spectra_4(self):
+        """Flush water from water to bin with measure speed. 
+        Pump speed is set according to sequence file value. 
+        Speed 1 or 2 is better to ensure no bubbles get stuck. 
+        Flow duration is 40 seconds to ensure flowcell is filled even at lowest speed"""
+        self.circuit.run_water(speed=self.pump_speed)   #speed must be 1 or 2 to ensure no bubble.
+        delay = 40
+        self.timer.singleShot(1000*delay,self.take_reference_spectra_5)
 
-        if self.spectro.dark_and_ref_stored():
-            spec=self.spectro.get_averaged_spectrum()
-            spec_abs, proc_delay =proc.intensity2absorbance(spec,self.spectro.active_ref_spectrum,self.spectro.active_background_spectrum)
-            if self.absorbance_spectrum1==None:
-                self.absorbance_spectrum1=spec_abs  #Firset spectrum of sequence
-            self.absorbance_spectra.append(spec_abs)
-            self.absorbance_spectra_cd.append(proc.correct_spectrum_from_dilution(spec_abs,self.dilution_factor))
-            delta=[spec_abs[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
-            self.window.append_spectra(N,spec_abs,delta,spec)    #adding spectrum
-            self.spectro.close_shutter()    #Closing shutter to protect fibers from overheating
+    def take_reference_spectra_5(self):
+        """Records background"""
+        self.spectro.acquire_background_spectrum()
+        delay=2*int(self.spectro.Irec_time)+5 #2times the measure time
+        self.timer.singleShot(1000*delay,self.take_reference_spectra_6)
 
-        #Stop the pump after taking measure
+    def take_reference_spectra_6(self):
+        """records reference"""
+        self.spectro.acquire_ref_spectrum()
+        ref_time = datetime.now().replace(microsecond=0)
+        #Append time and spectra in lists
+        self.reference_times.append(ref_time)
+        self.backgrounds.append(self.spectro.active_background_spectrum)
+        self.references.append(self.spectro.active_ref_spectrum)
+        delay=2*int(self.spectro.Irec_time)+5 #2times the measure time
+        self.timer.singleShot(1000*delay,self.take_reference_spectra_7)
+    
+    def take_reference_spectra_7(self):
+        """Respill clean water in water beaker"""
+        #Stop the pump
         self.pump.stop()
+        #Release water towards water beaker
+        self.circuit.empty_water()
+        #Connexion with next action 
+        self.timer.singleShot(1000*12,self.take_reference_spectra_8)
+    
+    def take_reference_spectra_8(self):
+        #Stop the pump : end of automatic reference sequence
+        self.pump.stop()
+        self.execute_instruction_2()    #resume the instructions 
 
-        ##Next measure
-        if self.measure_index==self.N_mes: #Last measure
-            self.ihm.seq_data.save_current_sequence_state()
-        else:
-            self.ihm.seq_data.save_current_sequence_state()
-            self.measure_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
 
     def dispense(self,num:int,dispense_type:str,value:float):
         """num : index of syringe
         dispense_type : 'DISP_ON_PH' or 'DISP_VOL_UL
         value : Either a volume (uL) or a pH value"""
+        #print(datetime.now())
         if self.syringe.state=='open':
             if dispense_type=='DISP_ON_PH':
                 target=value    #pH value
@@ -548,6 +592,59 @@ class CustomSequence(AutomaticSequence):
         self.dilution_factors.append(self.dilution_factor)
         #print(self.dilution_factor, self.cumulate_volume, self.V_init)
         #print("len dilution factors",len(self.dilution_factors))
+        self.last_dispense_time = datetime.now()
+        print(self.last_dispense_time)
+
+    def measure(self):
+        print("taking measure\n")
+        N=self.measure_index
+        
+        ## Opening shutter before recording spectrum
+        if self.spectro.dark_and_ref_stored():
+            self.spectro.open_shutter()
+            time.sleep(1)
+        
+        #recording time
+        meas_time=datetime.now()
+        #tm=tm.replace(microsecond=0)
+        self.measure_times.append(meas_time)
+        eq_time=meas_time-self.last_dispense_time    
+        self.equilibration_times.append(eq_time)
+        self.window.append_time_in_table(N,eq_time)  #time
+
+        #Measuring pH
+        if self.phmeter.state=='open':
+            pH=self.phmeter.currentPH
+            self.pH_mes[N-1]=str(pH)  #ajout dans les tableaux
+            self.stability_param.append((self.phmeter.stab_step, self.phmeter.stab_time))
+            self.window.append_pH_in_table(N,str(pH))    #affichage
+        else:
+            self.pH_mes[N-1]='/'
+
+        #Measuring absorbance
+        if self.spectro.dark_and_ref_stored():
+            spec=self.spectro.get_averaged_spectrum()
+            spec_abs, proc_delay =proc.intensity2absorbance(spec,self.spectro.active_ref_spectrum,self.spectro.active_background_spectrum)
+            if self.absorbance_spectrum1==None:
+                self.absorbance_spectrum1=spec_abs  #First spectrum of sequence
+            self.intensity_spectra.append(spec)
+            self.absorbance_spectra.append(spec_abs)
+            self.absorbance_spectra_cd.append(proc.correct_spectrum_from_dilution(spec_abs,self.dilution_factor))
+            delta=[spec_abs[k]-self.absorbance_spectrum1[k] for k in range(self.N_lambda)]
+            self.window.append_spectra(N,spec_abs,delta,spec)    #adding spectrum
+            self.spectro.close_shutter()    #Closing shutter to protect fibers from overheating
+
+        #Stop the pump after taking measure
+        if self.pump.state=='open':
+            self.pump.stop()
+
+        ##Next measure
+        if self.measure_index==self.N_mes: #Last measure
+            self.ihm.seq_data.save_current_sequence_state()
+            self.circuit.clean_and_empty()
+        else:
+            self.ihm.seq_data.save_current_sequence_state()
+            self.measure_timer.singleShot(self.DISPLAY_DELAY_MS,self.goToNextInstruction)
     
     def pause_resume(self):
         if self.is_running:
@@ -570,6 +667,8 @@ class CustomSequence(AutomaticSequence):
         self.is_running=False
         self.measure_timer.stop()
         self.pause_timer.stop()
+        self.timer.stop()
+        self.timer.stop()
         self.spectro.close_shutter()
         self.pump.stop()
         self.dispenser.stop()
@@ -578,25 +677,3 @@ class CustomSequence(AutomaticSequence):
 """class Data(AutomaticSequence):
 
     #à définir en reprenant le fichier file_manager"""
-
-if __name__=="__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    itf=IHM()
-    win=WindowHandler()
-    #ui.setupUi(MainWindow)
-    #MainWindow.show()        
-    #sys.exit(app.exec_())
-
-    config=['nom','description','matière organique',1,'fibres','flowcell',50,'dispense mode', 10, 4, 9, "C:/Users/francois.ollitrault/Desktop"]
-    sq=AutomaticSequence(itf,win,config)        
-    #pour visualisation du fichier de données
-    sq.spectro.active_background_spectrum=[0 for k in range(sq.N_lambda)]
-    sq.spectro.active_ref_spectrum=[1 for k in range(sq.N_lambda)]
-    sq.cumulate_volumes=[k*100 for k in range(sq.N_mes)]
-    sq.dilution_factors=[(50000+v)/50000 for v in sq.cumulate_volumes]
-    #sq.absorbance_spectra_cd=sq.absorbance_spectra
-    sq.absorbance_spectra_cd=proc.correct_spectra_from_dilution(sq.absorbance_spectra,sq.dilution_factors)
-    #print(sq.absorbance_spectra_cd,sq.absorbance_spectra)
-    sq.data.save_current_sequence_state()

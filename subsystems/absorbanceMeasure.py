@@ -4,15 +4,12 @@ from lib.oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spe
 from lib.oceandirect.od_logger import od_logger
 logger = od_logger()
 
-import numpy as np
-import matplotlib.pyplot as plt
-import time
-
 from Phidget22.Phidget import *
 from Phidget22.Devices.DigitalOutput import *
 
 from configparser import ConfigParser
-import os
+import os, time
+from datetime import datetime
 from pathlib import Path
 
 from PyQt5 import QtCore
@@ -61,6 +58,7 @@ class AbsorbanceMeasure(Spectrometer):
         self.wavelengths=None
         self.model=''
         self.serial_number=''
+        self.Irec_time=0
         
         #timer pour acquisition des spectres
         self.timer = QtCore.QTimer()
@@ -236,15 +234,20 @@ class AbsorbanceMeasure(Spectrometer):
         self.Irec_time=t1-t0
         self.avg_delay=t2-t1
         self.update_refresh_rate()
+        #print(type(avg))
         return avg
 
     def acquire_background_spectrum(self):
+        self.active_background_time = datetime.now().replace(microsecond=0)
         self.shutter.setState(False)
         time.sleep(2)
         bgd=self.get_averaged_spectrum()
         self.active_background_spectrum=bgd
+        time.sleep(2)
+        print("background spectrum recorded")
 
     def acquire_ref_spectrum(self):
+        self.active_ref_time = datetime.now().replace(microsecond=0)
         self.shutter.setState(True)
         time.sleep(2)
         ref=self.get_averaged_spectrum()
@@ -253,6 +256,8 @@ class AbsorbanceMeasure(Spectrometer):
         bgd=self.active_background_spectrum
         if bgd!=None:
             self.reference_absorbance, self.Aproc_delay = sp.intensity2absorbance(ref2,ref,bgd)
+        time.sleep(2)
+        print("reference spectrum recorded")
 
     def update_intensity_spectrum(self):    #ontimer
         self.current_intensity_spectrum=self.get_averaged_spectrum()
@@ -261,11 +266,12 @@ class AbsorbanceMeasure(Spectrometer):
         self.current_absorbance_spectrum, self.Aproc_delay = sp.intensity2absorbance(self.current_intensity_spectrum,self.active_ref_spectrum,self.active_background_spectrum)
 
     def dark_and_ref_stored(self):
-        """Returns True if a background and a reference spectrum have been stored"""
-        open=(self.state=='open')
+        """Returns True if a background and a reference spectrum have been stored
+        False otherwise"""
+        opened=(self.state=='open')
         bgd=(self.active_background_spectrum!=None)
         ref=(self.active_ref_spectrum!=None)
-        return open*bgd*ref
+        return opened*bgd*ref
 
     def updateSpectra(self):
         self.update_intensity_spectrum()
