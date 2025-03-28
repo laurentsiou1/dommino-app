@@ -1,7 +1,7 @@
 # gitignore file 
 
 # ignore folders in link with the pyinstaller process
-/dist/
+/dist/Dommino.exe/
 /build/
 #/Dommino.spec/
 #documentation process
