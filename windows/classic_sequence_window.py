@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from graphic.windows.classic_seq_win import Ui_titrationWindow
+from obsolete.classic_seq_win import Ui_titrationWindow
 
 import pyqtgraph as pg
 from windows.spectrometry_window import SpectrometryWindow

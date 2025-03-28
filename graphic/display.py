@@ -3,14 +3,14 @@
 def state2Text(state,type):
     if state==True: 
         if type=='dispenser':
-            text='ON'
+            text='DISPENSE'
         elif type=='circuit entrance':
             text='WATER'
         elif type=='circuit exit':
             text='BIN'
     else:
         if type=='dispenser':
-            text='OFF'
+            text='BOTTLE'
         elif type=='circuit entrance':
             text='IN'
         elif type=='circuit exit':

@@ -1,16 +1,16 @@
 syringe;dispense type;value;delay mixing;delay flow;pump speed;reference;;delay stop : pump stops during this delay
-A;DISP_VOL_UL;50;30;3570;1;1;;delay flow : pump runs during this delay
-B;DISP_ON_PH;4.2;30;3570;1;1;;the chemical equilibrum delay is the sump of mixing + flow
-B;DISP_ON_PH;4.5;30;3570;1;1;;
-B;DISP_ON_PH;5;30;3570;1;1;;
-B;DISP_ON_PH;5.5;30;3570;1;1;;
-B;DISP_ON_PH;6;30;3570;1;1;;
-B;DISP_ON_PH;6.5;30;3570;1;1;;
-B;DISP_ON_PH;7;30;3570;1;1;;
-B;DISP_ON_PH;7.5;30;3570;1;1;;
-B;DISP_ON_PH;8;30;3570;1;1;;
-B;DISP_ON_PH;8.5;30;3570;1;1;;
-B;DISP_ON_PH;9;30;3570;1;1;;
-B;DISP_ON_PH;9.5;30;3570;1;1;;
-B;DISP_ON_PH;10;30;3570;1;1;;
+A;DISP_VOL_UL;50;300;3570;1;1;;delay flow : pump runs during this delay
+B;DISP_ON_PH;4.2;300;3570;1;1;;the chemical equilibrum delay is the sump of mixing + flow
+B;DISP_ON_PH;4.5;300;3570;1;1;;
+B;DISP_ON_PH;5;300;3570;1;1;;
+B;DISP_ON_PH;5.5;300;3570;1;1;;
+B;DISP_ON_PH;6;300;3570;1;1;;
+B;DISP_ON_PH;6.5;300;3570;1;1;;
+B;DISP_ON_PH;7;300;3570;1;1;;
+B;DISP_ON_PH;7.5;300;3570;1;1;;
+B;DISP_ON_PH;8;300;3570;1;1;;
+B;DISP_ON_PH;8.5;300;3570;1;1;;
+B;DISP_ON_PH;9;300;3570;1;1;;
+B;DISP_ON_PH;9.5;300;3570;1;1;;
+B;DISP_ON_PH;10;300;3570;1;1;;
 B;DISP_VOL_UL;0;0;0;1;1;;

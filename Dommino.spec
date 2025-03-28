@@ -12,6 +12,8 @@ a = Analysis(
     ('graphic/images/red-led-on.png','graphic/images'),\
     ('graphic/images/pause_icon.png','graphic/images'),\
     ('graphic/images/play_icon.png','graphic/images'),\
+    ('graphic/images/logo idil.png','graphic/images'),\
+    ('graphic/images/logo cnrs.png','graphic/images'),\
     ('config/app_default_settings.ini','config'),\
     ('config/CALlog.txt','config'),\
     ('config/device_id.ini','config'),\

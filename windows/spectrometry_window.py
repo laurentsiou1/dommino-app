@@ -70,7 +70,7 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
             self.spectro_unit.timer.timeout.connect(self.refreshScreen)
 
             #Clic sur OK
-            self.buttonBox.accepted.connect(self.updateDefaultParameters)
+            self.buttonBox.accepted.connect(self.updateDefaultParameters)   #Non fonctionnelle
     
     def refreshScreen(self):  
         bgd=(self.spectro_unit.active_background_spectrum!=None)

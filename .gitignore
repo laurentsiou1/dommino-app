@@ -3,19 +3,25 @@
 # ignore folders in link with the pyinstaller process
 /dist/
 /build/
-/Dommino.spec/
+#/Dommino.spec/
 #documentation process
 /doc/
 #python local installation
 /dommino_env/
 #obsolete or inactive files
 /obsolete/
+#/other/
 
 #log
 /phidgetlog.log/
 
 #compiled python files
+
 __pycache__/
+*.py[cod]
+*.cpython-313.pyc
+*.pyc
+
 windows/__pycache__/
 subsystems/__pycache__/
 graphic/__pycache__/

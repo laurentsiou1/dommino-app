@@ -21,7 +21,7 @@ import re
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-#latest_cal = "config/latest_cal.ini"
+latest_cal = os.path.join(ROOT_DIR, "config/latest_cal.ini")
 cal_log = os.path.join(ROOT_DIR, "config/CALlog.txt")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
@@ -62,16 +62,15 @@ class PHMeter:
 		self.signals=CustomSignals()
 	
 		print("default settings file:", app_default_settings)
+		print('calibration file : ', latest_cal)
 		parser = ConfigParser()
 		parser.read(app_default_settings)
-		self.relative_calib_path=parser.get('calibration', 'file')
 		self.model=parser.get('phmeter', 'default')
 		self.electrode=parser.get('electrode', 'default')
 
 		self.update_infos()
 
 	def connect(self):
-		
 		#Ph mètre Phidget 1130_0 plugged in Voltage Input of main board
 		self.U_pH.setDeviceSerialNumber(self.board_number)
 		self.U_pH.setChannel(self.ch_phmeter)
@@ -89,6 +88,8 @@ class PHMeter:
 			print("pH meter disconnected")
 		self.update_infos()
 
+	#def disconnect()
+
 	def update_infos(self):
 		if self.state=='open':
 			self.infos=("Ph meter : "+self.state+"\nModel : phidget 1130"+"\nElectrode : "
@@ -100,12 +101,12 @@ class PHMeter:
 			self.infos="Ph meter : closed"
 
 	"""def load_calibration(self,path):
-		self.relative_calib_path=os.path.relpath(path, ROOT_DIR)
+		self.calib_path=os.path.relpath(path, ROOT_DIR)
 		#a faire récupérer le chemin relatif du fichier de calib
 		#Changement dans le fichier contenant le chemin du fichier de calibration par defaut
 		parser = ConfigParser()
 		parser.read(app_default_settings)
-		parser.set('calibration', 'file', str(self.relative_calib_path))
+		parser.set('calibration', 'file', str(self.calib_path))
 		#écriture du nouveau chemin de cal par défaut
 		cal_path_file = open(app_default_settings,'w')
 		parser.write(cal_path_file) 
@@ -113,7 +114,8 @@ class PHMeter:
 	
 	def getCalData(self):
 		parser = ConfigParser()
-		parser.read(self.relative_calib_path)
+		parser.read(latest_cal)
+		#print("calib path electrode", latest_cal)
 		self.CALmodel=parser.get('data', 'phmeter')
 		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')
@@ -137,7 +139,7 @@ class PHMeter:
 	
 	def onCalibrationChange(self):
 		parser = ConfigParser()
-		parser.read("config/latest_cal.ini")
+		parser.read(latest_cal)
 		self.CALmodel=parser.get('data', 'phmeter')
 		self.CALelectrode=parser.get('data', 'electrode')
 		self.CALdate=parser.get('data', 'date')

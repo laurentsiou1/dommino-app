@@ -7,6 +7,7 @@ from graphic.windows.custom_seq_win import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
 from windows.spectrometry_window import SpectrometryWindow
+from windows.Exit_confirmation_window import ExitConfirmationWindow
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -61,6 +62,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.spectrometry.clicked.connect(self.ihm.openSpectroWindow)
         self.syringes.clicked.connect(self.ihm.openDispenserWindow)
         self.pause_resume_button.clicked.connect(self.seq.pause_resume)
+        self.stop_all_button.clicked.connect(self.seq.stop)
         #saving
         self.actionsave.triggered.connect(lambda : self.ihm.seq_data.createSequenceFiles(seq)) 
         #la fonction ne s'applique pas sur le self, d'où le lambda ?
@@ -68,6 +70,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         
         ##Initialisation en fonction de la config 
         self.N_mes=seq.N_mes
+        self.remaining_time_sec=seq.total_time_sec
         
         #Paramètres d'expérience
         self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(seq.experience_name)\
@@ -107,6 +110,15 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
                 self.grid_instructions.addWidget(self.tab_jk, j+1, k+1, 1, 1)
                 self.tab_jk.setText(str(seq.instruction_table[j][k]))
         
+        # self.grid_instructions.setColumnStretch(0, 3) #appliquer ces tailles dans le boucle sur mes_jk
+        # self.grid_instructions.setColumnStretch(1, 2)
+        # self.grid_instructions.setColumnStretch(2, 10)
+        # self.grid_instructions.setColumnStretch(3, 2)
+        # self.grid_instructions.setColumnStretch(4, 3)
+        # self.grid_instructions.setColumnStretch(5, 3)
+        # self.grid_instructions.setColumnStretch(6, 3)
+        # self.grid_instructions.setColumnStretch(7, 2)
+        
         #matrix for dispensed volume, pH and measure times  #3columns and N_mes lines
         self.table_vol_pH=[[QtWidgets.QLabel(self.gridLayoutWidget),QtWidgets.QLabel(self.gridLayoutWidget),QtWidgets.QLabel(self.gridLayoutWidget)] for k in range(self.N_mes)]
         #Tableau volume dispensé/pH mesuré, temps de mesure
@@ -145,16 +157,11 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     #DIRECT
     def refresh_screen(self):
         #Countdown
-        try:
-            tm=datetime.now()
-            tm=tm.replace(microsecond=0)
-            elapsed=tm-self.seq.time_mes_last
-            elapsed_sec = elapsed.total_seconds() #convert to seconds
-            remaining = int(max(0,self.seq.delay_mes-elapsed_sec))
-            #print("remaining time : ", remaining)
-            self.countdown.setProperty("value", remaining)
-        except:
-            pass
+        if self.seq.is_running:  #If sequence is not on pause
+            if self.remaining_time_sec>0:
+                self.remaining_time_sec-=1
+                #print("remaining time : ", self.remaining_time_sec)
+                self.countdown.setProperty("value", self.remaining_time_sec)
         #PhMeter
         if self.ihm.phmeter.state=='open':
             self.direct_pH.display(self.ihm.phmeter.currentPH)
@@ -232,6 +239,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     def append_time_in_table(self,nb,dt):
         eq_time=str(dt.seconds//60)+":"+str(dt.seconds%60)
         self.table_vol_pH[nb-1][2].setObjectName("dt"+str(nb))
+        #print(self.table_vol_pH,nb)
         self.table_vol_pH[nb-1][2].setAlignment(QtCore.Qt.AlignCenter)
         self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][2], nb, 2, 1, 1)
         self.table_vol_pH[nb-1][2].clear()
@@ -244,12 +252,24 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.pause_resume_button.setIcon(QtGui.QIcon(pause_icon_path))
 
     def closeEvent(self, event):
-        print("User has clicked the red x on the custom sequence window")
-        #test : ça ne permet pas de supprimer l'objet 
-        event.accept()
-        self.seq.stop()
-        #self.ihm.updateDefaultParam() #cause du probleme sur app_default_settings
-        self.close()
+        #print("User has clicked the red x on the custom sequence window")
+        #event.accept()
+        event.ignore()
+        self.confirm_close()
+
+        #self.seq.stop()
+        #self.close()
+
+    def confirm_close(self):
+        """Affiche une fenêtre de confirmation avant de quitter."""
+        dialog = ExitConfirmationWindow(self)   # Crée la pop-up avec `self` comme parent
+        if dialog.exec_() == QtWidgets.QDialog.Accepted: # Ici, exec_ bloque l'execution jusqu'a que l'utilisateur clique sur oui
+            print("Window is closed and sequence is stopped by user")
+            self.seq.stop() # # Stoppe la séquence
+            self.deleteLater() # force la destruction de la fenetre
+            self.close()  # Ferme la fenêtre CustomSequenceWindow
+        else: # L'utilisateur à cliqué sur non
+            print("Fermeture annulée") 
     
     """def __del__(self):
         pass"""

@@ -138,13 +138,13 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
         #connexions
         self.electrode_box.textChanged.connect(self.update_electrode_model)
-        self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM)
+        self.connect_phmeter_button.clicked.connect(self.connect_disconnect_phmeter)
         self.cal_button.clicked.connect(self.ihm.openCalibWindow)
 
         self.connect_disconnect_spectro_button.clicked.connect(self.connect_disconnect_spectrometer)
         self.spectro_settings.clicked.connect(self.OnClick_spectro_settings)
         
-        self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
+        self.connect_dispenser_button.clicked.connect(self.connect_disconnect_dispenser)
         self.open_syringe_panel.clicked.connect(self.ihm.openDispenserWindow)
         
         self.connect_disconnect_circuit.clicked.connect(self.connexionChange_circuit)
@@ -167,7 +167,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.update_lights)
-        self.close_all.clicked.connect(self.clear_IHM)
+        self.close_all.clicked.connect(self.clear_phmeter_display)
 
     def select_pixmap(self, state):
         if state=='open':
@@ -201,7 +201,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def connectAllDevices(self):
         self.connectCircuit()
         self.link_pHmeter2IHM()
-        self.connectSyringePump()
+        self.connect_dispenser()
         self.spectro_unit.connect()
         if self.spectro_unit.state=='open':
             self.led_spectro.setPixmap(self.pixmap_green)
@@ -230,6 +230,25 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.stab_step.valueChanged.connect(self.update_stab_step)
             #self.load_calibration_button.clicked.connect(self.load_calibration)
     
+    def connect_disconnect_phmeter(self):
+        """Executed when clicking on connect/disconnect button"""
+        if self.phmeter.state=='closed':
+            self.phmeter.connect()
+            self.link_pHmeter2IHM()
+        elif self.phmeter.state=='open':
+            self.phmeter.close()
+            self.clear_phmeter_display()
+        self.update_phmeter_state()
+
+    def update_phmeter_state(self):
+        """Updates light indicator and Connexion button on dispenser"""
+        if self.phmeter.state=='closed':
+            self.led_phmeter.setPixmap(self.pixmap_red)
+            self.connect_phmeter_button.setText("Connect")
+        elif self.phmeter.state=='open':
+            self.led_phmeter.setPixmap(self.pixmap_green)
+            self.connect_phmeter_button.setText("Disconnect")
+    
     def update_electrode_model(self):
         self.phmeter.electrode=self.electrode_box.toPlainText()
 
@@ -239,7 +258,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def update_stab_step(self):
         self.phmeter.stab_step=self.stab_step.value()
 
-    def clear_IHM(self):
+    def clear_phmeter_display(self):
         #pH meter
         self.direct_pH.display(None)
         self.calib_text_box.clear()
@@ -341,10 +360,26 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
 
                                     ### Methods for Syringe pumps
-    def connectSyringePump(self):
+    def connect_dispenser(self):
         self.dispenser.connect()
-        if self.dispenser.state=='open':
+        self.update_dispenser_state()
+
+    def connect_disconnect_dispenser(self):
+        """Executed when clicking on connect/disconnect button"""
+        if self.dispenser.state=='closed':
+            self.dispenser.connect()
+        elif self.dispenser.state=='open':
+            self.dispenser.close()
+        self.update_dispenser_state()
+        
+    def update_dispenser_state(self):
+        """Updates light indicator and Connexion button on dispenser"""
+        if self.dispenser.state=='closed':
+            self.led_disp.setPixmap(self.pixmap_red)
+            self.connect_dispenser_button.setText("Connect")
+        elif self.dispenser.state=='open':
             self.led_disp.setPixmap(self.pixmap_green)
+            self.connect_dispenser_button.setText("Disconnect")
     
     def refresh_volumes(self):
         self.levelbarA.setProperty("value",str(self.dispenser.syringe_A.level_uL))   #int
