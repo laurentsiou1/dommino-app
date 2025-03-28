@@ -1,0 +1,10 @@
+Instant measure on Dommino titrator
+date and time : 03/04/2025 15:40:45
+Device : DOMMINO01
+
+pH meter not connected
+
+Syringe pump not connected
+Spectrometer closed
+
+
