@@ -1,12 +1,12 @@
 # gitignore file 
 
 # ignore folders in link with the pyinstaller process
-/dist/
+/dist/Dommino.exe/
 /build/
 #/Dommino.spec/
 #documentation process
 /doc/
-#python local installation
+#Enter the name of your Python virtual environment
 /dommino_env/
 #obsolete or inactive files
 /obsolete/
