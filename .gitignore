@@ -20,10 +20,11 @@
 __pycache__/
 *.py[cod]
 *.cpython-313.pyc
+*.cpython-39.pyc
 *.pyc
 
-windows/__pycache__/
-subsystems/__pycache__/
-graphic/__pycache__/
-graphic/windows/__pycache__/
-subsystems/windows/__pycache__/
+/windows/__pycache__/
+/subsystems/__pycache__/
+/graphic/__pycache__/
+/graphic/windows/__pycache__/
+/subsystems/windows/__pycache__/
