@@ -30,8 +30,11 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
         self.browse1.clicked.connect(self.browseConfigFile)
         self.saving_folder.setText(self.ihm.saving_folder)  #dossier de sauvegarde
         self.browse.clicked.connect(self.browsefolder)
-        self.dialogbox.accepted.connect(self.updateSettings)
-        self.dialogbox.accepted.connect(self.launchTitration)
+        #self.dialogbox.accepted.connect(self.updateSettings)
+        #self.dialogbox.accepted.connect(self.launchTitration)
+        ok_button = self.dialogbox.button(QtWidgets.QDialogButtonBox.Ok) # modif LS
+        ok_button.clicked.disconnect() # modif LS - pour annuler les connexion existante au bouton... (dans notre cas, evite de fermer la fenetre sequence windows lorsque V_init >=0)
+        ok_button.clicked.connect(self.launchTitration)  # - modif LS
         self.dispense_mode.currentTextChanged.connect(self.grey_out_widgets)
 
     def update_infos(self):
@@ -94,27 +97,29 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
         self.ihm.sequence_config_file=filepath
     
     def launchTitration(self):
-        
-        if self.dispense_mode.currentText() == "from file": #sequence instruction file
-            config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
-            bool(self.atmosphere_box.currentText()),str(self.ihm.fibers),\
-            str(self.ihm.flowcell),self.V_init.value(),self.dispense_mode.currentText(),\
-            self.sequence_config_file.text(),self.saving_folder.text()]
-            self.ihm.seq=CustomSequence(self.ihm,config) #creation of object sequence
-            self.ihm.seq_data=Data(self.ihm.seq)
-            self.ihm.seq.configure()
-            self.ihm.seq.run_sequence()
-        else:   #classic sequence
-            config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
-            bool(self.atmosphere_box.currentText()),str(self.ihm.fibers),str(self.ihm.flowcell),\
-            self.V_init.value(),self.dispense_mode.currentText(),self.Nmes.value(),\
-            self.pH_init.value(),self.pH_fin.value(),self.fixed_delay_box.value(),\
-            self.agitation_delay_box.value(),self.saving_folder.text()]
-            self.ihm.seq=ClassicSequence(self.ihm,config)
-            self.ihm.seq_data=Data(self.ihm.seq)
-            self.ihm.seq.configure()
-        self.update_infos()
-        print(self.infos)
+        if self.V_init.value() <= 0.0: # ------------------------------------------------------modif vLS
+            QtWidgets.QMessageBox.warning(self, "Missing Inital Volume", "Please enter an Initial Volume before starting the sequence...") # ------modif vLS
+        else:   #Able to launch
+            if self.dispense_mode.currentText() == "from file": #sequence instruction file
+                config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
+                bool(self.atmosphere_box.currentText()),str(self.ihm.fibers),\
+                str(self.ihm.flowcell),self.V_init.value(),self.dispense_mode.currentText(),\
+                self.sequence_config_file.text(),self.saving_folder.text()]
+                self.ihm.seq=CustomSequence(self.ihm,config) #creation of object sequence
+                self.ihm.seq_data=Data(self.ihm.seq)
+                self.ihm.seq.configure()
+                self.ihm.seq.run_sequence()
+            else:   #classic sequence
+                config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
+                bool(self.atmosphere_box.currentText()),str(self.ihm.fibers),str(self.ihm.flowcell),\
+                self.V_init.value(),self.dispense_mode.currentText(),self.Nmes.value(),\
+                self.pH_init.value(),self.pH_fin.value(),self.fixed_delay_box.value(),\
+                self.agitation_delay_box.value(),self.saving_folder.text()]
+                self.ihm.seq=ClassicSequence(self.ihm,config)
+                self.ihm.seq_data=Data(self.ihm.seq)
+                self.ihm.seq.configure()
+            self.update_infos()
+            print(self.infos)
     
     def updateSettings(self):
         self.ihm.dispense_mode=self.dispense_mode.currentText()

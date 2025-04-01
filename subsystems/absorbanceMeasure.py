@@ -131,11 +131,11 @@ class AbsorbanceMeasure(Spectrometer):
                 self.device.set_scans_to_average(10)
             
             if self.model=='OceanSR2':  #2k pix pour 700nm
-                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)   
-            elif self.model=='OceanSR4':    #2k pix pour 700nm à vérifier pour le SR4
-                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)     
+                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)    
             elif self.model=='OceanSR6':    #2k pix pour 700nm à vérifier pour le SR6
                 self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
+            elif self.model=='OceanSR4':    #2k pix pour 700nm à vérifier pour le SR4
+                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)     
             elif self.model=='OceanST': #2k pix pour 400nm
                 self.device.set_boxcar_width(2) #moyennage sur 5 points (2n+1) 
             else:

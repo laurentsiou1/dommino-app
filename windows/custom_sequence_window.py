@@ -7,7 +7,6 @@ from graphic.windows.custom_seq_win import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
 from windows.spectrometry_window import SpectrometryWindow
-from windows.Exit_confirmation_window import ExitConfirmationWindow
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -63,6 +62,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.syringes.clicked.connect(self.ihm.openDispenserWindow)
         self.pause_resume_button.clicked.connect(self.seq.pause_resume)
         self.stop_all_button.clicked.connect(self.seq.stop)
+
         #saving
         self.actionsave.triggered.connect(lambda : self.ihm.seq_data.createSequenceFiles(seq)) 
         #la fonction ne s'applique pas sur le self, d'où le lambda ?
@@ -71,6 +71,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         ##Initialisation en fonction de la config 
         self.N_mes=seq.N_mes
         self.remaining_time_sec=seq.total_time_sec
+
         
         #Paramètres d'expérience
         self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(seq.experience_name)\
@@ -78,6 +79,9 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         +"\nFibres : "+str(seq.fibers)\
         +"\nFlowcell : "+str(seq.flowcell)\
         +"\nDispense mode : "+str(seq.dispense_mode))
+
+        #Ajout d'un label pour les mesures en cours   ---------------------------------------------------------------------- Modif LS
+        self.measurement_status.setText("Waiting to start measurement sequence...")
 
         #Spectro
         if ihm.spectro_unit.state=='open':
@@ -109,15 +113,6 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
                 self.tab_jk.setAlignment(QtCore.Qt.AlignCenter)
                 self.grid_instructions.addWidget(self.tab_jk, j+1, k+1, 1, 1)
                 self.tab_jk.setText(str(seq.instruction_table[j][k]))
-        
-        # self.grid_instructions.setColumnStretch(0, 3) #appliquer ces tailles dans le boucle sur mes_jk
-        # self.grid_instructions.setColumnStretch(1, 2)
-        # self.grid_instructions.setColumnStretch(2, 10)
-        # self.grid_instructions.setColumnStretch(3, 2)
-        # self.grid_instructions.setColumnStretch(4, 3)
-        # self.grid_instructions.setColumnStretch(5, 3)
-        # self.grid_instructions.setColumnStretch(6, 3)
-        # self.grid_instructions.setColumnStretch(7, 2)
         
         #matrix for dispensed volume, pH and measure times  #3columns and N_mes lines
         self.table_vol_pH=[[QtWidgets.QLabel(self.gridLayoutWidget),QtWidgets.QLabel(self.gridLayoutWidget),QtWidgets.QLabel(self.gridLayoutWidget)] for k in range(self.N_mes)]
@@ -162,6 +157,16 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
                 self.remaining_time_sec-=1
                 #print("remaining time : ", self.remaining_time_sec)
                 self.countdown.setProperty("value", self.remaining_time_sec)
+        try:
+            tm=datetime.now()
+            tm=tm.replace(microsecond=0)
+            elapsed=tm-self.seq.time_mes_last
+            elapsed_sec = elapsed.total_seconds() #convert to seconds
+            remaining = int(max(0,self.seq.delay_mes-elapsed_sec))
+            #print("remaining time : ", remaining)
+            self.countdown.setProperty("value", remaining)
+        except:
+            pass
         #PhMeter
         if self.ihm.phmeter.state=='open':
             self.direct_pH.display(self.ihm.phmeter.currentPH)
@@ -222,6 +227,7 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     
     #volume, pH and times
     def append_vol_in_table(self,nb,vol): #nb numero de mesure 1 à Nmes
+        self.update_measure_status(nb) # modif LS
         self.table_vol_pH[nb-1][0].setObjectName("vol"+str(nb))
         self.table_vol_pH[nb-1][0].setAlignment(QtCore.Qt.AlignCenter)
         self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][0], nb, 0, 1, 1)
@@ -239,7 +245,6 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     def append_time_in_table(self,nb,dt):
         eq_time=str(dt.seconds//60)+":"+str(dt.seconds%60)
         self.table_vol_pH[nb-1][2].setObjectName("dt"+str(nb))
-        #print(self.table_vol_pH,nb)
         self.table_vol_pH[nb-1][2].setAlignment(QtCore.Qt.AlignCenter)
         self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][2], nb, 2, 1, 1)
         self.table_vol_pH[nb-1][2].clear()
@@ -251,25 +256,32 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     def resume(self):
         self.pause_resume_button.setIcon(QtGui.QIcon(pause_icon_path))
 
-    def closeEvent(self, event):
-        #print("User has clicked the red x on the custom sequence window")
-        #event.accept()
-        event.ignore()
-        self.confirm_close()
+    def closeEvent(self, event): # modif LS - fenetre pop up
+        msgBox = QtWidgets.QMessageBox(self)
+        msgBox.setIcon(QtWidgets.QMessageBox.Question)  # Icône standard (Information, Warning, Critical, Question)
+        msgBox.setWindowTitle('Confirmation')
+        msgBox.setText('Are you sure you want to stop the sequence and quit?')
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        msgBox.setDefaultButton(QtWidgets.QMessageBox.No)
 
-        #self.seq.stop()
-        #self.close()
+        reply = msgBox.exec_()
 
-    def confirm_close(self):
-        """Affiche une fenêtre de confirmation avant de quitter."""
-        dialog = ExitConfirmationWindow(self)   # Crée la pop-up avec `self` comme parent
-        if dialog.exec_() == QtWidgets.QDialog.Accepted: # Ici, exec_ bloque l'execution jusqu'a que l'utilisateur clique sur oui
-            print("Window is closed and sequence is stopped by user")
-            self.seq.stop() # # Stoppe la séquence
-            self.deleteLater() # force la destruction de la fenetre
-            self.close()  # Ferme la fenêtre CustomSequenceWindow
-        else: # L'utilisateur à cliqué sur non
-            print("Fermeture annulée") 
+        if reply == QtWidgets.QMessageBox.Yes:
+            print("Confirmation received: sequence stops and closes.")
+            self.seq.stop()
+            event.accept()
+        else:
+            event.ignore()
+    
+    def update_measure_status(self, nb): # modif LS - Indicateur de mesure en cours
+        if self.N_mes == 1:
+            self.measurement_status.setText("Unique measurement in progress...")
+        elif nb < self.N_mes:
+            self.measurement_status.setText(f"Measurement {nb}/{self.N_mes} in progress...")
+        elif nb == self.N_mes:
+            self.measurement_status.setText(f"Measurement {nb} in progress...")
+        else:
+            self.measurement_status.setText("Sequence finished!")
     
     """def __del__(self):
         pass"""

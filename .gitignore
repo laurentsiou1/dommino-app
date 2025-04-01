@@ -16,7 +16,7 @@
 
 #compiled python files
 
-__pycache__/
+__pycache__/*
 *.py[cod]
 *.cpython-313.pyc
 *.cpython-39.pyc

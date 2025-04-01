@@ -248,7 +248,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         elif self.phmeter.state=='open':
             self.led_phmeter.setPixmap(self.pixmap_green)
             self.connect_phmeter_button.setText("Disconnect")
-    
+
     def update_electrode_model(self):
         self.phmeter.electrode=self.electrode_box.toPlainText()
 

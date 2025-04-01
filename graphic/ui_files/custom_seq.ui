@@ -435,7 +435,7 @@ Parameters ...</string>
     <property name="geometry">
      <rect>
       <x>950</x>
-      <y>330</y>
+      <y>350</y>
       <width>71</width>
       <height>71</height>
      </rect>
@@ -448,7 +448,7 @@ Parameters ...</string>
     <property name="geometry">
      <rect>
       <x>880</x>
-      <y>270</y>
+      <y>290</y>
       <width>211</width>
       <height>41</height>
      </rect>
@@ -464,8 +464,8 @@ current instruction</string>
    <widget class="QPushButton" name="stop_all_button">
     <property name="geometry">
      <rect>
-      <x>1090</x>
-      <y>310</y>
+      <x>1100</x>
+      <y>320</y>
       <width>81</width>
       <height>81</height>
      </rect>
@@ -540,6 +540,25 @@ current instruction</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="measurement_status">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>230</y>
+      <width>301</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Montserrat</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -547,7 +566,7 @@ current instruction</string>
      <x>0</x>
      <y>0</y>
      <width>1752</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menufile">

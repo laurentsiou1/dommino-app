@@ -204,7 +204,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         
         self.syringe_type=syringe_type
         if syringe_type=='Trajan SGE 500uL':
-            self.size = 400 #uL : useful volume on syringe
+            self.size = 500 #uL : useful volume on syringe - modif LS passage de 400 à 500 + ajout des variables level_400 et level_500
             #uL use only 400 on a 500uL syringe
             #Pour ne pas toucher le bout de la seringue
         else:
@@ -503,17 +503,18 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
         # Puis reprendre la dispense là où elle s'est arrêtée. 
 
         print("starting dispense %f uL" %vol)
-        capacity=self.size
-        level=self.level_uL
+        capacity=400 # modif LS
+        level_500=self.level_uL
+        level_400 = self.level_uL-100
         q=int(vol//capacity)
         r=vol%capacity
         print(q,"x",capacity,"+",r,"uL")
-        if vol<=level: #cas classique de simple dispense
+        if vol<=level_400: #cas classique de simple dispense
             self.simple_dispense(vol)
-        else:   #vol>level #dispense with multiple stages
-            r2=r-level
+        else:   #vol>level_400 #dispense with multiple stages
+            r2=r-level_400
             #print("r2=",r2)
-            if r2<=0: #r<=level     #On peut dispenser le reste sans recharger
+            if r2<=0: #r<=level_400     #On peut dispenser le reste sans recharger
                 #donc on commence par dispenser le reste
                 self.simple_dispense(r)
                 self.full_refill()
@@ -521,7 +522,7 @@ class PhidgetStepperPump(SyringePump): #remplace l'ancienne classe SyringePump
                 for i in range(q):
                     self.simple_dispense(capacity)
                     self.full_refill()
-            else: #r>level:     #Le reste est supérieur au niveau de la seringue
+            else: #r>level_400:     #Le reste est supérieur au niveau de la seringue
                 #print("recharge pour dispense du reste")
                 self.full_refill()
                 self.simple_dispense(r)

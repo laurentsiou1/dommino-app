@@ -101,7 +101,22 @@ class IHM:
         self.VINT_number=0
         self.instrument_id=str(0)
 
+        # Ajout d'une variable pour suivre les alertes des switchs - modif vLS
+        self.switch_alerts = {} # modif vLS
+        
+        # Définition des switchs - modif vLS
+        self.switch_names = { # modif vLS
+        self.dispenser.syringe_A.ch_full: "Full A", # modif vLS
+        self.dispenser.syringe_A.ch_empty: "Empty A", # modif vLS
+        self.dispenser.syringe_B.ch_full: "Full B", # modif vLS
+        self.dispenser.syringe_B.ch_empty: "Empty B", # modif vLS
+        self.dispenser.syringe_C.ch_full: "Full C", # modif vLS
+        self.dispenser.syringe_C.ch_empty: "Empty C" # modif vLS
+        } # modif vLS
+
     def AttachHandler(self, man, channel):
+        """S'execute lors du branchement des cartes Phidget
+        Les trois arguments de cette fonction ne peuvent pas être enlevés"""
         serialNumber = channel.getDeviceSerialNumber()
         deviceName = channel.getDeviceName()
         channelName = channel.getChannelName()
@@ -117,6 +132,8 @@ class IHM:
             self.loadBoardsSerialNumbers('interface board',serialNumber)
 
     def loadBoardsSerialNumbers(self, board, nb):
+        """Ecrit dans le fichier "device_id" les numéros de séries des deux cartes
+        (Vint et Interface)"""
         parser = ConfigParser()
         parser.read(self.device_ids)
         if board=='VINT':
@@ -136,6 +153,7 @@ class IHM:
             self.getInstrumentSerialNumber()
 
     def getInstrumentSerialNumber(self):
+        """Récupère le numéro de série du boitier DOMMINO et modifie l'argument self.instrument_id"""
         parser = ConfigParser()
         parser.read(self.device_ids)
         if self.board_number == self.id01:
@@ -152,6 +170,8 @@ class IHM:
             pass
 
     def DetachHandler(self, man, channel):
+        """S'exécute lors du débranchement ou mis hors tention d'une des voies.
+        Les arguments ne peuvent pas être enlevés"""
         serialNumber = channel.getDeviceSerialNumber()
         deviceName = channel.getDeviceName()
         channelName = channel.getChannelName()
@@ -161,26 +181,41 @@ class IHM:
         #print("Disconnected : ",serialNumber,"--",deviceName,"--","port : ",hubPort,isChannel,"--",channelName,"--","channel : ",ch_num)
 
         #pH meter
-        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Voltage Input' and ch_num==0:
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Voltage Input' and ch_num==self.phmeter.ch_phmeter:
             self.phmeter.state='closed'
             print("pH meter disconnected")
             self.controlPanel.led_phmeter.setPixmap(self.controlPanel.pixmap_red)
         #Lamp control
 
-        #Dispenser
-        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Input' and ch_num==0:
-            self.dispenser.state='closed'
-            print("Syringe pump disconnected due to switchs unaccessible")
-            self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
-        if deviceName=='4A Stepper Phidget' and hubPort==0:
+        #--Dispenser
+        #Switch
+        if deviceName == 'PhidgetInterfaceKit 8/8/8' and channelName == 'Digital Input':     # modif LS
+            if ch_num in self.switch_names:  # Vérifie si le channel correspond à un switch connu
+                print(f"Détection d'un problème sur {self.switch_names[ch_num]} (Channel {ch_num})")  # Test 
+                self.dispenser.state = 'closed'
+                self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
+
+            # Affiche un message une seule fois par switch
+                if ch_num not in self.switch_alerts:
+                    switch_name = self.switch_names[ch_num]  # Récupère le nom du switch
+                    print("Syringe pump disconnected due to", f"switch {switch_name} ({ch_num})")
+                    self.switch_alerts[ch_num] = True  # Marquer ce switch comme déjà signalé     
+        
+        #if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Input' and ch_num==0:
+            #self.dispenser.state='closed'
+            #print("Syringe pump disconnected due to switchs unaccessible")
+            #self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
+
+        #Moteurs    
+        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.port_a: # modif LS - "==0" "self.phidgetstepperpump.port_a"
             #stepper A de pousse seringue débranché
             self.dispenser.syringe_A.state='closed'
             print("Stepper A disconnected")
-        if deviceName=='4A Stepper Phidget' and hubPort==1:
+        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.port_b: # modif LS - "==1" "self.phidgetstepperpump.port_b"
             #stepper B de pousse seringue débranché
             self.dispenser.syringe_B.state='closed'
             print("Stepper B disconnected")
-        if deviceName=='4A Stepper Phidget' and hubPort==2:
+        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.port_c: # modif LS - "==2" "self.phidgetstepperpump.port_c"
             #stepper C de pousse seringue débranché
             self.dispenser.syringe_C.state='closed'
             print("Stepper C disconnected")
@@ -190,13 +225,13 @@ class IHM:
         if self.dispenser.state=='closed':
             self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
         
-        if deviceName=='4A DC Motor Phidget' and hubPort==3:
+        if deviceName=='4A DC Motor Phidget' and hubPort==self.peristaltic_pump.port_motor:  # modif LS - "==3" par "self.peristaltic_pump.port_motor" 
             self.peristaltic_pump.state='closed'
             print("Peristaltic pump disconnected")
             self.controlPanel.led_pump.setPixmap(self.controlPanel.pixmap_red)
         
         #Lamp control unaccessible
-        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==5:
+        if deviceName=='PhidgetInterfaceKit 8/8/8' and channelName=='Digital Output' and ch_num==self.spectro_unit.ch_shutter: # modif LS
             self.spectro_unit.state='closed'
             print("Unable to control lamp")
             self.controlPanel.led_spectro.setPixmap(self.controlPanel.pixmap_red)
