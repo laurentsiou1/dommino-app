@@ -2,12 +2,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtGui import QIcon
 from graphic.windows.classic_seq_win import Ui_titrationWindow
 
 import pyqtgraph as pg
 from windows.spectrometry_window import SpectrometryWindow
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 import datetime
 from file_manager import Data
@@ -23,6 +25,11 @@ class ClassicSequenceWindow(QMainWindow,Ui_titrationWindow):
     def __init__(self, ihm, parent=None):
         super(ClassicSequenceWindow,self).__init__(parent)
         self.setupUi(self)
+
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
+        
         self.ihm=ihm
         self.spectro_unit=ihm.spectro_unit
         self.phmeter=ihm.phmeter

@@ -2,6 +2,8 @@
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtGui import QIcon
+import os
 
 from graphic.windows.settings_win import Ui_Dialog    #fenetre créée sur Qt designer
 
@@ -12,6 +14,10 @@ class SettingsWindow(QDialog,Ui_Dialog): #(object)
     def __init__(self, ihm, parent=None):
         super(SettingsWindow,self).__init__(parent)
         self.setupUi(self)
+
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
         self.ihm=ihm
         self.syringe_A=ihm.dispenser.syringe_A
         self.syringe_B=ihm.dispenser.syringe_B

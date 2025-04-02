@@ -2,16 +2,23 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox
+from PyQt5.QtGui import QIcon
 from graphic.windows.phmeter_calib_win import Ui_calibration_window
 
 from subsystems.pHmeter import *
 from datetime import datetime
+
+import os
 
 class PhMeterCalibWindow(QDialog, Ui_calibration_window):
     def __init__(self, ihm, parent=None):
         super(PhMeterCalibWindow,self).__init__(parent)
         self.setupUi(self)
         self.ihm=ihm
+        
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
 
         #connexions
         self.buttonBox.clicked.connect(self.on_button_clicked)

@@ -19,9 +19,9 @@
   <widget class="QLabel" name="label_level">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>300</y>
-     <width>111</width>
+     <x>60</x>
+     <y>290</y>
+     <width>141</width>
      <height>71</height>
     </rect>
    </property>
@@ -41,7 +41,10 @@
     <string>Dispensing range:</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="levelA_uL">
@@ -808,6 +811,12 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="text">
     <string>Syringe A</string>
    </property>
@@ -824,6 +833,12 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="text">
     <string>Syringe B</string>
    </property>
@@ -839,6 +854,12 @@
      <width>101</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="text">
     <string>Syringe C</string>
@@ -1071,10 +1092,10 @@ purge</string>
   <widget class="QLabel" name="label_level_2">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>350</y>
-     <width>111</width>
-     <height>41</height>
+     <x>90</x>
+     <y>340</y>
+     <width>171</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="cursor">
@@ -1092,7 +1113,10 @@ purge</string>
 Manual: 0–500 µL</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <zorder>label_level</zorder>

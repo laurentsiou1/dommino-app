@@ -344,6 +344,7 @@ class IHM:
 
         name+=str(date_time)
         output=header+"\n\n"+data
+        
         f_out = open(self.saving_folder+'/'+name+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output)
         f_out.close()    
