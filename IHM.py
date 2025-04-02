@@ -53,7 +53,10 @@ class IHM:
     spectro_unit=AbsorbanceMeasure()
     phmeter=PHMeter()
     dispenser=Dispenser()
+<<<<<<< HEAD
     #phidgetstepperpump=PhidgetStepperPump() # Modif LS
+=======
+>>>>>>> test_francois
     peristaltic_pump=PeristalticPump()
     circuit=Circuit(peristaltic_pump)
 
@@ -98,6 +101,12 @@ class IHM:
         self.manager.setOnAttachHandler(self.AttachHandler)
         self.manager.setOnDetachHandler(self.DetachHandler)
         self.manager.open()
+<<<<<<< HEAD
+=======
+        self.board_number=0
+        self.VINT_number=0
+        self.instrument_id=str(0)
+>>>>>>> test_francois
 
         # Ajout d'une variable pour suivre les alertes des switchs - modif vLS
         self.switch_alerts = {} # modif vLS
@@ -261,7 +270,11 @@ class IHM:
         if self.phmeter.state=='open':
             parser.set('phmeter', 'epsilon', str(self.phmeter.stab_step))
             parser.set('phmeter', 'delta', str(self.phmeter.stab_time))
+<<<<<<< HEAD
             parser.set('calibration', 'file', str(self.phmeter.relative_calib_path))
+=======
+            #parser.set('calibration', 'file', str(self.phmeter.relative_calib_path))
+>>>>>>> test_francois
             parser.set('phmeter', 'default', str(self.phmeter.model))
             parser.set('electrode', 'default', str(self.phmeter.electrode))
         if self.dispenser.state=='open':
@@ -278,7 +291,13 @@ class IHM:
         date_text=dt.strftime("%m/%d/%Y %H:%M:%S")
         date_time=dt.strftime("%m-%d-%Y_%Hh%Mmin%Ss")
         name = "mes_"
+<<<<<<< HEAD
         header = "Instant measure on Dommino titrator\n"+"date and time : "+str(date_text)+"\n"+"Device : "+self.instrument_id+"\n\n"
+=======
+        header = ("Instant measure on Dommino titrator\n"+"date and time : "+str(date_text)\
+            +"\n"+"Device : "+self.instrument_id+"\nMain board S/N : "+str(self.board_number)\
+            +"\nVINT S/N : "+str(self.VINT_number)+"\n\n")
+>>>>>>> test_francois
         data = ""
         print("saving instant measure - ")
         #saving pH measure
@@ -340,6 +359,10 @@ class IHM:
 
         name+=str(date_time)
         output=header+"\n\n"+data
+<<<<<<< HEAD
+=======
+        
+>>>>>>> test_francois
         f_out = open(self.saving_folder+'/'+name+'.txt','w') #création d'un fichier dans le répertoire
         f_out.write(output)
         f_out.close()    
@@ -375,7 +398,11 @@ class IHM:
     def openSettingsWindow(self):
         self.settings_win = SettingsWindow(self)
         self.settings_win.show()
+<<<<<<< HEAD
         for button in self.seqConfig.dialogbox.buttons():   #Disconnexion of Keyboard Enter event
+=======
+        for button in self.settings_win.dialogbox.buttons():   #Disconnexion of Keyboard Enter event
+>>>>>>> test_francois
             button.setAutoDefault(False)  
             button.setDefault(False)  
 

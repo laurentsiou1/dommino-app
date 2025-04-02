@@ -8,6 +8,7 @@
 /doc/
 #python local installation
 /laulau_env/
+/dommino_env/
 #obsolete or inactive files
 /obsolete/
 
@@ -15,9 +16,15 @@
 /phidgetlog.log/
 
 #compiled python files
-__pycache__/
-windows/__pycache__/
-subsystems/__pycache__/
-graphic/__pycache__/
-graphic/windows/__pycache__/
-subsystems/windows/__pycache__/
+
+__pycache__/*
+*.py[cod]
+*.cpython-313.pyc
+*.cpython-39.pyc
+*.pyc
+
+/windows/__pycache__/
+/subsystems/__pycache__/
+/graphic/__pycache__/
+/graphic/windows/__pycache__/
+/subsystems/windows/__pycache__/

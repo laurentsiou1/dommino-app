@@ -1,0 +1,7 @@
+syringe;dispense type;value;delay mixing;delay flow;pump speed;reference
+A;DISP_VOL_UL;10;20;60;1;0
+B;DISP_VOL_UL;50;20;60;1;0
+C;DISP_VOL_UL;500;20;60;1;0
+C;DISP_VOL_UL;200;20;60;1;0
+C;DISP_VOL_UL;250;20;60;1;0
+C;DISP_VOL_UL;0;0;0;1;1

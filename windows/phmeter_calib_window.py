@@ -1,22 +1,53 @@
 "fenêtre de calibration du pH mètre"
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+<<<<<<< HEAD
 from PyQt5.QtWidgets import QDialog
+=======
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox
+from PyQt5.QtGui import QIcon
+>>>>>>> test_francois
 from graphic.windows.phmeter_calib_win import Ui_calibration_window
 
 from subsystems.pHmeter import *
 from datetime import datetime
 
+<<<<<<< HEAD
 class PhMeterCalibWindow(QDialog, Ui_calibration_window):
     def __init__(self, ihm, parent=None):
         self.ihm=ihm
         super(PhMeterCalibWindow,self).__init__(parent)
         self.setupUi(self)
+=======
+import os
+
+class PhMeterCalibWindow(QDialog, Ui_calibration_window):
+    def __init__(self, ihm, parent=None):
+        super(PhMeterCalibWindow,self).__init__(parent)
+        self.setupUi(self)
+        self.ihm=ihm
+        
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
+
+        #connexions
+        self.buttonBox.clicked.connect(self.on_button_clicked)
+
+        if self.ihm.phmeter.state=='open':
+            self.ihm.timer_display.timeout.connect(self.setOnDirectVoltage) #voltage current update
+
+        #connexions 
+        self.button_ph4.clicked.connect(lambda : self.saveAndShowVoltage(self.U_ph4))
+        self.button_ph7.clicked.connect(lambda : self.saveAndShowVoltage(self.U_ph7))
+        self.button_ph10.clicked.connect(lambda : self.saveAndShowVoltage(self.U_ph10))
+>>>>>>> test_francois
 
         self.U4=0
         self.U7=0
         self.U10=0
         self.used_pH_buffers=set()
+<<<<<<< HEAD
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -95,10 +126,24 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
 
     def setOnDirectVoltage(self): #, ch, voltage):
         self.direct_voltage_mV.display(1000*self.ihm.phmeter.currentVoltage)
+=======
+    
+    def on_button_clicked(self, button):
+        if self.buttonBox.standardButton(button) == QDialogButtonBox.Apply:
+            self.validateCal()
+            self.ihm.phmeter.onCalibrationChange()
+            self.ihm.controlPanel.refreshCalibrationText()
+            self.accept()
+            self.reject()
+
+    def setOnDirectVoltage(self): #, ch, voltage):
+        self.lcdNumber.display(1000*self.ihm.phmeter.currentVoltage)
+>>>>>>> test_francois
 
     def saveAndShowVoltage(self, screen): #sreen est un objet QLCDNumber
         U=self.ihm.phmeter.currentVoltage
         print("save voltage")
+<<<<<<< HEAD
         if screen==self.lcdNumber_pH4:
             self.U4=U
             self.used_pH_buffers.add(4)
@@ -106,12 +151,25 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
             self.U7=U
             self.used_pH_buffers.add(7)
         if screen==self.lcdNumber_pH10:
+=======
+        if screen==self.U_ph4:
+            self.U4=U
+            self.used_pH_buffers.add(4)
+        if screen==self.U_ph7:
+            self.U7=U
+            self.used_pH_buffers.add(7)
+        if screen==self.U_ph10:
+>>>>>>> test_francois
             self.U10=U
             self.used_pH_buffers.add(10)
         print("voltage=",U)
         screen.display(U)
 
     def validateCal(self): #pH_buffers est un tuple contenant les valeurs de pH des tampons
+<<<<<<< HEAD
+=======
+        print("validate cal")
+>>>>>>> test_francois
         pH_buffers=sorted(list(self.used_pH_buffers))
         self.used_pH_buffers = pH_buffers
         #print("pH buffers : ",type(pH_buffers),pH_buffers)
@@ -131,6 +189,7 @@ class PhMeterCalibWindow(QDialog, Ui_calibration_window):
         (a,b)=PHMeter.computeCalCoefs(self.ihm.phmeter,u_cal,pH_buffers) #calcul des coefficients de calib
         PHMeter.saveCalData(self.ihm.phmeter, dt.strftime("%m/%d/%Y %H:%M:%S"), pH_buffers, u_cal, (a,b)) #enregistrer dans le fichier
 
+<<<<<<< HEAD
 """
 if __name__ == "__main__":
     import sys
@@ -201,3 +260,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+=======
+>>>>>>> test_francois

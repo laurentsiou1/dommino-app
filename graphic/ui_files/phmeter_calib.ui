@@ -6,8 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< HEAD
     <width>440</width>
     <height>290</height>
+=======
+    <width>418</width>
+    <height>316</height>
+>>>>>>> test_francois
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,12 +21,26 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
+<<<<<<< HEAD
      <x>190</x>
      <y>220</y>
+=======
+     <x>180</x>
+     <y>270</y>
+>>>>>>> test_francois
      <width>231</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+>>>>>>> test_francois
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
@@ -32,16 +51,31 @@
   <widget class="QLCDNumber" name="lcdNumber">
    <property name="geometry">
     <rect>
+<<<<<<< HEAD
      <x>210</x>
      <y>80</y>
+=======
+     <x>200</x>
+     <y>120</y>
+>>>>>>> test_francois
      <width>211</width>
      <height>131</height>
     </rect>
    </property>
+<<<<<<< HEAD
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+>>>>>>> test_francois
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
+<<<<<<< HEAD
      <x>260</x>
      <y>40</y>
      <width>131</width>
@@ -57,66 +91,189 @@
     <rect>
      <x>30</x>
      <y>50</y>
+=======
+     <x>240</x>
+     <y>80</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Live voltage (mV)</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="U_ph4">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>120</y>
+>>>>>>> test_francois
      <width>71</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_3">
    <property name="geometry">
     <rect>
      <x>30</x>
      <y>130</y>
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="U_ph7">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>190</y>
+>>>>>>> test_francois
      <width>71</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
   </widget>
   <widget class="QLCDNumber" name="lcdNumber_4">
    <property name="geometry">
     <rect>
      <x>30</x>
      <y>210</y>
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="U_ph10">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>260</y>
+>>>>>>> test_francois
      <width>71</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
      <x>130</x>
      <y>210</y>
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="button_ph10">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>260</y>
+>>>>>>> test_francois
      <width>51</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+>>>>>>> test_francois
    <property name="text">
     <string>pH10</string>
    </property>
   </widget>
+<<<<<<< HEAD
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
      <x>130</x>
      <y>130</y>
+=======
+  <widget class="QPushButton" name="button_ph7">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>190</y>
+>>>>>>> test_francois
      <width>51</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+>>>>>>> test_francois
    <property name="text">
     <string>pH7</string>
    </property>
   </widget>
+<<<<<<< HEAD
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
      <x>130</x>
      <y>50</y>
+=======
+  <widget class="QPushButton" name="button_ph4">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>120</y>
+>>>>>>> test_francois
      <width>51</width>
      <height>51</height>
     </rect>
    </property>
+<<<<<<< HEAD
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+>>>>>>> test_francois
    <property name="text">
     <string>pH4</string>
    </property>
@@ -125,13 +282,71 @@
    <property name="geometry">
     <rect>
      <x>30</x>
+<<<<<<< HEAD
      <y>10</y>
+=======
+     <y>80</y>
+>>>>>>> test_francois
      <width>151</width>
      <height>31</height>
     </rect>
    </property>
+<<<<<<< HEAD
    <property name="text">
     <string>Tensions enregistrées</string>
+=======
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Recorded voltages</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_indications">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>401</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Click on corresponding pH when voltage stabilizes
+Click Apply to save</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+>>>>>>> test_francois
    </property>
   </widget>
  </widget>

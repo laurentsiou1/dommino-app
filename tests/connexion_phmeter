@@ -1,0 +1,32 @@
+# test phmeter class
+if __name__ == "__main__":
+    from controlPannel import ControlPannel
+    try: #si le pH mètre est connecté
+        ch = VoltageInput()
+        ch.setDeviceSerialNumber(432846)
+        ch.setChannel(0)
+        ch.openWaitForAttachment(1000)
+        ch.setOnVoltageChangeHandler(PHMeter.doOnVoltageChange)
+
+        phm = PHMeter(ch)
+        phm.configure_pHmeter()
+        print("pH mètre connecté")
+    except: #pH mètre non connecté
+        phm = 'pH mètre'
+        print("pH mètre non connecté")
+    finally:    
+        import sys
+        app = QtWidgets.QApplication(sys.argv)
+        Dialog = QtWidgets.QDialog()
+        mwindow = ControlPannel()
+        ui = PhMeterCalibWindow(phm, mwindow)
+        ui.setupUi(Dialog)
+    try:
+        #connection de la fenêtre avec le pH-mètre
+        ui.phmeter.U_pH.setOnVoltageChangeHandler(ui.setOnDirectPH)
+    except:
+        pass
+    finally:
+        Dialog.show()        
+        #print("show")
+        sys.exit(app.exec_())

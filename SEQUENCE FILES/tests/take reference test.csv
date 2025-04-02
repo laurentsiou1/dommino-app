@@ -1,2 +1,7 @@
 syringe;dispense type;value;delay mixing;delay flow;pump speed;reference
 B;DISP_VOL_UL;0;0;0;1;1
+<<<<<<< HEAD
+=======
+B;DISP_VOL_UL;0;60;120;1;1
+B;DISP_VOL_UL;0;0;0;1;1
+>>>>>>> test_francois
