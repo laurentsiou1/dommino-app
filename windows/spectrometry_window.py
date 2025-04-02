@@ -6,10 +6,7 @@ from subsystems.absorbanceMeasure import AbsorbanceMeasure
 import subsystems.processing as proc
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-<<<<<<< HEAD
-=======
 from PyQt5.QtGui import QIcon
->>>>>>> test_francois
 from graphic.windows.spectrometer_win import Ui_spectro_config
 from PyQt5.QtWidgets import QDialog
 import pyqtgraph as pg
@@ -34,13 +31,10 @@ class SpectrometryWindow(QDialog,Ui_spectro_config):
     
         self.refreshing_rate=1000 #ms
 
-<<<<<<< HEAD
-=======
         # Icone windows
         icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
         self.setWindowIcon(QIcon(icon_path))
 
->>>>>>> test_francois
         #spectro connecté
         if self.spectro_unit.state=='open':
             self.shutter.setChecked(self.spectro_unit.shutter.getState())  

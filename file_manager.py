@@ -32,11 +32,7 @@ def readSequenceInstructions(file):  #file: sequence config file #chaine de cara
             elif syringe_id=='C':
                 syringes_to_use[2]=1
             line=[syringe_id,dispense_type,value,mixing_time,flow_time,pump_speed,refresh_ref]
-<<<<<<< HEAD
-            tab.append(line)
-=======
             tab.append(line)    #liste de liste avec chaque liste = ligne du fichier
->>>>>>> test_francois
             idx+=1
 
     instruction_table=tab
@@ -123,14 +119,10 @@ class Data():
                                 ### METADATA
 
         #Sequence general and chemical informations
-<<<<<<< HEAD
-        metadata = seq.infos+"\n\nInstruction table :\n"
-=======
         metadata = ("Instrument : "+seq.ihm.instrument_id+"\nMain board S/N : "\
         +str(seq.ihm.board_number)+"\nVINT S/N : "+str(seq.ihm.VINT_number)+seq.infos\
         +"\n\nInstruction table :\nSyringe\tDipense type\tValue\tdelay mixing\tdelay flow\tspeed\treference\n")
         
->>>>>>> test_francois
         #Sequence configuration file printed here
         tab = seq.instruction_table
         Nl = len(tab)
@@ -145,30 +137,18 @@ class Data():
         #background and reference spectra
         if seq.spectro.state=='open':   
             #N° measure where reference is taken
-<<<<<<< HEAD
-            metadata += "reference taken during measure N°\t"
-=======
             metadata += "reference taken after measure N°\t"
->>>>>>> test_francois
             if seq.initial_reference==True and seq.initial_background==True:
                 metadata += "Initial\t\t"
             for c in range(seq.N_ref):
                 metadata += str(seq.reference_indexes[c])+"\t\t"
             
             N_refs=len(seq.references)  #real number of references taken
-<<<<<<< HEAD
-            print("n refs ", N_refs)
-            #Times of reference measures
-            metadata += "\ntimes (h:min:sec)\t"
-            for c in range(N_refs):
-                print(c)
-=======
             #print("n refs ", N_refs)
             #Times of reference measures
             metadata += "\ntimes (h:min:sec)\t"
             for c in range(N_refs):
                 #print(c)
->>>>>>> test_francois
                 metadata += str(seq.reference_times[c])+"\t\t"
             #Labels bgd or ref
             metadata += "\nWavelengths(nm)\t"
@@ -239,11 +219,7 @@ class Data():
         data+="\ntimes (h:min:sec)\t"   #heures de mesures
         for k in range(len(seq.measure_times)):
             data+=str(seq.measure_times[k].strftime("%H:%M:%S"))+'\t'   
-<<<<<<< HEAD
-        data+="\nequilibration delay (min:sec)\t"   #temps entre mesures
-=======
         data+="\nequilibration delay (h:min:sec)\t"   #temps entre mesures
->>>>>>> test_francois
         for k in range(len(seq.equilibration_times)):
             data+=str(seq.equilibration_times[k].seconds//60)+":"+str(seq.equilibration_times[k].seconds%60)+'\t' 
 

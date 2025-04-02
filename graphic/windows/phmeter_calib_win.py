@@ -14,11 +14,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_calibration_window(object):
     def setupUi(self, calibration_window):
         calibration_window.setObjectName("calibration_window")
-<<<<<<< HEAD
-        calibration_window.resize(440, 290)
-        self.buttonBox = QtWidgets.QDialogButtonBox(calibration_window)
-        self.buttonBox.setGeometry(QtCore.QRect(190, 220, 231, 51))
-=======
         calibration_window.resize(418, 316)
         self.buttonBox = QtWidgets.QDialogButtonBox(calibration_window)
         self.buttonBox.setGeometry(QtCore.QRect(180, 270, 231, 51))
@@ -27,39 +22,10 @@ class Ui_calibration_window(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonBox.sizePolicy().hasHeightForWidth())
         self.buttonBox.setSizePolicy(sizePolicy)
->>>>>>> test_francois
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Apply|QtWidgets.QDialogButtonBox.Cancel)
         self.buttonBox.setObjectName("buttonBox")
         self.lcdNumber = QtWidgets.QLCDNumber(calibration_window)
-<<<<<<< HEAD
-        self.lcdNumber.setGeometry(QtCore.QRect(210, 80, 211, 131))
-        self.lcdNumber.setObjectName("lcdNumber")
-        self.label = QtWidgets.QLabel(calibration_window)
-        self.label.setGeometry(QtCore.QRect(260, 40, 131, 41))
-        self.label.setObjectName("label")
-        self.lcdNumber_2 = QtWidgets.QLCDNumber(calibration_window)
-        self.lcdNumber_2.setGeometry(QtCore.QRect(30, 50, 71, 51))
-        self.lcdNumber_2.setObjectName("lcdNumber_2")
-        self.lcdNumber_3 = QtWidgets.QLCDNumber(calibration_window)
-        self.lcdNumber_3.setGeometry(QtCore.QRect(30, 130, 71, 51))
-        self.lcdNumber_3.setObjectName("lcdNumber_3")
-        self.lcdNumber_4 = QtWidgets.QLCDNumber(calibration_window)
-        self.lcdNumber_4.setGeometry(QtCore.QRect(30, 210, 71, 51))
-        self.lcdNumber_4.setObjectName("lcdNumber_4")
-        self.pushButton = QtWidgets.QPushButton(calibration_window)
-        self.pushButton.setGeometry(QtCore.QRect(130, 210, 51, 51))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(calibration_window)
-        self.pushButton_2.setGeometry(QtCore.QRect(130, 130, 51, 51))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(calibration_window)
-        self.pushButton_3.setGeometry(QtCore.QRect(130, 50, 51, 51))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.label_2 = QtWidgets.QLabel(calibration_window)
-        self.label_2.setGeometry(QtCore.QRect(30, 10, 151, 31))
-        self.label_2.setObjectName("label_2")
-=======
         self.lcdNumber.setGeometry(QtCore.QRect(200, 120, 211, 131))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -156,7 +122,6 @@ class Ui_calibration_window(object):
         self.label_indications.setAlignment(QtCore.Qt.AlignCenter)
         self.label_indications.setWordWrap(True)
         self.label_indications.setObjectName("label_indications")
->>>>>>> test_francois
 
         self.retranslateUi(calibration_window)
         self.buttonBox.accepted.connect(calibration_window.accept) # type: ignore
@@ -166,13 +131,6 @@ class Ui_calibration_window(object):
     def retranslateUi(self, calibration_window):
         _translate = QtCore.QCoreApplication.translate
         calibration_window.setWindowTitle(_translate("calibration_window", "pH meter calibration"))
-<<<<<<< HEAD
-        self.label.setText(_translate("calibration_window", "tension (mV) en direct"))
-        self.pushButton.setText(_translate("calibration_window", "pH10"))
-        self.pushButton_2.setText(_translate("calibration_window", "pH7"))
-        self.pushButton_3.setText(_translate("calibration_window", "pH4"))
-        self.label_2.setText(_translate("calibration_window", "Tensions enregistrées"))
-=======
         self.label.setText(_translate("calibration_window", "Live voltage (mV)"))
         self.button_ph10.setText(_translate("calibration_window", "pH10"))
         self.button_ph7.setText(_translate("calibration_window", "pH7"))
@@ -180,7 +138,6 @@ class Ui_calibration_window(object):
         self.label_2.setText(_translate("calibration_window", "Recorded voltages"))
         self.label_indications.setText(_translate("calibration_window", "Click on corresponding pH when voltage stabilizes\n"
 "Click Apply to save"))
->>>>>>> test_francois
 
 
 if __name__ == "__main__":

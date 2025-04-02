@@ -8,11 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication #, QWidget, QLabel, QLineE
 from graphic.windows.control_panel_win import Ui_ControlPanel
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QRect, QPoint
-<<<<<<< HEAD
-#from PyQt5.QtGui import QPixmap
-=======
 from PyQt5.QtGui import QIcon
->>>>>>> test_francois
 from graphic import display
 
 from pyqtgraph import PlotWidget, plot
@@ -41,13 +37,10 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def __init__(self, ihm, parent=None):
         super(ControlPanel,self).__init__(parent)
         self.setupUi(self)
-<<<<<<< HEAD
-=======
         
         # Icone windows
         icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
         self.setWindowIcon(QIcon(icon_path))
->>>>>>> test_francois
 
         #Sous systèmes
         self.ihm=ihm
@@ -149,21 +142,13 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
         #connexions
         self.electrode_box.textChanged.connect(self.update_electrode_model)
-<<<<<<< HEAD
-        self.connect_phmeter.clicked.connect(self.link_pHmeter2IHM)
-=======
         self.connect_phmeter_button.clicked.connect(self.connect_disconnect_phmeter)
->>>>>>> test_francois
         self.cal_button.clicked.connect(self.ihm.openCalibWindow)
 
         self.connect_disconnect_spectro_button.clicked.connect(self.connect_disconnect_spectrometer)
         self.spectro_settings.clicked.connect(self.OnClick_spectro_settings)
         
-<<<<<<< HEAD
-        self.connect_syringe_pump.clicked.connect(self.connectSyringePump)
-=======
         self.connect_dispenser_button.clicked.connect(self.connect_disconnect_dispenser)
->>>>>>> test_francois
         self.open_syringe_panel.clicked.connect(self.ihm.openDispenserWindow)
         
         self.connect_disconnect_circuit.clicked.connect(self.connexionChange_circuit)
@@ -186,11 +171,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
         self.close_all.clicked.connect(self.ihm.close_all_devices)
         self.close_all.clicked.connect(self.update_lights)
-<<<<<<< HEAD
-        self.close_all.clicked.connect(self.clear_IHM)
-=======
         self.close_all.clicked.connect(self.clear_phmeter_display)
->>>>>>> test_francois
 
     def select_pixmap(self, state):
         if state=='open':
@@ -224,11 +205,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def connectAllDevices(self):
         self.connectCircuit()
         self.link_pHmeter2IHM()
-<<<<<<< HEAD
-        self.connectSyringePump()
-=======
         self.connect_dispenser()
->>>>>>> test_francois
         self.spectro_unit.connect()
         if self.spectro_unit.state=='open':
             self.led_spectro.setPixmap(self.pixmap_green)
@@ -257,8 +234,6 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.stab_step.valueChanged.connect(self.update_stab_step)
             #self.load_calibration_button.clicked.connect(self.load_calibration)
     
-<<<<<<< HEAD
-=======
     def connect_disconnect_phmeter(self):
         """Executed when clicking on connect/disconnect button"""
         if self.phmeter.state=='closed':
@@ -278,7 +253,6 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.led_phmeter.setPixmap(self.pixmap_green)
             self.connect_phmeter_button.setText("Disconnect")
 
->>>>>>> test_francois
     def update_electrode_model(self):
         self.phmeter.electrode=self.electrode_box.toPlainText()
 
@@ -288,11 +262,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
     def update_stab_step(self):
         self.phmeter.stab_step=self.stab_step.value()
 
-<<<<<<< HEAD
-    def clear_IHM(self):
-=======
     def clear_phmeter_display(self):
->>>>>>> test_francois
         #pH meter
         self.direct_pH.display(None)
         self.calib_text_box.clear()
@@ -394,12 +364,6 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
 
 
                                     ### Methods for Syringe pumps
-<<<<<<< HEAD
-    def connectSyringePump(self):
-        self.dispenser.connect()
-        if self.dispenser.state=='open':
-            self.led_disp.setPixmap(self.pixmap_green)
-=======
     def connect_dispenser(self):
         self.dispenser.connect()
         self.update_dispenser_state()
@@ -420,7 +384,6 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
         elif self.dispenser.state=='open':
             self.led_disp.setPixmap(self.pixmap_green)
             self.connect_dispenser_button.setText("Disconnect")
->>>>>>> test_francois
     
     def refresh_volumes(self):
         self.levelbarA.setProperty("value",str(self.dispenser.syringe_A.level_uL))   #int

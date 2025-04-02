@@ -3,11 +3,8 @@ from configparser import ConfigParser
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from graphic.windows.sequence_cfg_win import Ui_sequenceConfig
-<<<<<<< HEAD
-=======
 from PyQt5.QtGui import QIcon
 import os
->>>>>>> test_francois
 
 #from IHM import IHM
 from automatic_sequences import AutomaticSequence, CustomSequence
@@ -22,13 +19,10 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
         self.ihm=ihm
 
         #graphique
-<<<<<<< HEAD
-=======
 
         # Icone windows
         icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
         self.setWindowIcon(QIcon(icon_path))
->>>>>>> test_francois
         #défaut
         self.V_init.setSpecialValueText("")
         self.dispense_mode.setCurrentText(self.ihm.dispense_mode)
@@ -111,29 +105,6 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
     def launchTitration(self):
         if self.V_init.value() <= 0.0: # ------------------------------------------------------modif vLS
             QtWidgets.QMessageBox.warning(self, "Missing Inital Volume", "Please enter an Initial Volume before starting the sequence...") # ------modif vLS
-<<<<<<< HEAD
-        elif self.dispense_mode.currentText() == "from file": #sequence instruction file
-            config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
-            bool(self.atmosphere_box.currentText()),str(self.ihm.fibers),\
-            str(self.ihm.flowcell),self.V_init.value(),self.dispense_mode.currentText(),\
-            self.sequence_config_file.text(),self.saving_folder.text()]
-            self.ihm.seq=CustomSequence(self.ihm,config) #creation of object sequence
-            self.ihm.seq_data=Data(self.ihm.seq)
-            self.ihm.seq.configure()
-            self.ihm.seq.run_sequence()
-            self.update_infos()
-        else:   #classic sequence
-            config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
-            bool(self.atmosphere_box.currentText()),str(self.ihm.fibers),str(self.ihm.flowcell),\
-            self.V_init.value(),self.dispense_mode.currentText(),self.Nmes.value(),\
-            self.pH_init.value(),self.pH_fin.value(),self.fixed_delay_box.value(),\
-            self.agitation_delay_box.value(),self.saving_folder.text()]
-            self.ihm.seq=ClassicSequence(self.ihm,config)
-            self.ihm.seq_data=Data(self.ihm.seq)
-            self.ihm.seq.configure()
-            self.update_infos()
-        print(self.infos)
-=======
         else:   #Able to launch
             if self.dispense_mode.currentText() == "from file": #sequence instruction file
                 config = [self.exp_name.toPlainText(),self.description.toPlainText(),\
@@ -155,7 +126,6 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
                 self.ihm.seq.configure()
             self.update_infos()
             print(self.infos)
->>>>>>> test_francois
     
     def updateSettings(self):
         self.ihm.dispense_mode=self.dispense_mode.currentText()

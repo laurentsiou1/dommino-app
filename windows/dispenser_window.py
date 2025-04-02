@@ -2,17 +2,11 @@
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QDialog
-<<<<<<< HEAD
-from graphic.windows.dispenser_win import Ui_SyringePanel
-from graphic import display
-
-=======
 from PyQt5.QtGui import QIcon
 from graphic.windows.dispenser_win import Ui_SyringePanel
 from graphic import display
 
 
->>>>>>> test_francois
 from configparser import ConfigParser
 import os
 
@@ -26,13 +20,10 @@ class DispenserWindow(QDialog,Ui_SyringePanel): #(object)
         #graphic
         super(DispenserWindow,self).__init__(parent)
         self.setupUi(self)
-<<<<<<< HEAD
-=======
 
         # Icone windows
         icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
         self.setWindowIcon(QIcon(icon_path))
->>>>>>> test_francois
         
         self.ihm=ihm
         self.dispenser=ihm.dispenser
