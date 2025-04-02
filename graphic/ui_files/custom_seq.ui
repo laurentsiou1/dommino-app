@@ -142,7 +142,11 @@
       <height>871</height>
      </rect>
     </property>
+<<<<<<< HEAD
     <layout class="QGridLayout" name="grid_instructions" columnstretch="3,2,5,2,3,3,3,2">
+=======
+    <layout class="QGridLayout" name="grid_instructions" columnstretch="3,2,6,2,3,3,3,2">
+>>>>>>> test_francois
      <item row="0" column="4">
       <widget class="QLabel" name="column_delay_stop">
        <property name="text">
@@ -351,7 +355,11 @@ Parameters ...</string>
      </rect>
     </property>
     <property name="text">
+<<<<<<< HEAD
      <string>next measure in</string>
+=======
+     <string>Remaining time</string>
+>>>>>>> test_francois
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

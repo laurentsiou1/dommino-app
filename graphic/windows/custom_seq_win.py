@@ -263,7 +263,11 @@ class Ui_CustomSequenceWindow(object):
         self.spectra_tabs.setTabText(self.spectra_tabs.indexOf(self.tab1), _translate("CustomSequenceWindow", "delta"))
         self.spectra_tabs.setTabText(self.spectra_tabs.indexOf(self.tab2), _translate("CustomSequenceWindow", "raw"))
         self.spectra_tabs.setTabText(self.spectra_tabs.indexOf(self.tab3), _translate("CustomSequenceWindow", "intensity"))
+<<<<<<< HEAD
         self.label_countdown.setText(_translate("CustomSequenceWindow", "next measure in"))
+=======
+        self.label_countdown.setText(_translate("CustomSequenceWindow", "Remaining time"))
+>>>>>>> test_francois
         self.syringes.setText(_translate("CustomSequenceWindow", "Syringe Panel"))
         self.column_vol.setText(_translate("CustomSequenceWindow", "volume"))
         self.column_pH.setText(_translate("CustomSequenceWindow", "pH"))

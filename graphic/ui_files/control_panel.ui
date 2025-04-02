@@ -196,7 +196,11 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+<<<<<<< HEAD
    <widget class="QPushButton" name="connect_phmeter">
+=======
+   <widget class="QPushButton" name="connect_phmeter_button">
+>>>>>>> test_francois
     <property name="geometry">
      <rect>
       <x>570</x>
@@ -235,7 +239,11 @@
      <string>Stop</string>
     </property>
    </widget>
+<<<<<<< HEAD
    <widget class="QPushButton" name="connect_syringe_pump">
+=======
+   <widget class="QPushButton" name="connect_dispenser_button">
+>>>>>>> test_francois
     <property name="geometry">
      <rect>
       <x>650</x>
@@ -1358,9 +1366,15 @@ empty</string>
    <widget class="QLabel" name="label_level">
     <property name="geometry">
      <rect>
+<<<<<<< HEAD
       <x>700</x>
       <y>710</y>
       <width>111</width>
+=======
+      <x>640</x>
+      <y>700</y>
+      <width>211</width>
+>>>>>>> test_francois
       <height>71</height>
      </rect>
     </property>
@@ -1380,16 +1394,30 @@ empty</string>
      <string>Dispensing range:</string>
     </property>
     <property name="alignment">
+<<<<<<< HEAD
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+=======
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+>>>>>>> test_francois
     </property>
    </widget>
    <widget class="QLabel" name="label_level_2">
     <property name="geometry">
      <rect>
+<<<<<<< HEAD
       <x>730</x>
       <y>760</y>
       <width>111</width>
       <height>41</height>
+=======
+      <x>660</x>
+      <y>750</y>
+      <width>181</width>
+      <height>61</height>
+>>>>>>> test_francois
      </rect>
     </property>
     <property name="cursor">
@@ -1407,7 +1435,14 @@ empty</string>
  - Manual: 0–500 µL</string>
     </property>
     <property name="alignment">
+<<<<<<< HEAD
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+=======
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+>>>>>>> test_francois
     </property>
    </widget>
   </widget>

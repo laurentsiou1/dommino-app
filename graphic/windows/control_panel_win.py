@@ -63,18 +63,30 @@ class Ui_ControlPanel(object):
         self.levelA_uL.setFont(font)
         self.levelA_uL.setAlignment(QtCore.Qt.AlignCenter)
         self.levelA_uL.setObjectName("levelA_uL")
+<<<<<<< HEAD
         self.connect_phmeter = QtWidgets.QPushButton(self.centralwidget)
         self.connect_phmeter.setGeometry(QtCore.QRect(570, 140, 101, 31))
         self.connect_phmeter.setObjectName("connect_phmeter")
+=======
+        self.connect_phmeter_button = QtWidgets.QPushButton(self.centralwidget)
+        self.connect_phmeter_button.setGeometry(QtCore.QRect(570, 140, 101, 31))
+        self.connect_phmeter_button.setObjectName("connect_phmeter_button")
+>>>>>>> test_francois
         self.connect_disconnect_circuit = QtWidgets.QPushButton(self.centralwidget)
         self.connect_disconnect_circuit.setGeometry(QtCore.QRect(400, 590, 101, 31))
         self.connect_disconnect_circuit.setObjectName("connect_disconnect_circuit")
         self.stop_syringe = QtWidgets.QPushButton(self.centralwidget)
         self.stop_syringe.setGeometry(QtCore.QRect(580, 750, 61, 61))
         self.stop_syringe.setObjectName("stop_syringe")
+<<<<<<< HEAD
         self.connect_syringe_pump = QtWidgets.QPushButton(self.centralwidget)
         self.connect_syringe_pump.setGeometry(QtCore.QRect(650, 510, 111, 61))
         self.connect_syringe_pump.setObjectName("connect_syringe_pump")
+=======
+        self.connect_dispenser_button = QtWidgets.QPushButton(self.centralwidget)
+        self.connect_dispenser_button.setGeometry(QtCore.QRect(650, 510, 111, 61))
+        self.connect_dispenser_button.setObjectName("connect_dispenser_button")
+>>>>>>> test_francois
         self.graphic_tabs = QtWidgets.QTabWidget(self.centralwidget)
         self.graphic_tabs.setGeometry(QtCore.QRect(10, 50, 511, 441))
         self.graphic_tabs.setObjectName("graphic_tabs")
@@ -397,13 +409,18 @@ class Ui_ControlPanel(object):
         self.line_13.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_13.setObjectName("line_13")
         self.label_level = QtWidgets.QLabel(self.centralwidget)
+<<<<<<< HEAD
         self.label_level.setGeometry(QtCore.QRect(700, 710, 111, 71))
+=======
+        self.label_level.setGeometry(QtCore.QRect(640, 700, 211, 71))
+>>>>>>> test_francois
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.label_level.setFont(font)
         self.label_level.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.label_level.setAutoFillBackground(False)
+<<<<<<< HEAD
         self.label_level.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_level.setObjectName("label_level")
         self.label_level_2 = QtWidgets.QLabel(self.centralwidget)
@@ -412,6 +429,18 @@ class Ui_ControlPanel(object):
         self.label_level_2.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_level_2.setAutoFillBackground(False)
         self.label_level_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+=======
+        self.label_level.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_level.setWordWrap(True)
+        self.label_level.setObjectName("label_level")
+        self.label_level_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_level_2.setGeometry(QtCore.QRect(660, 750, 181, 61))
+        self.label_level_2.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.label_level_2.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_level_2.setAutoFillBackground(False)
+        self.label_level_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_level_2.setWordWrap(True)
+>>>>>>> test_francois
         self.label_level_2.setObjectName("label_level_2")
         ControlPanel.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(ControlPanel)
@@ -463,10 +492,17 @@ class Ui_ControlPanel(object):
         self.spectro_settings.setText(_translate("ControlPanel", "Spectrometry settings"))
         self.save_button.setText(_translate("ControlPanel", "Save current measure"))
         self.levelA_uL.setText(_translate("ControlPanel", "0 uL"))
+<<<<<<< HEAD
         self.connect_phmeter.setText(_translate("ControlPanel", "Connect"))
         self.connect_disconnect_circuit.setText(_translate("ControlPanel", "Connect"))
         self.stop_syringe.setText(_translate("ControlPanel", "Stop"))
         self.connect_syringe_pump.setText(_translate("ControlPanel", "connect \n"
+=======
+        self.connect_phmeter_button.setText(_translate("ControlPanel", "Connect"))
+        self.connect_disconnect_circuit.setText(_translate("ControlPanel", "Connect"))
+        self.stop_syringe.setText(_translate("ControlPanel", "Stop"))
+        self.connect_dispenser_button.setText(_translate("ControlPanel", "connect \n"
+>>>>>>> test_francois
 " Syringe Pump"))
         self.graphic_tabs.setTabText(self.graphic_tabs.indexOf(self.tab1), _translate("ControlPanel", "Absorbance"))
         self.graphic_tabs.setTabText(self.graphic_tabs.indexOf(self.tab_2), _translate("ControlPanel", "Intensity"))

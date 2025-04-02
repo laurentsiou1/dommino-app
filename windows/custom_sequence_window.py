@@ -3,6 +3,10 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QApplication
+<<<<<<< HEAD
+=======
+from PyQt5.QtGui import QIcon
+>>>>>>> test_francois
 from graphic.windows.custom_seq_win import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
@@ -31,6 +35,13 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.ihm=ihm
         self.seq=self.ihm.seq
         seq=self.seq
+<<<<<<< HEAD
+=======
+
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
+>>>>>>> test_francois
         
         #Sizing PlotWidgts inside QTabWidgets
         (w,h)=(self.spectra_tabs.geometry().width(),self.spectra_tabs.geometry().height())
@@ -61,6 +72,11 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.spectrometry.clicked.connect(self.ihm.openSpectroWindow)
         self.syringes.clicked.connect(self.ihm.openDispenserWindow)
         self.pause_resume_button.clicked.connect(self.seq.pause_resume)
+<<<<<<< HEAD
+=======
+        self.stop_all_button.clicked.connect(self.seq.stop)
+
+>>>>>>> test_francois
         #saving
         self.actionsave.triggered.connect(lambda : self.ihm.seq_data.createSequenceFiles(seq)) 
         #la fonction ne s'applique pas sur le self, d'où le lambda ?
@@ -68,6 +84,11 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         
         ##Initialisation en fonction de la config 
         self.N_mes=seq.N_mes
+<<<<<<< HEAD
+=======
+        self.remaining_time_sec=seq.total_time_sec
+
+>>>>>>> test_francois
         
         #Paramètres d'expérience
         self.experiment_parameters.setPlainText("\nNom de l'expérience : "+str(seq.experience_name)\
@@ -148,6 +169,14 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     #DIRECT
     def refresh_screen(self):
         #Countdown
+<<<<<<< HEAD
+=======
+        if self.seq.is_running:  #If sequence is not on pause
+            if self.remaining_time_sec>0:
+                self.remaining_time_sec-=1
+                #print("remaining time : ", self.remaining_time_sec)
+                self.countdown.setProperty("value", self.remaining_time_sec)
+>>>>>>> test_francois
         try:
             tm=datetime.now()
             tm=tm.replace(microsecond=0)
