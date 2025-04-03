@@ -149,7 +149,7 @@ class Data():
             metadata += "\ntimes (h:min:sec)\t"
             for c in range(N_refs):
                 #print(c)
-                metadata += str(seq.reference_times[c])+"\t\t"
+                metadata += str(seq.reference_times[c].strftime("%m/%d/%Y, %H:%M:%S"))+"\t\t"
             #Labels bgd or ref
             metadata += "\nWavelengths(nm)\t"
             for c in range(N_refs):
@@ -218,7 +218,7 @@ class Data():
         #Times
         data+="\ntimes (h:min:sec)\t"   #heures de mesures
         for k in range(len(seq.measure_times)):
-            data+=str(seq.measure_times[k].strftime("%H:%M:%S"))+'\t'   
+            data+=str(seq.measure_times[k].strftime("%m/%d/%Y, %H:%M:%S"))+'\t'   
         data+="\nequilibration delay (h:min:sec)\t"   #temps entre mesures
         for k in range(len(seq.equilibration_times)):
             data+=str(seq.equilibration_times[k].seconds//60)+":"+str(seq.equilibration_times[k].seconds%60)+'\t' 

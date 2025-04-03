@@ -374,6 +374,7 @@ class ControlPanel(QMainWindow, Ui_ControlPanel):
             self.dispenser.connect()
         elif self.dispenser.state=='open':
             self.dispenser.close()
+            self.ihm.updateDefaultParam()
         self.update_dispenser_state()
         
     def update_dispenser_state(self):
