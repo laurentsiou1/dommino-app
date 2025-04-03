@@ -1136,3 +1136,13 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(0.29911666666666675, -1.0742166666666677)
 
+pH meter : Phidget 1130
+pH probe : oakton epoxy
+04/03/2025 12:18:35
+
+Type de calibration: [4, 7, 10]
+Voltages calib:
+[1.7111, 2.5421, 3.3101]
+Coefficients U=a*pH+b
+(a,b)=(0.26649999999999996, 0.6556000000000012)
+
