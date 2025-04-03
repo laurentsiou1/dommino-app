@@ -32,7 +32,7 @@ def readSequenceInstructions(file):  #file: sequence config file #chaine de cara
             elif syringe_id=='C':
                 syringes_to_use[2]=1
             line=[syringe_id,dispense_type,value,mixing_time,flow_time,pump_speed,refresh_ref]
-            tab.append(line)
+            tab.append(line)    #liste de liste avec chaque liste = ligne du fichier
             idx+=1
 
     instruction_table=tab

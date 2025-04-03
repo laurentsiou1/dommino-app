@@ -3,6 +3,8 @@ from configparser import ConfigParser
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from graphic.windows.sequence_cfg_win import Ui_sequenceConfig
+from PyQt5.QtGui import QIcon
+import os
 
 #from IHM import IHM
 from automatic_sequences import AutomaticSequence, CustomSequence
@@ -17,6 +19,10 @@ class SequenceConfigWindow(QDialog,Ui_sequenceConfig): #(object)
         self.ihm=ihm
 
         #graphique
+
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
         #défaut
         self.V_init.setSpecialValueText("")
         self.dispense_mode.setCurrentText(self.ihm.dispense_mode)
