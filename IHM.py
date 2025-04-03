@@ -207,15 +207,15 @@ class IHM:
             #self.controlPanel.led_disp.setPixmap(self.controlPanel.pixmap_red)
 
         #Moteurs    
-        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.port_a: # modif LS - "==0" "self.phidgetstepperpump.port_a"
+        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.syringe_A.port_a: # modif LS - "==0" "self.phidgetstepperpump.port_a"
             #stepper A de pousse seringue débranché
             self.dispenser.syringe_A.state='closed'
             print("Stepper A disconnected")
-        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.port_b: # modif LS - "==1" "self.phidgetstepperpump.port_b"
+        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.syringe_B.port_b: # modif LS - "==1" "self.phidgetstepperpump.port_b"
             #stepper B de pousse seringue débranché
             self.dispenser.syringe_B.state='closed'
             print("Stepper B disconnected")
-        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.port_c: # modif LS - "==2" "self.phidgetstepperpump.port_c"
+        if deviceName=='4A Stepper Phidget' and hubPort==self.dispenser.syringe_C.port_c: # modif LS - "==2" "self.phidgetstepperpump.port_c"
             #stepper C de pousse seringue débranché
             self.dispenser.syringe_C.state='closed'
             print("Stepper C disconnected")
