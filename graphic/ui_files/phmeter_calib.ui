@@ -6,13 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-<<<<<<< HEAD
-    <width>440</width>
-    <height>290</height>
-=======
     <width>418</width>
     <height>316</height>
->>>>>>> test_francois
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,26 +16,18 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-<<<<<<< HEAD
-     <x>190</x>
-     <y>220</y>
-=======
      <x>180</x>
      <y>270</y>
->>>>>>> test_francois
      <width>231</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
->>>>>>> test_francois
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
@@ -51,47 +38,22 @@
   <widget class="QLCDNumber" name="lcdNumber">
    <property name="geometry">
     <rect>
-<<<<<<< HEAD
-     <x>210</x>
-     <y>80</y>
-=======
      <x>200</x>
      <y>120</y>
->>>>>>> test_francois
      <width>211</width>
      <height>131</height>
     </rect>
    </property>
-<<<<<<< HEAD
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
->>>>>>> test_francois
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-<<<<<<< HEAD
-     <x>260</x>
-     <y>40</y>
-     <width>131</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>tension (mV) en direct</string>
-   </property>
-  </widget>
-  <widget class="QLCDNumber" name="lcdNumber_2">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>50</y>
-=======
      <x>240</x>
      <y>80</y>
      <width>131</width>
@@ -125,19 +87,10 @@
     <rect>
      <x>20</x>
      <y>120</y>
->>>>>>> test_francois
      <width>71</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-  </widget>
-  <widget class="QLCDNumber" name="lcdNumber_3">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>130</y>
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
@@ -150,19 +103,10 @@
     <rect>
      <x>20</x>
      <y>190</y>
->>>>>>> test_francois
      <width>71</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-  </widget>
-  <widget class="QLCDNumber" name="lcdNumber_4">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>210</y>
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
@@ -175,19 +119,10 @@
     <rect>
      <x>20</x>
      <y>260</y>
->>>>>>> test_francois
      <width>71</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>210</y>
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
@@ -200,80 +135,54 @@
     <rect>
      <x>130</x>
      <y>260</y>
->>>>>>> test_francois
      <width>51</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
->>>>>>> test_francois
    <property name="text">
     <string>pH10</string>
    </property>
   </widget>
-<<<<<<< HEAD
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>130</y>
-=======
   <widget class="QPushButton" name="button_ph7">
    <property name="geometry">
     <rect>
      <x>130</x>
      <y>190</y>
->>>>>>> test_francois
      <width>51</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
->>>>>>> test_francois
    <property name="text">
     <string>pH7</string>
    </property>
   </widget>
-<<<<<<< HEAD
-  <widget class="QPushButton" name="pushButton_3">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>50</y>
-=======
   <widget class="QPushButton" name="button_ph4">
    <property name="geometry">
     <rect>
      <x>130</x>
      <y>120</y>
->>>>>>> test_francois
      <width>51</width>
      <height>51</height>
     </rect>
    </property>
-<<<<<<< HEAD
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
->>>>>>> test_francois
    <property name="text">
     <string>pH4</string>
    </property>
@@ -282,19 +191,11 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-<<<<<<< HEAD
-     <y>10</y>
-=======
      <y>80</y>
->>>>>>> test_francois
      <width>151</width>
      <height>31</height>
     </rect>
    </property>
-<<<<<<< HEAD
-   <property name="text">
-    <string>Tensions enregistrées</string>
-=======
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
@@ -346,7 +247,6 @@ Click Apply to save</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
->>>>>>> test_francois
    </property>
   </widget>
  </widget>

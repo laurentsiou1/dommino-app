@@ -1,5 +1,5 @@
 2023-08-17 17:15:20.276830
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -7,7 +7,7 @@ Coefficients U=a*pH+b
 (a,b)=(array([0.]), array([0.]))
 
 2023-08-17 17:40:46.475447
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -15,7 +15,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-08-17 17:44:10.544844
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.723, 2.7268]
@@ -23,7 +23,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.00015000000000007965, 2.7268833333333333)
 
 2023-08-17 17:44:42.724685
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -31,7 +31,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-17 17:44:57.249835
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -39,7 +39,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-17 17:45:09.496929
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -47,7 +47,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-18 14:21:39.797620
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.734, 2.7239]
@@ -55,7 +55,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0006333333333335524, 2.732966666666669)
 
 2023-08-18 14:22:02.957341
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.734, 2.7239]
@@ -63,7 +63,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0006333333333335524, 2.732966666666669)
 
 2023-08-18 15:08:03.783797
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7293, 2.7276]
@@ -71,7 +71,7 @@ Coefficients U=a*pH+b
 (a,b)=(-1.6666666666764374e-05, 2.7283166666666676)
 
 2023-08-18 15:43:41.891349
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7272, 2.7284]
@@ -79,7 +79,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00011666666666658311, 2.726950000000001)
 
 2023-08-18 15:43:53.231254
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7272, 2.7284]
@@ -87,7 +87,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00011666666666658311, 2.726950000000001)
 
 2023-08-18 15:43:54.143759
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7272, 2.7284]
@@ -95,7 +95,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00011666666666658311, 2.726950000000001)
 
 2023-08-18 15:43:54.707819
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7272, 2.7284]
@@ -103,7 +103,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00011666666666658311, 2.726950000000001)
 
 2023-08-18 15:44:42.295380
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -111,7 +111,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-18 15:49:02.486655
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7289, 2.7297]
@@ -119,7 +119,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003333333333332436, 2.7264333333333357)
 
 2023-08-18 15:49:10.615699
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7289, 2.7297]
@@ -127,7 +127,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003333333333332436, 2.7264333333333357)
 
 2023-08-18 16:01:28.052825
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7261, 2.7283]
@@ -135,7 +135,7 @@ Coefficients U=a*pH+b
 (a,b)=(9.999999999974256e-05, 2.726666666666669)
 
 2023-08-18 16:01:37.544984
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7261, 2.7283]
@@ -143,7 +143,7 @@ Coefficients U=a*pH+b
 (a,b)=(9.999999999974256e-05, 2.726666666666669)
 
 2023-08-18 16:02:08.320794
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -151,7 +151,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-18 16:02:11.459650
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -159,7 +159,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-18 16:03:47.932970
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 0, 0]
@@ -167,7 +167,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.45461666666666684, 4.091550000000002)
 
 2023-08-18 16:05:55.876637
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.728, 2.7277]
@@ -175,7 +175,7 @@ Coefficients U=a*pH+b
 (a,b)=(-3.339046764282948e-17, 2.727800000000001)
 
 2023-08-18 16:09:48.636714
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7298]
@@ -183,7 +183,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003499999999998244, 2.7259500000000023)
 
 2023-08-18 16:09:57.472183
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7298]
@@ -191,7 +191,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003499999999998244, 2.7259500000000023)
 
 2023-08-18 16:09:58.676517
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7298]
@@ -199,7 +199,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003499999999998244, 2.7259500000000023)
 
 2023-08-18 16:10:00.116613
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7298]
@@ -207,7 +207,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003499999999998244, 2.7259500000000023)
 
 2023-08-18 16:10:04.780473
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7298]
@@ -215,7 +215,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003499999999998244, 2.7259500000000023)
 
 2023-08-18 16:14:14.740573
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7246, 2.7272]
@@ -223,7 +223,7 @@ Coefficients U=a*pH+b
 (a,b)=(-8.333333333360559e-05, 2.7270833333333355)
 
 2023-08-18 16:14:29.873305
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7246, 2.7272]
@@ -231,7 +231,7 @@ Coefficients U=a*pH+b
 (a,b)=(-8.333333333360559e-05, 2.7270833333333355)
 
 2023-08-18 16:16:38.981217
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7332, 2.7228]
@@ -239,7 +239,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0008166666666668505, 2.733616666666668)
 
 2023-08-18 16:16:53.204996
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7332, 2.7228]
@@ -247,7 +247,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0008166666666668505, 2.733616666666668)
 
 2023-08-18 16:19:07.889604
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7277, 2.7277]
@@ -255,7 +255,7 @@ Coefficients U=a*pH+b
 (a,b)=(-2.0162044687075892e-16, 2.727700000000002)
 
 2023-08-18 16:21:09.417626
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7215, 2.7266]
@@ -263,7 +263,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0001833333333335043, 2.7265500000000014)
 
 2023-08-18 16:21:37.222640
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -271,7 +271,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-08-18 16:33:15.830275
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7277, 2.7322, 2.7281]
@@ -279,7 +279,7 @@ Coefficients U=a*pH+b
 (a,b)=(6.666666666652522e-05, 2.728866666666668)
 
 2023-08-29 11:58:10.975320
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.8694, 2.8256, 0]
@@ -287,7 +287,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.4782333333333336, 5.2459666666666696)
 
 2023-08-29 12:32:11.882217
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -295,7 +295,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-08-29 13:39:26.354757
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -303,7 +303,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-08-31 15:30:06.626232
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -311,7 +311,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-08-31 17:02:55.144351
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -319,7 +319,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-09-12 11:24:49.728489
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7398, 2.7397, 2.7398]
@@ -327,7 +327,7 @@ Coefficients U=a*pH+b
 (a,b)=(-1.1151645722089288e-16, 2.739766666666668)
 
 2023-09-12 11:25:18.405087
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.74, 2.7396, 0]
@@ -335,7 +335,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.45666666666666683, 5.023200000000002)
 
 2023-09-12 11:31:49.684953
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7392, 2.739, 0]
@@ -343,7 +343,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.4565333333333335, 5.0218000000000025)
 
 2023-09-12 11:32:15.533332
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7395, 2.7398, 2.7395]
@@ -351,7 +351,7 @@ Coefficients U=a*pH+b
 (a,b)=(9.04460934514917e-17, 2.7395999999999994)
 
 2023-09-12 11:32:18.492868
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7395, 2.7398, 2.7395]
@@ -359,7 +359,7 @@ Coefficients U=a*pH+b
 (a,b)=(9.04460934514917e-17, 2.7395999999999994)
 
 2023-09-12 12:21:19.446285
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7381, 2.7398, 2.7424]
@@ -367,7 +367,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0007166666666664455, 2.7350833333333355)
 
 2023-09-12 12:23:21.349664
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7377, 2.7384, 2.7381]
@@ -375,7 +375,7 @@ Coefficients U=a*pH+b
 (a,b)=(6.666666666678248e-05, 2.737600000000001)
 
 2023-09-12 12:27:02.957191
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7381, 2.7383, 0]
@@ -383,7 +383,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.4563500000000003, 5.019916666666669)
 
 2023-09-12 12:30:19.668484
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7382, 2.7381, 0]
@@ -391,7 +391,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.45636666666666675, 5.020000000000002)
 
 2023-09-12 12:34:50.144436
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -399,7 +399,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-09-12 12:38:49.056488
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [0, 0, 0]
@@ -407,7 +407,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
 2023-09-12 12:39:30.215980
-22°C 
+22ï¿½C 
 Type de calibration: 3
 Voltages calib:
 [2.7379, 2.7376, 0]
@@ -415,7 +415,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.45631666666666687, 5.019383333333335)
 
 2023-09-12 15:01:05.768123
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7379, 2.7381, 2.7382]
@@ -423,7 +423,7 @@ Coefficients U=a*pH+b
 (a,b)=(4.9999999999788996e-05, 2.7377166666666692)
 
 2023-09-12 15:25:50.170241
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7414]
@@ -431,7 +431,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0013000000000000789, 2.7322999999999995)
 
 2023-09-12 15:27:06.052681
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7376, 2.738]
@@ -439,7 +439,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00013333333333331865, 2.7370666666666668)
 
 2023-09-12 15:35:15.749162
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7376]
@@ -447,7 +447,7 @@ Coefficients U=a*pH+b
 (a,b)=(3.333333333340368e-05, 2.737366666666666)
 
 2023-09-12 15:35:39.621225
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7377]
@@ -455,7 +455,7 @@ Coefficients U=a*pH+b
 (a,b)=(6.666666666665932e-05, 2.737233333333333)
 
 2023-09-12 15:46:00.624310
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7393]
@@ -463,7 +463,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0006000000000000819, 2.7350999999999996)
 
 2023-09-12 15:48:03.250237
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7375, 2.7404, 2.7395]
@@ -471,7 +471,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003333333333332932, 2.736800000000001)
 
 2023-09-12 15:53:49.926180
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7377]
@@ -479,7 +479,7 @@ Coefficients U=a*pH+b
 (a,b)=(6.666666666665932e-05, 2.737233333333333)
 
 2023-09-12 15:56:15.163262
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7384]
@@ -487,7 +487,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00030000000000004096, 2.7362999999999995)
 
 2023-09-12 15:56:32.192182
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7375, 2.7375, 2.7378]
@@ -495,7 +495,7 @@ Coefficients U=a*pH+b
 (a,b)=(4.999999999996806e-05, 2.737250000000001)
 
 2023-09-12 15:56:51.731507
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.738]
@@ -503,7 +503,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00016666666666672233, 2.736833333333333)
 
 2023-09-12 15:57:36.455142
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7389, 2.7389]
@@ -511,7 +511,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0, 2.7389)
 
 2023-09-12 16:18:42.787786
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7376, 2.7398]
@@ -519,7 +519,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0007333333333332526, 2.734666666666667)
 
 2023-09-12 16:21:25.385846
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7378, 2.7424]
@@ -527,7 +527,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0015333333333333126, 2.731666666666667)
 
 2023-09-12 16:24:00.827673
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7411]
@@ -535,7 +535,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.001200000000000016, 2.7327)
 
 2023-09-12 16:25:08.371872
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7391]
@@ -543,7 +543,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0005333333333334226, 2.7353666666666663)
 
 2023-09-12 16:25:36.911137
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7375, 2.7375, 2.7599]
@@ -551,7 +551,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00373333333333323, 2.718833333333334)
 
 2023-09-12 16:28:52.782492
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.783]
@@ -559,7 +559,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.015166666666666698, 2.676833333333333)
 
 2023-09-12 16:29:08.495693
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7423, 2.7424, 2.7527]
@@ -567,7 +567,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0017333333333331708, 2.7336666666666685)
 
 2023-09-12 16:31:47.076683
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.738, 2.7521, 2.7574]
@@ -575,7 +575,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0032333333333332973, 2.726533333333335)
 
 2023-09-12 16:32:50.926020
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7383]
@@ -583,7 +583,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00026666666666678535, 2.736433333333333)
 
 2023-09-12 16:41:22.088395
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7377, 2.7424]
@@ -591,7 +591,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0015666666666667162, 2.731433333333333)
 
 2023-09-12 16:44:40.012011
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7378]
@@ -599,7 +599,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.000100000000000063, 2.7370999999999994)
 
 2023-09-12 16:47:13.568786
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7381]
@@ -607,7 +607,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.000200000000000126, 2.7366999999999995)
 
 2023-09-12 16:49:18.414542
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7378, 2.7424, 2.7423]
@@ -615,7 +615,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.000750000000000083, 2.7355833333333335)
 
 2023-09-12 16:58:21.513072
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7384, 2.7375]
@@ -623,7 +623,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.00030000000000004096, 2.7396000000000003)
 
 2023-09-12 17:06:07.375620
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7381]
@@ -631,7 +631,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.000200000000000126, 2.7366999999999995)
 
 2023-09-12 17:06:53.007706
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7409]
@@ -639,7 +639,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0011333333333333566, 2.7329666666666665)
 
 2023-09-12 17:08:55.273215
-22°C 
+22ï¿½C 
 Type de calibration: {4, 7}
 Voltages calib:
 [2.7375, 2.7377]
@@ -647,7 +647,7 @@ Coefficients U=a*pH+b
 (a,b)=(6.666666666665932e-05, 2.737233333333333)
 
 2023-09-12 17:23:18.018100
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7375, 2.7424, 2.7619]
@@ -655,7 +655,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00406666666666662, 2.718800000000001)
 
 2023-09-12 17:27:13.627948
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7376, 2.7107, 2.7425]
@@ -663,7 +663,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0008166666666666326, 2.724550000000001)
 
 2023-09-12 17:30:49.223712
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7431, 2.7633, 2.7755]
@@ -671,7 +671,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.005399999999999836, 2.7228333333333357)
 
 2023-09-12 17:32:29.067326
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.4018, 2.3221, 2.7337]
@@ -679,7 +679,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.05531666666666658, 2.098650000000001)
 
 2023-09-12 17:33:41.371848
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7577, 2.7781, 2.7832]
@@ -687,7 +687,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00424999999999987, 2.743250000000001)
 
 2023-09-12 17:34:22.295377
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7421, 2.741, 2.7452]
@@ -695,7 +695,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0005166666666666211, 2.739150000000001)
 
 2023-09-12 17:38:09.987576
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7375, 2.6933, 2.7704]
@@ -703,7 +703,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.005483333333333329, 2.69535)
 
 2023-09-12 17:39:33.508098
-22°C 
+22ï¿½C 
 Type de calibration: {10, 4, 7}
 Voltages calib:
 [2.7389, 2.7377, 2.7386]
@@ -711,7 +711,7 @@ Coefficients U=a*pH+b
 (a,b)=(-5.0000000000155186e-05, 2.7387500000000014)
 
 2023-09-12 18:16:47.893253
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [2.7385, 2.713, 2.7435]
@@ -719,7 +719,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0008333333333331597, 2.7258333333333367)
 
 2023-09-12 18:21:15.000681
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7375, 1.6742]
@@ -727,7 +727,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.3544333333333333, 4.155233333333333)
 
 2023-09-12 18:21:38.405373
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.6838, 2.7219]
@@ -735,7 +735,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.012700000000000008, 2.633)
 
 2023-09-12 18:22:05.724226
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7329, 2.7348]
@@ -743,7 +743,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0006333333333333376, 2.7303666666666664)
 
 2023-09-13 09:19:59.974037
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [2.7472, 2.7473, 2.7493]
@@ -751,7 +751,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0003499999999998972, 2.7454833333333344)
 
 2023-09-13 09:31:00.351682
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [2.7449, 2.7456, 2.7424]
@@ -759,7 +759,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0004166666666665873, 2.7472166666666666)
 
 2023-09-13 09:32:01.616602
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7444, 2.7448]
@@ -767,7 +767,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00013333333333331865, 2.743866666666667)
 
 2023-09-13 09:32:32.803437
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7439, 2.7463]
@@ -775,7 +775,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0008000000000000599, 2.7407)
 
 2023-09-13 09:34:39.228549
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7443, 2.7424]
@@ -783,7 +783,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0006333333333333376, 2.7468333333333335)
 
 2023-09-13 09:48:01.886985
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7425, 2.7429]
@@ -791,7 +791,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00013333333333331865, 2.741966666666667)
 
 2023-09-13 09:52:08.683798
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.8114, 2.2291]
@@ -799,7 +799,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.19410000000000002, 3.5878)
 
 2023-09-13 09:53:46.013814
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.6555, 2.7281]
@@ -807,7 +807,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.0242, 2.5587)
 
 2023-09-13 10:14:05.897977
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7424, 2.7219]
@@ -815,7 +815,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.006833333333333247, 2.769733333333333)
 
 2023-09-13 10:15:39.433264
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.5672, 2.5537]
@@ -823,7 +823,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.004500000000000022, 2.5852000000000004)
 
 2023-09-13 10:16:11.602952
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.4867, 2.5207]
@@ -831,7 +831,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.011333333333333417, 2.4413666666666662)
 
 2023-09-13 10:19:32.206480
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.742, 2.7385]
@@ -839,7 +839,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0011666666666666121, 2.7466666666666666)
 
 2023-09-13 10:21:45.083710
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.6838, 2.6852]
@@ -847,7 +847,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.00046666666666661527, 2.6819333333333337)
 
 2023-09-13 11:02:10.424187
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [2.7326, 2.7375, 2.7329]
@@ -855,7 +855,7 @@ Coefficients U=a*pH+b
 (a,b)=(4.9999999999902756e-05, 2.733983333333334)
 
 2023-09-13 11:07:57.520917
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.7375, 2.7288]
@@ -863,7 +863,7 @@ Coefficients U=a*pH+b
 (a,b)=(-0.0028999999999999027, 2.7490999999999994)
 
 2023-09-13 14:25:17.635576
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [1.7253, 2.547]
@@ -871,7 +871,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.27390000000000003, 0.6296999999999999)
 
 2023-12-14 14:13:24.115170
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.735, 2.5372, 3.3537]
@@ -879,7 +879,7 @@ Coefficients U=a*pH+b
 (a,b)=(0.26978333333333326, 0.6534833333333331)
 
 2023-12-21 10:06:07.908666
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.7009, 2.5031, 3.3022]
@@ -889,7 +889,7 @@ Coefficients U=a*pH+b
 pH meter : 'phidget'
 pH probe : 'test'
 2024-01-09 15:29:01.867410
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [0.16514, -0.00227, -0.17023]
@@ -899,7 +899,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-11 15:47:27.682032
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [0.1651, -0.00207, -0.17021]
@@ -909,7 +909,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-16 11:50:21.508098
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [0.17337, -0.001, -0.17374]
@@ -919,7 +919,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-19 11:07:37.687889
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [0.17182, -0.00209, -0.17442]
@@ -929,7 +929,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-23 11:26:06.470970
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [0.17321, -0.00162, -0.17336]
@@ -939,7 +939,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-26 16:00:25.637149
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [0.17333, -0.00142, -0.17391]
@@ -949,7 +949,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2024-01-31 14:50:58.250719
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6716, 2.5031, 3.3204]
@@ -959,7 +959,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-31 18:00:51.874975
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6129, 1.6129, 1.6129]
@@ -969,7 +969,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-31 18:04:20.379060
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6082, 1.6081, 1.6082]
@@ -979,7 +979,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-31 18:07:29.359555
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6082, 1.6082, 1.6083]
@@ -989,7 +989,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-31 18:08:10.438477
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6083, 1.6082, 1.6082]
@@ -999,7 +999,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget ADP1000_0
 pH probe : Oakton double-junction epoxy
 2024-01-31 18:13:35.856285
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6081, 1.6082, 1.6083]
@@ -1009,7 +1009,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2024-02-08 10:55:31.196304
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [3.3199, 3.3199, 3.3199]
@@ -1019,7 +1019,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2024-02-08 11:03:47.568397
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6667, 2.5036, 3.3199]
@@ -1029,7 +1029,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2024-03-05 10:34:10.991434
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.6716, 2.5226, 3.3248]
@@ -1039,7 +1039,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2024-11-28 17:06:52.563145
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.696, 2.5372, 3.3297]
@@ -1049,7 +1049,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2025-01-17 16:33:31.364482
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.7009, 2.5227, 3.3252]
@@ -1059,7 +1059,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2025-02-19 15:30:59.851346
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [1.696, 2.5372, 3.3298]
@@ -1069,7 +1069,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2025-02-28 10:55:50.103249
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7]
 Voltages calib:
 [2.0488, 2.0488]
@@ -1079,7 +1079,7 @@ Coefficients U=a*pH+b
 pH meter : Phidget 1130
 pH probe : Oakton epoxy
 2025-02-28 14:02:41.966645
-22°C 
+22ï¿½C 
 Type de calibration: [4, 7, 10]
 Voltages calib:
 [2.0488, 2.0488, 2.0488]
@@ -1116,8 +1116,6 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(0.0, 0.0)
 
-<<<<<<< HEAD
-=======
 pH meter : Phidget 1130
 pH probe : oakton epoxy test
 03/26/2025 14:28:56
@@ -1138,4 +1136,3 @@ Voltages calib:
 Coefficients U=a*pH+b
 (a,b)=(0.29911666666666675, -1.0742166666666677)
 
->>>>>>> test_francois
