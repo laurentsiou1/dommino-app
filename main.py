@@ -10,4 +10,4 @@ app=IHM()
 app.openControlPanel() 
 sys.exit(qApp.exec_())
 
-# [INFO] - Version Github FO du 28.03.2025 - ajout des modifications LS
+# [End]
