@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
-    <height>290</height>
+    <width>418</width>
+    <height>316</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,11 +16,17 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>220</y>
+     <x>180</x>
+     <y>270</y>
      <width>231</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -32,68 +38,112 @@
   <widget class="QLCDNumber" name="lcdNumber">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>80</y>
+     <x>200</x>
+     <y>120</y>
      <width>211</width>
      <height>131</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>40</y>
+     <x>240</x>
+     <y>80</y>
      <width>131</width>
-     <height>41</height>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="text">
     <string>Live voltage (mV)</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
-    <string>live voltage (mV)</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLCDNumber" name="U_ph4">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>50</y>
+     <x>20</x>
+     <y>120</y>
      <width>71</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
   </widget>
   <widget class="QLCDNumber" name="U_ph7">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>130</y>
+     <x>20</x>
+     <y>190</y>
      <width>71</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
   </widget>
   <widget class="QLCDNumber" name="U_ph10">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>210</y>
+     <x>20</x>
+     <y>260</y>
      <width>71</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
   </widget>
   <widget class="QPushButton" name="button_ph10">
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>210</y>
+     <y>260</y>
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="text">
     <string>pH10</string>
@@ -103,10 +153,16 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>130</y>
+     <y>190</y>
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="text">
     <string>pH7</string>
@@ -116,10 +172,16 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>50</y>
+     <y>120</y>
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="text">
     <string>pH4</string>
@@ -129,23 +191,47 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>10</y>
+     <y>80</y>
      <width>151</width>
      <height>31</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="text">
     <string>Recorded voltages</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="label_indications">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>501</width>
+     <x>10</x>
+     <y>10</y>
+     <width>401</width>
      <height>61</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="font">
     <font>
@@ -158,7 +244,9 @@ Click Apply to save</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
-    <string>Tensions enregistrées</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

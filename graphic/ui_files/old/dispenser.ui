@@ -19,9 +19,9 @@
   <widget class="QLabel" name="label_level">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>290</y>
-     <width>141</width>
+     <x>90</x>
+     <y>300</y>
+     <width>111</width>
      <height>71</height>
     </rect>
    </property>
@@ -41,10 +41,7 @@
     <string>Dispensing range:</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="levelA_uL">
@@ -226,7 +223,7 @@
     </rect>
    </property>
    <property name="maximum">
-    <number>500</number>
+    <number>400</number>
    </property>
   </widget>
   <widget class="QPushButton" name="dispense_button_B">
@@ -291,7 +288,7 @@
     </rect>
    </property>
    <property name="maximum">
-    <number>500</number>
+    <number>400</number>
    </property>
   </widget>
   <widget class="QPushButton" name="dispense_button_A">
@@ -317,7 +314,7 @@
     </rect>
    </property>
    <property name="maximum">
-    <number>500</number>
+    <number>400</number>
    </property>
   </widget>
   <widget class="QPushButton" name="make_ref_C">
@@ -421,7 +418,7 @@
     </rect>
    </property>
    <property name="maximum">
-    <number>500</number>
+    <number>400</number>
    </property>
   </widget>
   <widget class="QPushButton" name="full_reload_button_A">
@@ -460,7 +457,7 @@
     </rect>
    </property>
    <property name="maximum">
-    <number>500</number>
+    <number>400</number>
    </property>
   </widget>
   <widget class="QPushButton" name="make_ref_A">
@@ -486,7 +483,7 @@
     </rect>
    </property>
    <property name="maximum">
-    <number>500</number>
+    <number>400</number>
    </property>
   </widget>
   <widget class="QSpinBox" name="load_box_C">
@@ -811,12 +808,6 @@
      <height>51</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="text">
     <string>Syringe A</string>
    </property>
@@ -833,12 +824,6 @@
      <height>51</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="text">
     <string>Syringe B</string>
    </property>
@@ -854,12 +839,6 @@
      <width>101</width>
      <height>51</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
    </property>
    <property name="text">
     <string>Syringe C</string>
@@ -1092,10 +1071,10 @@ purge</string>
   <widget class="QLabel" name="label_level_2">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>340</y>
-     <width>171</width>
-     <height>71</height>
+     <x>120</x>
+     <y>350</y>
+     <width>111</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="cursor">
@@ -1113,10 +1092,7 @@ purge</string>
 Manual: 0–500 µL</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <zorder>label_level</zorder>

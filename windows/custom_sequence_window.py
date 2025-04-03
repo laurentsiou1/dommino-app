@@ -3,6 +3,7 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtGui import QIcon
 from graphic.windows.custom_seq_win import Ui_CustomSequenceWindow
 
 import pyqtgraph as pg
@@ -31,6 +32,10 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.ihm=ihm
         self.seq=self.ihm.seq
         seq=self.seq
+
+        # Icone windows
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "graphic", "images", "icon-appli.ico")
+        self.setWindowIcon(QIcon(icon_path))
         
         #Sizing PlotWidgts inside QTabWidgets
         (w,h)=(self.spectra_tabs.geometry().width(),self.spectra_tabs.geometry().height())
