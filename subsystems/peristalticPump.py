@@ -1,4 +1,6 @@
-"Classe permettant de controller le moteur de pompe péristaltique"
+"""
+Class allowing control on peristaltic pump motor.
+"""
 
 from Phidget22.Phidget import *
 from Phidget22.Devices.DCMotor import *
@@ -14,12 +16,10 @@ ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
-"""def require_open(self, method):
-        if self.state=='open':
-            return method # Return the function unchanged, not decorated.
-        return require_open(method)"""
-
 def require_open(func):
+    """
+    Decorator for conditionning execution on pump 'open'
+    """
     def wrapper(self, *args, **kwargs):
         if self.state=='open':
             return func(self, *args, **kwargs)
@@ -79,6 +79,10 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             self.infos="Peristaltic pump not connected"
 
     def get_current_speed(self):
+        """
+        attribute current_speed is a float between -1 and 1. Corresponding to the duty_cycle 
+        and the direction of pump.
+        """
         if self.state=='open':
             self.current_speed=self.getTargetVelocity()
         else:
@@ -91,6 +95,9 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             self.direction=-1
 
     def setSpeed_voltage(self,v):
+        """
+        Sets speed of pump. parameter v is in Volts
+        """
         self.mean_voltage=v
         self.duty_cycle=v/12
         self.target_speed=self.duty_cycle*self.direction
@@ -103,19 +110,31 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.update_infos()
 
     def set_speed_scale(self,v):
-        """Sets pump speed given the target speed in 1 to 5 scale"""
+        """
+        Sets pump speed given the target speed in 1 to 5 scale
+        """
         self.setSpeed_voltage(self.scale2volts(v))
 
     def scale2volts(self, speed_scale):   #speed scale = 1, 2, 3, 4, 5
+        """
+        Param : 1 to 5
+        Returns Voltage from 4 to 12V
+        """
         speed_volts = 2+2*speed_scale
         #print("speed volts = ", speed_volts)
         return speed_volts
 
     def volts2scale(self, speed_volts):   #speed volts = 4V, 6V, 8V, 10V, 12V
+        """
+        voltage to scale 1...5
+        """
         speed_scale=int(0.5*(speed_volts-2))
         return speed_scale
 
     def start_stop(self):
+        """
+        Starts or stops the pump. 
+        """
         self.get_current_speed()
         if self.state=='open':
             if self.current_speed==0:
@@ -135,14 +154,19 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         self.wait=False
     
     def run_during_delay_sec(self,delay):
+        """
+        delay in seconds
+        """
         self.start()
         self.wait=True  
         self.timer.singleShot(1000*delay,self.stop)
 
     #@require_attribute('state', 'open')
     def change_direction(self):
-        """Changes direction of pump. 
-        If pump is running, it stops and start again in the opposite direction"""
+        """
+        Changes direction of pump. 
+        If pump is running, it stops and start again in the opposite direction
+        """
         self.stop()
         self.direction*=-1
         self.target_speed=self.duty_cycle*self.direction
@@ -151,6 +175,9 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
             self.start()
 
     def text(self):
+        """
+        Returns text to display on Connect/Disconnect button
+        """
         if self.state=='open':
             self.get_current_speed()
             if self.current_speed==0:
@@ -162,6 +189,9 @@ class PeristalticPump(DCMotor): #Elle est créée comme une sous classe de DCMot
         return text   
     
     def update_in_file(self):
+        """
+        Updates values in file app_default_settings
+        """
         parser = ConfigParser()
         parser.read(app_default_settings)
         parser.set('pump','speed_volts', str(self.mean_voltage))

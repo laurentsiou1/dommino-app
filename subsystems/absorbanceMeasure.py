@@ -1,4 +1,8 @@
-"classe Spectrometer permettant de piloter l'ensemble Spectromètre et lampe"
+"""
+File absorbanceMeasure.py defines class AbsorbanceMeasure
+It allows to control both spectrometer and lamp
+This class inherits from class Spectrometer of OceanDirectAPI
+"""
 
 from lib.oceandirect.OceanDirectAPI import OceanDirectError, OceanDirectAPI, Spectrometer, FeatureID
 from lib.oceandirect.od_logger import od_logger
@@ -23,6 +27,7 @@ device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 class AbsorbanceMeasure(Spectrometer):
     
+    #getting board numbers and wiring
     parser = ConfigParser()
     parser.read(device_ids)
     board_number = int(parser.get('main board', 'id'))
@@ -31,7 +36,7 @@ class AbsorbanceMeasure(Spectrometer):
     ch_deuterium=int(parser.get('lamp', 'deuterium'))
     ch_halogen=int(parser.get('lamp', 'halogen'))
 
-    #Lamp control 
+    #Lamp control
     shutter = DigitalOutput()
     shutter.setDeviceSerialNumber(board_number)
     shutter.setChannel(ch_shutter)
@@ -42,13 +47,15 @@ class AbsorbanceMeasure(Spectrometer):
     halogen.setDeviceSerialNumber(board_number)
     halogen.setChannel(ch_halogen)
 
-    def __init__(self): #ihm:IHM est un argument optionnel 
+    def __init__(self):
         self.state='closed'
-        #Data
+        
         #All spectra are saved with active corrections. It can be nonlinearity and/or electric dark 
         # when activated via methods "set_nonlinearity_correction_usage" and 
         # "set_electric_dark_correction_usage". None of these are corrected from 
         # the background spectrum. 
+
+        #Before connecting the instrument, all attributes are instanciated with None
         self.active_background_spectrum=None  #Background Spectrum
         self.active_ref_spectrum=None   #Reference
         self.reference_absorbance=None  #courbe d'absorbance juste après la prise de réf
@@ -60,13 +67,20 @@ class AbsorbanceMeasure(Spectrometer):
         self.serial_number=''
         self.Irec_time=0
         
-        #timer pour acquisition des spectres
+        #timer for spectra acquisition
         self.timer = QtCore.QTimer()
         self.timer.setInterval(3000)
         
         self.update_infos()
 
     def connect(self):
+        """
+        Connection of spectrometer and lamp. 
+        If either lamp control (via interface board) or spectrometer is not connected or under tension
+        connection state will stay on 'closed'. 
+        Creates an instance of class Spectrometer self.device. And sets basic parameters on spectro.
+
+        """
         od = OceanDirectAPI()
         device_count = od.find_usb_devices() #ne pas enlever cette ligne pour détecter le spectro
         #print(device_count)
@@ -105,10 +119,12 @@ class AbsorbanceMeasure(Spectrometer):
         else:
             self.state='closed'
         
+        #if absorbanceMeasure object is in state 'closed', some methods would retunr error message
         if self.state=='open':
             self.wavelengths = [ round(l,1) for l in spectro.wavelengths ]
             self.N_lambda = len(self.wavelengths)
             self.model=spectro.get_model()
+            #print(self.model)
             self.serial_number=spectro.get_serial_number()
             self.ocean_manager=od #instance de la classe OceanDirectAPI
             self.device=spectro
@@ -120,9 +136,26 @@ class AbsorbanceMeasure(Spectrometer):
             self.t_int=int(parser.get('spectrometry', 'tint'))  #ms
             self.averaging=int(parser.get('spectrometry', 'avg'))
             self.acquisition_delay=self.t_int*self.averaging
-            
-            #Settings specific to models    #Tint and avg
+
+            #Nonlinearity correction : normally available on most of Ocean spectrometers 
             self.device.set_nonlinearity_correction_usage(True)
+            
+                    ## Settings specific to models 
+            
+            #Electric dark correction
+            try:
+                ed=self.device.get_electric_dark_correction_usage()
+                #self.device.set_electric_dark_correction_usage()
+                self.electric_dark=ed
+            except: #feature not available for OceanST or OceanSR spectrometers
+                self.electric_dark = False
+
+            #All spectra are saved with active corrections. It can be nonlinearity and/or electric dark 
+            # when activated via methods "set_nonlinearity_correction_usage" and 
+            # "set_electric_dark_correction_usage". None of these are corrected from 
+            # the background spectrum. 
+
+            #Integration time and averaging
             if self.model==former_model:
                 self.device.set_integration_time(1000*self.t_int)
                 self.device.set_scans_to_average(self.averaging)
@@ -130,22 +163,13 @@ class AbsorbanceMeasure(Spectrometer):
                 self.device.set_integration_time(15000) 
                 self.device.set_scans_to_average(10)
             
-            if self.model=='OceanSR2':  #2k pix pour 700nm
-                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)    
-            elif self.model=='OceanSR6':    #2k pix pour 700nm à vérifier pour le SR6
-                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)
-            elif self.model=='OceanSR4':    #2k pix pour 700nm à vérifier pour le SR4
-                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)     
+            #boxcar
+            if self.model=='OceanSR':  #2k pix pour 700nm   #SR4 or SR6
+                self.device.set_boxcar_width(1) #moyennage sur 3 points (2n+1)  
             elif self.model=='OceanST': #2k pix pour 400nm
                 self.device.set_boxcar_width(2) #moyennage sur 5 points (2n+1) 
             else:
                 print("Spectrometer model not recognized")
-            
-            try:
-                ed=self.device.get_electric_dark_correction_usage()
-                self.electric_dark=ed
-            except: #feature not available for OceanST or OceanSR spectrometers
-                self.electric_dark = False
 
             #time attributes in milliseconds. SDK methods outputs are in microseconds (us)
             self.t_int=self.device.get_integration_time()//1000 
@@ -161,6 +185,9 @@ class AbsorbanceMeasure(Spectrometer):
         print(self.infos)
     
     def update_infos(self):
+        """
+        Updates attribute self.infos according to current parameters of spectrometer 
+        """
         if self.state=='open':
             self.infos="\nSpectrometer : connected"\
             +"\nModel : "+self.model\
@@ -177,7 +204,11 @@ class AbsorbanceMeasure(Spectrometer):
         else:
             self.infos="\nCan not connect to spectrometer"
 
-    def close(self,id): #fermeture de l'objet absorbanceMeasure
+    def close(self,id): 
+        """
+        Closing of object AbsorbanceMeasure. It closes spectrometer and lamp shutter 
+        to protect fibers from solarization
+        """
         self.timer.stop()
         self.shutter.setState(False)
         print("shutter closed\n")
@@ -187,6 +218,8 @@ class AbsorbanceMeasure(Spectrometer):
         self.state='closed'
 
     def get_shutter_state(self):
+        """
+        Returns shutter's current state"""
         if self.state=='open':
             self.shutter_state=self.shutter.getState()
         else:
@@ -194,27 +227,44 @@ class AbsorbanceMeasure(Spectrometer):
         return self.shutter_state
 
     def open_shutter(self):
+        """
+        Opens lamp shutter.
+        """
         if self.state=='open':
             self.shutter.setState(True)
 
-    #@necessite self.state=='open'
     def close_shutter(self):
+        """
+        Closes lamp shutter.
+        """
         if self.state=='open':
             self.shutter.setState(False)
 
     def changeShutterState(self):
+        """
+        Changes the current shutter state --> ON or OFF
+        """
         state=self.shutter.getState()
         self.shutter.setState(not(state))
     
     def update_acquisition_delay(self):
+        """
+        Updates attribute self.acquisition_delay. This value is purely theoretical. 
+        The attibute is also updated via a timer inside method get_N_spectra()
+        """
         self.acquisition_delay=self.t_int*self.averaging #ms
 
-    #Récupère autant de spectres que N_avg sur le spectro
-    #Fonction vérifiée qui fonctionne. Plus rapide que de faire le moyennage sur le spectro
     def get_N_spectra(self):
+        """
+        It launches method get_formatted_spectrum from oceanDirectAPI N times, with N 
+        the current scans_to_average number
+        Returns spectra a list of N spectra : List[List[floats]]
+        Each spectrum is a list of float of size (self.wavelength)
+        """
+        t0=time.time()
         N=self.device.get_scans_to_average()
         try:
-            self.device.set_scans_to_average(1)
+            self.device.set_scans_to_average(1) #every spectrum recorded is a single spectrum
             spectra = [0 for k in range(N)]
             for i in range(N):
                 spectra[i] = self.device.get_formatted_spectrum() #gets the current spectrum
@@ -223,11 +273,16 @@ class AbsorbanceMeasure(Spectrometer):
             self.device.set_scans_to_average(N)
         except OceanDirectError as e:
             logger.error(e.get_error_details())  
-        #☺print("spectra",spectra)
+        t1=time.time()
+        #print("spectra",spectra)
+        self.acquisition_delay=t1-t0
+        #print("acquisition delay :",t1-t0)
         return spectra
     
     def get_averaged_spectrum(self):
-        """Returns a list of float"""
+        """
+        Launches record of N spectra. Returns the average List[float]
+        """
         t0=time.time()
         spectra=self.get_N_spectra()
         t1=time.time()
@@ -235,11 +290,15 @@ class AbsorbanceMeasure(Spectrometer):
         t2=time.time()
         self.Irec_time=t1-t0
         self.avg_delay=t2-t1
+        #print("averaging delay : ", self.avg_delay)
         self.update_refresh_rate()
         #print(type(avg))
         return avg
 
     def acquire_background_spectrum(self):
+        """
+        Acquires background spectrum (including closing shutter) and time
+        """
         self.active_background_time = datetime.now().replace(microsecond=0)
         self.shutter.setState(False)
         time.sleep(2)
@@ -249,6 +308,10 @@ class AbsorbanceMeasure(Spectrometer):
         print("background spectrum recorded")
 
     def acquire_ref_spectrum(self):
+        """
+        Acquires reference spectrum (including opening shutter) and time
+        If the background is taken, it also computes absorbance
+        """
         self.active_ref_time = datetime.now().replace(microsecond=0)
         self.shutter.setState(True)
         time.sleep(2)
@@ -261,33 +324,53 @@ class AbsorbanceMeasure(Spectrometer):
         time.sleep(2)
         print("reference spectrum recorded")
 
-    def update_intensity_spectrum(self):    #ontimer
+    def update_intensity_spectrum(self):
+        """
+        Updates the current spectrum by taking a measure.
+        The method is executed periodically with timer.
+        """
         self.current_intensity_spectrum=self.get_averaged_spectrum()
     
     def update_absorbance_spectrum(self):
+        """
+        Computes the absorbance spectrum from the current intensity spectrum.
+        """
         self.current_absorbance_spectrum, self.Aproc_delay = sp.intensity2absorbance(self.current_intensity_spectrum,self.active_ref_spectrum,self.active_background_spectrum)
 
     def dark_and_ref_stored(self):
-        """Returns True if a background and a reference spectrum have been stored
-        False otherwise"""
+        """
+        Returns True if a background and a reference spectrum have been stored
+        False otherwise
+        """
         opened=(self.state=='open')
         bgd=(self.active_background_spectrum!=None)
         ref=(self.active_ref_spectrum!=None)
         return opened*bgd*ref
 
     def updateSpectra(self):
+        """
+        Executes on timer. Updates current spectra.
+        """
         self.update_intensity_spectrum()
         if self.dark_and_ref_stored(): #background and ref recorded
             self.update_absorbance_spectrum()
 
-    #@Necessary that background and ref are stored
     def update_refresh_rate(self):   
-        self.refresh_rate=int(self.Irec_time*1000+500)   #ms
+        """
+        Modifies the period with which spectra are recorded and displayed.
+        """
+        #the rate is set 500ms higher than the entire acquisition time
+        #to let the interface refresh between two acquisitions.
+        self.refresh_rate=int(self.acquisition_delay*1000+500)   #ms
         self.timer.setInterval(self.refresh_rate)
 
 class Advanced(AbsorbanceMeasure):  ### Fonctions optionelles ###    
     
     def get_optimal_integration_time(self, spectra):
+        """
+        Method not used for the moment. It would allows to set automatically 
+        the appropriate integration time on spectrometer. 
+        """
         int_time_us=self.t_int*1000
         Imax=sp.max_intensity(spectra)
         if self.serial_number=='STUV002':
