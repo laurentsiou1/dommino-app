@@ -1,4 +1,5 @@
-"Class for electrovalves. It includes those of measure circuit and Syringe Pump circuits"
+"""
+Class for electrovalves. It includes those of measure circuit and Syringe Pump circuits"""
 
 from Phidget22.Devices.DigitalOutput import *
 
@@ -13,6 +14,7 @@ device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 class Electrovalve: 
 
+    #identifies ports
     parser = ConfigParser()
     parser.read(device_ids)
     VINT_number = int(parser.get('VINT', 'id'))
@@ -30,6 +32,7 @@ class Electrovalve:
         self.channel.setDeviceSerialNumber(self.VINT_number)
         self.channel.setHubPort(self.port_relay)
         
+        #5 different electrovalves on dommino
         if type == 'syringe pump A':
             self.channel.setChannel(self.num_a)
         elif type=='syringe pump B':
@@ -47,6 +50,9 @@ class Electrovalve:
         self.state=False    
 
     def connect(self):
+        """
+        Tries to connect valve, and updates state.
+        """
         try:
             self.channel.openWaitForAttachment(1000)
             self.channel_state='open'
@@ -59,6 +65,11 @@ class Electrovalve:
         self.channel_state='closed'
     
     def getState(self):
+        """
+        Gets state of valve : 
+        True : under tension
+        False : No tension
+        """
         if self.channel_state=='open':
             if self.channel.getState()==True:
                 self.state=True
@@ -69,17 +80,30 @@ class Electrovalve:
         return self.state
     
     def setState(self,state):
-        "state is a boolean"
+        """
+        Sets state. True or False.
+        """
         if self.channel_state=='open':
             self.channel.setState(state)
             self.state=state
     
     def changeState(self):
+        """
+        Changes current state
+        """
         if self.channel_state=='open':
             state=self.channel.getState()   #phidget function
             self.channel.setState(not(state))
 
     def state2Text(self,state):
+        """
+        Display on interface. 
+        measure circuit :
+            WATER or IN for entrance valve
+            OUT or BIN for exit valve
+        Syringe pumps:
+            BOTTLE or DISPENSE for Dispenser
+        """
         type=self.type
         #print(state,type)
         if state==True: 

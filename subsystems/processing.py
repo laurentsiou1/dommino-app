@@ -8,6 +8,9 @@ import time
 
 #retourne la moyenne de l'ensemble des spectres
 def average_spectra(spectra): 
+    """
+    Processes the average of spectra with module numpy.
+    """
     sp = np.array(spectra)
     a=np.mean(sp,0)
     avg_spectra=a.tolist()
@@ -16,6 +19,9 @@ def average_spectra(spectra):
 
 #intensité maximale de plusieurs spectres
 def max_intensity(spectra):
+    """
+    Maximum intensity on multiple spectra
+    """
     l=np.zeros(1)
     for s in spectra:
         arr=np.array(s)
@@ -34,6 +40,10 @@ def get_optimal_integration_time(spectra,int_time_us):
 
 #Les spectres entrés sont supposés corrigés du bruit d'obscurité et de la non linéarité du capteur
 def intensity2absorbance(spectrum, ref_spec, dark=None):
+    """
+    Computes absorbance given ; intensity spectrum, reference and background
+    Abs = log_10(reference-background/intensity-background)
+    """
     t0=time.time()
     N=len(spectrum)
     abs_spectrum=[0 for k in range(N)]
@@ -50,17 +60,21 @@ def intensity2absorbance(spectrum, ref_spec, dark=None):
     return abs_spectrum_round, dt
 
 def correct_spectrum_from_dilution(spec,dil):
-    """spec is a spectrum : list of float, dil is a float
-    returns a list of float"""
+    """
+    spec is a spectrum : list of float, dil is a float
+    returns a list of float
+    """
     #N=len(spec)
     #cs=[spec[k]*dil for k in range(N)]
     cs=[s*dil for s in spec]
     return cs
 
 def correct_spectra_from_dilution(spec,dil):
-    #spec[list] spectres d'absorbance
-    #dil[list float] facteurs de dilution
-    #print(spec,dil)
+    """
+    spec[list] absorbance spectra
+    dil[list float] dilution factors
+    print(spec,dil)
+    """
     N=len(spec)
     print(N,dil)
     if N!=len(dil):

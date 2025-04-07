@@ -1,6 +1,6 @@
-"Acquisition du pH"
-
-"""https://pythonpyqt.com/pyqt-events/ créer des signaux"""
+"""
+Class for handling pHmeter
+"""
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal, QObject
@@ -10,14 +10,13 @@ from Phidget22.Devices.Log import *
 from Phidget22.Devices.VoltageInput import *
 from Phidget22.Devices.PHSensor import *
 
-import math
 import numpy as np
 from configparser import ConfigParser
 import os
 from pathlib import Path
 import re
 
-#Récupère le fichier des données de calibration par défaut
+#Retrieves calibration data file
 path = Path(__file__)
 ROOT_DIR = path.parent.parent.absolute()
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
@@ -26,7 +25,9 @@ cal_log = os.path.join(ROOT_DIR, "config/CALlog.txt")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 def volt2pH(a,b,U): #m: pente, c: ordonnée à l'origine
-	#U=a*pH+b
+	"""
+	U=a*pH+b
+	"""
 	if a!=0:
 		pH=(U-b)/a
 	else:
@@ -71,7 +72,9 @@ class PHMeter:
 		self.update_infos()
 
 	def connect(self):
-		#Ph mètre Phidget 1130_0 plugged in Voltage Input of main board
+		"""
+		Connects pH meter Phidget 1130_0 plugged on a Voltage Input
+		"""
 		self.U_pH.setDeviceSerialNumber(self.board_number)
 		self.U_pH.setChannel(self.ch_phmeter)
 		try:
@@ -100,6 +103,7 @@ class PHMeter:
 		else:
 			self.infos="Ph meter : closed"
 
+	#function unused. Could be useful if using multiple calibration files.
 	"""def load_calibration(self,path):
 		self.calib_path=os.path.relpath(path, ROOT_DIR)
 		#a faire récupérer le chemin relatif du fichier de calib
@@ -113,6 +117,9 @@ class PHMeter:
 		cal_path_file.close()"""
 	
 	def getCalData(self):
+		"""
+		Gets last calibration data on file app_default_settings.ini
+		"""
 		parser = ConfigParser()
 		parser.read(latest_cal)
 		#print("calib path electrode", latest_cal)
@@ -127,17 +134,24 @@ class PHMeter:
 		self.b = float(parser.get('data', 'b'))
 
 	def doOnVoltageChange(self,ch,voltage): 
-		#les arguments de cette fonctions ne peuvent pas être changés
-		#self:PHMeter,ch:VoltageInput,voltage:float 
+		"""
+		Executes every time voltage changes more than voltage trigger.
+		Arguments cannot be modified. 
+		"""
 		self.currentVoltage=voltage 
-		self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)  
-		#print(self.currentPH)
+		self.currentPH=volt2pH(self.a,self.b,self.currentVoltage)
 	
 	def activatePHmeter(self):
+		"""
+		Activates pH update.
+		"""
 		#si le voltagechangetrigger est à zéro, l'évènement se produit périodiquement
 		self.U_pH.setOnVoltageChangeHandler(self.doOnVoltageChange)
 	
 	def onCalibrationChange(self):
+		"""
+		Executes when applying new calibration
+		"""
 		parser = ConfigParser()
 		parser.read(latest_cal)
 		self.CALmodel=parser.get('data', 'phmeter')
@@ -156,6 +170,9 @@ class PHMeter:
 		self.update_infos()
 	
 	def saveCalData(self,date,caltype,u_cal,coeffs):
+		"""
+		Saves calibration.
+		"""
 		parser = ConfigParser()
 		parser.read("config/latest_cal.ini")
 		parser.set('data', 'phmeter', str(self.model))
@@ -183,6 +200,9 @@ class PHMeter:
 		oldCal.close()
 
 	def computeCalCoefs(self,u_cal,pH_buffers):
+		"""
+		Computes calibration coefficents given the recorded voltages during calibration.
+		"""
 		if pH_buffers == [4]:
 			b=u_cal[0]-4*self.a	#dernière calibration
 		if pH_buffers == [4,7]:
@@ -202,6 +222,9 @@ class PHMeter:
 		return a, b
 	
 	def activateStabilityLevel(self):
+		"""
+		Activates stability progressbar , indicator of electrode stability.
+		"""
 		self.ph0=self.currentPH
 		self.stab_timer.start()
 		try:
@@ -250,60 +273,3 @@ if __name__ == "__main__":
 	
 	phm=PHMeter()
 	phm.connect()
-	
-	
-	"""Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
-	U_pH = VoltageInput()
-	U_pH.setOnErrorHandler(PHMeter.onError)
-	
-	U_pH.setDeviceSerialNumber(683442)	#pH mètre ADP1000_0
-	U_pH.setHubPort(3)
-	U_pH.openWaitForAttachment(2000)
-	if U_pH.getIsOpen():
-		print("connectéé")
-		#print(U_pH.getDataRate())
-		#print(U_pH.getMinDataRate(),U_pH.getMaxDataRate())
-		#print(U_pH.getMinDataInterval(),U_pH.getMaxDataInterval())
-		currentVoltage=U_pH.getVoltage()
-		print(currentVoltage)
-		
-		#U_pH.setDataInterval(int(1000))	#ms
-		print("aa")
-		#U_pH.setVoltageChangeTrigger(0.00001) #seuil de déclenchement (Volt)
-		print("aaa")
-		
-	else:
-		print("non détecté")
-	#except:
-	#	pass"""
-	
-		#fonction de détection ne fonctionne pas encore
-	"""def getPhmeterModel(self):
-		#Ph mètre Phidget 1130_0 branché sur le voltageInput0 de la carte
-		U_1130=VoltageInput()
-		U_1130.setDeviceSerialNumber(432846)	
-		U_1130.setChannel(0)	
-
-		#pH mètre ADP_1000 branché sur la broche 3 du VINT
-		U_ADP1000 = VoltageInput() 
-		U_ADP1000.setDeviceSerialNumber(683442)
-		U_ADP1000.setChannel(3)		
-
-		try:
-			U_ADP1000.openWaitForAttachment(1000)
-			if U_pH.getIsOpen():
-				self.model='Phidget ADP1000_0'
-				V=ADP1000.getVoltage()	
-				if abs(V-0.25)<=0.01:
-					self.electrode_state='unplugged'
-				else:
-					self.electrode_state='unplugged'
-		try:
-			U_1130.openWaitForAttachment(1000)
-			if U_1130.getIsOpen():
-				self.model='Phidget pH adapter 1130_0'
-				V=U_1130.getVoltage()	
-				if abs(V)<=0.01:
-					self.electrode_state='unplugged'
-				else:
-					self.electrode_state='plugged'"""

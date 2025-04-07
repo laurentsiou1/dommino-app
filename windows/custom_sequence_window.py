@@ -157,20 +157,26 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
     #DIRECT
     def refresh_screen(self):
         #Countdown
-        if self.seq.is_running:  #If sequence is not on pause
-            if self.remaining_time_sec>0:
-                self.remaining_time_sec-=1
-                #print("remaining time : ", self.remaining_time_sec)
-                self.countdown.setProperty("value", self.remaining_time_sec)
+        remaining = None
+        if self.seq.is_running:
+            if self.remaining_time_sec > 0:
+                self.remaining_time_sec -= 1
+
         try:
-            tm=datetime.now()
-            tm=tm.replace(microsecond=0)
-            elapsed=tm-self.seq.time_mes_last
-            elapsed_sec = elapsed.total_seconds() #convert to seconds
-            remaining = int(max(0,self.seq.delay_mes-elapsed_sec))
-            #print("remaining time : ", remaining)
-            self.countdown.setProperty("value", remaining)
+            tm = datetime.now().replace(microsecond=0)
+            elapsed = tm - self.seq.time_mes_last
+            elapsed_sec = elapsed.total_seconds()
+            remaining = int(max(0, self.seq.delay_mes - elapsed_sec))
         except:
+            remaining = self.remaining_time_sec  # valeur de secours
+
+        # Format et affichage (si QLabel)
+        if remaining is not None:
+            hours = remaining // 3600
+            minutes = (remaining % 3600) // 60
+            seconds = remaining % 60
+            formatted_time = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+            self.countdown.setText(formatted_time)
             pass
         #PhMeter
         if self.ihm.phmeter.state=='open':
@@ -246,6 +252,9 @@ class CustomSequenceWindow(QMainWindow,Ui_CustomSequenceWindow):
         self.grid_mes_pH_vol.addWidget(self.table_vol_pH[nb-1][1], nb, 1, 1, 1)
         self.table_vol_pH[nb-1][1].clear()
         self.table_vol_pH[nb-1][1].setText(pH)
+        
+        if nb == self.N_mes: # ajout vLS - 04/04/25
+            self.measurement_status.setText("Sequence finished!") # ajout vLS - 04/04/25
 
     def append_time_in_table(self,nb,dt):
         eq_time=str(dt.seconds//60)+":"+str(dt.seconds%60)

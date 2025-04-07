@@ -1,23 +1,25 @@
-"Class for controlling pump motor along with electrovalves of measure circuit"
-
-#from Phidget22.Devices.DigitalOutput import *
+"""
+file circuit contains class Circuit
+class Circuit allows to control peristaltic pump along with 2 electrovalves of measure circuit
+"""
 
 from subsystems.peristalticPump import PeristalticPump
 from subsystems.electrovalve import Electrovalve
-from PyQt5.QtCore import QTimer
-import threading
-import time
+import threading    #for Timers
 
 from configparser import ConfigParser
 import os
 from pathlib import Path
 
 path = Path(__file__)
-ROOT_DIR = path.parent.parent.absolute() #répertoire pytitrator
+ROOT_DIR = path.parent.parent.absolute() #project directory
 app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
 device_ids = os.path.join(ROOT_DIR, "config/device_id.ini")
 
 def require_pump_and_valves_connected(func):
+    """
+    Decorator of methods for requiring both pump and electrovalves state opened.
+    """
     def wrapper(self, *args, **kwargs):
         if self.pump.state=='closed':
             raise Exception("Pump not connected")
@@ -26,13 +28,14 @@ def require_pump_and_valves_connected(func):
         return func(self, *args, **kwargs)
     return wrapper
 
-class Circuit(): #la classe hérite des méthodes de la pompe
+class Circuit():
 
     app_default_settings = os.path.join(ROOT_DIR, "config/app_default_settings.ini")
-    #timer = QTimer()
 
-    def __init__(self, pump : PeristalticPump):   #pump est un objet de la classe pump, passé en argument
-        
+    def __init__(self, pump : PeristalticPump):   
+        """
+        pump is an object of type PeristalticPump. Has to be specified as argument
+        """
         self.pump=pump
         self.ev0 = Electrovalve('circuit entrance')
         self.ev1 = Electrovalve('circuit exit')
@@ -43,6 +46,9 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         self.circulation_delay_sec=int(parser.get('circuit', 'delay_sec'))  #delay of circulation at lowest speed (4V)
 
     def connect(self):
+        """
+        Connects the arguments of class : pump and electrovalves
+        """
         self.pump.connect()
         self.ev0.connect()
         self.ev1.connect()
@@ -51,12 +57,18 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         print(self.infos)
 
     def updateState(self):
+        """
+        Updates object state according to its attributes states
+        """
         if self.pump.state=='open' and self.ev0.channel_state=='open' and self.ev1.channel_state=='open':
             self.state='open'
         else:
             self.state='closed'
     
     def state2Text(self, state):
+        """
+        Returns display on Connect/Disconnect button.
+        """
         if state=='open':
             text="Disconnect"
         else:
@@ -64,6 +76,9 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         return text
     
     def update_infos(self):
+        """
+        Updates circuit informations with attributes infos.
+        """
         self.pump.update_infos()
         self.infos=self.pump.infos
         if self.state=='open':
@@ -74,6 +89,9 @@ class Circuit(): #la classe hérite des méthodes de la pompe
             self.infos+="\nElectrovalves not connected"
     
     def close(self):
+        """
+        Closes attributes.
+        """
         if self.pump.state=='open':
             self.pump.close_pump()
         self.ev0.close()
@@ -81,55 +99,69 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         self.state='closed'
 
     def ev0_changeState(self):
+        """
+        ev0 is the Entrance valve (WATER/IN)
+        """
         self.ev0.changeState()
 
     def ev1_changeState(self):
+        """
+        ev1 is the exit valve (OUT/BIN)
+        """
         self.ev1.changeState()
 
-    def ev0_display(self):
-        pass
-
     #Basic sequences in circuit
-    """These sequences are basic actions on circuit. They can be used directly on the interface
-    or also be runned as part of larger sequences defined in class System"""
-
-    #button empty --> empty_circuit()
-    #button water --> flush_water() #flushes indefinitely
-    #button fill all --> fill_all()
+    """These sequences are basic actions on circuit. They can be used directly on the interface with buttons :
+    run water, empty, fill water, clean and empty."""
+    
+    #button run water --> run_water() #flushes indefinitely
+    #button empty --> empty_circuit_button()
+    #button fill water --> fill_all()
+    #button Clean and empty --> clean_and_empty()
 
     def empty_measure_circuit(self):
-        """Empties circuit by running pump from OUT to IN back in the sample beaker"""
+        """
+        Empties circuit by running pump from OUT to IN back in the sample beaker.
+        """
         self.pump.stop()
         self.ev0.setState(False)
         self.ev1.setState(False)    #valves are set IN OUT
         self.empty()
     
     def empty_water(self):
-        """Used during sequence when taking a reference
-        Releases clean water back in the water beaker"""
+        """
+        Releases clean water back in the water beaker.
+        Used during sequence when taking a reference.
+        """
         self.pump.stop()
         self.ev0.setState(True)
         self.ev1.setState(True)    #valves are set IN OUT
         self.empty()
     
     def empty(self):
+        """
+        Empties circuit as it is without changing electrovalves.
+        """
         self.pump.set_direction(-1)
         self.pump.set_speed_scale(5)
         self.pump.start()
     
     def run_measure_circuit(self):
-        """Function executed during sequence for circulating sample into the flowcell"""
+        """
+        Function executed during sequence for circulating sample into the flowcell.
+        """
         self.pump.set_direction(1)
         self.ev0.setState(False)
         self.ev1.setState(False)    #valves are set IN OUT
         self.pump.start()
     
     def run_water(self,speed=5,delay=None):
-        """Flush water from WATER to BIN
+        """
+        Flush water from WATER to BIN
         delay : integer in seconds
         Executed function when pressing button Water
-        Circuit needs to be empty when using this function, not to contaminate water"""
-        # #Not to contaminate water when switching valve 
+        Circuit needs to be empty when using this function, not to contaminate water
+        """
         self.pump.stop()
         self.ev0.setState(True)
         self.ev1.setState(True)    #valves are set IN OUT
@@ -139,7 +171,10 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         
         ###fill_all
     def fill_all(self):
-        """Fills BIN and OUT with water. Then fills IN, and refills BIN"""
+        """
+        Fills BIN and OUT with water. Then fills IN, and refills BIN
+        Cut in multiple methods 2, 3, 4, end.
+        """
         self.run_water()
         timer = threading.Timer(10, self.fill_all_2)    #circuit in considered clean we just fill
         timer.start()
@@ -173,11 +208,12 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         self.pump.stop()
         self.ev0.setState(False)
         self.ev1.setState(False)
-
         
-        ###Clean and empty
     def clean_and_empty(self):
-        """Empty measure circuit"""
+        """
+        Empties measure circuit, cleans all with water. And empties all.
+        Cut in multiple methods : 2, 3, 4, end.
+        """
         self.empty_measure_circuit()
         timer = threading.Timer(12, self.clean_and_empty_2)
         timer.start() 
@@ -211,7 +247,9 @@ class Circuit(): #la classe hérite des méthodes de la pompe
         self.pump.set_direction(1)
 
     def empty_circuit_button(self):
-        """Executed function when pressing button Empty"""
+        """
+        Executed function when pressing button Empty
+        """
         self.empty_measure_circuit()
         timer = threading.Timer(12, self.pump.stop)
         timer.start()    

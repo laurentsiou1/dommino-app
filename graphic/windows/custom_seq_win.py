@@ -97,7 +97,7 @@ class Ui_CustomSequenceWindow(object):
         self.grid_instructions.addWidget(self.column_ref, 0, 7, 1, 1)
         self.grid_instructions.setColumnStretch(0, 3)
         self.grid_instructions.setColumnStretch(1, 2)
-        self.grid_instructions.setColumnStretch(2, 5)
+        self.grid_instructions.setColumnStretch(2, 6)
         self.grid_instructions.setColumnStretch(3, 2)
         self.grid_instructions.setColumnStretch(4, 3)
         self.grid_instructions.setColumnStretch(5, 3)
@@ -132,15 +132,10 @@ class Ui_CustomSequenceWindow(object):
         self.stab_step.setSingleStep(0.01)
         self.stab_step.setObjectName("stab_step")
         self.label_countdown = QtWidgets.QLabel(self.centralwidget)
-        self.label_countdown.setGeometry(QtCore.QRect(1100, 130, 131, 41))
-        self.label_countdown.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.label_countdown.setGeometry(QtCore.QRect(1050, 120, 171, 51))
+        self.label_countdown.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_countdown.setWordWrap(True)
         self.label_countdown.setObjectName("label_countdown")
-        self.countdown = QtWidgets.QLCDNumber(self.centralwidget)
-        self.countdown.setGeometry(QtCore.QRect(1100, 170, 111, 41))
-        self.countdown.setDigitCount(4)
-        self.countdown.setProperty("value", 0.0)
-        self.countdown.setProperty("intValue", 0)
-        self.countdown.setObjectName("countdown")
         self.syringes = QtWidgets.QPushButton(self.centralwidget)
         self.syringes.setGeometry(QtCore.QRect(1230, 320, 181, 41))
         self.syringes.setObjectName("syringes")
@@ -192,7 +187,7 @@ class Ui_CustomSequenceWindow(object):
         self.logo_idil.setAlignment(QtCore.Qt.AlignCenter)
         self.logo_idil.setObjectName("logo_idil")
         self.logo_cnrs = QtWidgets.QLabel(self.centralwidget)
-        self.logo_cnrs.setGeometry(QtCore.QRect(940, 120, 101, 101))
+        self.logo_cnrs.setGeometry(QtCore.QRect(920, 120, 101, 101))
         self.logo_cnrs.setAlignment(QtCore.Qt.AlignCenter)
         self.logo_cnrs.setObjectName("logo_cnrs")
         self.measurement_status = QtWidgets.QLabel(self.centralwidget)
@@ -203,6 +198,22 @@ class Ui_CustomSequenceWindow(object):
         self.measurement_status.setFont(font)
         self.measurement_status.setText("")
         self.measurement_status.setObjectName("measurement_status")
+        self.countdown = QtWidgets.QLabel(self.centralwidget)
+        self.countdown.setGeometry(QtCore.QRect(1070, 170, 131, 41))
+        self.countdown.setStyleSheet("QLabel {\n"
+"    font-family: \'Segoe UI\', sans-serif;\n"
+"    font-size: 20px;\n"
+"    color: #222;\n"
+"    background-color: #f0f0f0;\n"
+"    border: 1px solid #ccc;\n"
+"    border-radius: 6px;\n"
+"    padding: 4px 10px;\n"
+"    qproperty-alignment: AlignCenter;\n"
+"}")
+        self.countdown.setText("")
+        self.countdown.setAlignment(QtCore.Qt.AlignCenter)
+        self.countdown.setWordWrap(True)
+        self.countdown.setObjectName("countdown")
         CustomSequenceWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(CustomSequenceWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1752, 21))
@@ -263,7 +274,8 @@ class Ui_CustomSequenceWindow(object):
         self.spectra_tabs.setTabText(self.spectra_tabs.indexOf(self.tab1), _translate("CustomSequenceWindow", "delta"))
         self.spectra_tabs.setTabText(self.spectra_tabs.indexOf(self.tab2), _translate("CustomSequenceWindow", "raw"))
         self.spectra_tabs.setTabText(self.spectra_tabs.indexOf(self.tab3), _translate("CustomSequenceWindow", "intensity"))
-        self.label_countdown.setText(_translate("CustomSequenceWindow", "Remaining time"))
+        self.label_countdown.setText(_translate("CustomSequenceWindow", "Remaining time \n"
+"(HH:MM:SS)"))
         self.syringes.setText(_translate("CustomSequenceWindow", "Syringe Panel"))
         self.column_vol.setText(_translate("CustomSequenceWindow", "volume"))
         self.column_pH.setText(_translate("CustomSequenceWindow", "pH"))
