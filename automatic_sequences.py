@@ -16,6 +16,7 @@ import subsystems.processing as proc
 
 import file_manager as fm
 from file_manager import Data
+import dispense_data
 
 class AutomaticSequence:
     
