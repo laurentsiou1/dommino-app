@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Synthèse retraite — MSA / ENIM / AGRICA</title>
+  <style>
+    :root{--bg:#eef2f7;--card:#fff;--ink:#0f172a;--muted:#64748b;--line:#dbe3ec;--blue:#2563eb;--cyan:#06b6d4;--green:#16a34a;--amber:#d97706;--red:#dc2626;--violet:#7c3aed;--navy:#0b1220;--shadow:0 14px 38px rgba(15,23,42,.10);--r:22px}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(circle at 10% 0%,rgba(37,99,235,.10),transparent 24%),radial-gradient(circle at 90% 4%,rgba(124,58,237,.08),transparent 22%),var(--bg);color:var(--ink)}
+    .wrap{max-width:1280px;margin:auto;padding:24px}.top{background:linear-gradient(135deg,var(--navy),#17233a);color:#fff;border-radius:28px;padding:26px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.4fr .8fr;gap:20px}.eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#93c5fd;margin-bottom:10px}h1{margin:0;font-size:38px;letter-spacing:-.04em;line-height:1.05}.subtitle{margin:10px 0 0;color:rgba(255,255,255,.64);font-size:14px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}.kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:13px}.kpi span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.48);font-weight:800}.kpi strong{display:block;margin-top:5px;font-size:20px}.decision{background:linear-gradient(180deg,rgba(37,99,235,.95),rgba(14,165,233,.85));border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}.decision small{text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:rgba(255,255,255,.65)}.decision .date{font-size:38px;font-weight:950;letter-spacing:-.05em;margin:6px 0 8px}.decision p{margin:0;font-size:13px;color:rgba(255,255,255,.76)}
+    .section{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}.head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap}.section h2{margin:0;font-size:23px;letter-spacing:-.03em}.sub{margin-top:4px;color:var(--muted);font-size:12px}.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff,#f8fafc);padding:18px}.donutrow{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:center}.donut{width:170px;height:170px;border-radius:50%;background:conic-gradient(var(--blue) 0deg 349deg,#e2e8f0 349deg 360deg);display:grid;place-items:center;position:relative;margin:auto}.donut:after{content:"";width:118px;height:118px;border-radius:50%;background:white;position:absolute}.center{position:relative;z-index:1;text-align:center}.center strong{display:block;font-size:34px}.center span{font-size:11px;color:var(--muted)}.keylist{display:grid;gap:10px}.key{display:grid;grid-template-columns:10px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:13px;background:#f8fafc;border:1px solid #e6edf5;font-size:12px}.dot{width:10px;height:10px;border-radius:50%}.blue{background:var(--blue)}.violet{background:var(--violet)}.amber{background:var(--amber)}.matrix{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.box{border:1px solid var(--line);border-radius:15px;padding:14px;background:#fff}.box .label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:850;color:var(--muted)}.box .value{margin-top:6px;font-size:22px;font-weight:950}.box .note{margin-top:5px;font-size:11px;color:var(--muted)}.okbox{background:linear-gradient(180deg,#ecfdf5,#fff);border-color:#bbf7d0}.infobox{background:linear-gradient(180deg,#eff6ff,#fff);border-color:#bfdbfe}.warnbox{background:linear-gradient(180deg,#fff7ed,#fff);border-color:#fed7aa}.violetbox{background:linear-gradient(180deg,#f5f3ff,#fff);border-color:#ddd6fe}
+    .timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.year{position:relative;border:1px solid var(--line);border-radius:16px;padding:14px;background:linear-gradient(180deg,#fff,#f8fafc);min-height:118px}.year:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,var(--blue),var(--cyan))}.year.warn:before{background:linear-gradient(90deg,#f59e0b,#fb923c)}.year.alert:before{background:linear-gradient(90deg,#ef4444,#f97316)}.year.v:before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}.year strong{display:block;font-size:18px;margin-bottom:7px}.year span{font-size:11px;color:var(--muted);line-height:1.4}
+    .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px}table{width:100%;border-collapse:collapse;min-width:820px;background:#fff}th{padding:11px 12px;background:#f8fafc;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#475569;border-bottom:1px solid var(--line)}td{padding:12px;font-size:12px;border-bottom:1px solid #edf2f7;vertical-align:top}tr:last-child td{border-bottom:none}td:first-child{font-weight:850}.pill{display:inline-flex;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:850;white-space:nowrap}.pg{background:#dcfce7;color:#166534}.pa{background:#ffedd5;color:#9a3412}.pb{background:#dbeafe;color:#1d4ed8}.pr{background:#fee2e2;color:#991b1b}.pv{background:#ede9fe;color:#5b21b6}
+    .questions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.question{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:13px;border-radius:15px;background:#f8fafc;border:1px solid var(--line)}.q{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;font-size:12px;font-weight:950}.question strong{display:block;font-size:12px;margin-bottom:4px}.question span{display:block;color:var(--muted);font-size:11px}.final{margin-top:14px;border-radius:16px;padding:15px 16px;background:linear-gradient(90deg,#0f172a,#1e293b);color:white;font-size:13px}.final strong{color:#93c5fd}.foot{text-align:center;font-size:11px;color:var(--muted);padding:18px 0 0}
+    @media(max-width:1000px){.top,.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.wrap{padding:12px}h1{font-size:31px}.kpis,.matrix,.questions{grid-template-columns:1fr}.timeline{grid-template-columns:1fr 1fr}.donutrow{grid-template-columns:1fr}}@media print{body{background:#fff}.wrap{max-width:none;padding:0}.top,.section{box-shadow:none}.section{break-inside:avoid}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="top">
+    <div>
+      <div class="eyebrow">Dossier retraite anonymisé — synthèse visuelle</div>
+      <h1>MSA • ENIM • AGRICA</h1>
+      <p class="subtitle">Support de rendez-vous pour sécuriser la carrière longue, les périodes ENIM, le SIVP 1986 et le bloc 2008–2010.</p>
+      <div class="kpis">
+        <div class="kpi"><span>Année de naissance</span><strong>1966</strong></div>
+        <div class="kpi"><span>Début d’activité</span><strong>1982</strong></div>
+        <div class="kpi"><span>Trimestres globaux</span><strong>172</strong></div>
+        <div class="kpi"><span>Agirc-Arrco</span><strong>4 616,68 pts</strong></div>
+      </div>
+    </div>
+    <div class="decision">
+      <div><small>Date de travail retenue</small><div class="date">01/04/2027</div><p>Scénario prudent dans l’attente d’une confirmation écrite de la MSA.</p></div>
+      <div style="margin-top:14px"><span class="pill pg">Début avant 18 ans : acquis</span> <span class="pill pa">Carrière longue : à confirmer</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="head"><div><h2>Vue d’ensemble</h2><div class="sub">Le dossier en un écran</div></div></div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="donutrow">
+          <div class="donut"><div class="center"><strong>172</strong><span>trimestres globaux</span></div></div>
+          <div class="keylist">
+            <div class="key"><i class="dot blue"></i><span>MSA / Assurance retraite</span><strong>157</strong></div>
+            <div class="key"><i class="dot violet"></i><span>ENIM</span><strong>17</strong></div>
+            <div class="key"><i class="dot amber"></i><span>Total carrière longue</span><strong>À confirmer</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="matrix">
+          <div class="box okbox"><div class="label">Début avant 18 ans</div><div class="value">Oui</div><div class="note">Condition remplie.</div></div>
+          <div class="box infobox"><div class="label">Taux plein global</div><div class="value">172 / 172</div><div class="note">Au 01/01/2026.</div></div>
+          <div class="box warnbox"><div class="label">Carrière longue</div><div class="value">Non ventilée</div><div class="note">Réponse MSA nécessaire.</div></div>
+          <div class="box violetbox"><div class="label">Date prudente</div><div class="value">01/04/2027</div><div class="note">Base de travail.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="head"><div><h2>Années sensibles</h2><div class="sub">Contrôles prioritaires</div></div></div>
+    <div class="timeline">
+      <div class="year"><strong>1982</strong><span>1 trimestre. Début de carrière.</span></div>
+      <div class="year"><strong>1983–1984</strong><span>ENIM : 4 + 4 trimestres.</span></div>
+      <div class="year warn"><strong>1985</strong><span>3 trimestres seulement.</span></div>
+      <div class="year alert"><strong>1986</strong><span>ENIM + MSA + SIVP. Ventilation indispensable.</span></div>
+      <div class="year v"><strong>1989</strong><span>Année mixte MSA / ENIM.</span></div>
+      <div class="year alert"><strong>2008–2010</strong><span>Congé parental / AVPF. Bloc déterminant.</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="head"><div><h2>Tableau carrière</h2><div class="sub">Droits connus et réponses attendues</div></div></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Bloc</th><th>Donnée</th><th>Statut</th><th>À obtenir</th></tr></thead>
+      <tbody>
+        <tr><td>Début de carrière</td><td>1982</td><td><span class="pill pg">Acquis</span></td><td>Aucune correction à ce stade</td></tr>
+        <tr><td>Trimestres globaux</td><td>172 au 01/01/2026</td><td><span class="pill pg">Acquis</span></td><td>Calcul spécifique carrière longue</td></tr>
+        <tr><td>MSA / Assurance retraite</td><td>157 trimestres</td><td><span class="pill pb">Connu</span></td><td>Détail cotisé / assimilé</td></tr>
+        <tr><td>ENIM</td><td>17 trimestres</td><td><span class="pill pa">À confirmer</span></td><td>Qualification « cotisés carrière longue »</td></tr>
+        <tr><td>SIVP 1986</td><td>Mai à août 1986</td><td><span class="pill pa">À ventiler</span></td><td>Nature exacte du trimestre MSA 1986</td></tr>
+        <tr><td>2008–2010</td><td>Congé parental / AVPF</td><td><span class="pill pr">Prioritaire</span></td><td>Nombre retenu pour carrière longue</td></tr>
+        <tr><td>Agirc-Arrco</td><td>4 616,68 points</td><td><span class="pill pv">AGRICA</span></td><td>Montant brut mensuel au départ</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section">
+    <div class="head"><div><h2>SIVP 1986</h2><div class="sub">Preuves disponibles et portée</div></div></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Élément</th><th>Preuve</th><th>Conclusion</th></tr></thead>
+      <tbody>
+        <tr><td>Existence du SIVP</td><td>Contrat + attestation ANPE</td><td><span class="pill pg">Prouvé</span></td></tr>
+        <tr><td>Période</td><td>Mai à août 1986</td><td><span class="pill pg">Prouvé</span></td></tr>
+        <tr><td>Rémunération</td><td>Avis DDTE + bulletins</td><td><span class="pill pg">Prouvé</span></td></tr>
+        <tr><td>Trimestre cotisé supplémentaire</td><td>Non démontré par les seules pièces</td><td><span class="pill pa">À confirmer MSA</span></td></tr>
+        <tr><td>Utilité du dossier</td><td>Ventilation de 1986</td><td><span class="pill pb">Très utile</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section">
+    <div class="head"><div><h2>Scénarios de départ</h2><div class="sub">À comparer avec l’attestation officielle</div></div></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Scénario</th><th>Date</th><th>Condition</th><th>Position</th></tr></thead>
+      <tbody>
+        <tr><td>Très optimiste</td><td><strong>01/12/2026</strong></td><td>Total carrière longue déjà suffisant</td><td><span class="pill pr">Peu sécurisé</span></td></tr>
+        <tr><td>Optimiste</td><td><strong>01/01/2027</strong></td><td>Ventilation plus favorable</td><td><span class="pill pa">Possible</span></td></tr>
+        <tr><td>Prudent</td><td><strong>01/04/2027</strong></td><td>Hypothèse de travail actuelle</td><td><span class="pill pg">Recommandé</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section">
+    <div class="head"><div><h2>Questions à poser à la MSA</h2><div class="sub">Seulement les points encore incertains</div></div></div>
+    <div class="questions">
+      <div class="question"><div class="q">1</div><div><strong>Total carrière longue au 31/12/2025 ?</strong><span>Cotisés + réputés cotisés, distinct du total global.</span></div></div>
+      <div class="question"><div class="q">2</div><div><strong>Ventilation exacte de 1986 ?</strong><span>SIVP, MSA, ENIM et périodes assimilées.</span></div></div>
+      <div class="question"><div class="q">3</div><div><strong>Les 17 trimestres ENIM sont-ils tous cotisés ?</strong><span>Demander le détail des éventuelles exclusions.</span></div></div>
+      <div class="question"><div class="q">4</div><div><strong>Quelle nature pour 2008–2010 ?</strong><span>AVPF, congé parental et nombre retenu.</span></div></div>
+      <div class="question"><div class="q">5</div><div><strong>Première date de départ confirmée ?</strong><span>Demander une attestation écrite carrière longue.</span></div></div>
+    </div>
+    <div class="final"><strong>Phrase à utiliser :</strong> « Mon relevé affiche 172 trimestres, mais je souhaite le calcul spécifique carrière longue, avec la ventilation de 1986, des périodes ENIM et de 2008–2010, ainsi qu’une date de départ confirmée par écrit. »</div>
+  </section>
+
+  <div class="foot">Document de travail anonymisé — non officiel — base prudente retenue : 01/04/2027.</div>
+</div>
+</body>
+</html>
